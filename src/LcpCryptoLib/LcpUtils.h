@@ -5,13 +5,23 @@
 
 namespace lcp
 {
-    Status CreateStatus(StatusCover::StatusCode statusCode, const char * extension = "")
+    class StatusException : public std::runtime_error
     {
-        Status res;
-        res.ResultCode = statusCode;
-        res.Extension = extension;
-        return res;
-    }
+    public:
+        StatusException(const Status & status)
+            : std::runtime_error(status.Extension)
+            , m_status(status)
+        {
+        }
+
+        Status ResultStatus() const
+        {
+            return m_status;
+        }
+
+    private:
+        Status m_status;
+    };
 }
 
 #endif //__LCP_UTILS_H__

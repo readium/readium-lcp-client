@@ -8,7 +8,7 @@ namespace lcp
     class RapidJsonLcpParser : public IJsonLcpParser
     {
     public:
-        virtual Status Parse(const std::string & licenseJson, std::unique_ptr<ILicense> & license);
+        virtual Status Parse(const std::string & licenseJson, ILicense ** license);
     };
 }
 

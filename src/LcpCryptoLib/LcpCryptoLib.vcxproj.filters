@@ -9,26 +9,107 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
+    <Filter Include="Header Files\JsonParser">
+      <UniqueIdentifier>{687dd0d6-f7b5-4056-993a-bec6eb0a7fed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\JsonParser">
+      <UniqueIdentifier>{3741ba53-66b1-4ec8-8e96-c1b526915c8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\PublicInterfaces">
+      <UniqueIdentifier>{1428b178-44b5-48b6-927a-bc5dab46bf75}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="LcpPublicInterfaces.h">
+    <ClInclude Include="LcpUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RapidJsonLcpParser.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\JsonParser</Filter>
     </ClInclude>
     <ClInclude Include="IJsonLcpParser.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\JsonParser</Filter>
+    </ClInclude>
+    <ClInclude Include="ILcpNode.h">
+      <Filter>Header Files\JsonParser</Filter>
+    </ClInclude>
+    <ClInclude Include="JsonValueReader.h">
+      <Filter>Header Files\JsonParser</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseLcpNode.h">
+      <Filter>Header Files\JsonParser</Filter>
+    </ClInclude>
+    <ClInclude Include="RootLcpNode.h">
+      <Filter>Header Files\JsonParser</Filter>
+    </ClInclude>
+    <ClInclude Include="LinksLcpNode.h">
+      <Filter>Header Files\JsonParser</Filter>
+    </ClInclude>
+    <ClInclude Include="LcpPublicInterfaces.h">
+      <Filter>Header Files\PublicInterfaces</Filter>
     </ClInclude>
     <ClInclude Include="LcpStatus.h">
+      <Filter>Header Files\PublicInterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ICrypto.h">
+      <Filter>Header Files\PublicInterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ILicense.h">
+      <Filter>Header Files\PublicInterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="ILcpService.h">
+      <Filter>Header Files\PublicInterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="LcpService.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LcpUtils.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="ILinks.h">
+      <Filter>Header Files\PublicInterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="CryptoLcpNode.h">
+      <Filter>Header Files\JsonParser</Filter>
+    </ClInclude>
+    <ClInclude Include="IUser.h">
+      <Filter>Header Files\PublicInterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="IRights.h">
+      <Filter>Header Files\PublicInterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="UserLcpNode.h">
+      <Filter>Header Files\JsonParser</Filter>
+    </ClInclude>
+    <ClInclude Include="RightsLcpNode.h">
+      <Filter>Header Files\JsonParser</Filter>
+    </ClInclude>
+    <ClInclude Include="LcpServiceCreator.h">
+      <Filter>Header Files\PublicInterfaces</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RapidJsonLcpParser.cpp">
+      <Filter>Source Files\JsonParser</Filter>
+    </ClCompile>
+    <ClCompile Include="RootLcpNode.cpp">
+      <Filter>Source Files\JsonParser</Filter>
+    </ClCompile>
+    <ClCompile Include="JsonValueReader.cpp">
+      <Filter>Source Files\JsonParser</Filter>
+    </ClCompile>
+    <ClCompile Include="LinksLcpNode.cpp">
+      <Filter>Source Files\JsonParser</Filter>
+    </ClCompile>
+    <ClCompile Include="LcpService.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CryptoLcpNode.cpp">
+      <Filter>Source Files\JsonParser</Filter>
+    </ClCompile>
+    <ClCompile Include="RightsLcpNode.cpp">
+      <Filter>Source Files\JsonParser</Filter>
+    </ClCompile>
+    <ClCompile Include="UserLcpNode.cpp">
+      <Filter>Source Files\JsonParser</Filter>
+    </ClCompile>
+    <ClCompile Include="LcpServiceCreator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

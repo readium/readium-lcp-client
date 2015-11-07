@@ -30,3 +30,5 @@ Thumbs.db
 # User-specific files
 *.suo
 *.user
+*.opensdf
+*.sdf

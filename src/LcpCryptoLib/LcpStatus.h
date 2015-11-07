@@ -1,9 +1,11 @@
 #ifndef __LCP_STATUS_H__
 #define __LCP_STATUS_H__
 
+#include <string>
+
 namespace lcp
 {
-    struct StatusCover
+    struct StCodeCover
     {
         enum StatusCode
         {
@@ -11,6 +13,8 @@ namespace lcp
 
             // No Error
             ErrorSuccess,
+            // Invalid Argument
+            ErrorInvalidArgument,
             // No NetProvider implementation has been given.
             ErrorNoNetProvider,
             // No StorageProvider implementation has been given.
@@ -59,14 +63,20 @@ namespace lcp
 
     struct Status
     {
-        StatusCover::StatusCode ResultCode;
-        const char * Extension;
-    };
+        Status(StCodeCover::StatusCode resultCode, const std::string & extension = "")
+            : ResultCode(resultCode)
+            , Extension(extension)
+        {
+        }
 
-    bool IsSuccess(Status status)
-    {
-        return status.ResultCode == StatusCover::ErrorSuccess;
-    }
+        StCodeCover::StatusCode ResultCode;
+        std::string Extension;
+
+        static bool IsSuccess(const Status & status)
+        {
+            return status.ResultCode == StCodeCover::ErrorSuccess;
+        }
+    };
 }
 
 #endif //__LCP_STATUS_H__

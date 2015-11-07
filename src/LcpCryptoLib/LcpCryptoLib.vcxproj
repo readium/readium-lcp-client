@@ -75,6 +75,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../include</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -86,6 +87,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../include</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -99,6 +101,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../include</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -114,6 +117,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../include</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -122,14 +126,38 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BaseLcpNode.h" />
+    <ClInclude Include="CryptoLcpNode.h" />
+    <ClInclude Include="ICrypto.h" />
     <ClInclude Include="IJsonLcpParser.h" />
+    <ClInclude Include="ILcpNode.h" />
+    <ClInclude Include="ILcpService.h" />
+    <ClInclude Include="ILicense.h" />
+    <ClInclude Include="ILinks.h" />
+    <ClInclude Include="IRights.h" />
+    <ClInclude Include="IUser.h" />
+    <ClInclude Include="JsonValueReader.h" />
     <ClInclude Include="LcpPublicInterfaces.h" />
+    <ClInclude Include="LcpService.h" />
+    <ClInclude Include="LcpServiceCreator.h" />
     <ClInclude Include="LcpStatus.h" />
+    <ClInclude Include="LinksLcpNode.h" />
     <ClInclude Include="RapidJsonLcpParser.h" />
     <ClInclude Include="LcpUtils.h" />
+    <ClInclude Include="RightsLcpNode.h" />
+    <ClInclude Include="RootLcpNode.h" />
+    <ClInclude Include="UserLcpNode.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CryptoLcpNode.cpp" />
+    <ClCompile Include="JsonValueReader.cpp" />
+    <ClCompile Include="LcpService.cpp" />
+    <ClCompile Include="LcpServiceCreator.cpp" />
+    <ClCompile Include="LinksLcpNode.cpp" />
     <ClCompile Include="RapidJsonLcpParser.cpp" />
+    <ClCompile Include="RightsLcpNode.cpp" />
+    <ClCompile Include="RootLcpNode.cpp" />
+    <ClCompile Include="UserLcpNode.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
