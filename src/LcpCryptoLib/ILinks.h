@@ -1,5 +1,5 @@
-#ifndef __I_LINKS_H__
-#define __I_LINKS_H__
+#ifndef __I_LCP_LINKS_H__
+#define __I_LCP_LINKS_H__
 
 #include <vector>
 #include <string>
@@ -7,16 +7,22 @@
 
 namespace lcp
 {
-    template<typename T> class IIterator;
+    struct Link
+    {
+        std::string href;
+        std::string title;
+        std::string type;
+        std::string templated;
+        std::string length;
+        std::string hash;
+    };
 
     class ILinks
     {
     public:
-        /*virtual Status Enumerate(IIterator<Link> ** iterator) = 0;
-        virtual bool IsArray(const std::string & linkName) const = 0;
-        virtual std::vector<std::string> LinkNames() const = 0;
-        virtual Link * GetLinkByName(const std::string & linkName) = 0;
-        virtual std::list<Link *> GetLinksByName(const std::string & linkName) = 0;*/
+        virtual std::vector<Link> GetLinks(const std::string & name) const = 0;
+        //virtual Status Enumerate(IIterator<Link> ** iterator) const = 0;
+        //virtual bool IsArray(const std::string & name) const = 0;
         virtual ~ILinks() {}
 
     public:
@@ -26,4 +32,4 @@ namespace lcp
     };
 }
 
-#endif //__I_LINKS_H__
+#endif //__I_LCP_LINKS_H__

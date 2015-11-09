@@ -1,11 +1,19 @@
 #include "rapidjson/document.h"
 #include "RootLcpNode.h"
 #include "JsonValueReader.h"
+#include "LcpUtils.h"
 
 namespace lcp
 {
-    RootLcpNode::RootLcpNode(ICrypto * crypto, ILinks * links, IUser * user, IRights * rights)
-        : m_crypto(crypto)
+    RootLcpNode::RootLcpNode(
+        const std::string & licenseJson,
+        ICrypto * crypto,
+        ILinks * links,
+        IUser * user,
+        IRights * rights
+        )
+        : m_licenseJson(licenseJson)
+        , m_crypto(crypto)
         , m_links(links)
         , m_user(user)
         , m_rights(rights)
@@ -57,26 +65,29 @@ namespace lcp
         return m_rights;
     }
 
-    Status RootLcpNode::ParseNode(const rapidjson::Value & parentObject, JsonValueReader * reader)
+    void RootLcpNode::ParseNode(const rapidjson::Value & parentObject, JsonValueReader * reader)
     {
-        if (!parentObject.IsObject())
+        rapidjson::Document rootObject;
+        //TODO: kParseValidateEncodingFlag
+        if (rootObject.Parse(m_licenseJson.c_str()).HasParseError())
         {
-            return JsonValueReader::CreateRapidJsonError(rapidjson::kParseErrorValueInvalid);
+            throw StatusException(JsonValueReader::CreateRapidJsonError(
+                rootObject.GetParseError(), rootObject.GetErrorOffset())
+                );
         }
 
-        m_rootInfo.id = reader->ReadAsStringCheck("id", parentObject);
-        m_rootInfo.issued = reader->ReadAsStringCheck("issued", parentObject);
-        m_rootInfo.provider = reader->ReadAsStringCheck("provider", parentObject);
-        m_rootInfo.updated = reader->ReadAsString("updated", parentObject);
-
-        for (auto it = m_childs.begin(); it != m_childs.end(); ++it)
+        if (!rootObject.IsObject())
         {
-            Status res = (*it)->ParseNode(parentObject, reader);
-            if (!Status::IsSuccess(res))
-            {
-                return res;
-            }
+            throw StatusException(JsonValueReader::CreateRapidJsonError(
+                rapidjson::kParseErrorValueInvalid)
+                );
         }
-        return Status(StCodeCover::ErrorSuccess);
+
+        m_rootInfo.id = reader->ReadStringCheck("id", rootObject);
+        m_rootInfo.issued = reader->ReadStringCheck("issued", rootObject);
+        m_rootInfo.provider = reader->ReadStringCheck("provider", rootObject);
+        m_rootInfo.updated = reader->ReadString("updated", rootObject);
+
+        BaseLcpNode::ParseNode(rootObject, reader);
     }
 }

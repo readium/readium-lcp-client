@@ -1,11 +1,15 @@
-#ifndef __I_RIGHTS_H__
-#define __I_RIGHTS_H__
+#ifndef __I_LCP_RIGHTS_H__
+#define __I_LCP_RIGHTS_H__
+
+#include "Iterator.h"
 
 namespace lcp
 {
     class IRights
     {
     public:
+        virtual bool GetRightValue(const std::string & name, std::string & value) const = 0;
+        //virtual Status Enumerate(Iterator<std::string> ** iterator) const = 0;
         virtual ~IRights() {}
 
     public:
@@ -17,4 +21,4 @@ namespace lcp
     };
 }
 
-#endif //__I_RIGHTS_H__
+#endif //__I_LCP_RIGHTS_H__

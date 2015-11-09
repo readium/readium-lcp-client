@@ -76,6 +76,7 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -129,7 +130,7 @@
     <ClInclude Include="BaseLcpNode.h" />
     <ClInclude Include="CryptoLcpNode.h" />
     <ClInclude Include="ICrypto.h" />
-    <ClInclude Include="IJsonLcpParser.h" />
+    <ClInclude Include="Iterator.h" />
     <ClInclude Include="ILcpNode.h" />
     <ClInclude Include="ILcpService.h" />
     <ClInclude Include="ILicense.h" />
@@ -142,7 +143,6 @@
     <ClInclude Include="LcpServiceCreator.h" />
     <ClInclude Include="LcpStatus.h" />
     <ClInclude Include="LinksLcpNode.h" />
-    <ClInclude Include="RapidJsonLcpParser.h" />
     <ClInclude Include="LcpUtils.h" />
     <ClInclude Include="RightsLcpNode.h" />
     <ClInclude Include="RootLcpNode.h" />
@@ -155,8 +155,8 @@
     <ClCompile Include="JsonValueReader.cpp" />
     <ClCompile Include="LcpService.cpp" />
     <ClCompile Include="LcpServiceCreator.cpp" />
+    <ClCompile Include="LcpUtils.cpp" />
     <ClCompile Include="LinksLcpNode.cpp" />
-    <ClCompile Include="RapidJsonLcpParser.cpp" />
     <ClCompile Include="RightsLcpNode.cpp" />
     <ClCompile Include="RootLcpNode.cpp" />
     <ClCompile Include="UserLcpNode.cpp" />

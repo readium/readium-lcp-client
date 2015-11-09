@@ -19,6 +19,7 @@ namespace lcp
     {
     public:
         RootLcpNode(
+            const std::string & licenseJson,
             ICrypto * crypto,
             ILinks * links,
             IUser * user,
@@ -27,7 +28,7 @@ namespace lcp
 
     public:
         // ILcpNode
-        virtual Status ParseNode(const rapidjson::Value & parentObject, JsonValueReader * reader);
+        virtual void ParseNode(const rapidjson::Value & parentObject, JsonValueReader * reader);
 
     public:
         // ILicense
@@ -48,6 +49,7 @@ namespace lcp
         ILinks * m_links;
         IUser * m_user;
         IRights * m_rights;
+        std::string m_licenseJson;
     };
 }
 

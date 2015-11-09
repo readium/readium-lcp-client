@@ -26,12 +26,6 @@
     <ClInclude Include="LcpUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RapidJsonLcpParser.h">
-      <Filter>Header Files\JsonParser</Filter>
-    </ClInclude>
-    <ClInclude Include="IJsonLcpParser.h">
-      <Filter>Header Files\JsonParser</Filter>
-    </ClInclude>
     <ClInclude Include="ILcpNode.h">
       <Filter>Header Files\JsonParser</Filter>
     </ClInclude>
@@ -86,11 +80,11 @@
     <ClInclude Include="LcpServiceCreator.h">
       <Filter>Header Files\PublicInterfaces</Filter>
     </ClInclude>
+    <ClInclude Include="Iterator.h">
+      <Filter>Header Files\PublicInterfaces</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="RapidJsonLcpParser.cpp">
-      <Filter>Source Files\JsonParser</Filter>
-    </ClCompile>
     <ClCompile Include="RootLcpNode.cpp">
       <Filter>Source Files\JsonParser</Filter>
     </ClCompile>
@@ -115,10 +109,13 @@
     <ClCompile Include="LcpServiceCreator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ILInks.cpp">
+    <ClCompile Include="IRights.cpp">
       <Filter>Source Files\PublicInterfaces</Filter>
     </ClCompile>
-    <ClCompile Include="IRights.cpp">
+    <ClCompile Include="LcpUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ILInks.cpp">
       <Filter>Source Files\PublicInterfaces</Filter>
     </ClCompile>
   </ItemGroup>

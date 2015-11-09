@@ -3,6 +3,10 @@
 
 #include <string>
 
+#ifdef _DEBUG
+#pragma optimize( "", off )
+#endif
+
 namespace lcp
 {
     struct StCodeCover
@@ -12,52 +16,50 @@ namespace lcp
             // Error Common
 
             // No Error
-            ErrorSuccess,
-            // Invalid Argument
-            ErrorInvalidArgument,
+            ErrorCommonSuccess,
             // No NetProvider implementation has been given.
-            ErrorNoNetProvider,
+            ErrorCommonNoNetProvider,
             // No StorageProvider implementation has been given.
-            ErrorNoStorageProvider,
+            ErrorCommonNoStorageProvider,
 
             // ErrorOpening
 
             // The given LCPL is not a valid License Document.
-            ErrorLicenseNotValid,
+            ErrorOpeningLicenseNotValid,
             // The license hasn't begun yet (right 'start'),
-            ErrorLicenseNotStarted,
+            ErrorOpeningLicenseNotStarted,
             // The license is expired (right 'end'),
-            ErrorLicenseExpired,
+            ErrorOpeningLicenseExpired,
             // No Root Certificate provided by the Client.
-            ErrorNoRootCertificate,
+            ErrorOpeningNoRootCertificate,
             // The Content Provider Certificate is not found in the root 
             // chain, or has been revoked.
-            ErrorContentProviderCertificateNotValid,
+            ErrorOpeningContentProviderCertificateNotValid,
             // The calculated License signature doesn't match the one 
             // provided by the License.
-            ErrorLicenseSignatureNotValid,
+            ErrorOpeningLicenseSignatureNotValid,
 
             // ErrorAcquisition
 
             // No acquisition link found in the license.
-            ErrorNoAcquisitionLink,
+            ErrorAcquisitionNoAcquisitionLink,
             // The downloaded publication doesn't match the license hash.
-            ErrorPublicationCorrupted,
+            ErrorAcquisitionPublicationCorrupted,
 
             // ErrorDecryption
 
             // The given User Pass phrase is not valid for this License
-            ErrorUserPassphraseNotValid,
+            ErrorDecryptionUserPassphraseNotValid,
             // The License is still encrypted and can't be used to decrypt 
             // data.
-            ErrorLicenseEncrypted,
+            ErrorDecryptionLicenseEncrypted,
 
             // ErrorNetworking
 
             // 404 Not found
-            ErrorRequestNotFound,
+            ErrorNetworkingRequestNotFound,
             // Any other network error
-            ErrorRequestFailed
+            ErrorNetworkingRequestFailed
         };
     };
 
@@ -74,7 +76,7 @@ namespace lcp
 
         static bool IsSuccess(const Status & status)
         {
-            return status.ResultCode == StCodeCover::ErrorSuccess;
+            return status.ResultCode == StCodeCover::ErrorCommonSuccess;
         }
     };
 }

@@ -49,29 +49,29 @@ namespace lcp
         return m_cryptoInfo.signatureCertificate;
     }
 
-    Status CryptoLcpNode::ParseNode(const rapidjson::Value & parentObject, JsonValueReader * reader)
+    void CryptoLcpNode::ParseNode(const rapidjson::Value & parentObject, JsonValueReader * reader)
     {
-        const rapidjson::Value & encryptionObject = reader->ReadAsObjectCheck("encryption", parentObject);
+        const rapidjson::Value & encryptionObject = reader->ReadObjectCheck("encryption", parentObject);
 
-        m_cryptoInfo.encryptionProfile = reader->ReadAsStringCheck("profile", encryptionObject);
+        m_cryptoInfo.encryptionProfile = reader->ReadStringCheck("profile", encryptionObject);
 
-        const rapidjson::Value & contentKeyObject = reader->ReadAsObjectCheck("content_key", encryptionObject);
+        const rapidjson::Value & contentKeyObject = reader->ReadObjectCheck("content_key", encryptionObject);
 
-        m_cryptoInfo.contentKey = reader->ReadAsStringCheck("encrypted_value", contentKeyObject);
-        m_cryptoInfo.contentKeyAlgorithm = reader->ReadAsStringCheck("algorithm", contentKeyObject);
+        m_cryptoInfo.contentKey = reader->ReadStringCheck("encrypted_value", contentKeyObject);
+        m_cryptoInfo.contentKeyAlgorithm = reader->ReadStringCheck("algorithm", contentKeyObject);
 
-        const rapidjson::Value & userKeyObject = reader->ReadAsObjectCheck("user_key", encryptionObject);
+        const rapidjson::Value & userKeyObject = reader->ReadObjectCheck("user_key", encryptionObject);
 
-        m_cryptoInfo.userKeyHint = reader->ReadAsStringCheck("text_hint", userKeyObject);
-        m_cryptoInfo.userKeyAlgorithm = reader->ReadAsStringCheck("algorithm", userKeyObject);
-        m_cryptoInfo.userKeyCheck = reader->ReadAsStringCheck("key_check", userKeyObject);
+        m_cryptoInfo.userKeyHint = reader->ReadStringCheck("text_hint", userKeyObject);
+        m_cryptoInfo.userKeyAlgorithm = reader->ReadStringCheck("algorithm", userKeyObject);
+        m_cryptoInfo.userKeyCheck = reader->ReadStringCheck("key_check", userKeyObject);
 
-        const rapidjson::Value & signatureObject = reader->ReadAsObjectCheck("signature", parentObject);//TODO: separate node
+        const rapidjson::Value & signatureObject = reader->ReadObjectCheck("signature", parentObject);//TODO: separate node
 
-        m_cryptoInfo.signatureAlgorithm = reader->ReadAsStringCheck("algorithm", signatureObject);
-        m_cryptoInfo.signatureCertificate = reader->ReadAsStringCheck("certificate", signatureObject);
-        m_cryptoInfo.signature = reader->ReadAsStringCheck("value", signatureObject);
+        m_cryptoInfo.signatureAlgorithm = reader->ReadStringCheck("algorithm", signatureObject);
+        m_cryptoInfo.signatureCertificate = reader->ReadStringCheck("certificate", signatureObject);
+        m_cryptoInfo.signature = reader->ReadStringCheck("value", signatureObject);
 
-        return Status(StCodeCover::ErrorSuccess);
+        BaseLcpNode::ParseNode(encryptionObject, reader);
     }
 }

@@ -10,7 +10,8 @@ namespace lcp
         {
             throw std::invalid_argument("lcpService is nullptr");
         }
+        auto status = Status(StCodeCover::ErrorCommonSuccess);
         *lcpService = new LcpService();
-        return Status(StCodeCover::ErrorSuccess);
+        return status;
     }
 }

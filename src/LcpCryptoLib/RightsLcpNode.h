@@ -1,30 +1,45 @@
 #ifndef __RIGHTS_LCP_NODE_H__
 #define __RIGHTS_LCP_NODE_H__
 
-#include <map>
+#include "LcpUtils.h"
 #include "BaseLcpNode.h"
 #include "IRights.h"
 
 namespace lcp
 {
-    struct Rights
+    struct RightsInfo
     {
+        RightsInfo()
+            : print(UNLIMITED)
+            , copy(UNLIMITED)
+            , tts(true)
+        {
+        }
+
         int print;
         int copy;
         bool tts;
         std::string start;
         std::string end;
-        std::map<std::string, std::string> extendedRights;
+        StringsMap valuesMap;
+
+        static int UNLIMITED;
     };
 
     class RightsLcpNode : public BaseLcpNode, public IRights
     {
     public:
         // ILcpNode
-        virtual Status ParseNode(const rapidjson::Value & parentObject, JsonValueReader * reader);
+        virtual void ParseNode(const rapidjson::Value & parentObject, JsonValueReader * reader);
+
+        // IRights
+        virtual bool GetRightValue(const std::string & name, std::string & value) const;
 
     private:
-        Rights m_rights;
+        void FillRegisteredFields(const std::string & name, const rapidjson::Value & value);
+
+    private:
+        RightsInfo m_rights;
     };
 }
 

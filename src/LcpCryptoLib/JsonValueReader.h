@@ -15,14 +15,12 @@ namespace lcp
     class JsonValueReader
     {
     public:
-        std::string ReadAsString(const std::string & name, const rapidjson::Value & jsonValue);
-        std::string ReadAsStringCheck(const std::string & name, const rapidjson::Value & jsonValue);
+        std::string ReadString(const std::string & name, const rapidjson::Value & jsonValue);
+        std::string ReadStringCheck(const std::string & name, const rapidjson::Value & jsonValue);
+        std::string ConvertToString(const rapidjson::Value & value);
 
-        const rapidjson::Value & ReadAsObject(const std::string & name, const rapidjson::Value & jsonValue);
-        const rapidjson::Value & ReadAsObjectCheck(const std::string & name, const rapidjson::Value & jsonValue);
-
-        int ReadAsInt(const std::string & name, const rapidjson::Value & jsonValue);
-        const rapidjson::Value & ReadAsArray(const std::string & name, const rapidjson::Value & jsonValue);
+        const rapidjson::Value & ReadObject(const std::string & name, const rapidjson::Value & jsonValue);
+        const rapidjson::Value & ReadObjectCheck(const std::string & name, const rapidjson::Value & jsonValue);
 
         static Status CreateRapidJsonError(rapidjson::ParseErrorCode errorCode, size_t offset = INVALID_OFFSET);
 

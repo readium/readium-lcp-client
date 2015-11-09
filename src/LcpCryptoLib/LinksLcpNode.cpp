@@ -1,59 +1,67 @@
+#include <algorithm>
 #include "rapidjson/document.h"
 #include "LinksLcpNode.h"
 #include "JsonValueReader.h"
-
+#include "LcpUtils.h"
 
 namespace lcp
 {
-    Status LinksLcpNode::ParseNode(const rapidjson::Value & parentObject, JsonValueReader * reader)
+    void LinksLcpNode::ParseNode(const rapidjson::Value & parentObject, JsonValueReader * reader)
     {
-        const rapidjson::Value & linksObject = reader->ReadAsObjectCheck("links", parentObject);
+        const rapidjson::Value & linksObject = reader->ReadObjectCheck("links", parentObject);
         
-        if (!linksObject.HasMember("hint") ||
-            !linksObject.HasMember("publication") ||
-            !linksObject.HasMember("self"))
+        if (!linksObject.HasMember(HINT))
         {
-            return Status(StCodeCover::ErrorLicenseNotValid, "links object is not valid");
+            throw StatusException(Status(StCodeCover::ErrorOpeningLicenseNotValid, "links object is not valid"));
         }
 
         for (auto it = linksObject.MemberBegin(); it != linksObject.MemberEnd(); ++it)
         {
             rapidjson::Type type = it->value.GetType();
 
-            if (type = rapidjson::kObjectType)
+            if (type == rapidjson::kObjectType)
             {
                 Link link = this->ParseLinkValues(it->value, reader);
-                m_linksMap.insert(std::make_pair(it->name.GetString(), link));
+                m_linksMultiMap.insert(std::make_pair(it->name.GetString(), link));
             }
             else if (type == rapidjson::kArrayType)
             {
-                std::list<Link> linksList;
                 for (auto arrayIt = it->value.Begin(); arrayIt != it->value.End(); ++arrayIt)
                 {
-                    Link link = this->ParseLinkValues(it->value, reader);
-                    linksList.push_back(std::move(link));
+                    Link link = this->ParseLinkValues(*arrayIt, reader);
+                    m_linksMultiMap.insert(std::make_pair(it->name.GetString(), link));
                 }
-                m_linksListMap.insert(std::make_pair(
-                    it->name.GetString(), std::move(linksList))
-                    );
             }
             else
             {
-                return Status(StCodeCover::ErrorLicenseNotValid, "links object is not valid");
+                throw StatusException(Status(StCodeCover::ErrorOpeningLicenseNotValid, "links object is not valid"));
             }
         }
-        return Status(StCodeCover::ErrorSuccess);
+
+        BaseLcpNode::ParseNode(linksObject, reader);
+    }
+
+    std::vector<Link> LinksLcpNode::GetLinks(const std::string & name) const
+    {
+        std::vector<Link> result;
+        std::pair<LinksMapConstIt, LinksMapConstIt> range = m_linksMultiMap.equal_range(name);
+        std::transform(
+            range.first, range.second,
+            std::back_inserter(result),
+            [&result](const LinksMap::value_type & val) { return val.second; }
+        );
+        return result;
     }
 
     Link LinksLcpNode::ParseLinkValues(const rapidjson::Value & linkObject, JsonValueReader * reader)
     {
         Link link;
-        link.href = reader->ReadAsStringCheck("href", linkObject);
-        link.title = reader->ReadAsString("title", linkObject);
-        link.type = reader->ReadAsString("type", linkObject);
-        link.templated = reader->ReadAsString("templated", linkObject);
-        link.length = reader->ReadAsString("length", linkObject);
-        link.hash = reader->ReadAsString("hash", linkObject);
+        link.href = reader->ReadStringCheck("href", linkObject);
+        link.title = reader->ReadString("title", linkObject);
+        link.type = reader->ReadString("type", linkObject);
+        link.templated = reader->ReadString("templated", linkObject);
+        link.length = reader->ReadString("length", linkObject);
+        link.hash = reader->ReadString("hash", linkObject);
         return link;
     }
 }

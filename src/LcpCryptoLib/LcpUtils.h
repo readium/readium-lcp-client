@@ -1,6 +1,8 @@
 #ifndef __LCP_UTILS_H__
 #define __LCP_UTILS_H__
 
+#include <string>
+#include <map>
 #include "LcpStatus.h"
 
 namespace lcp
@@ -22,6 +24,10 @@ namespace lcp
     private:
         Status m_status;
     };
+
+    std::string BoolToString(bool val);
+
+    typedef std::map<std::string, std::string> StringsMap;
 }
 
 #endif //__LCP_UTILS_H__

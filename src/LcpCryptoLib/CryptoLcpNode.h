@@ -23,7 +23,7 @@ namespace lcp
     {
     public:
         // ILcpNode
-        Status ParseNode(const rapidjson::Value & parentObject, JsonValueReader * reader);
+        void ParseNode(const rapidjson::Value & parentObject, JsonValueReader * reader);
 
     public:
         // ICrypto

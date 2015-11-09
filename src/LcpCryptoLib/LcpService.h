@@ -14,9 +14,6 @@ namespace lcp
     public:
         LcpService();
         virtual Status OpenLicense(const std::string & licenseJSON, ILicense ** license);
-
-    private:
-        std::unique_ptr<IJsonLcpParser> m_jsonParser;
     };
 }
 #endif //__LCP_SERVICE_H__

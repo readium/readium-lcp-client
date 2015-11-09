@@ -8,28 +8,23 @@
 
 namespace lcp
 {
-    struct Link
-    {
-        std::string href;
-        std::string title;
-        std::string type;
-        std::string templated;
-        std::string length;
-        std::string hash;
-    };
-
     class LinksLcpNode : public BaseLcpNode, public ILinks
     {
     public:
-        virtual Status ParseNode(const rapidjson::Value & parentObject, JsonValueReader * reader);
+        // ILcpNode
+        virtual void ParseNode(const rapidjson::Value & parentObject, JsonValueReader * reader);
+
+    public:
+        // ILinks
+        virtual std::vector<Link> GetLinks(const std::string & name) const;
 
     private:
         Link ParseLinkValues(const rapidjson::Value & linkObject, JsonValueReader * reader);
 
     private:
-        std::multimap<std::string, Link> m_linksMultiMap;
-        std::map<std::string, Link> m_linksMap;
-        std::map<std::string, std::list<Link> > m_linksListMap;
+        typedef std::multimap<std::string, Link> LinksMap;
+        typedef LinksMap::const_iterator LinksMapConstIt;
+        LinksMap m_linksMultiMap;
     };
 }
 

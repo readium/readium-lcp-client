@@ -4,7 +4,7 @@
 
 namespace lcp
 {
-    std::string JsonValueReader::ReadAsString(const std::string & name, const rapidjson::Value & jsonValue)
+    std::string JsonValueReader::ReadString(const std::string & name, const rapidjson::Value & jsonValue)
     {
         auto it = jsonValue.FindMember(name.c_str());
         if (it != jsonValue.MemberEnd() && it->value.IsString())
@@ -14,60 +14,72 @@ namespace lcp
         return std::string();
     }
 
-    std::string JsonValueReader::ReadAsStringCheck(const std::string & name, const rapidjson::Value & jsonValue)
+    std::string JsonValueReader::ReadStringCheck(const std::string & name, const rapidjson::Value & jsonValue)
     {
         auto it = jsonValue.FindMember(name.c_str());
         if (it == jsonValue.MemberEnd() || !it->value.IsString())
         {
-            throw StatusException(Status(StCodeCover::ErrorLicenseNotValid, name + " object is not valid"));
+            throw StatusException(Status(StCodeCover::ErrorOpeningLicenseNotValid, name + " object is not valid"));
         }
 
         std::string result(it->value.GetString());
         if (result.empty())
         {
-            throw StatusException(Status(StCodeCover::ErrorLicenseNotValid, name + " object is not valid"));
+            throw StatusException(Status(StCodeCover::ErrorOpeningLicenseNotValid, name + " object is not valid"));
         }
         return result;
     }
 
-    const rapidjson::Value & JsonValueReader::ReadAsObject(const std::string & name, const rapidjson::Value & jsonValue)
+    const rapidjson::Value & JsonValueReader::ReadObject(const std::string & name, const rapidjson::Value & jsonValue)
     {
         auto it = jsonValue.FindMember(name.c_str());
         if (it != jsonValue.MemberEnd() && it->value.IsObject())
         {
             return it->value;
         }
-        return rapidjson::Value();
+        rapidjson::Value nullValue(rapidjson::kNullType);
+        return nullValue.Move();
     }
 
-    const rapidjson::Value & JsonValueReader::ReadAsObjectCheck(const std::string & name, const rapidjson::Value & jsonValue)
+    const rapidjson::Value & JsonValueReader::ReadObjectCheck(const std::string & name, const rapidjson::Value & jsonValue)
     {
         auto it = jsonValue.FindMember(name.c_str());
         if (it == jsonValue.MemberEnd() || !it->value.IsObject())
         {
-            throw StatusException(Status(StCodeCover::ErrorLicenseNotValid, name + " object is not valid"));
+            throw StatusException(Status(StCodeCover::ErrorOpeningLicenseNotValid, name + " object is not valid"));
         }
         return it->value;
     }
 
-    int JsonValueReader::ReadAsInt(const std::string & name, const rapidjson::Value & jsonValue)
+    std::string JsonValueReader::ConvertToString(const rapidjson::Value & value)
     {
-        auto it = jsonValue.FindMember(name.c_str());
-        if (it != jsonValue.MemberEnd() && it->value.IsInt())
+        switch (value.GetType())
         {
-            return it->value.GetInt();
+        case rapidjson::kFalseType:
+            return BoolToString(value.GetBool());
+        case rapidjson::kTrueType:
+            return BoolToString(value.GetBool());
+        case rapidjson::kStringType:
+            return value.GetString();
+        case rapidjson::kNumberType:
+            if (value.IsUint64())
+                return std::to_string(value.GetUint64());
+            else if (value.IsInt64())
+                return std::to_string(value.GetInt64());
+            else if (value.IsUint())
+                return std::to_string(value.GetUint());
+            else if (value.IsInt())
+                return std::to_string(value.GetInt());
+            else if (value.IsDouble())
+                return std::to_string(value.GetDouble());
+            else
+                return std::string();
+        case rapidjson::kNullType:
+        case rapidjson::kObjectType:
+        case rapidjson::kArrayType:
+        default:
+            return std::string();
         }
-        return -1;
-    }
-
-    const rapidjson::Value & JsonValueReader::ReadAsArray(const std::string & name, const rapidjson::Value & jsonValue)
-    {
-        auto it = jsonValue.FindMember(name.c_str());
-        if (it != jsonValue.MemberEnd() && it->value.IsArray())
-        {
-            return it->value;
-        }
-        return rapidjson::Value();
     }
 
     /*static*/ Status JsonValueReader::CreateRapidJsonError(rapidjson::ParseErrorCode errorCode, size_t offset /* = INVALID_OFFSET */)
@@ -80,7 +92,7 @@ namespace lcp
         }
 
         return Status(
-            StCodeCover::ErrorLicenseNotValid,
+            StCodeCover::ErrorOpeningLicenseNotValid,
             strm.str().c_str()
             );
     }

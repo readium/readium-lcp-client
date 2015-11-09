@@ -1,39 +1,87 @@
 #include "UserLcpNode.h"
 #include "JsonValueReader.h"
 
+#pragma optimize( "", off )
+
 namespace lcp
 {
-    Status UserLcpNode::ParseNode(const rapidjson::Value & parentObject, JsonValueReader * reader)
+    std::string UserLcpNode::Id() const
     {
-        const rapidjson::Value & userObject = reader->ReadAsObject("user", parentObject);
-        if (userObject.IsObject())
+        return m_userInfo.id;
+    }
+
+    std::string UserLcpNode::Email() const
+    {
+        return m_userInfo.email;
+    }
+
+    std::string UserLcpNode::Name() const
+    {
+        return m_userInfo.name;
+    }
+
+    bool UserLcpNode::GetUserValue(const std::string & name, std::string & value) const
+    {
+        auto it = m_userInfo.valuesMap.find(name);
+        if (it != m_userInfo.valuesMap.end())
         {
-            for (auto it = userObject.MemberBegin(); it != userObject.MemberEnd(); ++it)
+            value = it->second;
+            return true;
+        }
+        return false;
+    }
+
+    void UserLcpNode::ParseNode(const rapidjson::Value & parentObject, JsonValueReader * reader)
+    {
+        const rapidjson::Value & userObject = reader->ReadObject("user", parentObject);
+        if (userObject.IsNull())
+        {
+            return;
+        }
+
+        for (auto it = userObject.MemberBegin(); it != userObject.MemberEnd(); ++it)
+        {
+            std::string name = it->name.GetString();
+
+            if (name == "encrypted" && it->value.IsArray())
             {
-                std::string name = it->name.GetString();
-                if (name == "id")
-                    m_userInfo.id = it->value.GetString();
-                else if (name == "email")
-                    m_userInfo.email = it->value.GetString();
-                else if (name == "name")
-                    m_userInfo.name = it->value.GetString();
-                else if (name == "encrypted" && it->value.IsArray())
+                for (auto arrayIt = it->value.Begin(); arrayIt != it->value.End(); ++arrayIt)
                 {
-                    for (auto arrayIt = it->value.Begin(); arrayIt != it->value.End(); ++arrayIt)
+                    if (arrayIt->IsString())
                     {
-                        if (arrayIt->IsString())
-                        {
-                            m_userInfo.Encrypted.push_back(arrayIt->GetString());
-                        }
-                    };
+                        m_userInfo.encrypted.push_back(arrayIt->GetString());
+                    }
                 }
-                else
+            }
+            else
+            {
+                std::string strValue = reader->ConvertToString(it->value);
+                bool res = m_userInfo.valuesMap.insert(std::make_pair(name, strValue)).second;
+                if (!res)
                 {
-                    m_userInfo.Extended.insert(std::make_pair(name, it->value.GetString()));
+                    throw std::runtime_error("Duplicate user value");
                 }
+
+                FillRegisteredFields(name, it->value);
             }
         }
 
-        return Status(StCodeCover::ErrorSuccess);
+        BaseLcpNode::ParseNode(userObject, reader);
+    }
+
+    void UserLcpNode::FillRegisteredFields(const std::string & name, const rapidjson::Value & value)
+    {
+        if (name == "id")
+        {
+            m_userInfo.id = value.GetString();
+        }
+        else if (name == "email")
+        {
+            m_userInfo.email = value.GetString();
+        }
+        else if (name == "name")
+        {
+            m_userInfo.name = value.GetString();
+        }
     }
 }
