@@ -9,9 +9,9 @@ namespace lcp
 {
     struct UserInfo
     {
-        std::string Id;
-        std::string Email;
-        std::string Name;
+        std::string id;
+        std::string email;
+        std::string name;
         std::vector<std::string> Encrypted;
         std::map<std::string, std::string> Extended;
     };

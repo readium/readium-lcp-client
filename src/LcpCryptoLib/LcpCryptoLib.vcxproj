@@ -150,6 +150,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CryptoLcpNode.cpp" />
+    <ClCompile Include="ILInks.cpp" />
+    <ClCompile Include="IRights.cpp" />
     <ClCompile Include="JsonValueReader.cpp" />
     <ClCompile Include="LcpService.cpp" />
     <ClCompile Include="LcpServiceCreator.cpp" />

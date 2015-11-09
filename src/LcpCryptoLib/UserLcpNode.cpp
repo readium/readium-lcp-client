@@ -12,11 +12,11 @@ namespace lcp
             {
                 std::string name = it->name.GetString();
                 if (name == "id")
-                    m_userInfo.Id = it->value.GetString();
+                    m_userInfo.id = it->value.GetString();
                 else if (name == "email")
-                    m_userInfo.Email = it->value.GetString();
+                    m_userInfo.email = it->value.GetString();
                 else if (name == "name")
-                    m_userInfo.Name = it->value.GetString();
+                    m_userInfo.name = it->value.GetString();
                 else if (name == "encrypted" && it->value.IsArray())
                 {
                     for (auto arrayIt = it->value.Begin(); arrayIt != it->value.End(); ++arrayIt)

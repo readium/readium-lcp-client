@@ -8,15 +8,15 @@ namespace lcp
 {
     struct CryptoInfo
     {
-        std::string EncryptionProfile;
-        std::string ContentKey;
-        std::string ContentKeyAlgorithm;
-        std::string UserKeyHint;
-        std::string UserKeyAlgorithm;
-        std::string UserKeyCheck;
-        std::string Signature;
-        std::string SignatureAlgorithm;
-        std::string SignatureCertificate;
+        std::string encryptionProfile;
+        std::string contentKey;
+        std::string contentKeyAlgorithm;
+        std::string userKeyHint;
+        std::string userKeyAlgorithm;
+        std::string userKeyCheck;
+        std::string signature;
+        std::string signatureAlgorithm;
+        std::string signatureCertificate;
     };
 
     class CryptoLcpNode : public BaseLcpNode, public ICrypto

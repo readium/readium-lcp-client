@@ -7,20 +7,6 @@
 
 namespace lcp
 {
-    struct Link
-    {
-        std::string Href;
-        std::string Title;
-        std::string Type;
-        std::string Templated;
-        std::string Length;
-        std::string Hash;
-
-        static const char * PUBLICATION;
-        static const char * HINT;
-        static const char * SELF;
-    };
-
     template<typename T> class IIterator;
 
     class ILinks
@@ -32,6 +18,11 @@ namespace lcp
         virtual Link * GetLinkByName(const std::string & linkName) = 0;
         virtual std::list<Link *> GetLinksByName(const std::string & linkName) = 0;*/
         virtual ~ILinks() {}
+
+    public:
+        static const char * PUBLICATION;
+        static const char * HINT;
+        static const char * SELF;
     };
 }
 

@@ -7,6 +7,13 @@ namespace lcp
     {
     public:
         virtual ~IRights() {}
+
+    public:
+        static const char * PRINT;
+        static const char * COPY;
+        static const char * TTS;
+        static const char * START;
+        static const char * END;
     };
 }
 

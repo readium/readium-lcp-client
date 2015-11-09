@@ -14,27 +14,27 @@ namespace lcp
 
     std::string RootLcpNode::Id() const
     {
-        return m_rootInfo.Id;
+        return m_rootInfo.id;
     }
 
     std::string RootLcpNode::Content() const
     {
-        return m_rootInfo.Content;
+        return m_rootInfo.content;
     }
 
     std::string RootLcpNode::Issued() const
     {
-        return m_rootInfo.Issued;
+        return m_rootInfo.issued;
     }
 
     std::string RootLcpNode::Updated() const
     {
-        return m_rootInfo.Updated;
+        return m_rootInfo.updated;
     }
 
     std::string RootLcpNode::Provider() const
     {
-        return m_rootInfo.Provider;
+        return m_rootInfo.provider;
     }
 
     ICrypto * RootLcpNode::Crypto() const
@@ -64,10 +64,10 @@ namespace lcp
             return JsonValueReader::CreateRapidJsonError(rapidjson::kParseErrorValueInvalid);
         }
 
-        m_rootInfo.Id = reader->ReadAsStringCheck("id", parentObject);
-        m_rootInfo.Issued = reader->ReadAsStringCheck("issued", parentObject);
-        m_rootInfo.Provider = reader->ReadAsStringCheck("provider", parentObject);
-        m_rootInfo.Updated = reader->ReadAsString("updated", parentObject);
+        m_rootInfo.id = reader->ReadAsStringCheck("id", parentObject);
+        m_rootInfo.issued = reader->ReadAsStringCheck("issued", parentObject);
+        m_rootInfo.provider = reader->ReadAsStringCheck("provider", parentObject);
+        m_rootInfo.updated = reader->ReadAsString("updated", parentObject);
 
         for (auto it = m_childs.begin(); it != m_childs.end(); ++it)
         {

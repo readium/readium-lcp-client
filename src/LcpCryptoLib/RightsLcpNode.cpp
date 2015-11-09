@@ -3,11 +3,7 @@
 
 namespace lcp
 {
-    /*static*/ const char * Rights::PRINT = "print";
-    /*static*/ const char * Rights::COPY = "copy";
-    /*static*/ const char * Rights::TTS = "tts";
-    /*static*/ const char * Rights::START = "start";
-    /*static*/ const char * Rights::END = "end";
+
 
     Status RightsLcpNode::ParseNode(const rapidjson::Value & parentObject, JsonValueReader * reader)
     {
@@ -17,19 +13,19 @@ namespace lcp
             for (auto it = rightsObject.MemberBegin(); it != rightsObject.MemberEnd(); ++it)
             {
                 std::string name = it->name.GetString();
-                if (name == Rights::PRINT)
-                    m_rights.Print = it->value.GetInt();
-                else if (name == Rights::COPY)
-                    m_rights.Copy = it->value.GetInt();
-                else if (name == Rights::TTS)
-                    m_rights.Tts = it->value.GetBool();
-                else if (name == Rights::START)
-                    m_rights.Start = it->value.GetString();
-                else if (name == Rights::END)
-                    m_rights.End = it->value.GetString();
+                if (name == PRINT)
+                    m_rights.print = it->value.GetInt();
+                else if (name == COPY)
+                    m_rights.copy = it->value.GetInt();
+                else if (name == TTS)
+                    m_rights.tts = it->value.GetBool();
+                else if (name == START)
+                    m_rights.start = it->value.GetString();
+                else if (name == END)
+                    m_rights.end = it->value.GetString();
                 else
                 {
-                    m_rights.ExtendedRights.insert(std::make_pair(name, it->value.GetString()));
+                    m_rights.extendedRights.insert(std::make_pair(name, it->value.GetString()));
                 }
             }
         }

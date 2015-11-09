@@ -9,18 +9,12 @@ namespace lcp
 {
     struct Rights
     {
-        int Print;
-        int Copy;
-        bool Tts;
-        std::string Start;
-        std::string End;
-        std::map<std::string, std::string> ExtendedRights;
-
-        static const char * PRINT;
-        static const char * COPY;
-        static const char * TTS;
-        static const char * START;
-        static const char * END;
+        int print;
+        int copy;
+        bool tts;
+        std::string start;
+        std::string end;
+        std::map<std::string, std::string> extendedRights;
     };
 
     class RightsLcpNode : public BaseLcpNode, public IRights

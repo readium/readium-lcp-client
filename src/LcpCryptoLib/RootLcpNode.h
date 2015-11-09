@@ -8,11 +8,11 @@ namespace lcp
 {
     struct RootInfo
     {
-        std::string Id;
-        std::string Content;
-        std::string Issued;
-        std::string Provider;
-        std::string Updated;
+        std::string id;
+        std::string content;
+        std::string issued;
+        std::string provider;
+        std::string updated;
     };
 
     class RootLcpNode : public BaseLcpNode, public ILicense

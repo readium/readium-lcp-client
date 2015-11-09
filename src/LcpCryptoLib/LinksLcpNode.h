@@ -8,6 +8,16 @@
 
 namespace lcp
 {
+    struct Link
+    {
+        std::string href;
+        std::string title;
+        std::string type;
+        std::string templated;
+        std::string length;
+        std::string hash;
+    };
+
     class LinksLcpNode : public BaseLcpNode, public ILinks
     {
     public:
@@ -17,6 +27,7 @@ namespace lcp
         Link ParseLinkValues(const rapidjson::Value & linkObject, JsonValueReader * reader);
 
     private:
+        std::multimap<std::string, Link> m_linksMultiMap;
         std::map<std::string, Link> m_linksMap;
         std::map<std::string, std::list<Link> > m_linksListMap;
     };

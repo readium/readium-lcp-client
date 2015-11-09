@@ -5,10 +5,6 @@
 
 namespace lcp
 {
-    /*static*/ const char * Link::PUBLICATION = "publication";
-    /*static*/ const char * Link::HINT = "hint";
-    /*static*/ const char * Link::SELF = "self";
-
     Status LinksLcpNode::ParseNode(const rapidjson::Value & parentObject, JsonValueReader * reader)
     {
         const rapidjson::Value & linksObject = reader->ReadAsObjectCheck("links", parentObject);
@@ -27,9 +23,7 @@ namespace lcp
             if (type = rapidjson::kObjectType)
             {
                 Link link = this->ParseLinkValues(it->value, reader);
-                m_linksMap.insert(std::make_pair(
-                    it->name.GetString(), std::move(link))
-                    );
+                m_linksMap.insert(std::make_pair(it->name.GetString(), link));
             }
             else if (type == rapidjson::kArrayType)
             {
@@ -54,12 +48,12 @@ namespace lcp
     Link LinksLcpNode::ParseLinkValues(const rapidjson::Value & linkObject, JsonValueReader * reader)
     {
         Link link;
-        link.Href = reader->ReadAsStringCheck("href", linkObject);
-        link.Title = reader->ReadAsString("title", linkObject);
-        link.Type = reader->ReadAsString("type", linkObject);
-        link.Templated = reader->ReadAsString("templated", linkObject);
-        link.Length = reader->ReadAsString("length", linkObject);
-        link.Hash = reader->ReadAsString("hash", linkObject);
+        link.href = reader->ReadAsStringCheck("href", linkObject);
+        link.title = reader->ReadAsString("title", linkObject);
+        link.type = reader->ReadAsString("type", linkObject);
+        link.templated = reader->ReadAsString("templated", linkObject);
+        link.length = reader->ReadAsString("length", linkObject);
+        link.hash = reader->ReadAsString("hash", linkObject);
         return link;
     }
 }

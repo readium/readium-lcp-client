@@ -18,6 +18,9 @@
     <Filter Include="Header Files\PublicInterfaces">
       <UniqueIdentifier>{1428b178-44b5-48b6-927a-bc5dab46bf75}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\PublicInterfaces">
+      <UniqueIdentifier>{cd3ce8e4-dc0a-4d59-a173-3d531f29d927}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LcpUtils.h">
@@ -111,6 +114,12 @@
     </ClCompile>
     <ClCompile Include="LcpServiceCreator.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ILInks.cpp">
+      <Filter>Source Files\PublicInterfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="IRights.cpp">
+      <Filter>Source Files\PublicInterfaces</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
