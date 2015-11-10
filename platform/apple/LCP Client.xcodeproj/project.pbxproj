@@ -1,0 +1,477 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		5ACE2E711BF21E5000AC0585 /* CryptoLcpNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5ACE2E491BF21E5000AC0585 /* CryptoLcpNode.cpp */; };
+		5ACE2E721BF21E5000AC0585 /* ILInks.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5ACE2E4F1BF21E5000AC0585 /* ILInks.cpp */; };
+		5ACE2E731BF21E5000AC0585 /* IRights.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5ACE2E511BF21E5000AC0585 /* IRights.cpp */; };
+		5ACE2E741BF21E5000AC0585 /* JsonValueReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5ACE2E551BF21E5000AC0585 /* JsonValueReader.cpp */; };
+		5ACE2E751BF21E5000AC0585 /* LcpService.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5ACE2E5A1BF21E5000AC0585 /* LcpService.cpp */; };
+		5ACE2E761BF21E5000AC0585 /* LcpServiceCreator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5ACE2E5C1BF21E5000AC0585 /* LcpServiceCreator.cpp */; };
+		5ACE2E771BF21E5000AC0585 /* LcpUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5ACE2E5F1BF21E5000AC0585 /* LcpUtils.cpp */; };
+		5ACE2E781BF21E5000AC0585 /* LinksLcpNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5ACE2E611BF21E5000AC0585 /* LinksLcpNode.cpp */; };
+		5ACE2E791BF21E5000AC0585 /* RightsLcpNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5ACE2E631BF21E5000AC0585 /* RightsLcpNode.cpp */; };
+		5ACE2E7A1BF21E5000AC0585 /* RootLcpNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5ACE2E651BF21E5000AC0585 /* RootLcpNode.cpp */; };
+		5ACE2E7B1BF21E5000AC0585 /* UserLcpNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5ACE2E671BF21E5000AC0585 /* UserLcpNode.cpp */; };
+		5ACE2E7C1BF21E5000AC0585 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5ACE2E6D1BF21E5000AC0585 /* main.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		5ACE2E191BF21D8C00AC0585 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		5ACE2E1B1BF21D8C00AC0585 /* libLCP-client-iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libLCP-client-iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5ACE2E271BF21E5000AC0585 /* allocators.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = allocators.h; sourceTree = "<group>"; };
+		5ACE2E281BF21E5000AC0585 /* document.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = document.h; sourceTree = "<group>"; };
+		5ACE2E291BF21E5000AC0585 /* encodedstream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = encodedstream.h; sourceTree = "<group>"; };
+		5ACE2E2A1BF21E5000AC0585 /* encodings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = encodings.h; sourceTree = "<group>"; };
+		5ACE2E2C1BF21E5000AC0585 /* en.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = en.h; sourceTree = "<group>"; };
+		5ACE2E2D1BF21E5000AC0585 /* error.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = error.h; sourceTree = "<group>"; };
+		5ACE2E2E1BF21E5000AC0585 /* filereadstream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = filereadstream.h; sourceTree = "<group>"; };
+		5ACE2E2F1BF21E5000AC0585 /* filewritestream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = filewritestream.h; sourceTree = "<group>"; };
+		5ACE2E311BF21E5000AC0585 /* biginteger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = biginteger.h; sourceTree = "<group>"; };
+		5ACE2E321BF21E5000AC0585 /* diyfp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = diyfp.h; sourceTree = "<group>"; };
+		5ACE2E331BF21E5000AC0585 /* dtoa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dtoa.h; sourceTree = "<group>"; };
+		5ACE2E341BF21E5000AC0585 /* ieee754.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ieee754.h; sourceTree = "<group>"; };
+		5ACE2E351BF21E5000AC0585 /* itoa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = itoa.h; sourceTree = "<group>"; };
+		5ACE2E361BF21E5000AC0585 /* meta.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = meta.h; sourceTree = "<group>"; };
+		5ACE2E371BF21E5000AC0585 /* pow10.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pow10.h; sourceTree = "<group>"; };
+		5ACE2E381BF21E5000AC0585 /* stack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stack.h; sourceTree = "<group>"; };
+		5ACE2E391BF21E5000AC0585 /* strfunc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = strfunc.h; sourceTree = "<group>"; };
+		5ACE2E3A1BF21E5000AC0585 /* strtod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = strtod.h; sourceTree = "<group>"; };
+		5ACE2E3B1BF21E5000AC0585 /* swap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = swap.h; sourceTree = "<group>"; };
+		5ACE2E3C1BF21E5000AC0585 /* memorybuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = memorybuffer.h; sourceTree = "<group>"; };
+		5ACE2E3D1BF21E5000AC0585 /* memorystream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = memorystream.h; sourceTree = "<group>"; };
+		5ACE2E3F1BF21E5000AC0585 /* inttypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = inttypes.h; sourceTree = "<group>"; };
+		5ACE2E401BF21E5000AC0585 /* stdint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stdint.h; sourceTree = "<group>"; };
+		5ACE2E411BF21E5000AC0585 /* pointer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pointer.h; sourceTree = "<group>"; };
+		5ACE2E421BF21E5000AC0585 /* prettywriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = prettywriter.h; sourceTree = "<group>"; };
+		5ACE2E431BF21E5000AC0585 /* rapidjson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rapidjson.h; sourceTree = "<group>"; };
+		5ACE2E441BF21E5000AC0585 /* reader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = reader.h; sourceTree = "<group>"; };
+		5ACE2E451BF21E5000AC0585 /* stringbuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stringbuffer.h; sourceTree = "<group>"; };
+		5ACE2E461BF21E5000AC0585 /* writer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = writer.h; sourceTree = "<group>"; };
+		5ACE2E481BF21E5000AC0585 /* BaseLcpNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseLcpNode.h; sourceTree = "<group>"; };
+		5ACE2E491BF21E5000AC0585 /* CryptoLcpNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CryptoLcpNode.cpp; sourceTree = "<group>"; };
+		5ACE2E4A1BF21E5000AC0585 /* CryptoLcpNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CryptoLcpNode.h; sourceTree = "<group>"; };
+		5ACE2E4B1BF21E5000AC0585 /* ICrypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ICrypto.h; sourceTree = "<group>"; };
+		5ACE2E4C1BF21E5000AC0585 /* ILcpNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ILcpNode.h; sourceTree = "<group>"; };
+		5ACE2E4D1BF21E5000AC0585 /* ILcpService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ILcpService.h; sourceTree = "<group>"; };
+		5ACE2E4E1BF21E5000AC0585 /* ILicense.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ILicense.h; sourceTree = "<group>"; };
+		5ACE2E4F1BF21E5000AC0585 /* ILInks.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ILInks.cpp; sourceTree = "<group>"; };
+		5ACE2E501BF21E5000AC0585 /* ILinks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ILinks.h; sourceTree = "<group>"; };
+		5ACE2E511BF21E5000AC0585 /* IRights.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IRights.cpp; sourceTree = "<group>"; };
+		5ACE2E521BF21E5000AC0585 /* IRights.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IRights.h; sourceTree = "<group>"; };
+		5ACE2E531BF21E5000AC0585 /* Iterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Iterator.h; sourceTree = "<group>"; };
+		5ACE2E541BF21E5000AC0585 /* IUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IUser.h; sourceTree = "<group>"; };
+		5ACE2E551BF21E5000AC0585 /* JsonValueReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JsonValueReader.cpp; sourceTree = "<group>"; };
+		5ACE2E561BF21E5000AC0585 /* JsonValueReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JsonValueReader.h; sourceTree = "<group>"; };
+		5ACE2E571BF21E5000AC0585 /* LcpCryptoLib.vcxproj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = LcpCryptoLib.vcxproj; sourceTree = "<group>"; };
+		5ACE2E581BF21E5000AC0585 /* LcpCryptoLib.vcxproj.filters */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = LcpCryptoLib.vcxproj.filters; sourceTree = "<group>"; };
+		5ACE2E591BF21E5000AC0585 /* LcpPublicInterfaces.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LcpPublicInterfaces.h; sourceTree = "<group>"; };
+		5ACE2E5A1BF21E5000AC0585 /* LcpService.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LcpService.cpp; sourceTree = "<group>"; };
+		5ACE2E5B1BF21E5000AC0585 /* LcpService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LcpService.h; sourceTree = "<group>"; };
+		5ACE2E5C1BF21E5000AC0585 /* LcpServiceCreator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LcpServiceCreator.cpp; sourceTree = "<group>"; };
+		5ACE2E5D1BF21E5000AC0585 /* LcpServiceCreator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LcpServiceCreator.h; sourceTree = "<group>"; };
+		5ACE2E5E1BF21E5000AC0585 /* LcpStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LcpStatus.h; sourceTree = "<group>"; };
+		5ACE2E5F1BF21E5000AC0585 /* LcpUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LcpUtils.cpp; sourceTree = "<group>"; };
+		5ACE2E601BF21E5000AC0585 /* LcpUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LcpUtils.h; sourceTree = "<group>"; };
+		5ACE2E611BF21E5000AC0585 /* LinksLcpNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LinksLcpNode.cpp; sourceTree = "<group>"; };
+		5ACE2E621BF21E5000AC0585 /* LinksLcpNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LinksLcpNode.h; sourceTree = "<group>"; };
+		5ACE2E631BF21E5000AC0585 /* RightsLcpNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RightsLcpNode.cpp; sourceTree = "<group>"; };
+		5ACE2E641BF21E5000AC0585 /* RightsLcpNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RightsLcpNode.h; sourceTree = "<group>"; };
+		5ACE2E651BF21E5000AC0585 /* RootLcpNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RootLcpNode.cpp; sourceTree = "<group>"; };
+		5ACE2E661BF21E5000AC0585 /* RootLcpNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootLcpNode.h; sourceTree = "<group>"; };
+		5ACE2E671BF21E5000AC0585 /* UserLcpNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UserLcpNode.cpp; sourceTree = "<group>"; };
+		5ACE2E681BF21E5000AC0585 /* UserLcpNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserLcpNode.h; sourceTree = "<group>"; };
+		5ACE2E691BF21E5000AC0585 /* LcpCryptoLib.sln */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LcpCryptoLib.sln; sourceTree = "<group>"; };
+		5ACE2E6B1BF21E5000AC0585 /* LcpCryptoLibTest.vcxproj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = LcpCryptoLibTest.vcxproj; sourceTree = "<group>"; };
+		5ACE2E6C1BF21E5000AC0585 /* LcpCryptoLibTest.vcxproj.filters */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = LcpCryptoLibTest.vcxproj.filters; sourceTree = "<group>"; };
+		5ACE2E6D1BF21E5000AC0585 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		5ACE2E6F1BF21E5000AC0585 /* rapidjson.vcxproj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = rapidjson.vcxproj; sourceTree = "<group>"; };
+		5ACE2E701BF21E5000AC0585 /* rapidjson.vcxproj.filters */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = rapidjson.vcxproj.filters; sourceTree = "<group>"; };
+		5ACE2E7D1BF21EBE00AC0585 /* LCP Client.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "LCP Client.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		5ACE2E181BF21D8C00AC0585 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		5ACE2E021BF21D7900AC0585 = {
+			isa = PBXGroup;
+			children = (
+				5ACE2E7D1BF21EBE00AC0585 /* LCP Client.xcconfig */,
+				5ACE2E241BF21E5000AC0585 /* Sources */,
+				5ACE2E0C1BF21D7900AC0585 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		5ACE2E0C1BF21D7900AC0585 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5ACE2E1B1BF21D8C00AC0585 /* libLCP-client-iOS.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		5ACE2E241BF21E5000AC0585 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				5ACE2E251BF21E5000AC0585 /* include */,
+				5ACE2E471BF21E5000AC0585 /* LcpCryptoLib */,
+				5ACE2E691BF21E5000AC0585 /* LcpCryptoLib.sln */,
+				5ACE2E6A1BF21E5000AC0585 /* LcpCryptoLibTest */,
+				5ACE2E6E1BF21E5000AC0585 /* rapidjson */,
+			);
+			name = Sources;
+			path = ../../src;
+			sourceTree = "<group>";
+		};
+		5ACE2E251BF21E5000AC0585 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				5ACE2E261BF21E5000AC0585 /* rapidjson */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		5ACE2E261BF21E5000AC0585 /* rapidjson */ = {
+			isa = PBXGroup;
+			children = (
+				5ACE2E271BF21E5000AC0585 /* allocators.h */,
+				5ACE2E281BF21E5000AC0585 /* document.h */,
+				5ACE2E291BF21E5000AC0585 /* encodedstream.h */,
+				5ACE2E2A1BF21E5000AC0585 /* encodings.h */,
+				5ACE2E2B1BF21E5000AC0585 /* error */,
+				5ACE2E2E1BF21E5000AC0585 /* filereadstream.h */,
+				5ACE2E2F1BF21E5000AC0585 /* filewritestream.h */,
+				5ACE2E301BF21E5000AC0585 /* internal */,
+				5ACE2E3C1BF21E5000AC0585 /* memorybuffer.h */,
+				5ACE2E3D1BF21E5000AC0585 /* memorystream.h */,
+				5ACE2E3E1BF21E5000AC0585 /* msinttypes */,
+				5ACE2E411BF21E5000AC0585 /* pointer.h */,
+				5ACE2E421BF21E5000AC0585 /* prettywriter.h */,
+				5ACE2E431BF21E5000AC0585 /* rapidjson.h */,
+				5ACE2E441BF21E5000AC0585 /* reader.h */,
+				5ACE2E451BF21E5000AC0585 /* stringbuffer.h */,
+				5ACE2E461BF21E5000AC0585 /* writer.h */,
+			);
+			path = rapidjson;
+			sourceTree = "<group>";
+		};
+		5ACE2E2B1BF21E5000AC0585 /* error */ = {
+			isa = PBXGroup;
+			children = (
+				5ACE2E2C1BF21E5000AC0585 /* en.h */,
+				5ACE2E2D1BF21E5000AC0585 /* error.h */,
+			);
+			path = error;
+			sourceTree = "<group>";
+		};
+		5ACE2E301BF21E5000AC0585 /* internal */ = {
+			isa = PBXGroup;
+			children = (
+				5ACE2E311BF21E5000AC0585 /* biginteger.h */,
+				5ACE2E321BF21E5000AC0585 /* diyfp.h */,
+				5ACE2E331BF21E5000AC0585 /* dtoa.h */,
+				5ACE2E341BF21E5000AC0585 /* ieee754.h */,
+				5ACE2E351BF21E5000AC0585 /* itoa.h */,
+				5ACE2E361BF21E5000AC0585 /* meta.h */,
+				5ACE2E371BF21E5000AC0585 /* pow10.h */,
+				5ACE2E381BF21E5000AC0585 /* stack.h */,
+				5ACE2E391BF21E5000AC0585 /* strfunc.h */,
+				5ACE2E3A1BF21E5000AC0585 /* strtod.h */,
+				5ACE2E3B1BF21E5000AC0585 /* swap.h */,
+			);
+			path = internal;
+			sourceTree = "<group>";
+		};
+		5ACE2E3E1BF21E5000AC0585 /* msinttypes */ = {
+			isa = PBXGroup;
+			children = (
+				5ACE2E3F1BF21E5000AC0585 /* inttypes.h */,
+				5ACE2E401BF21E5000AC0585 /* stdint.h */,
+			);
+			path = msinttypes;
+			sourceTree = "<group>";
+		};
+		5ACE2E471BF21E5000AC0585 /* LcpCryptoLib */ = {
+			isa = PBXGroup;
+			children = (
+				5ACE2E481BF21E5000AC0585 /* BaseLcpNode.h */,
+				5ACE2E491BF21E5000AC0585 /* CryptoLcpNode.cpp */,
+				5ACE2E4A1BF21E5000AC0585 /* CryptoLcpNode.h */,
+				5ACE2E4B1BF21E5000AC0585 /* ICrypto.h */,
+				5ACE2E4C1BF21E5000AC0585 /* ILcpNode.h */,
+				5ACE2E4D1BF21E5000AC0585 /* ILcpService.h */,
+				5ACE2E4E1BF21E5000AC0585 /* ILicense.h */,
+				5ACE2E4F1BF21E5000AC0585 /* ILInks.cpp */,
+				5ACE2E501BF21E5000AC0585 /* ILinks.h */,
+				5ACE2E511BF21E5000AC0585 /* IRights.cpp */,
+				5ACE2E521BF21E5000AC0585 /* IRights.h */,
+				5ACE2E531BF21E5000AC0585 /* Iterator.h */,
+				5ACE2E541BF21E5000AC0585 /* IUser.h */,
+				5ACE2E551BF21E5000AC0585 /* JsonValueReader.cpp */,
+				5ACE2E561BF21E5000AC0585 /* JsonValueReader.h */,
+				5ACE2E571BF21E5000AC0585 /* LcpCryptoLib.vcxproj */,
+				5ACE2E581BF21E5000AC0585 /* LcpCryptoLib.vcxproj.filters */,
+				5ACE2E591BF21E5000AC0585 /* LcpPublicInterfaces.h */,
+				5ACE2E5A1BF21E5000AC0585 /* LcpService.cpp */,
+				5ACE2E5B1BF21E5000AC0585 /* LcpService.h */,
+				5ACE2E5C1BF21E5000AC0585 /* LcpServiceCreator.cpp */,
+				5ACE2E5D1BF21E5000AC0585 /* LcpServiceCreator.h */,
+				5ACE2E5E1BF21E5000AC0585 /* LcpStatus.h */,
+				5ACE2E5F1BF21E5000AC0585 /* LcpUtils.cpp */,
+				5ACE2E601BF21E5000AC0585 /* LcpUtils.h */,
+				5ACE2E611BF21E5000AC0585 /* LinksLcpNode.cpp */,
+				5ACE2E621BF21E5000AC0585 /* LinksLcpNode.h */,
+				5ACE2E631BF21E5000AC0585 /* RightsLcpNode.cpp */,
+				5ACE2E641BF21E5000AC0585 /* RightsLcpNode.h */,
+				5ACE2E651BF21E5000AC0585 /* RootLcpNode.cpp */,
+				5ACE2E661BF21E5000AC0585 /* RootLcpNode.h */,
+				5ACE2E671BF21E5000AC0585 /* UserLcpNode.cpp */,
+				5ACE2E681BF21E5000AC0585 /* UserLcpNode.h */,
+			);
+			path = LcpCryptoLib;
+			sourceTree = "<group>";
+		};
+		5ACE2E6A1BF21E5000AC0585 /* LcpCryptoLibTest */ = {
+			isa = PBXGroup;
+			children = (
+				5ACE2E6B1BF21E5000AC0585 /* LcpCryptoLibTest.vcxproj */,
+				5ACE2E6C1BF21E5000AC0585 /* LcpCryptoLibTest.vcxproj.filters */,
+				5ACE2E6D1BF21E5000AC0585 /* main.cpp */,
+			);
+			path = LcpCryptoLibTest;
+			sourceTree = "<group>";
+		};
+		5ACE2E6E1BF21E5000AC0585 /* rapidjson */ = {
+			isa = PBXGroup;
+			children = (
+				5ACE2E6F1BF21E5000AC0585 /* rapidjson.vcxproj */,
+				5ACE2E701BF21E5000AC0585 /* rapidjson.vcxproj.filters */,
+			);
+			path = rapidjson;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		5ACE2E1A1BF21D8C00AC0585 /* LCP Client (iOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5ACE2E211BF21D8C00AC0585 /* Build configuration list for PBXNativeTarget "LCP Client (iOS)" */;
+			buildPhases = (
+				5ACE2E171BF21D8C00AC0585 /* Sources */,
+				5ACE2E181BF21D8C00AC0585 /* Frameworks */,
+				5ACE2E191BF21D8C00AC0585 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "LCP Client (iOS)";
+			productName = "lcp-client-iOS";
+			productReference = 5ACE2E1B1BF21D8C00AC0585 /* libLCP-client-iOS.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		5ACE2E031BF21D7900AC0585 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0710;
+				ORGANIZATIONNAME = Mantano;
+				TargetAttributes = {
+					5ACE2E1A1BF21D8C00AC0585 = {
+						CreatedOnToolsVersion = 7.1;
+					};
+				};
+			};
+			buildConfigurationList = 5ACE2E061BF21D7900AC0585 /* Build configuration list for PBXProject "LCP Client" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 5ACE2E021BF21D7900AC0585;
+			productRefGroup = 5ACE2E0C1BF21D7900AC0585 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				5ACE2E1A1BF21D8C00AC0585 /* LCP Client (iOS) */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		5ACE2E171BF21D8C00AC0585 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5ACE2E751BF21E5000AC0585 /* LcpService.cpp in Sources */,
+				5ACE2E771BF21E5000AC0585 /* LcpUtils.cpp in Sources */,
+				5ACE2E7C1BF21E5000AC0585 /* main.cpp in Sources */,
+				5ACE2E731BF21E5000AC0585 /* IRights.cpp in Sources */,
+				5ACE2E711BF21E5000AC0585 /* CryptoLcpNode.cpp in Sources */,
+				5ACE2E741BF21E5000AC0585 /* JsonValueReader.cpp in Sources */,
+				5ACE2E791BF21E5000AC0585 /* RightsLcpNode.cpp in Sources */,
+				5ACE2E761BF21E5000AC0585 /* LcpServiceCreator.cpp in Sources */,
+				5ACE2E7A1BF21E5000AC0585 /* RootLcpNode.cpp in Sources */,
+				5ACE2E7B1BF21E5000AC0585 /* UserLcpNode.cpp in Sources */,
+				5ACE2E721BF21E5000AC0585 /* ILInks.cpp in Sources */,
+				5ACE2E781BF21E5000AC0585 /* LinksLcpNode.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		5ACE2E121BF21D7900AC0585 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5ACE2E7D1BF21EBE00AC0585 /* LCP Client.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		5ACE2E131BF21D7900AC0585 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5ACE2E7D1BF21EBE00AC0585 /* LCP Client.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		5ACE2E221BF21D8C00AC0585 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "LCP-client-iOS";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		5ACE2E231BF21D8C00AC0585 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "LCP-client-iOS";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		5ACE2E061BF21D7900AC0585 /* Build configuration list for PBXProject "LCP Client" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5ACE2E121BF21D7900AC0585 /* Debug */,
+				5ACE2E131BF21D7900AC0585 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5ACE2E211BF21D8C00AC0585 /* Build configuration list for PBXNativeTarget "LCP Client (iOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5ACE2E221BF21D8C00AC0585 /* Debug */,
+				5ACE2E231BF21D8C00AC0585 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 5ACE2E031BF21D7900AC0585 /* Project object */;
+}
