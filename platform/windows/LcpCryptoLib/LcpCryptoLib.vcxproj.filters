@@ -44,34 +44,34 @@
     <ClInclude Include="..\..\..\src\LcpCryptoLib\UserLcpNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\ICrypto.h">
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\PublicInterfaces\ICrypto.h">
       <Filter>Header Files\PublicInterfaces</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\ILcpService.h">
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\PublicInterfaces\ILcpService.h">
       <Filter>Header Files\PublicInterfaces</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\ILicense.h">
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\PublicInterfaces\ILicense.h">
       <Filter>Header Files\PublicInterfaces</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\ILinks.h">
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\PublicInterfaces\ILinks.h">
       <Filter>Header Files\PublicInterfaces</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\IRights.h">
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\PublicInterfaces\IRights.h">
       <Filter>Header Files\PublicInterfaces</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\Iterator.h">
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\PublicInterfaces\Iterator.h">
       <Filter>Header Files\PublicInterfaces</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\IUser.h">
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\PublicInterfaces\IUser.h">
       <Filter>Header Files\PublicInterfaces</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\LcpStatus.h">
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\PublicInterfaces\lcp.h">
       <Filter>Header Files\PublicInterfaces</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\LcpServiceCreator.h">
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\PublicInterfaces\LcpServiceCreator.h">
       <Filter>Header Files\PublicInterfaces</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\lcp.h">
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\PublicInterfaces\LcpStatus.h">
       <Filter>Header Files\PublicInterfaces</Filter>
     </ClInclude>
   </ItemGroup>
