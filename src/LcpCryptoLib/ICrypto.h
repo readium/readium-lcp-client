@@ -14,6 +14,7 @@ namespace lcp
 
         // Content Key encrypted with the User Key (base 64).
         virtual std::string ContentKey() const = 0;
+
         // Algorithm used to encrypt the Content Key, as an URI (W3C XML
         // Encryption).
         virtual std::string ContentKeyAlgorithm() const = 0;
@@ -27,10 +28,7 @@ namespace lcp
         virtual std::string UserKeyAlgorithm() const = 0;
 
         // The value of the License's identifier field, encrypted using 
-        // the User Key and the same algorithm identified for Content Key
-        // encryption.
-        // This is used to verify that the Reading System has the correct
-        // User Key.
+        // the User Key
         virtual std::string UserKeyCheck() const = 0;
 
         // Value of the License signature.
