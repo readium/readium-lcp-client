@@ -37,8 +37,7 @@ namespace lcp
         {
             return it->value;
         }
-        rapidjson::Value nullValue(rapidjson::kNullType);
-        return nullValue.Move();
+        return rapidjson::Value(rapidjson::kNullType).Move();
     }
 
     const rapidjson::Value & JsonValueReader::ReadObjectCheck(const std::string & name, const rapidjson::Value & jsonValue)

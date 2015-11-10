@@ -5,8 +5,6 @@
 
 #include "ILcpService.h"
 
-#include "IJsonLcpParser.h"
-
 namespace lcp
 {
     class LcpService : public ILcpService
