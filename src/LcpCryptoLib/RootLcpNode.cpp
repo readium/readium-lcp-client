@@ -68,8 +68,7 @@ namespace lcp
     void RootLcpNode::ParseNode(const rapidjson::Value & parentObject, JsonValueReader * reader)
     {
         rapidjson::Document rootObject;
-        //TODO: kParseValidateEncodingFlag
-        if (rootObject.Parse(m_licenseJson.c_str()).HasParseError())
+        if (rootObject.Parse<rapidjson::kParseValidateEncodingFlag>(m_licenseJson.c_str()).HasParseError())
         {
             throw StatusException(JsonValueReader::CreateRapidJsonError(
                 rootObject.GetParseError(), rootObject.GetErrorOffset())
