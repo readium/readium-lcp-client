@@ -3,7 +3,7 @@
 
 #include <memory>
 
-#include "ILcpService.h"
+#include "Public/ILcpService.h"
 
 namespace lcp
 {

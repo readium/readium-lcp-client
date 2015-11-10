@@ -3,7 +3,7 @@
 
 #include <sstream>
 #include "rapidjson/document.h"
-#include "LcpStatus.h"
+#include "Public/LcpStatus.h"
 
 // namespace rapidjson
 // {

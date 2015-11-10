@@ -3,7 +3,7 @@
 
 #include "LcpUtils.h"
 #include "BaseLcpNode.h"
-#include "IRights.h"
+#include "Public/IRights.h"
 
 namespace lcp
 {

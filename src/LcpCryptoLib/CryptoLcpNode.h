@@ -2,7 +2,7 @@
 #define __ENCRYPTION_LCP_NODE_H__
 
 #include "BaseLcpNode.h"
-#include "ICrypto.h"
+#include "Public/ICrypto.h"
 
 namespace lcp
 {

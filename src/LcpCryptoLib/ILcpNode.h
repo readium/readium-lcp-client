@@ -2,7 +2,7 @@
 #define __I_LCP_NODE_H__
 
 #include <memory>
-#include "LcpStatus.h"
+#include "Public/LcpStatus.h"
 #include "rapidjson/document.h"
 
 // namespace rapidjson

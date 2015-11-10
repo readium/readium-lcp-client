@@ -1,5 +1,5 @@
 #include <exception>
-#include "LcpServiceCreator.h"
+#include "Public/LcpServiceCreator.h"
 #include "LcpService.h"
 
 namespace lcp

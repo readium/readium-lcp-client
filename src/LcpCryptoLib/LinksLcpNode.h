@@ -4,7 +4,7 @@
 #include <map>
 #include <list>
 #include "BaseLcpNode.h"
-#include "ILinks.h"
+#include "Public/ILinks.h"
 
 namespace lcp
 {

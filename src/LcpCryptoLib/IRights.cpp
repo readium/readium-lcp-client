@@ -1,4 +1,4 @@
-#include "IRights.h"
+#include "Public/IRights.h"
 
 namespace lcp
 {

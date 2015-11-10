@@ -3,7 +3,7 @@
 
 #include <string>
 #include <map>
-#include "LcpStatus.h"
+#include "Public/LcpStatus.h"
 
 namespace lcp
 {

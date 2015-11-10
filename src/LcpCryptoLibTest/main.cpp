@@ -1,7 +1,7 @@
 #include <iostream>
 #include <memory>
 
-#include "lcp.h"
+#include "Public/lcp.h"
 
 int main()
 {
