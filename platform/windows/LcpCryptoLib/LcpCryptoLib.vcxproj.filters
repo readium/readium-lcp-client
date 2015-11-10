@@ -29,9 +29,6 @@
     <ClInclude Include="..\..\..\src\LcpCryptoLib\LcpService.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\LcpServiceCreator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\LcpCryptoLib\LcpUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -68,10 +65,13 @@
     <ClInclude Include="..\..\..\src\LcpCryptoLib\IUser.h">
       <Filter>Header Files\PublicInterfaces</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\LcpPublicInterfaces.h">
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\LcpStatus.h">
       <Filter>Header Files\PublicInterfaces</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\LcpStatus.h">
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\LcpServiceCreator.h">
+      <Filter>Header Files\PublicInterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\lcp.h">
       <Filter>Header Files\PublicInterfaces</Filter>
     </ClInclude>
   </ItemGroup>

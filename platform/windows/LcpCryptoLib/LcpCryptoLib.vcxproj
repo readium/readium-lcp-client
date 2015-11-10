@@ -30,7 +30,7 @@
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Iterator.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\IUser.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\JsonValueReader.h" />
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\LcpPublicInterfaces.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\lcp.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\LcpService.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\LcpServiceCreator.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\LcpStatus.h" />

@@ -1,8 +1,7 @@
 #include <iostream>
 #include <memory>
 
-#include "LcpPublicInterfaces.h"
-#include "LcpServiceCreator.h"
+#include "lcp.h"
 
 int main()
 {
