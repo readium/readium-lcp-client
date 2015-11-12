@@ -18,7 +18,8 @@ namespace lcp
         virtual Status OpenLicense(const std::string & licenseJson, ILicense ** license);
         
     private:
-        bool FindLicense(const std::string & licenseJson, ILicense ** license);
+        bool FindLicense(const std::string & canonicalJson, ILicense ** license);
+        std::string CalculateCanonicalForm(const std::string & licenseJson);
 
     private:
         std::map<std::string, std::unique_ptr<ILicense> > m_licenses;

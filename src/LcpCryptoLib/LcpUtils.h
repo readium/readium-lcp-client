@@ -29,6 +29,7 @@ namespace lcp
     std::string DoubleToExponentString(const double & value);
 
     void ValidateUtf8(const std::string & utf8Str);
+    bool LexicographicalCompareUtf8(const std::string & left, const std::string & right);
 
     typedef std::map<std::string, std::string> StringsMap;
 }

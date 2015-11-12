@@ -23,7 +23,8 @@ namespace lcp
 
         try
         {
-            if (this->FindLicense(licenseJson, license))
+            std::string canonicalJson = this->CalculateCanonicalForm(licenseJson);
+            if (this->FindLicense(canonicalJson, license))
             {
                 return Status(Status(StCodeCover::ErrorCommonSuccess));
             }
@@ -34,6 +35,7 @@ namespace lcp
             std::unique_ptr<RightsLcpNode> rightsNode(new RightsLcpNode());
             std::unique_ptr<RootLcpNode> rootNode(new RootLcpNode(
                 licenseJson,
+                std::move(canonicalJson),
                 cryptoNode.get(),
                 linksNode.get(),
                 userNode.get(),
@@ -48,12 +50,12 @@ namespace lcp
             auto parentValue = rapidjson::Value(rapidjson::kNullType);
             rootNode->ParseNode(parentValue, m_jsonReader.get());
 
-            auto res = m_licenses.insert(std::make_pair(rootNode->Id(), std::move(rootNode)));
-            if (!res.second)
+            auto insertRes = m_licenses.insert(std::make_pair(rootNode->Content(), std::move(rootNode)));
+            if (!insertRes.second)
             {
-                return Status(StCodeCover::ErrorOpeningDuplicateLicense);
+                throw std::runtime_error("Two License instances with the same canonical form");
             }
-            *license = rootNode.get();
+            *license = insertRes.first->second.get();
             return Status(StCodeCover::ErrorCommonSuccess);
         }
         catch (const StatusException & ex)
@@ -62,19 +64,24 @@ namespace lcp
         }
     }
 
-    bool LcpService::FindLicense(const std::string & licenseJson, ILicense ** license)
+    bool LcpService::FindLicense(const std::string & canonicalJson, ILicense ** license)
     {
-        JsonCanonicalizer canonicalizer(licenseJson, m_jsonReader.get());
-        auto licIt = m_licenses.find(canonicalizer.Id());
+        auto licIt = m_licenses.find(canonicalJson);
         if (licIt != m_licenses.end())
         {
-            std::string canonicalJson = canonicalizer.CanonicalLicense();
-            if (canonicalJson == licIt->second->Content())
+            if (canonicalJson.size() == licIt->second->Content().size() &&
+                std::equal(canonicalJson.begin(), canonicalJson.end(), licIt->second->Content().begin()))
             {
                 *license = licIt->second.get();
                 return true;
             }
         }
         return false;
+    }
+
+    std::string LcpService::CalculateCanonicalForm(const std::string & licenseJson)
+    {
+        JsonCanonicalizer canonicalizer(licenseJson, m_jsonReader.get());
+        return canonicalizer.CanonicalLicense();
     }
 }

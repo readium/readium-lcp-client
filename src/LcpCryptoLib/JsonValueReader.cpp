@@ -61,18 +61,16 @@ namespace lcp
         case rapidjson::kStringType:
             return std::string(value.GetString(), value.GetStringLength());
         case rapidjson::kNumberType:
-            if (value.IsUint64())
-                return std::to_string(value.GetUint64());
-            else if (value.IsInt64())
-                return std::to_string(value.GetInt64());
+            if (value.IsInt())
+                return std::to_string(value.GetInt());
             else if (value.IsUint())
                 return std::to_string(value.GetUint());
-            else if (value.IsInt())
-                return std::to_string(value.GetInt());
-            else if (value.IsDouble())
-                return std::to_string(value.GetDouble());
+            else if (value.IsInt64())
+                return std::to_string(value.GetInt64());
+            else if (value.IsUint64())
+                return std::to_string(value.GetUint64());
             else
-                return std::string();
+                return std::to_string(value.GetDouble());
         case rapidjson::kNullType:
         case rapidjson::kObjectType:
         case rapidjson::kArrayType:

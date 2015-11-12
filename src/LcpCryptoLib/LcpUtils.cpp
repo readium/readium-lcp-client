@@ -58,4 +58,15 @@ namespace lcp
             throw utf8::invalid_utf8(*endIt);
         }
     }
+
+    bool LexicographicalCompareUtf8(const std::string & left, const std::string & right)
+    {
+        typedef utf8::iterator<std::string::const_iterator> Utf8ConstIt;
+        Utf8ConstIt leftBeginIt(left.begin(), left.begin(), left.end());
+        Utf8ConstIt leftEndIt(left.end(), left.begin(), left.end());
+        Utf8ConstIt rightBeginIt(right.begin(), right.begin(), right.end());
+        Utf8ConstIt rightEndIt(right.end(), right.begin(), right.end());
+
+        return std::lexicographical_compare(leftBeginIt, leftEndIt, rightBeginIt, rightEndIt);
+    }
 }

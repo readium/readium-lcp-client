@@ -8,6 +8,7 @@ namespace lcp
 {
     RootLcpNode::RootLcpNode(
         const std::string & licenseJson,
+        std::string canonicalJson,
         ICrypto * crypto,
         ILinks * links,
         IUser * user,
@@ -19,6 +20,7 @@ namespace lcp
         , m_user(user)
         , m_rights(rights)
     {
+        m_rootInfo.content = std::move(canonicalJson);
     }
 
     std::string RootLcpNode::Id() const
@@ -90,7 +92,7 @@ namespace lcp
 
         BaseLcpNode::ParseNode(rootObject, reader);
 
-        JsonCanonicalizer canonicalizer(std::move(rootObject), reader);
-        m_rootInfo.content = canonicalizer.CanonicalLicense();
+        //JsonCanonicalizer canonicalizer(std::move(rootObject), reader);
+        //m_rootInfo.content = canonicalizer.CanonicalLicense();
     }
 }

@@ -26,8 +26,6 @@ namespace lcp
 
             // The given LCPL is not a valid License Document.
             ErrorOpeningLicenseNotValid,
-            // Two licenses with the same id
-            ErrorOpeningDuplicateLicense,
             // The license hasn't begun yet (right 'start'),
             ErrorOpeningLicenseNotStarted,
             // The license is expired (right 'end'),

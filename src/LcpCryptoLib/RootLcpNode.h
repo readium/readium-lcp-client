@@ -20,6 +20,7 @@ namespace lcp
     public:
         RootLcpNode(
             const std::string & licenseJson,
+            std::string canonicalJson,
             ICrypto * crypto,
             ILinks * links,
             IUser * user,

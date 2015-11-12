@@ -97,6 +97,7 @@ int main()
             res = lcpService->OpenLicense(jsonLicense, &rawLicPtr);
             if (lcp::Status::IsSuccess(res))
             {
+                std::cout << rawLicPtr->Content() << std::endl;
                 std::cout << "License parsed successfully!" << std::endl;
             }
             else

@@ -4,6 +4,7 @@
 #include "CanonicalWriter.h"
 #include "JsonValueReader.h"
 #include "JsonCanonicalizer.h"
+#include "LcpUtils.h"
 
 namespace lcp
 {
@@ -66,8 +67,10 @@ namespace lcp
             std::sort(parentObject.MemberBegin(), parentObject.MemberEnd(),
                 [](JsonObjectIt & left, JsonObjectIt & right)
             {
-                return std::string(left.name.GetString(), left.name.GetStringLength()) <
-                    std::string(right.name.GetString(), left.name.GetStringLength());
+                return LexicographicalCompareUtf8(
+                    std::string(left.name.GetString(), left.name.GetStringLength()),
+                    std::string(right.name.GetString(), right.name.GetStringLength())
+                    );
             });
         }
         else if (parentObject.IsArray())
