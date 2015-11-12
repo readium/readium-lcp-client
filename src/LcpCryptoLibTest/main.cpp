@@ -59,7 +59,7 @@ int main()
                 "\"end\" : \"2013-11-25T01:08:15+01:00\","
                 "\"http://www.imaginaryebookretailer.com/lcp/rights/tweet\" : true,"
                 "\"http://www.imaginaryebookretailer.com/lcp/rights/tweet234\" : 2.4894324894e-5,"
-                "\"http://www.imaginaryebookretailer.com/lcp/rights/tweet234546\" : 1.0e-5,"
+                "\"http://www.imaginaryebookretailer.com/lcp/rights/tweet234546\" : 0e-5,"
                 "\"http://www.imaginaryebookretailer.com/lcp/rights/tweet2345463453\" : \"Hello world!\""
             "},"
             "\"user\": {"
