@@ -26,6 +26,9 @@ namespace lcp
     };
 
     std::string BoolToString(bool val);
+    std::string DoubleToExponentString(const double & value);
+
+    void ValidateUtf8(const std::string & utf8Str);
 
     typedef std::map<std::string, std::string> StringsMap;
 }

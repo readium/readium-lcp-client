@@ -14,7 +14,7 @@ namespace lcp
         // Parses the given JSON License Document and returns a matching
         // License instance. The License will be automatically decrypted
         // if a valid User Key can be found in the storage provider.
-        virtual Status OpenLicense(const std::string & licenseJSON, ILicense ** license) = 0;
+        virtual Status OpenLicense(const std::string & licenseJson, ILicense ** license) = 0;
         virtual ~ILcpService() {}
     };
 }

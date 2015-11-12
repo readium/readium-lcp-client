@@ -8,7 +8,7 @@ int main()
     try
     {
         const char jsonLicense[] =
-            "{ \"id\": \"ef15e740-697f-11e3-949a-0800200c9a66\","
+            u8"{ \"id\": \"ef15e740-697f-11e3-949a-0800200c9a66\","
             "\"issued\": \"2013-11-04T01:08:15+01:00\","
             "\"updated\": \"2014-02-21T09:44:17+01:00\","
             "\"provider\": \"http://www.imaginaryebookretailer.com\","
@@ -57,7 +57,10 @@ int main()
                 "\"tts\" : true,"
                 "\"start\" : \"2013-11-04T01:08:15+01:00\","
                 "\"end\" : \"2013-11-25T01:08:15+01:00\","
-                "\"http://www.imaginaryebookretailer.com/lcp/rights/tweet\" : true"
+                "\"http://www.imaginaryebookretailer.com/lcp/rights/tweet\" : true,"
+                "\"http://www.imaginaryebookretailer.com/lcp/rights/tweet234\" : 2.4894324894e-5,"
+                "\"http://www.imaginaryebookretailer.com/lcp/rights/tweet234546\" : 1.0e-5,"
+                "\"http://www.imaginaryebookretailer.com/lcp/rights/tweet2345463453\" : \"Hello world!\""
             "},"
             "\"user\": {"
             "\"id\": \"d9f298a7-7f34-49e7-8aae-4378ecb1d597\","
@@ -92,7 +95,6 @@ int main()
         {
             lcp::ILicense * rawLicPtr = nullptr;
             res = lcpService->OpenLicense(jsonLicense, &rawLicPtr);
-            std::unique_ptr<lcp::ILicense> license(rawLicPtr);
             if (lcp::Status::IsSuccess(res))
             {
                 std::cout << "License parsed successfully!" << std::endl;
@@ -100,7 +102,6 @@ int main()
             else
             {
                 std::string jsonLicenseStr = jsonLicense;
-                std::string substr = jsonLicenseStr.substr(614, std::string::npos);
                 std::cout << "Status: " << res.ResultCode << "; Extension: " << res.Extension << std::endl;
             }
         }

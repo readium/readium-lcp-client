@@ -18,6 +18,37 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\third-parties\rapidjson\allocators.h" />
+    <ClInclude Include="..\..\..\src\third-parties\rapidjson\document.h" />
+    <ClInclude Include="..\..\..\src\third-parties\rapidjson\encodedstream.h" />
+    <ClInclude Include="..\..\..\src\third-parties\rapidjson\encodings.h" />
+    <ClInclude Include="..\..\..\src\third-parties\rapidjson\error\en.h" />
+    <ClInclude Include="..\..\..\src\third-parties\rapidjson\error\error.h" />
+    <ClInclude Include="..\..\..\src\third-parties\rapidjson\filereadstream.h" />
+    <ClInclude Include="..\..\..\src\third-parties\rapidjson\filewritestream.h" />
+    <ClInclude Include="..\..\..\src\third-parties\rapidjson\internal\biginteger.h" />
+    <ClInclude Include="..\..\..\src\third-parties\rapidjson\internal\diyfp.h" />
+    <ClInclude Include="..\..\..\src\third-parties\rapidjson\internal\dtoa.h" />
+    <ClInclude Include="..\..\..\src\third-parties\rapidjson\internal\ieee754.h" />
+    <ClInclude Include="..\..\..\src\third-parties\rapidjson\internal\itoa.h" />
+    <ClInclude Include="..\..\..\src\third-parties\rapidjson\internal\meta.h" />
+    <ClInclude Include="..\..\..\src\third-parties\rapidjson\internal\pow10.h" />
+    <ClInclude Include="..\..\..\src\third-parties\rapidjson\internal\stack.h" />
+    <ClInclude Include="..\..\..\src\third-parties\rapidjson\internal\strfunc.h" />
+    <ClInclude Include="..\..\..\src\third-parties\rapidjson\internal\strtod.h" />
+    <ClInclude Include="..\..\..\src\third-parties\rapidjson\internal\swap.h" />
+    <ClInclude Include="..\..\..\src\third-parties\rapidjson\memorybuffer.h" />
+    <ClInclude Include="..\..\..\src\third-parties\rapidjson\memorystream.h" />
+    <ClInclude Include="..\..\..\src\third-parties\rapidjson\msinttypes\inttypes.h" />
+    <ClInclude Include="..\..\..\src\third-parties\rapidjson\msinttypes\stdint.h" />
+    <ClInclude Include="..\..\..\src\third-parties\rapidjson\pointer.h" />
+    <ClInclude Include="..\..\..\src\third-parties\rapidjson\prettywriter.h" />
+    <ClInclude Include="..\..\..\src\third-parties\rapidjson\rapidjson.h" />
+    <ClInclude Include="..\..\..\src\third-parties\rapidjson\reader.h" />
+    <ClInclude Include="..\..\..\src\third-parties\rapidjson\stringbuffer.h" />
+    <ClInclude Include="..\..\..\src\third-parties\rapidjson\writer.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{A26EFC86-CCDD-4EB9-BDC5-8ABD8AEB5199}</ProjectGuid>
     <RootNamespace>rapidjson</RootNamespace>
@@ -136,37 +167,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="..\include\rapidjson\allocators.h" />
-    <ClInclude Include="..\include\rapidjson\document.h" />
-    <ClInclude Include="..\include\rapidjson\encodedstream.h" />
-    <ClInclude Include="..\include\rapidjson\encodings.h" />
-    <ClInclude Include="..\include\rapidjson\error\en.h" />
-    <ClInclude Include="..\include\rapidjson\error\error.h" />
-    <ClInclude Include="..\include\rapidjson\filereadstream.h" />
-    <ClInclude Include="..\include\rapidjson\filewritestream.h" />
-    <ClInclude Include="..\include\rapidjson\internal\biginteger.h" />
-    <ClInclude Include="..\include\rapidjson\internal\diyfp.h" />
-    <ClInclude Include="..\include\rapidjson\internal\dtoa.h" />
-    <ClInclude Include="..\include\rapidjson\internal\ieee754.h" />
-    <ClInclude Include="..\include\rapidjson\internal\itoa.h" />
-    <ClInclude Include="..\include\rapidjson\internal\meta.h" />
-    <ClInclude Include="..\include\rapidjson\internal\pow10.h" />
-    <ClInclude Include="..\include\rapidjson\internal\stack.h" />
-    <ClInclude Include="..\include\rapidjson\internal\strfunc.h" />
-    <ClInclude Include="..\include\rapidjson\internal\strtod.h" />
-    <ClInclude Include="..\include\rapidjson\internal\swap.h" />
-    <ClInclude Include="..\include\rapidjson\memorybuffer.h" />
-    <ClInclude Include="..\include\rapidjson\memorystream.h" />
-    <ClInclude Include="..\include\rapidjson\msinttypes\inttypes.h" />
-    <ClInclude Include="..\include\rapidjson\msinttypes\stdint.h" />
-    <ClInclude Include="..\include\rapidjson\pointer.h" />
-    <ClInclude Include="..\include\rapidjson\prettywriter.h" />
-    <ClInclude Include="..\include\rapidjson\rapidjson.h" />
-    <ClInclude Include="..\include\rapidjson\reader.h" />
-    <ClInclude Include="..\include\rapidjson\stringbuffer.h" />
-    <ClInclude Include="..\include\rapidjson\writer.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

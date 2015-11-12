@@ -44,35 +44,41 @@
     <ClInclude Include="..\..\..\src\LcpCryptoLib\UserLcpNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\PublicInterfaces\ICrypto.h">
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\ICrypto.h">
       <Filter>Header Files\PublicInterfaces</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\PublicInterfaces\ILcpService.h">
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\ILcpService.h">
       <Filter>Header Files\PublicInterfaces</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\PublicInterfaces\ILicense.h">
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\ILicense.h">
       <Filter>Header Files\PublicInterfaces</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\PublicInterfaces\ILinks.h">
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\ILinks.h">
       <Filter>Header Files\PublicInterfaces</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\PublicInterfaces\IRights.h">
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\IRights.h">
       <Filter>Header Files\PublicInterfaces</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\PublicInterfaces\Iterator.h">
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\Iterator.h">
       <Filter>Header Files\PublicInterfaces</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\PublicInterfaces\IUser.h">
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\IUser.h">
       <Filter>Header Files\PublicInterfaces</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\PublicInterfaces\lcp.h">
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\lcp.h">
       <Filter>Header Files\PublicInterfaces</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\PublicInterfaces\LcpServiceCreator.h">
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\LcpServiceCreator.h">
       <Filter>Header Files\PublicInterfaces</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\PublicInterfaces\LcpStatus.h">
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\LcpStatus.h">
       <Filter>Header Files\PublicInterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\CanonicalWriter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\JsonCanonicalizer.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -107,6 +113,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\LcpCryptoLib\IRights.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\JsonCanonicalizer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

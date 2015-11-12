@@ -41,7 +41,7 @@ namespace lcp
 
         for (auto it = userObject.MemberBegin(); it != userObject.MemberEnd(); ++it)
         {
-            std::string name = it->name.GetString();
+            std::string name(it->name.GetString(), it->name.GetStringLength());
 
             if (name == "encrypted" && it->value.IsArray())
             {
@@ -49,7 +49,9 @@ namespace lcp
                 {
                     if (arrayIt->IsString())
                     {
-                        m_userInfo.encrypted.push_back(arrayIt->GetString());
+                        m_userInfo.encrypted.push_back(
+                            std::string(arrayIt->GetString(), arrayIt->GetStringLength())
+                            );
                     }
                 }
             }
@@ -73,15 +75,15 @@ namespace lcp
     {
         if (name == "id")
         {
-            m_userInfo.id = value.GetString();
+            m_userInfo.id.assign(value.GetString(), value.GetStringLength());
         }
         else if (name == "email")
         {
-            m_userInfo.email = value.GetString();
+            m_userInfo.email.assign(value.GetString(), value.GetStringLength());
         }
         else if (name == "name")
         {
-            m_userInfo.name = value.GetString();
+            m_userInfo.name.assign(value.GetString(), value.GetStringLength());
         }
     }
 }

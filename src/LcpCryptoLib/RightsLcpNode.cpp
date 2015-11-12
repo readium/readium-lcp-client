@@ -56,11 +56,11 @@ namespace lcp
         }
         else if (name == START)
         {
-            m_rights.start = value.GetString();
+            m_rights.start.assign(value.GetString(), value.GetStringLength());
         }
         else if (name == END)
         {
-            m_rights.end = value.GetString();
+            m_rights.end.assign(value.GetString(), value.GetStringLength());
         }
     }
 }

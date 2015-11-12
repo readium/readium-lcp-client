@@ -18,6 +18,12 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\third-parties\utf8-cpp\utf8.h" />
+    <ClInclude Include="..\..\..\src\third-parties\utf8-cpp\utf8\checked.h" />
+    <ClInclude Include="..\..\..\src\third-parties\utf8-cpp\utf8\core.h" />
+    <ClInclude Include="..\..\..\src\third-parties\utf8-cpp\utf8\unchecked.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{5499379B-FDCF-4D4D-8F45-5602AF16A955}</ProjectGuid>
     <RootNamespace>utf8cpp</RootNamespace>
@@ -132,12 +138,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="..\include\utf8-cpp\include\utf8.h" />
-    <ClInclude Include="..\include\utf8-cpp\include\utf8\checked.h" />
-    <ClInclude Include="..\include\utf8-cpp\include\utf8\core.h" />
-    <ClInclude Include="..\include\utf8-cpp\include\utf8\unchecked.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

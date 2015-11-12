@@ -20,7 +20,7 @@ namespace lcp
         // Used when validating the signature of the
         // license, or acquiring the publication to store the
         // META-INF/license.lcpl file.
-        virtual std::string Content() const = 0;
+        virtual const std::string & Content() const = 0;
 
         // Date when the license was first issued (ISO 8601).
         virtual std::string Issued() const = 0;

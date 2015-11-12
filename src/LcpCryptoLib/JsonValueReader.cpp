@@ -9,7 +9,7 @@ namespace lcp
         auto it = jsonValue.FindMember(name.c_str());
         if (it != jsonValue.MemberEnd() && it->value.IsString())
         {
-            return it->value.GetString();
+            return std::string(it->value.GetString(), it->value.GetStringLength());
         }
         return std::string();
     }
@@ -22,7 +22,7 @@ namespace lcp
             throw StatusException(Status(StCodeCover::ErrorOpeningLicenseNotValid, name + " object is not valid"));
         }
 
-        std::string result(it->value.GetString());
+        std::string result(it->value.GetString(), it->value.GetStringLength());
         if (result.empty())
         {
             throw StatusException(Status(StCodeCover::ErrorOpeningLicenseNotValid, name + " object is not valid"));
@@ -59,7 +59,7 @@ namespace lcp
         case rapidjson::kTrueType:
             return BoolToString(value.GetBool());
         case rapidjson::kStringType:
-            return value.GetString();
+            return std::string(value.GetString(), value.GetStringLength());
         case rapidjson::kNumberType:
             if (value.IsUint64())
                 return std::to_string(value.GetUint64());

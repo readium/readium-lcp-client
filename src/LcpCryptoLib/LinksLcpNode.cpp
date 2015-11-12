@@ -22,14 +22,18 @@ namespace lcp
             if (type == rapidjson::kObjectType)
             {
                 Link link = this->ParseLinkValues(it->value, reader);
-                m_linksMultiMap.insert(std::make_pair(it->name.GetString(), link));
+                m_linksMultiMap.insert(std::make_pair(
+                    std::string(it->name.GetString(), it->name.GetStringLength()), link)
+                    );
             }
             else if (type == rapidjson::kArrayType)
             {
                 for (auto arrayIt = it->value.Begin(); arrayIt != it->value.End(); ++arrayIt)
                 {
                     Link link = this->ParseLinkValues(*arrayIt, reader);
-                    m_linksMultiMap.insert(std::make_pair(it->name.GetString(), link));
+                    m_linksMultiMap.insert(std::make_pair(
+                        std::string(it->name.GetString(), it->name.GetStringLength()), link)
+                        );
                 }
             }
             else

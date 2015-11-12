@@ -2,6 +2,7 @@
 #include "RootLcpNode.h"
 #include "JsonValueReader.h"
 #include "LcpUtils.h"
+#include "JsonCanonicalizer.h"
 
 namespace lcp
 {
@@ -25,7 +26,7 @@ namespace lcp
         return m_rootInfo.id;
     }
 
-    std::string RootLcpNode::Content() const
+    const std::string & RootLcpNode::Content() const
     {
         return m_rootInfo.content;
     }
@@ -68,7 +69,7 @@ namespace lcp
     void RootLcpNode::ParseNode(const rapidjson::Value & parentObject, JsonValueReader * reader)
     {
         rapidjson::Document rootObject;
-        if (rootObject.Parse<rapidjson::kParseValidateEncodingFlag>(m_licenseJson.c_str()).HasParseError())
+        if (rootObject.Parse<rapidjson::kParseValidateEncodingFlag>(m_licenseJson.data()).HasParseError())
         {
             throw StatusException(JsonValueReader::CreateRapidJsonError(
                 rootObject.GetParseError(), rootObject.GetErrorOffset())
@@ -88,5 +89,8 @@ namespace lcp
         m_rootInfo.updated = reader->ReadString("updated", rootObject);
 
         BaseLcpNode::ParseNode(rootObject, reader);
+
+        JsonCanonicalizer canonicalizer(std::move(rootObject), reader);
+        m_rootInfo.content = canonicalizer.CanonicalLicense();
     }
 }
