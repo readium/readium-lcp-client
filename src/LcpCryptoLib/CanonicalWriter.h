@@ -26,11 +26,11 @@ namespace lcp
         bool Double(double d)
         {
             std::string doubleStr = DoubleToExponentString(d);
-            Prefix(kNumberType);
+            Base::Prefix(kNumberType);
             char * begin = &doubleStr.front();
             for (char* p = begin; p != begin + doubleStr.size(); ++p)
             {
-                os_->Put(*p);
+                Base::os_->Put(*p);
             }
             return true;
         }

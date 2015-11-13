@@ -1,2 +1,2 @@
 
-HEADER_SEARCH_PATHS = ../../src/include
+HEADER_SEARCH_PATHS = ../../src/third-parties
