@@ -4,15 +4,30 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LcpCryptoLib", "LcpCryptoLib\LcpCryptoLib.vcxproj", "{260B5BB3-0BEF-4DC9-AC6F-E848FF487B2B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3423EC9A-52E4-4A4D-9753-EDEBC38785EF} = {3423EC9A-52E4-4A4D-9753-EDEBC38785EF}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rapidjson", "rapidjson\rapidjson.vcxproj", "{A26EFC86-CCDD-4EB9-BDC5-8ABD8AEB5199}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LcpCryptoLibTest", "LcpCryptoLibTest\LcpCryptoLibTest.vcxproj", "{9AE496CE-1811-4D1C-8B43-C8CDD64CB990}"
 	ProjectSection(ProjectDependencies) = postProject
+		{3423EC9A-52E4-4A4D-9753-EDEBC38785EF} = {3423EC9A-52E4-4A4D-9753-EDEBC38785EF}
 		{260B5BB3-0BEF-4DC9-AC6F-E848FF487B2B} = {260B5BB3-0BEF-4DC9-AC6F-E848FF487B2B}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "utf8-cpp", "utf8-cpp\utf8-cpp.vcxproj", "{5499379B-FDCF-4D4D-8F45-5602AF16A955}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cryptlib", "..\..\src\third-parties\cryptopp\cryptlib.vcxproj", "{3423EC9A-52E4-4A4D-9753-EDEBC38785EF}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LcpCryptoLibUnitTest", "LcpCryptoLibUnitTest\LcpCryptoLibUnitTest.vcxproj", "{7857526B-262E-4EFA-8514-803E5265D163}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C8F6C172-56F2-4E76-B5FA-C3B423B31BE7} = {C8F6C172-56F2-4E76-B5FA-C3B423B31BE7}
+		{3423EC9A-52E4-4A4D-9753-EDEBC38785EF} = {3423EC9A-52E4-4A4D-9753-EDEBC38785EF}
+		{260B5BB3-0BEF-4DC9-AC6F-E848FF487B2B} = {260B5BB3-0BEF-4DC9-AC6F-E848FF487B2B}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtest", "..\..\src\third-parties\gtest\msvc\gtest.vcxproj", "{C8F6C172-56F2-4E76-B5FA-C3B423B31BE7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -46,6 +61,28 @@ Global
 		{5499379B-FDCF-4D4D-8F45-5602AF16A955}.Debug|x86.ActiveCfg = Debug|Win32
 		{5499379B-FDCF-4D4D-8F45-5602AF16A955}.Release|x64.ActiveCfg = Release|x64
 		{5499379B-FDCF-4D4D-8F45-5602AF16A955}.Release|x86.ActiveCfg = Release|Win32
+		{3423EC9A-52E4-4A4D-9753-EDEBC38785EF}.Debug|x64.ActiveCfg = Debug|x64
+		{3423EC9A-52E4-4A4D-9753-EDEBC38785EF}.Debug|x64.Build.0 = Debug|x64
+		{3423EC9A-52E4-4A4D-9753-EDEBC38785EF}.Debug|x86.ActiveCfg = Debug|Win32
+		{3423EC9A-52E4-4A4D-9753-EDEBC38785EF}.Debug|x86.Build.0 = Debug|Win32
+		{3423EC9A-52E4-4A4D-9753-EDEBC38785EF}.Release|x64.ActiveCfg = Release|x64
+		{3423EC9A-52E4-4A4D-9753-EDEBC38785EF}.Release|x64.Build.0 = Release|x64
+		{3423EC9A-52E4-4A4D-9753-EDEBC38785EF}.Release|x86.ActiveCfg = Release|Win32
+		{3423EC9A-52E4-4A4D-9753-EDEBC38785EF}.Release|x86.Build.0 = Release|Win32
+		{7857526B-262E-4EFA-8514-803E5265D163}.Debug|x64.ActiveCfg = Debug|x64
+		{7857526B-262E-4EFA-8514-803E5265D163}.Debug|x64.Build.0 = Debug|x64
+		{7857526B-262E-4EFA-8514-803E5265D163}.Debug|x86.ActiveCfg = Debug|Win32
+		{7857526B-262E-4EFA-8514-803E5265D163}.Debug|x86.Build.0 = Debug|Win32
+		{7857526B-262E-4EFA-8514-803E5265D163}.Release|x64.ActiveCfg = Release|x64
+		{7857526B-262E-4EFA-8514-803E5265D163}.Release|x64.Build.0 = Release|x64
+		{7857526B-262E-4EFA-8514-803E5265D163}.Release|x86.ActiveCfg = Release|Win32
+		{7857526B-262E-4EFA-8514-803E5265D163}.Release|x86.Build.0 = Release|Win32
+		{C8F6C172-56F2-4E76-B5FA-C3B423B31BE7}.Debug|x64.ActiveCfg = Debug|Win32
+		{C8F6C172-56F2-4E76-B5FA-C3B423B31BE7}.Debug|x86.ActiveCfg = Debug|Win32
+		{C8F6C172-56F2-4E76-B5FA-C3B423B31BE7}.Debug|x86.Build.0 = Debug|Win32
+		{C8F6C172-56F2-4E76-B5FA-C3B423B31BE7}.Release|x64.ActiveCfg = Release|Win32
+		{C8F6C172-56F2-4E76-B5FA-C3B423B31BE7}.Release|x86.ActiveCfg = Release|Win32
+		{C8F6C172-56F2-4E76-B5FA-C3B423B31BE7}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

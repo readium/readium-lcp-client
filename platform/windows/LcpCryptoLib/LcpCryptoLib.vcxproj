@@ -21,7 +21,10 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\src\LcpCryptoLib\BaseLcpNode.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\CanonicalWriter.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Certificate.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\CryptoLcpNode.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\CryptoppCryptoProvider.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\ICryptoProvider.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\ILcpNode.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\JsonCanonicalizer.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\JsonValueReader.h" />
@@ -43,7 +46,9 @@
     <ClInclude Include="..\..\..\src\LcpCryptoLib\UserLcpNode.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\Certificate.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\CryptoLcpNode.cpp" />
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\CryptoppCryptoProvider.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\ILinks.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\IRights.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\JsonCanonicalizer.cpp" />

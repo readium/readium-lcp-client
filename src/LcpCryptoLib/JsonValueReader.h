@@ -19,6 +19,9 @@ namespace lcp
         std::string ReadStringCheck(const std::string & name, const rapidjson::Value & jsonValue);
         std::string ConvertToString(const rapidjson::Value & value);
 
+        bool ReadBoolean(const std::string & name, const rapidjson::Value & jsonValue);
+        int  ReadInteger(const std::string & name, const rapidjson::Value & jsonValue);
+
         const rapidjson::Value & ReadObject(const std::string & name, const rapidjson::Value & jsonValue);
         const rapidjson::Value & ReadObjectCheck(const std::string & name, const rapidjson::Value & jsonValue);
 

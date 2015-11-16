@@ -63,8 +63,8 @@ namespace lcp
         link.href = reader->ReadStringCheck("href", linkObject);
         link.title = reader->ReadString("title", linkObject);
         link.type = reader->ReadString("type", linkObject);
-        link.templated = reader->ReadString("templated", linkObject);
-        link.length = reader->ReadString("length", linkObject);
+        link.templated = reader->ReadBoolean("templated", linkObject);
+        link.length = reader->ReadInteger("length", linkObject);
         link.hash = reader->ReadString("hash", linkObject);
         return link;
     }

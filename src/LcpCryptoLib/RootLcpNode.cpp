@@ -4,6 +4,9 @@
 #include "LcpUtils.h"
 #include "JsonCanonicalizer.h"
 
+#include "utf8-cpp/utf8.h"
+#include <iostream>
+
 namespace lcp
 {
     RootLcpNode::RootLcpNode(

@@ -10,7 +10,7 @@ namespace lcp
     class LcpServiceCreator
     {
     public:
-        Status CreateLcpService(ILcpService ** lcpService);
+        Status CreateLcpService(const std::string & rootCertificate, ILcpService ** lcpService);
     };
 }
 

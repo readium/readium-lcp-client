@@ -9,9 +9,15 @@
 
 namespace lcp
 {
-    LcpService::LcpService()
-        : m_jsonReader(new JsonValueReader())
+    LcpService::LcpService(const std::string & rootCertificate)
+        : m_rootCertificate(rootCertificate)
+        , m_jsonReader(new JsonValueReader())
     {
+    }
+
+    std::string LcpService::RootCertificate() const
+    {
+        return m_rootCertificate;
     }
 
     Status LcpService::OpenLicense(const std::string & licenseJson, ILicense ** license)
