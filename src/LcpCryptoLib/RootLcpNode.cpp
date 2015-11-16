@@ -4,11 +4,14 @@
 #include "LcpUtils.h"
 #include "JsonCanonicalizer.h"
 
+#include "utf8-cpp/utf8.h"
+#include <iostream>
+
 namespace lcp
 {
     RootLcpNode::RootLcpNode(
         const std::string & licenseJson,
-        std::string canonicalJson,
+        const std::string & canonicalJson,
         ICrypto * crypto,
         ILinks * links,
         IUser * user,
@@ -20,7 +23,7 @@ namespace lcp
         , m_user(user)
         , m_rights(rights)
     {
-        m_rootInfo.content = std::move(canonicalJson);
+        m_rootInfo.content = canonicalJson;
     }
 
     std::string RootLcpNode::Id() const
