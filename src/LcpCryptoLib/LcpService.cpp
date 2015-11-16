@@ -41,7 +41,7 @@ namespace lcp
             std::unique_ptr<RightsLcpNode> rightsNode(new RightsLcpNode());
             std::unique_ptr<RootLcpNode> rootNode(new RootLcpNode(
                 licenseJson,
-                canonicalJson,
+                std::move(canonicalJson),
                 cryptoNode.get(),
                 linksNode.get(),
                 userNode.get(),
@@ -56,7 +56,7 @@ namespace lcp
             auto parentValue = rapidjson::Value(rapidjson::kNullType);
             rootNode->ParseNode(parentValue, m_jsonReader.get());
 
-            auto insertRes = m_licenses.insert(std::make_pair(std::move(canonicalJson), std::move(rootNode)));
+            auto insertRes = m_licenses.insert(std::make_pair(rootNode->Content(), std::move(rootNode)));
             if (!insertRes.second)
             {
                 throw std::runtime_error("Two License instances with the same canonical form");
