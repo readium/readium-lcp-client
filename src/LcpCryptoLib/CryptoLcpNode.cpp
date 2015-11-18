@@ -1,9 +1,17 @@
 #include "rapidjson/document.h"
 #include "CryptoLcpNode.h"
 #include "JsonValueReader.h"
+#include "LcpUtils.h"
+#include "IEncryptionProfile.h"
+#include "EncryptionProfilesManager.h"
 
 namespace lcp
 {
+    CryptoLcpNode::CryptoLcpNode(EncryptionProfilesManager * encryptionProfilesManager)
+        : m_encryptionProfilesManager(encryptionProfilesManager)
+    {
+    }
+
     std::string CryptoLcpNode::EncryptionProfile() const
     {
         return m_cryptoInfo.encryptionProfile;
@@ -71,6 +79,25 @@ namespace lcp
         m_cryptoInfo.signatureAlgorithm = reader->ReadStringCheck("algorithm", signatureObject);
         m_cryptoInfo.signatureCertificate = reader->ReadStringCheck("certificate", signatureObject);
         m_cryptoInfo.signature = reader->ReadStringCheck("value", signatureObject);
+
+        m_encryptionProfile = m_encryptionProfilesManager->GetProfile(m_cryptoInfo.encryptionProfile);
+        if (m_encryptionProfile == nullptr)
+        {
+            throw StatusException(Status(StCodeCover::ErrorOpeningLicenseNotValid, "encryption profile was not found"));
+        }
+
+        if (m_encryptionProfile->ContentKeyAlgorithm() != m_cryptoInfo.contentKeyAlgorithm)
+        {
+            throw StatusException(Status(StCodeCover::ErrorOpeningLicenseNotValid, "content key algorithm is not valid"));
+        }
+        if (m_encryptionProfile->UserKeyAlgorithm() != m_cryptoInfo.userKeyAlgorithm)
+        {
+            throw StatusException(Status(StCodeCover::ErrorOpeningLicenseNotValid, "user key algorithm is not valid"));
+        }
+        if (m_encryptionProfile->SignatureAlgorithm() != m_cryptoInfo.signatureAlgorithm)
+        {
+            throw StatusException(Status(StCodeCover::ErrorOpeningLicenseNotValid, "signature algorithm is not valid"));
+        }
 
         BaseLcpNode::ParseNode(encryptionObject, reader);
     }

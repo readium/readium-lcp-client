@@ -74,7 +74,7 @@ namespace lcp
         }
         catch (const CryptoPP::Exception & ex)
         {
-            return Status(StCodeCover::ErrorOpeningCryptoError);
+            return Status(StCodeCover::ErrorOpeningConentProviderVerificationFailed, ex.GetWhat());
         }
     }
 }

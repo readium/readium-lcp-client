@@ -90,7 +90,9 @@ int main()
         lcp::LcpServiceCreator creator;
         lcp::ILcpService * rawSvcPtr = nullptr;
         std::string rootCertificate;
-        lcp::Status res = creator.CreateLcpService(rootCertificate, &rawSvcPtr);
+        lcp::INetProvider * netProvider = nullptr;
+        lcp::IStorageProvider * storageProvider = nullptr;
+        lcp::Status res = creator.CreateLcpService(rootCertificate, netProvider, storageProvider, &rawSvcPtr);
         std::unique_ptr<lcp::ILcpService> lcpService(rawSvcPtr);
         if (lcp::Status::IsSuccess(res))
         {

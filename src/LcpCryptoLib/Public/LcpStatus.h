@@ -45,7 +45,8 @@ namespace lcp
             ErrorOpeningContentProviderCertificateNotStarted,
             // The Content Provider Certificate is expired
             ErrorOpeningContentProviderCertificateExpired,
-            ErrorOpeningCryptoError,
+            // The Content Provider Certificate verification failed
+            ErrorOpeningConentProviderVerificationFailed,
             // The calculated License signature doesn't match the one 
             // provided by the License.
             ErrorOpeningLicenseSignatureNotValid,

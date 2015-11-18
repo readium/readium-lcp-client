@@ -9,12 +9,17 @@ namespace lcp
 {
     struct Link
     {
+        Link()
+        {
+            templated = false;
+            length = 0;
+        }
         std::string href;
         std::string title;
         std::string type;
-        std::string templated;
-        std::string length;
         std::string hash;
+        bool templated;
+        int length;
     };
 
     class ILinks

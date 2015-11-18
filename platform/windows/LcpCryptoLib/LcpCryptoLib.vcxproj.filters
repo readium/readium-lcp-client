@@ -116,6 +116,24 @@
     <ClInclude Include="..\..\..\src\LcpCryptoLib\CertificateUtils.h">
       <Filter>Header Files\Crypto</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\EncryptionProfilesManager.h">
+      <Filter>Header Files\Crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\IEncryptionProfile.h">
+      <Filter>Header Files\Crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Lcp1dot0EncryptionProfile.h">
+      <Filter>Header Files\Crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\AlgorithmNames.h">
+      <Filter>Header Files\Crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\IStorageProvider.h">
+      <Filter>Header Files\PublicInterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\INetProvider.h">
+      <Filter>Header Files\PublicInterfaces</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\LcpCryptoLib\LcpService.cpp">
@@ -164,6 +182,12 @@
       <Filter>Source Files\Json</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\LcpCryptoLib\CertificateUtils.cpp">
+      <Filter>Source Files\Crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\EncryptionProfilesManager.cpp">
+      <Filter>Source Files\Crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\AlgorithmNames.cpp">
       <Filter>Source Files\Crypto</Filter>
     </ClCompile>
   </ItemGroup>

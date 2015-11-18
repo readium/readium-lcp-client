@@ -6,11 +6,18 @@
 namespace lcp
 {
     class ILcpService;
+    class INetProvider;
+    class IStorageProvider;
 
     class LcpServiceCreator
     {
     public:
-        Status CreateLcpService(const std::string & rootCertificate, ILcpService ** lcpService);
+        Status CreateLcpService(
+            const std::string & rootCertificate,
+            INetProvider * netProvider,
+            IStorageProvider * storageProvider,
+            ILcpService ** lcpService
+            );
     };
 }
 

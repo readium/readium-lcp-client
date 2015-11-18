@@ -6,18 +6,21 @@
 #include "RootLcpNode.h"
 #include "JsonValueReader.h"
 #include "JsonCanonicalizer.h"
+#include "EncryptionProfilesManager.h"
 
 namespace lcp
 {
-    LcpService::LcpService(const std::string & rootCertificate)
+    LcpService::LcpService(
+        const std::string & rootCertificate,
+        INetProvider * netProvider,
+        IStorageProvider * storageProvider
+        )
         : m_rootCertificate(rootCertificate)
+        , m_netProvider(netProvider)
+        , m_storageProvider(storageProvider)
         , m_jsonReader(new JsonValueReader())
+        , m_encryptionProfilesManager(new EncryptionProfilesManager())
     {
-    }
-
-    std::string LcpService::RootCertificate() const
-    {
-        return m_rootCertificate;
     }
 
     Status LcpService::OpenLicense(const std::string & licenseJson, ILicense ** license)
@@ -35,7 +38,7 @@ namespace lcp
                 return Status(Status(StCodeCover::ErrorCommonSuccess));
             }
 
-            std::unique_ptr<CryptoLcpNode> cryptoNode(new CryptoLcpNode());
+            std::unique_ptr<CryptoLcpNode> cryptoNode(new CryptoLcpNode(m_encryptionProfilesManager.get()));
             std::unique_ptr<LinksLcpNode> linksNode(new LinksLcpNode());
             std::unique_ptr<UserLcpNode> userNode(new UserLcpNode());
             std::unique_ptr<RightsLcpNode> rightsNode(new RightsLcpNode());
@@ -66,12 +69,46 @@ namespace lcp
                 throw std::runtime_error("Two License instances with the same canonical form");
             }
             *license = insertRes.first->second.get();
+
             return Status(StCodeCover::ErrorCommonSuccess);
         }
         catch (const StatusException & ex)
         {
             return ex.ResultStatus();
         }
+    }
+
+    Status LcpService::DecryptLicense(ILicense * license, const std::string & userPassphrase)
+    {
+        return Status(StCodeCover::ErrorCommonSuccess);
+    }
+
+    Status LcpService::DecryptData(
+        ILicense * license,
+        const unsigned char * data,
+        const size_t dataLength,
+        unsigned char * decryptedData,
+        size_t * decryptedDataLength,
+        const std::string & algorithm
+        )
+    {
+        return Status(StCodeCover::ErrorCommonSuccess);
+    }
+
+
+    std::string LcpService::RootCertificate() const
+    {
+        return m_rootCertificate;
+    }
+
+    INetProvider * LcpService::LcpService::NetProvider() const
+    {
+        return m_netProvider;
+    }
+
+    IStorageProvider * LcpService::LcpService::StorageProvider() const
+    {
+        return m_storageProvider;
     }
 
     bool LcpService::FindLicense(const std::string & canonicalJson, ILicense ** license)

@@ -6,6 +6,9 @@
 
 namespace lcp
 {
+    class IEncryptionProfile;
+    class EncryptionProfilesManager;
+
     struct CryptoInfo
     {
         std::string encryptionProfile;
@@ -22,6 +25,7 @@ namespace lcp
     class CryptoLcpNode : public BaseLcpNode, public ICrypto
     {
     public:
+        explicit CryptoLcpNode(EncryptionProfilesManager * encryptionProfilesManager);
         // ILcpNode
         void ParseNode(const rapidjson::Value & parentObject, JsonValueReader * reader);
 
@@ -39,6 +43,8 @@ namespace lcp
 
     private:
         CryptoInfo m_cryptoInfo;
+        IEncryptionProfile * m_encryptionProfile;
+        EncryptionProfilesManager * m_encryptionProfilesManager;
     };
 }
 #endif //__ENCRYPTION_LCP_NODE_H__

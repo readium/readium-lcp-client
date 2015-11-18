@@ -32,9 +32,21 @@ namespace lcp
             ErrorOpeningLicenseExpired,
             // No Root Certificate provided by the Client.
             ErrorOpeningNoRootCertificate,
-            // The Content Provider Certificate is not found in the root 
-            // chain, or has been revoked.
+            // Root Certificate provided by the Client is not valid
+            ErrorOpeningRootCertificateNotValid,
+            // The Content Provider Certificate is not valid
             ErrorOpeningContentProviderCertificateNotValid,
+            // The Content Provider Certificate is not found in the root 
+            // chain
+            ErrorOpeningContentProviderCertificateNotVerified,
+            // The Content Provider Certificate has been revoked.
+            ErrorOpeningContentProviderCertificateRevoked,
+            // The Content Provider Certificate hasn't begun yet
+            ErrorOpeningContentProviderCertificateNotStarted,
+            // The Content Provider Certificate is expired
+            ErrorOpeningContentProviderCertificateExpired,
+            // The Content Provider Certificate verification failed
+            ErrorOpeningConentProviderVerificationFailed,
             // The calculated License signature doesn't match the one 
             // provided by the License.
             ErrorOpeningLicenseSignatureNotValid,

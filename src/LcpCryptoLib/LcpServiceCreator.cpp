@@ -4,14 +4,19 @@
 
 namespace lcp
 {
-    Status LcpServiceCreator::CreateLcpService(const std::string & rootCertificate, ILcpService ** lcpService)
+    Status LcpServiceCreator::CreateLcpService(
+        const std::string & rootCertificate,
+        INetProvider * netProvider,
+        IStorageProvider * storageProvider,
+        ILcpService ** lcpService
+        )
     {
         if (lcpService == nullptr)
         {
             throw std::invalid_argument("lcpService is nullptr");
         }
         auto status = Status(StCodeCover::ErrorCommonSuccess);
-        *lcpService = new LcpService(rootCertificate);
+        *lcpService = new LcpService(rootCertificate, netProvider, storageProvider);
         return status;
     }
 }
