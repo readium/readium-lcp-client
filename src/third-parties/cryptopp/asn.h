@@ -68,7 +68,7 @@ CRYPTOPP_DLL size_t CRYPTOPP_API DEREncodeOctetString(BufferedTransformation &ou
 CRYPTOPP_DLL size_t CRYPTOPP_API BERDecodeOctetString(BufferedTransformation &in, SecByteBlock &str);
 CRYPTOPP_DLL size_t CRYPTOPP_API BERDecodeOctetString(BufferedTransformation &in, BufferedTransformation &str);
 
-CRYPTOPP_DLL void BERDecodeTime(CryptoPP::BufferedTransformation& bt, SecByteBlock& time);
+CRYPTOPP_DLL void BERDecodeTime(CryptoPP::BufferedTransformation& bt, std::string& time);
 
 // for UTF8_STRING, PRINTABLE_STRING, and IA5_STRING
 CRYPTOPP_DLL size_t CRYPTOPP_API DEREncodeTextString(BufferedTransformation &out, const std::string &str, byte asnTag);

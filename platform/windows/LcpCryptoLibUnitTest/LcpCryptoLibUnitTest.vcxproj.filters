@@ -21,6 +21,9 @@
     <ClCompile Include="..\..\..\src\LcpCryptoLibUnitTest\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\LcpCryptoLibUnitTest\DateTimeTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\LcpCryptoLibUnitTest\TestUtils.h">

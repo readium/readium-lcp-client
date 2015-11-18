@@ -103,7 +103,6 @@ int main()
             }
             else
             {
-                std::string jsonLicenseStr = jsonLicense;
                 std::cout << "Status: " << res.ResultCode << "; Extension: " << res.Extension << std::endl;
             }
         }

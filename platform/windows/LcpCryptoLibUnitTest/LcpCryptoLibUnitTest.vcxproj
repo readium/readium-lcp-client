@@ -170,6 +170,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\LcpCryptoLibUnitTest\CertificateTest.cpp" />
+    <ClCompile Include="..\..\..\src\LcpCryptoLibUnitTest\DateTimeTest.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLibUnitTest\main.cpp" />
   </ItemGroup>
   <ItemGroup>

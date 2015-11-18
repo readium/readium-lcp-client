@@ -44,6 +44,10 @@ using CryptoPP::SecByteBlock;
 using CryptoPP::lword;
 using CryptoPP::word32;
 
+#include "Certificate.h"
+#include "Public/lcp.h"
+
+
 namespace lcptest
 {
 
@@ -110,6 +114,10 @@ namespace lcptest
             }
         }
 
+        //lcp::Certificate cert(base64Cert);
+        /*cert.ValidateMessage((unsigned char *)canonicalJson.data(), canonicalJson.size(),
+            rawSign.data(), rawSign.size());*/
+
         SecByteBlock rawDecodedSign;
         {
             Base64Decoder decoderSign;
@@ -148,7 +156,7 @@ namespace lcptest
             "xX9g8wbHWzzOdVxDgG1oguG1R7WwpZ+Lil8mMrcLwI2Q9kOWAP/MWCGJuJuToT1k"
             "dw==";*/
         // localhost
-        /*std::string testbase64Cert = "MIIC1jCCAb6gAwIBAgIQKDb7Oazo77RIbUBWHaRaWzANBgkqhkiG9w0BAQUFADAU"
+        std::string testbase64Cert = "MIIC1jCCAb6gAwIBAgIQKDb7Oazo77RIbUBWHaRaWzANBgkqhkiG9w0BAQUFADAU"
             "MRIwEAYDVQQDEwlsb2NhbGhvc3QwHhcNMTUwNzMwMTQyMDMwWhcNMjAwNzMwMDAw"
             "MDAwWjAUMRIwEAYDVQQDEwlsb2NhbGhvc3QwggEiMA0GCSqGSIb3DQEBAQUAA4IB"
             "DwAwggEKAoIBAQC7uvRfxl0aJQLD929XkAY0C/keu5Rx2Z1MyQr7RdZh2AS1lmdl"
@@ -163,7 +171,7 @@ namespace lcptest
             "doBC7iwDCbEAWAPY7hMfjGEvMTP3oObEPMbTWcwmia2W+brB2cgKy6mnhUZP9KLe"
             "vf42VGLQyKzvbVFcrg0nk33r/85Pw+/eWUya3QIGHZj86j9amyZl1APuUT7997cj"
             "Lii1sC5fv3GHHUGAfoHKkosCGJhmXU6VP7y7sdOQ0weiZCHtuikYmNvoLs/jr1rE"
-            "91yNXO9v5kh/0w==";*/
+            "91yNXO9v5kh/0w==";
 
         SecByteBlock rawDecodedCert;
         {

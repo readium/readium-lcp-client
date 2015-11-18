@@ -5,17 +5,15 @@
 
 namespace lcp
 {
-    class ICrypto;
-    class IRights;
+    class ILicense;
 
     class ICryptoProvider
     {
     public:
         virtual Status Validate(
-            const std::string & rootCertificate,
+            const std::string & rootCertificateBase64,
             const std::string & canonicalLicense,
-            ICrypto * crypto,
-            IRights * rights
+            ILicense * licenses
             ) = 0;
 
         virtual ~ICryptoProvider() {}

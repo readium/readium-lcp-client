@@ -94,8 +94,5 @@ namespace lcp
         m_rootInfo.updated = reader->ReadString("updated", rootObject);
 
         BaseLcpNode::ParseNode(rootObject, reader);
-
-        //JsonCanonicalizer canonicalizer(std::move(rootObject), reader);
-        //m_rootInfo.content = canonicalizer.CanonicalLicense();
     }
 }

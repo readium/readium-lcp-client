@@ -4,31 +4,39 @@
 #include <string>
 #include <cryptopp/rsa.h>
 #include <cryptopp/secblock.h>
-#include "Public/LcpStatus.h"
+#include "ICertificate.h"
+
+using namespace CryptoPP;
 
 namespace lcp
 {
-    class Certificate
+    class Certificate : public ICertificate
     {
     public:
-        Certificate(const std::string & certificateBase64);
+        explicit Certificate(const std::string & certificateBase64);
 
         std::string SerialNumber() const;
         std::string NotBeforeDate() const;
         std::string NotAfterDate() const;
         std::vector<unsigned char> PublicKey() const;
 
-        bool ValidateCertificate(Certificate * rootCertificate);
+        bool VerifyCertificate(ICertificate * rootCertificate);
         bool ValidateMessage(const std::string & message, const std::string & hashBase64);
+        bool ValidateMessage(
+            const unsigned char * message,
+            size_t messageLength,
+            const unsigned char *signature,
+            size_t signatureLength
+            );
 
     private:
         std::string m_serialNumber;
         std::string m_notBeforeDate;
         std::string m_notAfterDate;
-        CryptoPP::RSA::PublicKey m_publicKey;
-        CryptoPP::SecByteBlock m_toBeSignedSequence;
-        CryptoPP::SecByteBlock m_rootSignature;
-        CryptoPP::OID m_signatureAlgorithm;
+        RSA::PublicKey m_publicKey;
+        SecByteBlock m_toBeSignedData;
+        SecByteBlock m_rootSignature;
+        OID m_signatureAlgorithm;
     };
 }
 

@@ -198,7 +198,7 @@ size_t BERDecodeBitString(BufferedTransformation &bt, SecByteBlock &str, unsigne
 	return bc-1;
 }
 
-void BERDecodeTime(CryptoPP::BufferedTransformation& bt, SecByteBlock& time)
+void BERDecodeTime(CryptoPP::BufferedTransformation& bt, std::string& time)
 {
     byte b;
     if (!bt.Get(b) || (b != GENERALIZED_TIME && b != UTC_TIME))
@@ -208,9 +208,20 @@ void BERDecodeTime(CryptoPP::BufferedTransformation& bt, SecByteBlock& time)
     if (!BERLengthDecode(bt, bc))
         BERDecodeError();
 
-    time.resize(bc);
-    if (bc != bt.Get(time, bc))
+    SecByteBlock secBlockTime(bc);
+    if (bc != bt.Get(secBlockTime, bc))
         BERDecodeError();
+
+    time.assign(secBlockTime.begin(), secBlockTime.end());
+    if (b == UTC_TIME)
+    {
+        int years = std::stoi(time.substr(0, 2));
+        if (years < 50)
+            time = "20" + time;
+        else
+            time = "19" + time;
+    }
+    time = time.substr(0, 8) + "T" + time.substr(8);
 }
 
 void DERReencode(BufferedTransformation &source, BufferedTransformation &dest)

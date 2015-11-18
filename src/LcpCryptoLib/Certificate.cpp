@@ -1,19 +1,16 @@
-#include "Certificate.h"
-#include <sstream>
-#include <memory>
-
 #include <cryptopp/cryptlib.h>
-
 #include <cryptopp/queue.h>
-#include <cryptopp/base64.h>
 
 #include <cryptopp/rsa.h>
 #include <cryptopp/sha.h>
 #include <cryptopp/md5.h>
 
 #include <cryptopp/asn.h>
-
 #include <cryptopp/oids.h>
+
+#include "Certificate.h"
+#include "CertificateUtils.h"
+
 using namespace CryptoPP;
 
 // Signature Algorithm OIDs commonly used in certs that have RSA keys
@@ -23,87 +20,45 @@ DEFINE_OID(CryptoPP::ASN1::pkcs_1() + 11, sha256withRSAEncryption);
 
 namespace lcp
 {
+
     Certificate::Certificate(const std::string & certificateBase64)
     {
         SecByteBlock rawDecodedCert;
-        {
-            Base64Decoder decoderCert;
-            decoderCert.Put((byte *)certificateBase64.data(), certificateBase64.size());
-            decoderCert.MessageEnd();
-
-            lword size = decoderCert.MaxRetrievable();
-            if (size > 0 && size <= SIZE_MAX)
-            {
-                rawDecodedCert.resize(size);
-                decoderCert.Get((byte *)rawDecodedCert.data(), rawDecodedCert.size());
-            }
-        }
+        CertificateUtils::Base64ToSecBlock(certificateBase64, rawDecodedCert);
 
         ByteQueue certData;
         certData.Put(rawDecodedCert.data(), rawDecodedCert.size());
         certData.MessageEnd();
 
-        ByteQueue tbsCertDataForHash;
-
-        ByteQueue certDataForHash(certData); //copy of data
-        BERSequenceDecoder certForHash(certDataForHash);
-        BERSequenceDecoder tbsCertForHash(certForHash);
-        DERSequenceEncoder tbsCertEncForHash(tbsCertDataForHash);
-        tbsCertForHash.CopyTo(tbsCertEncForHash);
-        tbsCertEncForHash.MessageEnd();
-
         BERSequenceDecoder cert(certData);
         {
-            BERSequenceDecoder tbsCert(cert);
+            BERSequenceDecoder toBeSignedCert(cert);
             {
-                BERGeneralDecoder context(tbsCert, 0xa0);
-                word32 ver = 0;
-                CryptoPP::BERDecodeUnsigned<word32>(tbsCert, ver);
+                word32 version = CertificateUtils::ReadVersion(toBeSignedCert);
 
-                Integer serial;
-                serial.BERDecode(tbsCert);
-                std::stringstream strm;
-                strm << serial;
-                m_serialNumber = strm.str();
-                strm.clear();
+                m_serialNumber = CertificateUtils::ReadIntegerAsString(toBeSignedCert);
 
-                BERSequenceDecoder algorithmId(tbsCert);
-                algorithmId.SkipAll();
+                // algorithmId
+                CertificateUtils::SkipNextSequence(toBeSignedCert);
+                // issuer
+                CertificateUtils::SkipNextSequence(toBeSignedCert);
 
-                BERSequenceDecoder issuer(tbsCert);
-                issuer.SkipAll();
+                CertificateUtils::ReadDateTimeSequence(toBeSignedCert, m_notBeforeDate, m_notAfterDate);
 
-                BERSequenceDecoder validity(tbsCert);
-                {
-                    SecByteBlock notBefore;
-                    CryptoPP::BERDecodeTime(validity, notBefore);
-                    m_notBeforeDate.assign(notBefore.begin(), notBefore.end());
-                    SecByteBlock notAfter;
-                    CryptoPP::BERDecodeTime(validity, notAfter);
-                    m_notAfterDate.assign(notAfter.begin(), notAfter.end());
-                }
-                validity.MessageEnd();
+                // subject
+                CertificateUtils::SkipNextSequence(toBeSignedCert);
 
-                BERSequenceDecoder subject(tbsCert);
-                subject.SkipAll();
-
-                ByteQueue subjectPublicKey;
-                BERSequenceDecoder subjPublicInfoFrom(tbsCert);
-                DERSequenceEncoder subjPublicInfoOut(subjectPublicKey);
-                subjPublicInfoFrom.CopyTo(subjPublicInfoOut);
-                subjPublicInfoOut.MessageEnd();
-
-                m_publicKey.BERDecode(subjectPublicKey);
+                CertificateUtils::ReadSubjectPublicKey(toBeSignedCert, m_publicKey);
             }
-            tbsCert.SkipAll();
+            toBeSignedCert.SkipAll();
 
-            BERSequenceDecoder signAlgorithm(cert);
-            m_signatureAlgorithm.BERDecodeAndCheck(signAlgorithm);
-            signAlgorithm.SkipAll();
+            CertificateUtils::ReadOID(cert, m_signatureAlgorithm);
 
             unsigned int unused = 0;
             BERDecodeBitString(cert, m_rootSignature, unused);
         }
+
+        CertificateUtils::PullToBeSignedData(rawDecodedCert, m_toBeSignedData);
     }
 
     std::vector<unsigned char> Certificate::PublicKey() const
@@ -119,18 +74,7 @@ namespace lcp
     bool Certificate::ValidateMessage(const std::string & message, const std::string & hashBase64)
     {
         SecByteBlock rawHash;
-        {
-            Base64Decoder decoder;
-            decoder.Put((byte *)hashBase64.data(), hashBase64.size());
-            decoder.MessageEnd();
-
-            lword size = decoder.MaxRetrievable();
-            if (size > 0 && size <= SIZE_MAX)
-            {
-                rawHash.resize(size);
-                decoder.Get((byte *)hashBase64.data(), hashBase64.size());
-            }
-        }
+        CertificateUtils::Base64ToSecBlock(hashBase64, rawHash);
 
         RSASS<PKCS1v15, SHA256>::Verifier verifier(m_publicKey);
         return verifier.VerifyMessage(
@@ -141,7 +85,23 @@ namespace lcp
             );
     }
 
-    bool Certificate::ValidateCertificate(Certificate * rootCertificate)
+    bool Certificate::ValidateMessage(
+        const unsigned char * message,
+        size_t messageLength,
+        const unsigned char *signature,
+        size_t signatureLength
+        )
+    {
+        RSASS<PKCS1v15, SHA256>::Verifier verifier(m_publicKey);
+        return verifier.VerifyMessage(
+            message,
+            messageLength,
+            signature,
+            signatureLength
+            );
+    }
+
+    bool Certificate::VerifyCertificate(ICertificate * rootCertificate)
     {
         ByteQueue publicKeyQueue;
         std::vector<unsigned char> rawPublicKey = rootCertificate->PublicKey();
@@ -171,8 +131,8 @@ namespace lcp
         }
 
         return rootVerifierPtr->VerifyMessage(
-            m_toBeSignedSequence.data(),
-            m_toBeSignedSequence.size(),
+            m_toBeSignedData.data(),
+            m_toBeSignedData.size(),
             m_rootSignature.data(),
             m_rootSignature.size()
             );
