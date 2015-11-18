@@ -41,6 +41,11 @@ namespace lcp
             ErrorOpeningContentProviderCertificateNotVerified,
             // The Content Provider Certificate has been revoked.
             ErrorOpeningContentProviderCertificateRevoked,
+            // The Content Provider Certificate hasn't begun yet
+            ErrorOpeningContentProviderCertificateNotStarted,
+            // The Content Provider Certificate is expired
+            ErrorOpeningContentProviderCertificateExpired,
+            ErrorOpeningCryptoError,
             // The calculated License signature doesn't match the one 
             // provided by the License.
             ErrorOpeningLicenseSignatureNotValid,

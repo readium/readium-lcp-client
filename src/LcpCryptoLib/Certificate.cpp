@@ -35,9 +35,13 @@ namespace lcp
             BERSequenceDecoder toBeSignedCert(cert);
             {
                 word32 version = CertificateUtils::ReadVersion(toBeSignedCert);
+                if (version != Certificatev3)
+                {
+                    throw BERDecodeErr("Wrong version of the certificate");
+                }
 
                 m_serialNumber = CertificateUtils::ReadIntegerAsString(toBeSignedCert);
-
+                
                 // algorithmId
                 CertificateUtils::SkipNextSequence(toBeSignedCert);
                 // issuer
@@ -71,7 +75,7 @@ namespace lcp
         return outKey;
     }
 
-    bool Certificate::ValidateMessage(const std::string & message, const std::string & hashBase64)
+    bool Certificate::VerifyMessage(const std::string & message, const std::string & hashBase64)
     {
         SecByteBlock rawHash;
         CertificateUtils::Base64ToSecBlock(hashBase64, rawHash);
@@ -85,7 +89,7 @@ namespace lcp
             );
     }
 
-    bool Certificate::ValidateMessage(
+    bool Certificate::VerifyMessage(
         const unsigned char * message,
         size_t messageLength,
         const unsigned char *signature,

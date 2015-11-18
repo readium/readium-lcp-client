@@ -48,6 +48,8 @@ namespace lcp
                 rightsNode.get())
                 );
 
+            RightsLcpNode * rightsNodeNaked = rightsNode.get();
+
             rootNode->AddChildNode(std::move(cryptoNode));
             rootNode->AddChildNode(std::move(linksNode));
             rootNode->AddChildNode(std::move(userNode));
@@ -55,6 +57,8 @@ namespace lcp
 
             auto parentValue = rapidjson::Value(rapidjson::kNullType);
             rootNode->ParseNode(parentValue, m_jsonReader.get());
+
+            rightsNodeNaked->VerifyLicenseValidity();
 
             auto insertRes = m_licenses.insert(std::make_pair(std::move(canonicalJson), std::move(rootNode)));
             if (!insertRes.second)

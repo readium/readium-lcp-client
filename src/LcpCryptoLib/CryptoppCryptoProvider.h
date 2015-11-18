@@ -8,7 +8,7 @@ namespace lcp
     class CryptoppCryptoProvider : public ICryptoProvider
     {
     public:
-        virtual Status Validate(
+        virtual Status VerifyLicense(
             const std::string & rootCertificateBase64,
             const std::string & canonicalLicense,
             ILicense * license

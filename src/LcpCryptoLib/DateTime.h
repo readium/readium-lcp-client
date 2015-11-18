@@ -26,6 +26,8 @@ namespace lcp
         bool operator< (const DateTime & right);
         bool operator> (const DateTime & right);
 
+        static DateTime Now();
+
     public:
         static std::string IsoUtcFormat;
         static std::string IsoTimeZoneFormat;

@@ -1,6 +1,7 @@
 #include "RightsLcpNode.h"
 #include "JsonValueReader.h"
 #include "LcpUtils.h"
+#include "DateTime.h"
 
 namespace lcp
 {
@@ -15,6 +16,23 @@ namespace lcp
             return true;
         }
         return false;
+    }
+
+    Status RightsLcpNode::VerifyLicenseValidity() const
+    {
+        DateTime started(m_rights.start);
+        DateTime expired(m_rights.end);
+        DateTime now = DateTime::Now();
+
+        if (now < started)
+        {
+            return Status(StCodeCover::ErrorOpeningLicenseNotStarted);
+        }
+        else if (now > expired)
+        {
+            return Status(StCodeCover::ErrorOpeningLicenseExpired);
+        }
+        return Status(StCodeCover::ErrorCommonSuccess);
     }
 
     void RightsLcpNode::ParseNode(const rapidjson::Value & parentObject, JsonValueReader * reader)

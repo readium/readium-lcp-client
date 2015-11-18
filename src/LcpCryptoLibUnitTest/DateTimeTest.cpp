@@ -92,6 +92,13 @@ namespace lcptest
         ASSERT_EQ(object.ToTime(), 1447280497);
     }
 
+    TEST(DateTimeTest, NormalIsoTimeToTime_t_TimeZoneMinusTwo)
+    {
+        std::string timeStr = "2015-11-11T22:21:37-02:00";
+        lcp::DateTime object(timeStr);
+        ASSERT_EQ(object.ToTime(), 1447266097);
+    }
+
     TEST(DateTimeTest, CompareSmaller)
     {
         lcp::DateTime left("2015-11-11T22:21:37Z");

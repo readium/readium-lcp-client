@@ -21,8 +21,8 @@ namespace lcp
         std::vector<unsigned char> PublicKey() const;
 
         bool VerifyCertificate(ICertificate * rootCertificate);
-        bool ValidateMessage(const std::string & message, const std::string & hashBase64);
-        bool ValidateMessage(
+        bool VerifyMessage(const std::string & message, const std::string & hashBase64);
+        bool VerifyMessage(
             const unsigned char * message,
             size_t messageLength,
             const unsigned char *signature,
@@ -37,6 +37,8 @@ namespace lcp
         SecByteBlock m_toBeSignedData;
         SecByteBlock m_rootSignature;
         OID m_signatureAlgorithm;
+
+        static const int Certificatev3 = 2;
     };
 }
 

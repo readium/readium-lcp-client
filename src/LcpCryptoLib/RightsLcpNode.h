@@ -29,6 +29,8 @@ namespace lcp
     class RightsLcpNode : public BaseLcpNode, public IRights
     {
     public:
+        Status VerifyLicenseValidity() const;
+
         // ILcpNode
         virtual void ParseNode(const rapidjson::Value & parentObject, JsonValueReader * reader);
 
