@@ -3,6 +3,7 @@
 
 #include "BaseLcpNode.h"
 #include "Public/ILicense.h"
+#include "IKeyProvider.h"
 
 namespace lcp
 {
@@ -14,8 +15,8 @@ namespace lcp
         std::string provider;
         std::string updated;
     };
-
-    class RootLcpNode : public BaseLcpNode, public ILicense
+    
+    class RootLcpNode : public BaseLcpNode, public ILicense, public IKeyProvider
     {
     public:
         RootLcpNode(
@@ -27,9 +28,13 @@ namespace lcp
             IRights * rights
             );
 
+        void SetKeyProvider(std::unique_ptr<IKeyProvider> keyProvider);
+
     public:
         // ILcpNode
         virtual void ParseNode(const rapidjson::Value & parentObject, JsonValueReader * reader);
+        virtual Status VerifyNode(ILicense * license, IClientProvider * clientProvider, ICryptoProvider * cryptoProvider);
+        virtual Status DecryptNode(ILicense * license, IKeyProvider * keyProvider, ICryptoProvider * cryptoProvider);
 
     public:
         // ILicense
@@ -44,6 +49,12 @@ namespace lcp
         virtual IUser * User() const;
         virtual IRights * Rights() const;
 
+        virtual bool Decrypted() const;
+
+    public:
+        virtual const KeyType & UserKey() const;
+        virtual const KeyType & ContentKey() const;
+
     private:
         RootInfo m_rootInfo;
         ICrypto * m_crypto;
@@ -51,6 +62,8 @@ namespace lcp
         IUser * m_user;
         IRights * m_rights;
         std::string m_licenseJson;
+        bool m_decrypted;
+        std::unique_ptr<IKeyProvider> m_keyProvider;
     };
 }
 

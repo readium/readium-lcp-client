@@ -7,6 +7,8 @@
 #include "JsonValueReader.h"
 #include "JsonCanonicalizer.h"
 #include "EncryptionProfilesManager.h"
+#include "CryptoppCryptoProvider.h"
+#include "SimpleKeyProvider.h"
 
 namespace lcp
 {
@@ -20,6 +22,7 @@ namespace lcp
         , m_storageProvider(storageProvider)
         , m_jsonReader(new JsonValueReader())
         , m_encryptionProfilesManager(new EncryptionProfilesManager())
+        , m_cryptoProvider(new CryptoppCryptoProvider(m_encryptionProfilesManager.get()))
     {
     }
 
@@ -51,8 +54,6 @@ namespace lcp
                 rightsNode.get())
                 );
 
-            RightsLcpNode * rightsNodeNaked = rightsNode.get();
-
             rootNode->AddChildNode(std::move(cryptoNode));
             rootNode->AddChildNode(std::move(linksNode));
             rootNode->AddChildNode(std::move(userNode));
@@ -61,12 +62,14 @@ namespace lcp
             auto parentValue = rapidjson::Value(rapidjson::kNullType);
             rootNode->ParseNode(parentValue, m_jsonReader.get());
 
-            rightsNodeNaked->VerifyLicenseValidity();
-
+            Status res = rootNode->VerifyNode(rootNode.get(), this, m_cryptoProvider.get());
+            if (!Status::IsSuccess(res))
+                return res;
+            
             auto insertRes = m_licenses.insert(std::make_pair(std::move(canonicalJson), std::move(rootNode)));
             if (!insertRes.second)
             {
-                throw std::runtime_error("Two License instances with the same canonical form");
+                return Status(StCodeCover::ErrorCommonError, "Two License instances with the same canonical form");
             }
             *license = insertRes.first->second.get();
 
@@ -76,11 +79,43 @@ namespace lcp
         {
             return ex.ResultStatus();
         }
+        catch (const std::exception & ex)
+        {
+            return Status(StCodeCover::ErrorCommonError, ex.what());
+        }
     }
 
     Status LcpService::DecryptLicense(ILicense * license, const std::string & userPassphrase)
     {
-        return Status(StCodeCover::ErrorCommonSuccess);
+        try
+        {
+            KeyType userKey;
+            Status res = m_cryptoProvider->DecryptUserKey(userPassphrase, license, userKey);
+            if (!Status::IsSuccess(res))
+                return res;
+
+            KeyType contentKey;
+            res = m_cryptoProvider->DecryptContentKey(userKey, license, contentKey);
+            if (!Status::IsSuccess(res))
+                return res;
+
+            RootLcpNode * rootNode = dynamic_cast<RootLcpNode *>(license);
+            if (rootNode == nullptr)
+            {
+                return Status(StCodeCover::ErrorCommonError, "Can not cast ILicense to ILcpNode");
+            }
+
+            rootNode->SetKeyProvider(std::unique_ptr<IKeyProvider>(new SimpleKeyProvider(userKey, contentKey)));
+            return rootNode->DecryptNode(license, rootNode, m_cryptoProvider.get());
+        }
+        catch (const StatusException & ex)
+        {
+            return ex.ResultStatus();
+        }
+        catch (const std::exception & ex)
+        {
+            return Status(StCodeCover::ErrorCommonError, ex.what());
+        }
     }
 
     Status LcpService::DecryptData(
@@ -88,25 +123,58 @@ namespace lcp
         const unsigned char * data,
         const size_t dataLength,
         unsigned char * decryptedData,
-        size_t * decryptedDataLength,
-        const std::string & algorithm
+        size_t inDecryptedDataLength,
+        size_t * outDecryptedDataLength,
+        const std::string & algorithm,
+        bool firstDataBlock
         )
     {
-        return Status(StCodeCover::ErrorCommonSuccess);
-    }
+        try
+        {
+            IEncryptionProfile * profile = m_encryptionProfilesManager->GetProfile(license->Crypto()->EncryptionProfile());
+            if (algorithm != profile->PublicationAlgorithm())
+            {
+                return Status(StCodeCover::ErrorCommonAlgorithmMismatch);
+            }
 
+            IKeyProvider * keyProvider = dynamic_cast<IKeyProvider *>(license);
+            if (keyProvider == nullptr)
+            {
+                return Status(StCodeCover::ErrorCommonError, "Can not cast ILicense to IKeyProvider");
+            }
+
+            return m_cryptoProvider->DecryptPublicationData(
+                license,
+                keyProvider,
+                data,
+                dataLength,
+                decryptedData,
+                inDecryptedDataLength,
+                outDecryptedDataLength,
+                firstDataBlock
+                );
+        }
+        catch (const StatusException & ex)
+        {
+            return ex.ResultStatus();
+        }
+        catch (const std::exception & ex)
+        {
+            return Status(StCodeCover::ErrorCommonError, ex.what());
+        }
+    }
 
     std::string LcpService::RootCertificate() const
     {
         return m_rootCertificate;
     }
 
-    INetProvider * LcpService::LcpService::NetProvider() const
+    INetProvider * LcpService::NetProvider() const
     {
         return m_netProvider;
     }
 
-    IStorageProvider * LcpService::LcpService::StorageProvider() const
+    IStorageProvider * LcpService::StorageProvider() const
     {
         return m_storageProvider;
     }
@@ -116,12 +184,8 @@ namespace lcp
         auto licIt = m_licenses.find(canonicalJson);
         if (licIt != m_licenses.end())
         {
-            if (canonicalJson.size() == licIt->second->Content().size() &&
-                std::equal(canonicalJson.begin(), canonicalJson.end(), licIt->second->Content().begin()))
-            {
-                *license = licIt->second.get();
-                return true;
-            }
+            *license = licIt->second.get();
+            return true;
         }
         return false;
     }

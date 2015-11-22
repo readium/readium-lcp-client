@@ -113,12 +113,6 @@
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Certificate.h">
       <Filter>Header Files\Crypto</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\CertificateUtils.h">
-      <Filter>Header Files\Crypto</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\EncryptionProfilesManager.h">
-      <Filter>Header Files\Crypto</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\LcpCryptoLib\IEncryptionProfile.h">
       <Filter>Header Files\Crypto</Filter>
     </ClInclude>
@@ -133,6 +127,33 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\INetProvider.h">
       <Filter>Header Files\PublicInterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\CryptoAlgorithmInterfaces.h">
+      <Filter>Header Files\Crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\RsaSha256SignatureAlgorithm.h">
+      <Filter>Header Files\Crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\EncryptionProfileNames.h">
+      <Filter>Header Files\Crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Sha256HashAlgorithm.h">
+      <Filter>Header Files\Crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\AesCbcSymmetricAlgorithm.h">
+      <Filter>Header Files\Crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\EncryptionProfilesManager.h">
+      <Filter>Header Files\Crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\CryptoppUtils.h">
+      <Filter>Header Files\Crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\IKeyProvider.h">
+      <Filter>Header Files\Crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\SimpleKeyProvider.h">
+      <Filter>Header Files\Crypto</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -181,13 +202,28 @@
     <ClCompile Include="..\..\..\src\LcpCryptoLib\JsonValueReader.cpp">
       <Filter>Source Files\Json</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\LcpCryptoLib\CertificateUtils.cpp">
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\AlgorithmNames.cpp">
+      <Filter>Source Files\Crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\AesCbcSymmetricAlgorithm.cpp">
+      <Filter>Source Files\Crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\Lcp1dot0EncryptionProfile.cpp">
+      <Filter>Source Files\Crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\EncryptionProfileNames.cpp">
+      <Filter>Source Files\Crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\Sha256HashAlgorithm.cpp">
       <Filter>Source Files\Crypto</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\LcpCryptoLib\EncryptionProfilesManager.cpp">
       <Filter>Source Files\Crypto</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\LcpCryptoLib\AlgorithmNames.cpp">
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\RsaSha256SignatureAlgorithm.cpp">
+      <Filter>Source Files\Crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\CryptoppUtils.cpp">
       <Filter>Source Files\Crypto</Filter>
     </ClCompile>
   </ItemGroup>

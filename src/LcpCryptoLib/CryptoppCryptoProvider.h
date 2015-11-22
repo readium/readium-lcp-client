@@ -5,14 +5,50 @@
 
 namespace lcp
 {
+    class EncryptionProfilesManager;
+
     class CryptoppCryptoProvider : public ICryptoProvider
     {
     public:
+        explicit CryptoppCryptoProvider(EncryptionProfilesManager * encryptionProfilesManager);
+
         virtual Status VerifyLicense(
             const std::string & rootCertificateBase64,
-            const std::string & canonicalLicense,
             ILicense * license
             );
+
+        virtual Status DecryptUserKey(
+            const std::string & userPassphrase,
+            ILicense * license,
+            KeyType & userKey
+            );
+
+        virtual Status DecryptContentKey(
+            const KeyType & userKey,
+            ILicense * license,
+            KeyType & contentKey
+            );
+
+        virtual Status DecryptLicenseData(
+            const std::string & dataBase64,
+            ILicense * license,
+            IKeyProvider * keyProvider,
+            std::string & decrypted
+            );
+
+        virtual Status DecryptPublicationData(
+            ILicense * license,
+            IKeyProvider * keyProvider,
+            const unsigned char * data,
+            const size_t dataLength,
+            unsigned char * decryptedData,
+            size_t inDecryptedDataLength,
+            size_t * outDecryptedDataLength,
+            bool containsIv
+            );
+
+    private:
+        EncryptionProfilesManager * m_encryptionProfilesManager;
     };
 }
 

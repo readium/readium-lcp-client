@@ -1,5 +1,6 @@
 #include "UserLcpNode.h"
 #include "JsonValueReader.h"
+#include "ICryptoProvider.h"
 
 #pragma optimize( "", off )
 
@@ -29,6 +30,25 @@ namespace lcp
             return true;
         }
         return false;
+    }
+    
+    Status UserLcpNode::DecryptNode(ILicense * license, IKeyProvider * keyProvider, ICryptoProvider * cryptoProvider)
+    {
+        for (auto it = m_userInfo.encrypted.begin(); it != m_userInfo.encrypted.end(); ++it)
+        {
+            auto valueIt = m_userInfo.valuesMap.find(*it);
+            if (valueIt == m_userInfo.valuesMap.end())
+            {
+                throw std::runtime_error("encrypted user field not found");
+            }
+
+            Status res = cryptoProvider->DecryptLicenseData(valueIt->second, license, keyProvider, valueIt->second);
+            if (!Status::IsSuccess(res))
+                return res;
+
+            this->FillRegisteredFields(valueIt->first, valueIt->second);
+        }
+        return BaseLcpNode::DecryptNode(license, keyProvider, cryptoProvider);
     }
 
     void UserLcpNode::ParseNode(const rapidjson::Value & parentObject, JsonValueReader * reader)
@@ -64,26 +84,26 @@ namespace lcp
                     throw std::runtime_error("Duplicate user value");
                 }
 
-                FillRegisteredFields(name, it->value);
+                FillRegisteredFields(name, std::string(it->value.GetString(), it->value.GetStringLength()));
             }
         }
 
         BaseLcpNode::ParseNode(userObject, reader);
     }
 
-    void UserLcpNode::FillRegisteredFields(const std::string & name, const rapidjson::Value & value)
+    void UserLcpNode::FillRegisteredFields(const std::string & name, const std::string & value)
     {
         if (name == "id")
         {
-            m_userInfo.id.assign(value.GetString(), value.GetStringLength());
+            m_userInfo.id = value;
         }
         else if (name == "email")
         {
-            m_userInfo.email.assign(value.GetString(), value.GetStringLength());
+            m_userInfo.email = value;
         }
         else if (name == "name")
         {
-            m_userInfo.name.assign(value.GetString(), value.GetStringLength());
+            m_userInfo.name = value;
         }
     }
 }

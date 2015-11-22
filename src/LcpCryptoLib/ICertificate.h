@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include "LcpUtils.h"
 
 namespace lcp
 {
@@ -12,7 +13,7 @@ namespace lcp
         virtual std::string SerialNumber() const = 0;
         virtual std::string NotBeforeDate() const = 0;
         virtual std::string NotAfterDate() const = 0;
-        virtual std::vector<unsigned char> PublicKey() const = 0;
+        virtual KeyType PublicKey() const = 0;
         virtual bool VerifyCertificate(ICertificate * rootCertificate) = 0;
         virtual bool VerifyMessage(const std::string & message, const std::string & hashBase64) = 0;
         virtual ~ICertificate() {}

@@ -19,18 +19,22 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\AesCbcSymmetricAlgorithm.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\AlgorithmNames.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\BaseLcpNode.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\CanonicalWriter.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Certificate.h" />
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\CertificateUtils.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\CryptoppUtils.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\CryptoAlgorithmInterfaces.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\CryptoLcpNode.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\CryptoppCryptoProvider.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\DateTime.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\EncryptionProfileNames.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\EncryptionProfilesManager.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\ICertificate.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\ICryptoProvider.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\IEncryptionProfile.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\IKeyProvider.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\ILcpNode.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\JsonCanonicalizer.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\JsonValueReader.h" />
@@ -52,26 +56,34 @@
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\LcpStatus.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\RightsLcpNode.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\RootLcpNode.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\RsaSha256SignatureAlgorithm.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Sha256HashAlgorithm.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\SimpleKeyProvider.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\UserLcpNode.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\AesCbcSymmetricAlgorithm.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\AlgorithmNames.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\Certificate.cpp" />
-    <ClCompile Include="..\..\..\src\LcpCryptoLib\CertificateUtils.cpp" />
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\CryptoppUtils.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\CryptoLcpNode.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\CryptoppCryptoProvider.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\DateTime.cpp" />
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\EncryptionProfileNames.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\EncryptionProfilesManager.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\ILinks.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\IRights.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\JsonCanonicalizer.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\JsonValueReader.cpp" />
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\Lcp1dot0EncryptionProfile.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\LcpService.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\LcpServiceCreator.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\LcpUtils.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\LinksLcpNode.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\RightsLcpNode.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\RootLcpNode.cpp" />
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\RsaSha256SignatureAlgorithm.cpp" />
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\Sha256HashAlgorithm.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\UserLcpNode.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

@@ -7,6 +7,8 @@
 
 namespace lcp
 {
+    class ILicense;
+    
     struct UserInfo
     {
         std::string id;
@@ -21,7 +23,9 @@ namespace lcp
     public:
         // ILcpNode
         virtual void ParseNode(const rapidjson::Value & parentObject, JsonValueReader * reader);
+        virtual Status DecryptNode(ILicense * license, IKeyProvider * keyProvider, ICryptoProvider * cryptoProvider);
 
+    public:
         // IUser
         virtual std::string Id() const;
         virtual std::string Email() const;
@@ -29,7 +33,7 @@ namespace lcp
         virtual bool GetUserValue(const std::string & name, std::string & value) const;
 
     private:
-        void FillRegisteredFields(const std::string & name, const rapidjson::Value & value);
+        void FillRegisteredFields(const std::string & name, const std::string & value);
 
     private:
         UserInfo m_userInfo;

@@ -1,34 +1,24 @@
 #ifndef __LCP_1DOT0_ENCRTYPTION_PROFILE_H__
 #define __LCP_1DOT0_ENCRTYPTION_PROFILE_H__
 
+#include <memory>
 #include "IEncryptionProfile.h"
-#include "AlgorithmNames.h"
+#include "LcpUtils.h"
 
 namespace lcp
 {
     class Lcp1dot0EncryptionProfile : public IEncryptionProfile
     {
     public:
-        std::string Self() const
-        {
-            return "http://readium.org/lcp/profile-1.0";
-        }
-        std::string PublicationAlgorithm() const
-        {
-            return AlgorithmNames::AesCbc256Id;
-        }
-        std::string ContentKeyAlgorithm() const
-        {
-            return AlgorithmNames::AesCbc256Id;
-        }
-        std::string UserKeyAlgorithm() const
-        {
-            return AlgorithmNames::Sha256Id;
-        }
-        std::string SignatureAlgorithm() const
-        {
-            return AlgorithmNames::RsaSha256Id;
-        }
+        virtual std::string Name() const;
+        virtual std::string UserKeyAlgorithm() const;
+        virtual std::string PublicationAlgorithm() const;
+        virtual std::string ContentKeyAlgorithm() const;
+        virtual std::string SignatureAlgorithm() const;
+        virtual IHashAlgorithm * CreateUserKeyAlgorithm() const;
+        virtual ISymmetricAlgorithm * CreatePublicationAlgorithm(const KeyType & symmetricKey) const;
+        virtual ISymmetricAlgorithm * CreateContentKeyAlgorithm(const KeyType & symmetricKey) const;
+        virtual ISignatureAlgorithm * CreateSignatureAlgorithm(const KeyType & publicKey) const;
     };
 }
 

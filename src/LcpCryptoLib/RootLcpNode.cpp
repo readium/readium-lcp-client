@@ -1,11 +1,12 @@
 #include "rapidjson/document.h"
+#include "utf8-cpp/utf8.h"
 #include "RootLcpNode.h"
 #include "JsonValueReader.h"
 #include "LcpUtils.h"
 #include "JsonCanonicalizer.h"
+#include "ICryptoProvider.h"
 
-#include "utf8-cpp/utf8.h"
-#include <iostream>
+#include "Public/ILcpService.h"
 
 namespace lcp
 {
@@ -22,6 +23,7 @@ namespace lcp
         , m_links(links)
         , m_user(user)
         , m_rights(rights)
+        , m_decrypted(false)
     {
         m_rootInfo.content = canonicalJson;
     }
@@ -69,6 +71,50 @@ namespace lcp
     IRights * RootLcpNode::Rights() const
     {
         return m_rights;
+    }
+
+    bool RootLcpNode::Decrypted() const
+    {
+        return m_decrypted;
+    }
+
+    const KeyType & RootLcpNode::UserKey() const
+    {
+        if (m_keyProvider != nullptr)
+        {
+            return m_keyProvider->UserKey();
+        }
+        return std::move(KeyType());
+    }
+
+    const KeyType & RootLcpNode::ContentKey() const
+    {
+        if (m_keyProvider != nullptr)
+        {
+            return m_keyProvider->ContentKey();
+        }
+        return std::move(KeyType());
+    }
+
+    void RootLcpNode::SetKeyProvider(std::unique_ptr<IKeyProvider> keyProvider)
+    {
+        m_keyProvider = std::move(keyProvider);
+    }
+
+    Status RootLcpNode::VerifyNode(ILicense * license, IClientProvider * clientProvider, ICryptoProvider * cryptoProvider)
+    {
+        cryptoProvider->VerifyLicense(clientProvider->RootCertificate(), license);
+        return BaseLcpNode::VerifyNode(license, clientProvider, cryptoProvider);
+    }
+
+    Status RootLcpNode::DecryptNode(ILicense * license, IKeyProvider * keyProvider, ICryptoProvider * cryptoProvider)
+    {
+        Status res = BaseLcpNode::DecryptNode(license, keyProvider, cryptoProvider);
+        if (Status::IsSuccess(res))
+        {
+            m_decrypted = true;
+        }
+        return res;
     }
 
     void RootLcpNode::ParseNode(const rapidjson::Value & parentObject, JsonValueReader * reader)

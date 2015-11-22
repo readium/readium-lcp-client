@@ -1,12 +1,13 @@
 #include <sstream>
 #include <cryptopp/base64.h>
-#include "CertificateUtils.h"
+#include "CryptoppUtils.h"
+#include "LcpUtils.h"
 
 using namespace CryptoPP;
 
 namespace lcp
 {
-    word32 CertificateUtils::ReadVersion(BERSequenceDecoder & toBeSignedCertificate)
+    word32 CryptoppUtils::Cert::Cert::ReadVersion(BERSequenceDecoder & toBeSignedCertificate)
     {
         try
         {
@@ -23,13 +24,13 @@ namespace lcp
         }
     }
 
-    void CertificateUtils::SkipNextSequence(BERSequenceDecoder & parentSequence)
+    void CryptoppUtils::Cert::SkipNextSequence(BERSequenceDecoder & parentSequence)
     {
         BERSequenceDecoder sequence(parentSequence);
         sequence.SkipAll();
     }
 
-    std::string CertificateUtils::IntegerToString(const Integer & integer)
+    std::string CryptoppUtils::Cert::IntegerToString(const Integer & integer)
     {
         std::stringstream strm;
         strm << integer;
@@ -37,28 +38,60 @@ namespace lcp
         return result.substr(0, result.find_first_of('.'));
     }
 
-    std::string CertificateUtils::ReadIntegerAsString(BERSequenceDecoder & sequence)
+    std::string CryptoppUtils::Cert::ReadIntegerAsString(BERSequenceDecoder & sequence)
     {
         Integer value;
         value.BERDecode(sequence);
-        return CertificateUtils::IntegerToString(value);
+        return CryptoppUtils::Cert::Cert::IntegerToString(value);
     }
 
-    void CertificateUtils::Base64ToSecBlock(const std::string & base64, SecByteBlock & result)
+    void CryptoppUtils::Base64ToVector(const std::string & base64, KeyType & result)
     {
+        if (base64.empty())
+        {
+            throw std::runtime_error("base64 data is empty");
+        }
+
         Base64Decoder decoder;
-        decoder.Put((byte *)base64.data(), base64.size());
+        decoder.Put(reinterpret_cast<const byte *>(base64.data()), base64.size());
         decoder.MessageEnd();
 
         lword size = decoder.MaxRetrievable();
         if (size > 0 && size <= SIZE_MAX)
         {
-            result.resize(size);
-            decoder.Get((byte *)result.data(), result.size());
+            result.resize(static_cast<size_t>(size));
+            decoder.Get(reinterpret_cast<byte *>(result.data()), result.size());
+        }
+        else
+        {
+            throw std::runtime_error("result data is empty");
         }
     }
 
-    void CertificateUtils::ReadDateTimeSequence(
+    void CryptoppUtils::Base64ToSecBlock(const std::string & base64, SecByteBlock & result)
+    {
+        if (base64.empty())
+        {
+            throw std::runtime_error("base64 data is empty");
+        }
+
+        Base64Decoder decoder;
+        decoder.Put(reinterpret_cast<const byte *>(base64.data()), base64.size());
+        decoder.MessageEnd();
+
+        lword size = decoder.MaxRetrievable();
+        if (size > 0 && size <= SIZE_MAX)
+        {
+            result.resize(static_cast<size_t>(size));
+            decoder.Get(reinterpret_cast<byte *>(result.data()), result.size());
+        }
+        else
+        {
+            throw std::runtime_error("result data is empty");
+        }
+    }
+
+    void CryptoppUtils::Cert::ReadDateTimeSequence(
         BERSequenceDecoder & toBeSignedCertificate,
         std::string & notBefore,
         std::string & notAfter
@@ -72,7 +105,7 @@ namespace lcp
         validity.MessageEnd();
     }
 
-    void CertificateUtils::ReadSubjectPublicKey(BERSequenceDecoder & toBeSignedCertificate, RSA::PublicKey & result)
+    void CryptoppUtils::Cert::ReadSubjectPublicKey(BERSequenceDecoder & toBeSignedCertificate, RSA::PublicKey & result)
     {
         ByteQueue subjectPublicKey;
 
@@ -84,15 +117,20 @@ namespace lcp
         result.BERDecode(subjectPublicKey);
     }
 
-    void CertificateUtils::ReadOID(BERSequenceDecoder & certificate, OID & algorithmId)
+    void CryptoppUtils::Cert::ReadOID(BERSequenceDecoder & certificate, OID & algorithmId)
     {
         BERSequenceDecoder algorithm(certificate);
         algorithmId.BERDecode(algorithm);
         algorithm.SkipAll();
     }
 
-    void CertificateUtils::PullToBeSignedData(const SecByteBlock & rawCertificate, SecByteBlock & result)
+    void CryptoppUtils::Cert::PullToBeSignedData(const SecByteBlock & rawCertificate, SecByteBlock & result)
     {
+        if (rawCertificate.empty())
+        {
+            throw std::runtime_error("raw certificate data is empty");
+        }
+
         ByteQueue certificateQueue;
         ByteQueue resultQueue;
         certificateQueue.Put(rawCertificate.data(), rawCertificate.size());
@@ -107,8 +145,12 @@ namespace lcp
         lword size = resultQueue.MaxRetrievable();
         if (size > 0 && size <= SIZE_MAX)
         {
-            result.resize(size);
+            result.resize(static_cast<size_t>(size));
             resultQueue.Get(result.data(), result.size());
+        }
+        else
+        {
+            throw std::runtime_error("signed data is empty");
         }
     }
 }

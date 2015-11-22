@@ -6,12 +6,12 @@ namespace lcp
     EncryptionProfilesManager::EncryptionProfilesManager()
     {
         std::unique_ptr<IEncryptionProfile> lcp1dot0(new Lcp1dot0EncryptionProfile());
-        m_profilesMap.insert(std::make_pair(lcp1dot0->Self(), std::move(lcp1dot0)));
+        m_profilesMap.insert(std::make_pair(lcp1dot0->Name(), std::move(lcp1dot0)));
     }
 
     bool EncryptionProfilesManager::RegisterProfile(std::unique_ptr<IEncryptionProfile> profile)
     {
-        auto res = m_profilesMap.insert(std::make_pair(profile->Self(), std::move(profile)));
+        auto res = m_profilesMap.insert(std::make_pair(profile->Name(), std::move(profile)));
         return res.second;
     }
 

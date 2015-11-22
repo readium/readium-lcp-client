@@ -29,11 +29,11 @@ namespace lcp
     class RightsLcpNode : public BaseLcpNode, public IRights
     {
     public:
-        Status VerifyLicenseValidity() const;
-
         // ILcpNode
         virtual void ParseNode(const rapidjson::Value & parentObject, JsonValueReader * reader);
+        virtual Status VerifyNode(ILicense * license, IClientProvider * clientProvider, ICryptoProvider * cryptoProvider);
 
+    public:
         // IRights
         virtual bool GetRightValue(const std::string & name, std::string & value) const;
 

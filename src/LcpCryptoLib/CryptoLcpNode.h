@@ -26,10 +26,11 @@ namespace lcp
     {
     public:
         explicit CryptoLcpNode(EncryptionProfilesManager * encryptionProfilesManager);
+
         // ILcpNode
         void ParseNode(const rapidjson::Value & parentObject, JsonValueReader * reader);
+        Status VerifyNode(ILicense * license, IClientProvider * clientProvider, ICryptoProvider * cryptoProvider);
 
-    public:
         // ICrypto
         std::string EncryptionProfile() const;
         std::string ContentKey() const;

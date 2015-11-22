@@ -18,7 +18,7 @@ namespace lcp
         return false;
     }
 
-    Status RightsLcpNode::VerifyLicenseValidity() const
+    Status RightsLcpNode::VerifyNode(ILicense * license, IClientProvider * clientProvider, ICryptoProvider * cryptoProvider)
     {
         DateTime started(m_rights.start);
         DateTime expired(m_rights.end);
@@ -32,7 +32,7 @@ namespace lcp
         {
             return Status(StCodeCover::ErrorOpeningLicenseExpired);
         }
-        return Status(StCodeCover::ErrorCommonSuccess);
+        return BaseLcpNode::VerifyNode(license, clientProvider, cryptoProvider);
     }
 
     void RightsLcpNode::ParseNode(const rapidjson::Value & parentObject, JsonValueReader * reader)

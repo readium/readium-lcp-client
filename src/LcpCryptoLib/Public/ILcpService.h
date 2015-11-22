@@ -10,7 +10,26 @@ namespace lcp
     class INetProvider;
     class IStorageProvider;
 
-    class ILcpService
+    class IClientProvider
+    {
+    public:
+        // Root certificate provided by the Readium foundation to the Reader System
+        virtual std::string RootCertificate() const = 0;
+
+        // Shared implementation of the net provider, used for any
+        // network call from the library. To be set by the
+        // library's client.
+        virtual INetProvider * NetProvider() const = 0;
+
+        // Shared implementation of the secure storage provider, used
+        // to store and retrieve safely any JSON value by the library.
+        // To be set by the library's client.
+        virtual IStorageProvider * StorageProvider() const = 0;
+
+        virtual ~IClientProvider() {}
+    };
+
+    class ILcpService : public IClientProvider
     {
     public:
         // Parses the given JSON License Document and returns a matching
@@ -24,29 +43,20 @@ namespace lcp
         virtual Status DecryptLicense(ILicense * license, const std::string & userPassphrase) = 0;
 
         // Decrypts and returns the given bytes using the given License.
-        // Algorithm parameter may be dropped, in that the case algorithm 
-        // from the Encryption Profile will be used.
+        // dataLength is the size of the encrypted data
+        // decryptedDataLength will be set to the size of the decrypted
+        // data. Algorithm parameter must be the same as in the
+        // Encryption Profile
         virtual Status DecryptData(
             ILicense * license,
             const unsigned char * data,
             const size_t dataLength,
             unsigned char * decryptedData,
-            size_t * decryptedDataLength,
-            const std::string & algorithm = ""
+            size_t inDecryptedDataLength,
+            size_t * outDecryptedDataLength,
+            const std::string & algorithm,
+            bool firstDataBlock = true
             ) = 0;
-
-        // Root certificate provided by the Readium foundation to the Reader System
-        virtual std::string RootCertificate() const = 0;
-
-        // Shared implementation of the net provider, used for any
-        // network call from the library. To be set by the
-        // library's client.
-        virtual INetProvider * NetProvider() const = 0;
-
-        // Shared implementation of the secure storage provider, used
-        // to store and retrieve safely any JSON value by the library.
-        // To be set by the library's client.
-        virtual IStorageProvider * StorageProvider() const = 0;
 
         virtual ~ILcpService() {}
     };

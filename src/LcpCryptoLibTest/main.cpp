@@ -3,6 +3,20 @@
 
 #include "Public/lcp.h"
 
+class StorageProvider : lcp::IStorageProvider
+{
+public:
+    virtual std::string Get(const std::string & vaultId, const std::string & key)
+    {
+        return std::string();
+    }
+
+    virtual void Set(const std::string & vaultId, const std::string & key, const std::string & value)
+    {
+
+    }
+};
+
 int main()
 {
     try

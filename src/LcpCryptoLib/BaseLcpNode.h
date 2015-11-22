@@ -4,9 +4,12 @@
 #include <vector>
 #include <memory>
 #include "ILcpNode.h"
+#include "LcpUtils.h"
 
 namespace lcp
 {
+    class ICryptoProvider;
+
     class BaseLcpNode : public ILcpNode
     {
     public:
@@ -29,6 +32,34 @@ namespace lcp
                     (*it)->ParseNode(parentObject, reader);
                 }
             }
+        }
+
+        virtual Status DecryptNode(ILicense * license, IKeyProvider * keyProvider, ICryptoProvider * cryptoProvider)
+        {
+            if (!IsLeaf())
+            {
+                for (auto it = m_childs.begin(); it != m_childs.end(); ++it)
+                {
+                    Status res = (*it)->DecryptNode(license, keyProvider, cryptoProvider);
+                    if (!Status::IsSuccess(res))
+                        return res;
+                }
+            }
+            return Status(StCodeCover::ErrorCommonSuccess);
+        }
+
+        virtual Status VerifyNode(ILicense * license, IClientProvider * clientProvider, ICryptoProvider * cryptoProvider)
+        {
+            if (!IsLeaf())
+            {
+                for (auto it = m_childs.begin(); it != m_childs.end(); ++it)
+                {
+                    Status res = (*it)->VerifyNode(license, clientProvider, cryptoProvider);
+                    if (!Status::IsSuccess(res))
+                        return res;
+                }
+            }
+            return Status(StCodeCover::ErrorCommonSuccess);
         }
 
     protected:
