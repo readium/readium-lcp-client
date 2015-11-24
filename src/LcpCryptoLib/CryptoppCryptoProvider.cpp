@@ -65,7 +65,7 @@ namespace lcp
             DateTime notBefore(providerCertificate->NotBeforeDate());
             DateTime notAfter(providerCertificate->NotAfterDate());
 
-            /*DateTime lastUpdated;
+            DateTime lastUpdated;
             if (!license->Updated().empty())
             {
                 lastUpdated = DateTime(license->Updated());
@@ -82,7 +82,7 @@ namespace lcp
             else if (lastUpdated > notAfter)
             {
                 return Status(StCodeCover::ErrorOpeningContentProviderCertificateExpired);
-            }*/
+            }
             return Status(StCodeCover::ErrorCommonSuccess);
         }
         catch (const CryptoPP::Exception & ex)
@@ -108,9 +108,12 @@ namespace lcp
             std::unique_ptr<IHashAlgorithm> hashAlgorithm(profile->CreateUserKeyAlgorithm());
             userKey = hashAlgorithm->CalculateHash(userPassphrase);
 
+            std::string hex;
+            Status res = this->ConvertKeyToHex(userKey, hex);
+
             std::unique_ptr<ISymmetricAlgorithm> contentKeyAlgorithm(profile->CreateContentKeyAlgorithm(userKey));
             std::string id = contentKeyAlgorithm->Decrypt(license->Crypto()->UserKeyCheck());
-            if (!LexicographicalCompareUtf8(id, license->Id()))
+            if (!EqualsUtf8(id, license->Id()))
             {
                 return Status(StCodeCover::ErrorDecryptionUserPassphraseNotValid);
             }
@@ -150,19 +153,34 @@ namespace lcp
 
     Status CryptoppCryptoProvider::ConvertKeyToHex(
         const KeyType & key,
-        std::string hex
+        std::string & hex
         )
     {
         try
         {
             hex = CryptoppUtils::KeyToHex(key);
+            return Status(StCodeCover::ErrorCommonSuccess);
         }
         catch (const CryptoPP::Exception & ex)
         {
             return Status(StCodeCover::ErrorDecryptionCommonError, ex.GetWhat());
         }
-        
-        return Status(StCodeCover::ErrorCommonSuccess);
+    }
+
+    Status CryptoppCryptoProvider::ConvertHexToKey(
+        const std::string & hex,
+        KeyType & key
+        )
+    {
+        try
+        {
+            key = CryptoppUtils::HexToKey(hex);
+            return Status(StCodeCover::ErrorCommonSuccess);
+        }
+        catch (const CryptoPP::Exception & ex)
+        {
+            return Status(StCodeCover::ErrorDecryptionCommonError, ex.GetWhat());
+        }
     }
 
     Status CryptoppCryptoProvider::DecryptLicenseData(

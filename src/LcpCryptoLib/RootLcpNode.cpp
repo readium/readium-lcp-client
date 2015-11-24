@@ -1,6 +1,5 @@
 #include <sstream>
 #include "rapidjson/document.h"
-#include "utf8-cpp/utf8.h"
 #include "RootLcpNode.h"
 #include "JsonValueReader.h"
 #include "LcpUtils.h"

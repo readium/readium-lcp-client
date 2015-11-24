@@ -2,7 +2,6 @@
 #include <cryptopp/filters.h>
 #include "AlgorithmNames.h"
 #include "Sha256HashAlgorithm.h"
-#include "CryptoppUtils.h"
 
 namespace lcp
 {
@@ -16,11 +15,9 @@ namespace lcp
         return CryptoPP::SHA256::DIGESTSIZE;
     }
 
-    KeyType Sha256HashAlgorithm::CalculateHash(const std::string & base64)
+    KeyType Sha256HashAlgorithm::CalculateHash(const std::string & dataStr)
     {
-        CryptoPP::SecByteBlock rawData;
-        CryptoppUtils::Base64ToSecBlock(base64, rawData);
-        return this->CalculateHash(rawData.data(), rawData.size());
+        return this->CalculateHash(reinterpret_cast<const unsigned char *>(dataStr.data()), dataStr.size());
     }
 
     KeyType Sha256HashAlgorithm::CalculateHash(

@@ -79,10 +79,25 @@ namespace lcp
             key.size(),
             true,
             new CryptoPP::HexEncoder(
-                new CryptoPP::StringSink(hex)
+                new CryptoPP::StringSink(hex),
+                false
                 )
             );
         return hex;
+    }
+
+    KeyType CryptoppUtils::HexToKey(const std::string & hex)
+    {
+        KeyType key(hex.size() / 2);
+        CryptoPP::StringSource(
+            hex, true,
+            new CryptoPP::HexDecoder(
+                new CryptoPP::ArraySink(
+                    &key.at(0), key.size()
+                    )
+                )
+            );
+        return key;
     }
 
     void CryptoppUtils::Base64ToSecBlock(const std::string & base64, SecByteBlock & result)

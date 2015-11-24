@@ -62,3 +62,5 @@ profile
 *.moved-aside
 DerivedData
 
+# Generated Testing Data
+storage.json

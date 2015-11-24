@@ -34,13 +34,13 @@ namespace lcp
 
     Status LcpService::OpenLicense(const std::string & licenseJson, ILicense ** license)
     {
-        if (license == nullptr)
-        {
-            throw std::invalid_argument("license is nullptr");
-        }
-
         try
         {
+            if (license == nullptr)
+            {
+                return Status(StCodeCover::ErrorCommonError, "license is nullptr");
+            }
+
             std::string canonicalJson = this->CalculateCanonicalForm(licenseJson);
             if (this->FindLicense(canonicalJson, license))
             {
@@ -99,12 +99,21 @@ namespace lcp
     {
         try
         {
+            if (license == nullptr)
+            {
+                return Status(StCodeCover::ErrorCommonError, "license is nullptr");
+            }
+
             KeyType userKey;
             Status res = m_cryptoProvider->DecryptUserKey(userPassphrase, license, userKey);
             if (!Status::IsSuccess(res))
                 return res;
 
-            return this->DecryptLicenseByUserKey(license, userKey);
+            res = this->DecryptLicenseByUserKey(license, userKey);
+            if (!Status::IsSuccess(res))
+                return res;
+
+            return this->AddDecryptedUserKey(license, userKey);
         }
         catch (const StatusException & ex)
         {
@@ -130,25 +139,64 @@ namespace lcp
         }
 
         rootNode->SetKeyProvider(std::unique_ptr<IKeyProvider>(new SimpleKeyProvider(userKey, contentKey)));
-        res = rootNode->DecryptNode(license, rootNode, m_cryptoProvider.get());
+        return rootNode->DecryptNode(license, rootNode, m_cryptoProvider.get());
+    }
+
+    Status LcpService::AddDecryptedUserKey(ILicense * license, const KeyType & userKey)
+    {
+        std::string hexUserKey;
+        Status res = m_cryptoProvider->ConvertKeyToHex(userKey, hexUserKey);
         if (!Status::IsSuccess(res))
             return res;
-
-        /*std::string hexUserKey;
-        res = m_cryptoProvider->ConvertKeyToHex(userKey, hexUserKey);
-        if (!Status::IsSuccess(res))
-        return res;*/
 
         std::string userId = license->User()->Id();
         if (!userId.empty())
         {
-            res = this->AddUserKey(std::string(userKey.begin(), userKey.end()), userId, license->Provider());
+            res = this->AddUserKey(hexUserKey, userId, license->Provider());
         }
         else
         {
-            res = this->AddUserKey(std::string(userKey.begin(), userKey.end()));
+            res = this->AddUserKey(hexUserKey);
         }
         return res;
+    }
+
+    Status LcpService::DecryptLicenseByStorage(ILicense * license)
+    {
+        if (m_storageProvider == nullptr)
+        {
+            return Status(StCodeCover::ErrorCommonNoStorageProvider);
+        }
+
+        std::string userId = license->User()->Id();
+        if (!userId.empty())
+        {
+            std::string userKeyHex = m_storageProvider->GetValue(
+                UserKeysVaultId,
+                BuildStorageProviderKey(license->Provider(), userId)
+                );
+            if (!userKeyHex.empty())
+            {
+                KeyType userKey;
+                Status res = m_cryptoProvider->ConvertHexToKey(userKeyHex, userKey);
+                if (!Status::IsSuccess(res))
+                    return res;
+
+                return this->DecryptLicenseByUserKey(license, userKey);
+            }
+        }
+
+        std::unique_ptr<MapIterator<std::string> > it(m_storageProvider->EnumerateVault(UserKeysVaultId));
+        for (it->First(); !it->IsDone(); it->Next())
+        {
+            KeyType userKey;
+            Status res = m_cryptoProvider->ConvertHexToKey(it->Current()->second, userKey);
+
+            res = this->DecryptLicenseByUserKey(license, userKey);
+            if (Status::IsSuccess(res))
+                return res;
+        }
+        return Status(StCodeCover::ErrorOpeningLicenseStillEncrypted);
     }
 
     Status LcpService::DecryptData(
@@ -164,6 +212,11 @@ namespace lcp
     {
         try
         {
+            if (license == nullptr)
+            {
+                return Status(StCodeCover::ErrorCommonError, "license is nullptr");
+            }
+
             IEncryptionProfile * profile = m_encryptionProfilesManager->GetProfile(license->Crypto()->EncryptionProfile());
             if (algorithm != profile->PublicationAlgorithm())
             {
@@ -269,42 +322,6 @@ namespace lcp
     IStorageProvider * LcpService::StorageProvider() const
     {
         return m_storageProvider;
-    }
-
-    Status LcpService::DecryptLicenseByStorage(ILicense * license)
-    {
-        if (m_storageProvider == nullptr)
-        {
-            return Status(StCodeCover::ErrorCommonNoStorageProvider);
-        }
-
-        std::string userId = license->User()->Id();
-        if (!userId.empty())
-        {
-            std::string userKeyStr = m_storageProvider->GetValue(
-                UserKeysVaultId,
-                BuildStorageProviderKey(license->Provider(), userId)
-                );
-            if (!userKeyStr.empty())
-            {
-                KeyType userKey;
-                userKey.assign(userKeyStr.begin(), userKeyStr.end());
-                return this->DecryptLicenseByUserKey(license, userKey);
-            }
-        }
-
-        std::unique_ptr<MapIterator<std::string> > it(m_storageProvider->EnumerateVault(UserKeysVaultId));
-        for (it->First(); !it->IsDone(); it->Next())
-        {
-            KeyType userKey;
-            userKey.assign(it->Current()->second.begin(), it->Current()->second.end());
-            Status res = this->DecryptLicenseByUserKey(license, userKey);
-            if (Status::IsSuccess(res))
-            {
-                return res;
-            }
-        }
-        return Status(StCodeCover::ErrorOpeningLicenseStillEncrypted);
     }
 
     bool LcpService::FindLicense(const std::string & canonicalJson, ILicense ** license)

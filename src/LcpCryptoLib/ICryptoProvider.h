@@ -31,7 +31,12 @@ namespace lcp
 
         virtual Status ConvertKeyToHex(
             const KeyType & key,
-            std::string hex
+            std::string & hex
+            ) = 0;
+
+        virtual Status ConvertHexToKey(
+            const std::string & hex,
+            KeyType & key
             ) = 0;
 
         virtual Status DecryptLicenseData(

@@ -7,9 +7,9 @@
 namespace lcp
 {
     /*static*/ std::string DateTime::IsoUtcFormat = "2015-11-11T22:21:37Z";
-    /*static*/ std::string DateTime::IsoUtcFormatRegex = "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z";
+    /*static*/ std::string DateTime::IsoUtcFormatRegex = "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.*\\d*Z";
     /*static*/ std::string DateTime::IsoTimeZoneFormat = "2015-11-11T22:21:37+01:00";
-    /*static*/ std::string DateTime::IsoTimeZoneFormatRegex = "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}[+-]\\d{2}:\\d{2}";
+    /*static*/ std::string DateTime::IsoTimeZoneFormatRegex = "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.*\\d*[+-]\\d{2}:\\d{2}";
     /*static*/ std::string DateTime::IsoJointUtcFormat = "20151111T222137Z";
     /*static*/ std::string DateTime::IsoJointUtcFormatRegex = "\\d{8}T\\d{6}Z";
     /*static*/ std::string DateTime::IsoJointTimeZoneFormat = "20151111T222137+0100";

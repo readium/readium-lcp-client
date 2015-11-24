@@ -20,18 +20,26 @@ namespace lcp
 
     Status RightsLcpNode::VerifyNode(ILicense * license, IClientProvider * clientProvider, ICryptoProvider * cryptoProvider)
     {
-        /*DateTime started(m_rights.start);
-        DateTime expired(m_rights.end);
         DateTime now = DateTime::Now();
-
-        if (now < started)
+        
+        if (!m_rights.start.empty())
         {
-            return Status(StCodeCover::ErrorOpeningLicenseNotStarted);
+            DateTime started(m_rights.start);
+            if (now < started)
+            {
+                return Status(StCodeCover::ErrorOpeningLicenseNotStarted);
+            }
         }
-        else if (now > expired)
+
+        if (!m_rights.end.empty())
         {
-            return Status(StCodeCover::ErrorOpeningLicenseExpired);
-        }*/
+            DateTime expired(m_rights.end);
+            if (now > expired)
+            {
+                return Status(StCodeCover::ErrorOpeningLicenseExpired);
+            }
+        }
+
         return BaseLcpNode::VerifyNode(license, clientProvider, cryptoProvider);
     }
 

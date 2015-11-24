@@ -4,7 +4,7 @@
 #include <map>
 #include <memory>
 #include "Public/ILcpService.h"
-#include "LcpUtils.h"//todo
+#include "LcpUtils.h"
 
 namespace lcp
 {
@@ -12,7 +12,6 @@ namespace lcp
     class EncryptionProfilesManager;
     class ICryptoProvider;
     class UUIDGenerator;
-    //class KeyType;
 
     class LcpService : public ILcpService
     {
@@ -51,8 +50,11 @@ namespace lcp
         
     private:
         bool FindLicense(const std::string & canonicalJson, ILicense ** license);
+
         Status DecryptLicenseByUserKey(ILicense * license, const KeyType & userKey);
         Status DecryptLicenseByStorage(ILicense * license);
+        Status AddDecryptedUserKey(ILicense * license, const KeyType & userKey);
+
         std::string CalculateCanonicalForm(const std::string & licenseJson);
         std::string BuildStorageProviderKey(const std::string & part1, const std::string & part2);
 

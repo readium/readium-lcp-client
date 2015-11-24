@@ -47,6 +47,7 @@ namespace lcp
         }
 
         std::string decryptedDataStr;
+        
         CryptoPP::ArraySource source(
             cipherData, cipherSize, true,
             new CryptoPP::StreamTransformationFilter(m_decryptor,

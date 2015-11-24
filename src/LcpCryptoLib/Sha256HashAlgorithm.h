@@ -10,7 +10,7 @@ namespace lcp
     public:
         virtual std::string Name() const;
         virtual size_t DigestSize() const;
-        virtual KeyType CalculateHash(const std::string & base64);
+        virtual KeyType CalculateHash(const std::string & dataStr);
         virtual KeyType CalculateHash(
             const unsigned char * data,
             const size_t dataLength

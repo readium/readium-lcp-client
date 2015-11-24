@@ -34,7 +34,7 @@ namespace lcp
         virtual std::string Name() const = 0;
         virtual size_t DigestSize() const = 0;
 
-        virtual KeyType CalculateHash(const std::string & base64) = 0;
+        virtual KeyType CalculateHash(const std::string & dataStr) = 0;
         virtual KeyType CalculateHash(
             const unsigned char * data,
             const size_t dataLength
