@@ -15,6 +15,10 @@
 #include <sys/types.h>
 #endif
 
+#if defined(__ANDROID__)
+# include <sys/select.h>
+#endif
+
 #include "hrtimer.h"
 
 NAMESPACE_BEGIN(CryptoPP)

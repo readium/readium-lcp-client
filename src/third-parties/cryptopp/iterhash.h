@@ -93,7 +93,7 @@ protected:
 	FixedSizeAlignedSecBlock<T_HashWordType, T_BlockSize/sizeof(T_HashWordType), T_StateAligned> m_state;
 };
 
-#ifndef __GNUC__
+#if !defined(__GNUC__) || defined(_M_ARM)
 	CRYPTOPP_DLL_TEMPLATE_CLASS IteratedHashBase<word64, HashTransformation>;
 	CRYPTOPP_STATIC_TEMPLATE_CLASS IteratedHashBase<word64, MessageAuthenticationCode>;
 

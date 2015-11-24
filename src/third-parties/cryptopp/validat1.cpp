@@ -12,6 +12,7 @@
 #include "dmac.h"
 #include "idea.h"
 #include "des.h"
+#include "aes.h"
 #include "rc2.h"
 #include "arc4.h"
 #include "rc5.h"

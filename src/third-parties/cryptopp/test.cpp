@@ -29,9 +29,11 @@
 #include <windows.h>
 #endif
 
-#if defined(USE_BERKELEY_STYLE_SOCKETS) && !defined(macintosh)
-#include <netinet/in.h>
-#include <netinet/tcp.h>
+#ifdef SOCKETS_AVAILABLE
+# if defined(USE_BERKELEY_STYLE_SOCKETS) && !defined(macintosh)
+#  include <netinet/in.h>
+#  include <netinet/tcp.h>
+# endif
 #endif
 
 #if (_MSC_VER >= 1000)

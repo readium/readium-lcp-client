@@ -1,21 +1,42 @@
-CXXFLAGS = -DNDEBUG -g -O2
+# CXXFLAGS += -DDEBUG -g3 -ggdb -O1 -fPIC
+CXXFLAGS += -DNDEBUG -g2 -Os -fPIC
+
 # -O3 fails to link on Cygwin GCC version 4.5.3
 # -fPIC is supported. Please report any breakage of -fPIC as a bug.
 # CXXFLAGS += -fPIC
 # the following options reduce code size, but breaks link or makes link very slow on some systems
 # CXXFLAGS += -ffunction-sections -fdata-sections
 # LDFLAGS += -Wl,--gc-sections
+CXXFLAGS += -Wno-unused-function -Wno-unused-parameter -Wno-unused-variable
 ARFLAGS = -cr	# ar needs the dash on OpenBSD
-RANLIB = ranlib
+RANLIB ?= ranlib
 CP = cp
 MKDIR = mkdir
 EGREP = egrep
+CHMOD = chmod
 UNAME = $(shell uname)
 ISX86 = $(shell uname -m | $(EGREP) -c "i.86|x86|i86|amd64")
 IS_SUN_CC = $(shell $(CXX) -V 2>&1 | $(EGREP) -c "CC: Sun")
 IS_LINUX = $(shell $(CXX) -dumpmachine 2>&1 | $(EGREP) -c "linux")
+IS_DARWIN = $(shell uname -s | $(EGREP) -i -c "Darwin")
 IS_MINGW = $(shell $(CXX) -dumpmachine 2>&1 | $(EGREP) -c "mingw")
-CLANG_COMPILER = $(shell $(CXX) --version 2>&1 | $(EGREP) -i -c "clang version")
+CLANG_COMPILER = $(shell $(CXX) --version 2>&1 | $(EGREP) -i -c "clang")
+
+# Set in the environment
+ifeq ($(IS_CROSS_COMPILE),1)
+  ISX86=0
+  IS_LINUX=0
+  IS_MINGW=0
+  IS_DARWIN=0
+  UNAME=CrossCompile
+endif
+
+# Try to fix MinGW with a missing MSYS
+ifeq ($(IS_MINGW),1)
+  ifeq ($(UNAME),)
+    UNAME=mingw
+  endif
+endif
 
 # Default prefix for make install
 ifeq ($(PREFIX),)
@@ -36,11 +57,11 @@ GAS217_OR_LATER = $(shell $(CXX) -xc -c /dev/null -Wa,-v -o/dev/null 2>&1 | $(EG
 GAS219_OR_LATER = $(shell $(CXX) -xc -c /dev/null -Wa,-v -o/dev/null 2>&1 | $(EGREP) -c "GNU assembler version (2\.19|2\.[2-9]|[3-9])")
 
 ifneq ($(GCC42_OR_LATER),0)
-ifeq ($(UNAME),Darwin)
-CXXFLAGS += -arch x86_64 -arch i386
-else
 CXXFLAGS += -march=native
 endif
+
+ifeq ($(IS_DARWIN),1)
+CXXFLAGS += -arch x86_64 -arch i386
 endif
 
 ifneq ($(INTEL_COMPILER),0)
@@ -86,16 +107,51 @@ M32OR64 = -m64
 endif
 endif
 
-ifeq ($(UNAME),Darwin)
-AR = libtool
-ARFLAGS = -static -o
-CXX = c++
-IS_GCC2 = $(shell $(CXX) -v 2>&1 | $(EGREP) -c gcc-932)
-ifeq ($(IS_GCC2),1)
-CXXFLAGS += -fno-coalesce-templates -fno-coalesce-static-vtables
-LDLIBS += -lstdc++
-LDFLAGS += -flat_namespace -undefined suppress -m
+ifeq ($(IS_DARWIN),1)
+  AR = libtool
+  ARFLAGS = -static -o
+  CXX = /usr/local/bin/clang++
+#  CXXFLAGS += -stdlib=libc++
+  IS_GCC2 = $(shell $(CXX) -v 2>&1 | $(EGREP) -c gcc-932)
+  ifeq ($(IS_GCC2),1)
+    CXXFLAGS += -fno-coalesce-templates -fno-coalesce-static-vtables
+    LDFLAGS += -flat_namespace -undefined suppress -m
+  endif
 endif
+
+# iOS cross-compile configuration. Works in conjunction with IS_CROSS_COMPILE.
+#   See http://www.cryptopp.com/wiki/iOS_(Command_Line).
+ifeq ($(IS_IOS),1)
+  CXX = clang++
+
+  CXXFLAGS = -DNDEBUG -g2 -Os -pipe -fPIC
+  CXXFLAGS += -DCRYPTOPP_DISABLE_ASM  $(IOS_FLAGS)
+  CXXFLAGS += -arch $(IOS_ARCH) -isysroot $(IOS_SYSROOT)
+  CXXFLAGS += -stdlib=libc++
+
+  AR = libtool
+  ARFLAGS = -static -o
+  LDFLAGS += -flat_namespace
+endif
+
+# Android cross-compile configuration. Works in conjunction with IS_CROSS_COMPILE.
+#   See http://www.cryptopp.com/wiki/Android_(Command_Line).
+ifeq ($(IS_ANDROID),1)
+  # CPP, CXX, AR, RANLIB, LD, etc are set in 'setenv-android.sh'
+  CXXFLAGS = -DNDEBUG -g2 -Os -pipe -fPIC
+  CXXFLAGS += -DCRYPTOPP_DISABLE_ASM $(ANDROID_FLAGS)
+  CXXFLAGS += --sysroot=$(ANDROID_SYSROOT) -I$(ANDROID_STL_INC)
+  LDLIBS += $(ANDROID_STL_LIB)
+endif
+
+# ARM embedded cross-compile configuration. Works in conjunction with IS_CROSS_COMPILE.
+#   See http://www.cryptopp.com/wiki/ARM_Embedded_(Command_Line)
+#   and http://www.cryptopp.com/wiki/ARM_Embedded_(Bare Metal).
+ifeq ($(IS_ARM_EMBEDDED),1)
+  # CPP, CXX, AR, RANLIB, LD, etc are set in 'setenv-embedded.sh'
+  CXXFLAGS = -DNDEBUG -g2 -Os -pipe -fPIC
+  CXXFLAGS += -DCRYPTOPP_DISABLE_ASM $(ARM_EMBEDDED_FLAGS)
+  CXXFLAGS += --sysroot=$(ARM_EMBEDDED_SYSROOT)
 endif
 
 ifeq ($(UNAME),SunOS)
@@ -104,7 +160,7 @@ M32OR64 = -m$(shell isainfo -b)
 endif
 
 ifneq ($(CLANG_COMPILER),0)
-CXXFLAGS += -Wno-tautological-compare
+CXXFLAGS += -Wno-tautological-compare -Wno-unused-value
 endif
 
 ifneq ($(IS_SUN_CC),0)	# override flags for CC Sun C++ compiler
@@ -146,13 +202,20 @@ test: cryptest.exe
 
 clean:
 	-$(RM) cryptest.exe libcryptopp.a libcryptopp.so $(LIBOBJS) $(TESTOBJS) cryptopp.dll libcryptopp.dll.a libcryptopp.import.a cryptest.import.exe dlltest.exe $(DLLOBJS) $(LIBIMPORTOBJS) $(TESTI MPORTOBJS) $(DLLTESTOBJS)
-
+	-$(RM) -r *.dSYM
 install:
 	$(MKDIR) -p $(PREFIX)/include/cryptopp $(PREFIX)/lib $(PREFIX)/bin
 	-$(CP) *.h $(PREFIX)/include/cryptopp
 	-$(CP) *.a $(PREFIX)/lib
 	-$(CP) *.so $(PREFIX)/lib
 	-$(CP) *.exe $(PREFIX)/bin
+	-$(CHMOD) 0755 $(PREFIX)/include
+	-$(CHMOD) 0755 $(PREFIX)/include/cryptopp
+	-$(CHMOD) 0755 $(PREFIX)/lib
+	-$(CHMOD) 0755 $(PREFIX)/bin
+	-$(CHMOD) 0644 $(PREFIX)/include/cryptopp/*
+	-$(CHMOD) 0755 $(PREFIX)/lib/*
+	-$(CHMOD) 0755 $(PREFIX)/bin/*
 
 remove:
 	-$(RM) -rf $(PREFIX)/include/cryptopp
@@ -165,7 +228,7 @@ libcryptopp.a: $(LIBOBJS)
 	$(RANLIB) $@
 
 libcryptopp.so: $(LIBOBJS)
-	$(CXX) -shared -o $@ $(LIBOBJS)
+	$(CXX) $(CXXFLAGS) -shared -o $@ $(LIBOBJS) $(LDFLAGS) $(LDLIBS)
 
 cryptest.exe: libcryptopp.a $(TESTOBJS)
 	$(CXX) -o $@ $(CXXFLAGS) $(TESTOBJS) ./libcryptopp.a $(LDFLAGS) $(LDLIBS)
