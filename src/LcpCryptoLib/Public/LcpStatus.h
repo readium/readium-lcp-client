@@ -51,7 +51,7 @@ namespace lcp
             // The Content Provider Certificate is not valid
             ErrorOpeningContentProviderCertificateNotValid,
             // The Content Provider Certificate was not found in the root 
-            // chain or not verified because of crypto exception
+            // chain or not verified because of the crypto error
             ErrorOpeningContentProviderCertificateNotVerified,
             // The Content Provider Certificate has been revoked.
             ErrorOpeningContentProviderCertificateRevoked,
@@ -59,6 +59,8 @@ namespace lcp
             ErrorOpeningContentProviderCertificateNotStarted,
             // The Content Provider Certificate is expired
             ErrorOpeningContentProviderCertificateExpired,
+            // No User Key found in the Storage to decrypt the license
+            ErrorOpeningLicenseStillEncrypted,
 
             // ErrorAcquisition
 
@@ -74,6 +76,8 @@ namespace lcp
             // The License is still encrypted and can't be used to decrypt 
             // data.
             ErrorDecryptionLicenseEncrypted,
+            //
+            ErrorDecryptionCommonError,
 
             // ErrorNetworking
 

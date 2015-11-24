@@ -12,7 +12,7 @@ namespace lcp
         : m_key(key)
         , m_keySize(keySize)
     {
-        KeyType emptyIv(m_decryptor.IVSize());
+        KeyType emptyIv(CryptoPP::AES::BLOCKSIZE);
         m_decryptor.SetKeyWithIV(&key.at(0), key.size(), &emptyIv.at(0));
     }
 
@@ -95,18 +95,18 @@ namespace lcp
         size_t * cipherSize
         )
     {
-        size_t blockSize = m_decryptor.MandatoryBlockSize();
-        size_t ivSize = m_decryptor.IVSize();
-        CryptoPP::SecByteBlock iv(ivSize);
+        // Length of block equals to length of IV
+        size_t blockAndIvSize = CryptoPP::AES::BLOCKSIZE;
+        CryptoPP::SecByteBlock iv(blockAndIvSize);
 
-        if (dataLength < ivSize + blockSize)
+        if (dataLength < blockAndIvSize + blockAndIvSize)
         {
             throw std::invalid_argument("input data to decrypt is too small");
         }
 
-        iv.Assign(data, ivSize);
-        *cipherData = data + ivSize;
-        *cipherSize = dataLength - ivSize;
+        iv.Assign(data, blockAndIvSize);
+        *cipherData = data + blockAndIvSize;
+        *cipherSize = dataLength - blockAndIvSize;
 
         m_decryptor.SetKeyWithIV(&m_key.at(0), m_key.size(), iv.data());
     }

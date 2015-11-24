@@ -25,10 +25,10 @@ namespace lcp
         const rapidjson::Value & ReadObject(const std::string & name, const rapidjson::Value & jsonValue);
         const rapidjson::Value & ReadObjectCheck(const std::string & name, const rapidjson::Value & jsonValue);
 
-        static Status CreateRapidJsonError(rapidjson::ParseErrorCode errorCode, size_t offset = INVALID_OFFSET);
+        static Status CreateRapidJsonError(rapidjson::ParseErrorCode errorCode, size_t offset = InvalidOffset);
 
     private:
-        static const size_t INVALID_OFFSET = -1;
+        static const size_t InvalidOffset = -1;
     };
 }
 

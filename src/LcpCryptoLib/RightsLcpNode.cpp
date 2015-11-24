@@ -20,7 +20,7 @@ namespace lcp
 
     Status RightsLcpNode::VerifyNode(ILicense * license, IClientProvider * clientProvider, ICryptoProvider * cryptoProvider)
     {
-        DateTime started(m_rights.start);
+        /*DateTime started(m_rights.start);
         DateTime expired(m_rights.end);
         DateTime now = DateTime::Now();
 
@@ -31,7 +31,7 @@ namespace lcp
         else if (now > expired)
         {
             return Status(StCodeCover::ErrorOpeningLicenseExpired);
-        }
+        }*/
         return BaseLcpNode::VerifyNode(license, clientProvider, cryptoProvider);
     }
 
@@ -60,23 +60,23 @@ namespace lcp
 
     void RightsLcpNode::FillRegisteredFields(const std::string & name, const rapidjson::Value & value)
     {
-        if (name == PRINT)
+        if (name == PrintRight)
         {
             m_rights.print = value.GetInt();
         }
-        else if (name == COPY)
+        else if (name == CopyRight)
         {
             m_rights.copy = value.GetInt();
         }
-        else if (name == TTS)
+        else if (name == TtsRight)
         {
             m_rights.tts = value.GetBool();
         }
-        else if (name == START)
+        else if (name == StartRight)
         {
             m_rights.start.assign(value.GetString(), value.GetStringLength());
         }
-        else if (name == END)
+        else if (name == EndRight)
         {
             m_rights.end.assign(value.GetString(), value.GetStringLength());
         }

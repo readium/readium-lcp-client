@@ -30,12 +30,15 @@
     <Filter Include="Source Files\Crypto">
       <UniqueIdentifier>{d0dac3ce-44a3-48f9-b696-5b2098d4f5d5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Utils">
+      <UniqueIdentifier>{3a335619-d9dd-409a-bcfa-4c5a8ea18401}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utils">
+      <UniqueIdentifier>{c1da2584-02a5-4b14-bf36-c277e13ac8d2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\LcpCryptoLib\LcpService.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\LcpUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\ICrypto.h">
@@ -67,9 +70,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\LcpStatus.h">
       <Filter>Header Files\PublicInterfaces</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\DateTime.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\LcpCryptoLib\BaseLcpNode.h">
       <Filter>Header Files\Nodes</Filter>
@@ -155,24 +155,21 @@
     <ClInclude Include="..\..\..\src\LcpCryptoLib\SimpleKeyProvider.h">
       <Filter>Header Files\Crypto</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\LcpUtils.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\DateTime.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\UUIDGenerator.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\LcpCryptoLib\LcpService.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\LcpCryptoLib\LcpServiceCreator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\LcpCryptoLib\LcpUtils.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\LcpCryptoLib\ILinks.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\LcpCryptoLib\IRights.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\LcpCryptoLib\DateTime.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\LcpCryptoLib\Certificate.cpp">
@@ -225,6 +222,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\LcpCryptoLib\CryptoppUtils.cpp">
       <Filter>Source Files\Crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\DateTime.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\LcpUtils.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\UUIDGenerator.cpp">
+      <Filter>Source Files\Utils</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

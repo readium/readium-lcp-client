@@ -6,6 +6,7 @@
 #include "Certificate.h"
 #include "DateTime.h"
 #include "IKeyProvider.h"
+#include "CryptoppUtils.h"
 
 namespace lcp
 {
@@ -64,7 +65,7 @@ namespace lcp
             DateTime notBefore(providerCertificate->NotBeforeDate());
             DateTime notAfter(providerCertificate->NotAfterDate());
 
-            DateTime lastUpdated;
+            /*DateTime lastUpdated;
             if (!license->Updated().empty())
             {
                 lastUpdated = DateTime(license->Updated());
@@ -81,7 +82,7 @@ namespace lcp
             else if (lastUpdated > notAfter)
             {
                 return Status(StCodeCover::ErrorOpeningContentProviderCertificateExpired);
-            }
+            }*/
             return Status(StCodeCover::ErrorCommonSuccess);
         }
         catch (const CryptoPP::Exception & ex)
@@ -147,6 +148,21 @@ namespace lcp
         }
     }
 
+    Status CryptoppCryptoProvider::ConvertKeyToHex(
+        const KeyType & key,
+        std::string hex
+        )
+    {
+        try
+        {
+            hex = CryptoppUtils::KeyToHex(key);
+        }
+        catch (const CryptoPP::Exception & ex)
+        {
+            return Status(StCodeCover::ErrorDecryptionCommonError, ex.GetWhat());
+        }
+    }
+
     Status CryptoppCryptoProvider::DecryptLicenseData(
         const std::string & dataBase64,
         ILicense * license,
@@ -200,7 +216,7 @@ namespace lcp
         }
         catch (const CryptoPP::Exception & ex)
         {
-            return Status(StCodeCover::ErrorDecryptionLicenseEncrypted, ex.GetWhat());
+            return Status(StCodeCover::ErrorDecryptionCommonError, ex.GetWhat());
         }
     }
 }

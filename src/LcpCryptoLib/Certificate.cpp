@@ -40,11 +40,11 @@ namespace lcp
         {
             BERSequenceDecoder toBeSignedCert(cert);
             {
-                word32 version = CryptoppUtils::Cert::ReadVersion(toBeSignedCert);
-                if (version != Certificatev3)
+                //word32 version = CryptoppUtils::Cert::ReadVersion(toBeSignedCert);
+                /*if (version != Certificatev3)
                 {
                     throw BERDecodeErr("Wrong version of the certificate");
-                }
+                }*/
 
                 m_serialNumber = CryptoppUtils::Cert::ReadIntegerAsString(toBeSignedCert);
 

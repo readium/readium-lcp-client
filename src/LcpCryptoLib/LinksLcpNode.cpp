@@ -10,7 +10,7 @@ namespace lcp
     {
         const rapidjson::Value & linksObject = reader->ReadObjectCheck("links", parentObject);
         
-        if (!linksObject.HasMember(HINT))
+        if (!linksObject.HasMember(Hint))
         {
             throw StatusException(Status(StCodeCover::ErrorOpeningLicenseNotValid, "links object is not valid"));
         }

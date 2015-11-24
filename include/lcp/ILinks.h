@@ -29,12 +29,11 @@ namespace lcp
         //virtual Status Enumerate(IIterator<Link> ** iterator) const = 0;
         //virtual bool IsArray(const std::string & name) const = 0;
         virtual ~ILinks() {}
-
-    public:
-        static const char * PUBLICATION;
-        static const char * HINT;
-        static const char * SELF;
     };
+
+    static const char * Publication = "publication";
+    static const char * Hint = "hint";
+    static const char * Self = "self";
 }
 
 #endif //__I_LCP_LINKS_H__

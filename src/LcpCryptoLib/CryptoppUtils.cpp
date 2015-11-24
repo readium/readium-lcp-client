@@ -1,5 +1,6 @@
 #include <sstream>
 #include <cryptopp/base64.h>
+#include <cryptopp/hex.h>
 #include "CryptoppUtils.h"
 #include "LcpUtils.h"
 
@@ -45,7 +46,7 @@ namespace lcp
         return CryptoppUtils::Cert::Cert::IntegerToString(value);
     }
 
-    void CryptoppUtils::Base64ToVector(const std::string & base64, KeyType & result)
+    std::vector<unsigned char> CryptoppUtils::Base64ToVector(const std::string & base64)
     {
         if (base64.empty())
         {
@@ -56,6 +57,7 @@ namespace lcp
         decoder.Put(reinterpret_cast<const byte *>(base64.data()), base64.size());
         decoder.MessageEnd();
 
+        std::vector<unsigned char> result;
         lword size = decoder.MaxRetrievable();
         if (size > 0 && size <= SIZE_MAX)
         {
@@ -66,6 +68,21 @@ namespace lcp
         {
             throw std::runtime_error("result data is empty");
         }
+        return result;
+    }
+
+    std::string CryptoppUtils::KeyToHex(const KeyType & key)
+    {
+        std::string hex;
+        CryptoPP::ArraySource hexSource(
+            &key.at(0),
+            key.size(),
+            true,
+            new CryptoPP::HexEncoder(
+                new CryptoPP::StringSink(hex)
+                )
+            );
+        return hex;
     }
 
     void CryptoppUtils::Base64ToSecBlock(const std::string & base64, SecByteBlock & result)

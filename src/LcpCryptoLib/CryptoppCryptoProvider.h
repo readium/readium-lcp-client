@@ -29,6 +29,11 @@ namespace lcp
             KeyType & contentKey
             );
 
+        virtual Status ConvertKeyToHex(
+            const KeyType & key,
+            std::string hex
+            );
+
         virtual Status DecryptLicenseData(
             const std::string & dataBase64,
             ILicense * license,

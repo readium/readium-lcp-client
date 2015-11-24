@@ -41,6 +41,9 @@ namespace lcp
         // IRights maps a Right identifier to its JSON value, if any.
         virtual IRights * Rights() const = 0;
 
+        // Returns true if the License is decrypted
+        virtual bool Decrypted() const = 0;
+
         virtual ~ILicense() {};
     };
 }

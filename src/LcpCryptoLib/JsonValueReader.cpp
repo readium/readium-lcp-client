@@ -103,7 +103,7 @@ namespace lcp
     {
         std::stringstream strm;
         strm << "RapidJson error code: " << static_cast<int>(errorCode);
-        if (offset != INVALID_OFFSET)
+        if (offset != InvalidOffset)
         {
             strm << ". Error offset: " << offset;
         }

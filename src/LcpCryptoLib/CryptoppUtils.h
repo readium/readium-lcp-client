@@ -14,7 +14,8 @@ namespace lcp
     {
     public:
         static void Base64ToSecBlock(const std::string & base64, SecByteBlock & result);
-        static void Base64ToVector(const std::string & base64, KeyType & result);
+        static std::vector<unsigned char> Base64ToVector(const std::string & base64);
+        static std::string KeyToHex(const KeyType & key);
 
         class Cert
         {

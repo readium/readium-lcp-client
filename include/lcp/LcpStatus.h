@@ -17,11 +17,19 @@ namespace lcp
 
             // No Error
             ErrorCommonSuccess,
+            // Common Error
+            ErrorCommonError,
             // No NetProvider implementation has been given.
             ErrorCommonNoNetProvider,
             // No StorageProvider implementation has been given.
             ErrorCommonNoStorageProvider,
-
+            // Implementation of the Encryption Profile from the
+            // license file was not found
+            ErrorCommonEncryptionProfileNotFound,
+            // Algorithm from encryption profile doesn't match algorithm
+            // from license file or encryption.xml
+            ErrorCommonAlgorithmMismatch,
+            
             // ErrorOpening
 
             // The given LCPL is not a valid License Document.
@@ -30,14 +38,20 @@ namespace lcp
             ErrorOpeningLicenseNotStarted,
             // The license is expired (right 'end'),
             ErrorOpeningLicenseExpired,
+            // The calculated License signature doesn't match the one 
+            // provided by the License.
+            ErrorOpeningLicenseSignatureNotValid,
             // No Root Certificate provided by the Client.
             ErrorOpeningNoRootCertificate,
             // Root Certificate provided by the Client is not valid
             ErrorOpeningRootCertificateNotValid,
+            // Algorithm of the Root Certificate for signing child
+            // certificate was not found
+            ErrorOpeningRootCertificateSignatureAlgorithmNotFound,
             // The Content Provider Certificate is not valid
             ErrorOpeningContentProviderCertificateNotValid,
-            // The Content Provider Certificate is not found in the root 
-            // chain
+            // The Content Provider Certificate was not found in the root 
+            // chain or not verified because of the crypto error
             ErrorOpeningContentProviderCertificateNotVerified,
             // The Content Provider Certificate has been revoked.
             ErrorOpeningContentProviderCertificateRevoked,
@@ -45,11 +59,8 @@ namespace lcp
             ErrorOpeningContentProviderCertificateNotStarted,
             // The Content Provider Certificate is expired
             ErrorOpeningContentProviderCertificateExpired,
-            // The Content Provider Certificate verification failed
-            ErrorOpeningConentProviderVerificationFailed,
-            // The calculated License signature doesn't match the one 
-            // provided by the License.
-            ErrorOpeningLicenseSignatureNotValid,
+            // No User Key found in the Storage to decrypt the license
+            ErrorOpeningLicenseStillEncrypted,
 
             // ErrorAcquisition
 
@@ -65,6 +76,8 @@ namespace lcp
             // The License is still encrypted and can't be used to decrypt 
             // data.
             ErrorDecryptionLicenseEncrypted,
+            //
+            ErrorDecryptionCommonError,
 
             // ErrorNetworking
 

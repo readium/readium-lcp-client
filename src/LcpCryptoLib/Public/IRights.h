@@ -11,14 +11,13 @@ namespace lcp
         virtual bool GetRightValue(const std::string & name, std::string & value) const = 0;
         //virtual Status Enumerate(Iterator<std::string> ** iterator) const = 0;
         virtual ~IRights() {}
-
-    public:
-        static const char * PRINT;
-        static const char * COPY;
-        static const char * TTS;
-        static const char * START;
-        static const char * END;
     };
+
+    static const char * PrintRight = "print";
+    static const char * CopyRight = "copy";
+    static const char * TtsRight = "tts";
+    static const char * StartRight = "start";
+    static const char * EndRight = "end";
 }
 
 #endif //__I_LCP_RIGHTS_H__

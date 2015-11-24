@@ -1,27 +1,69 @@
 #include <iostream>
 #include <memory>
+#include <map>
+#include <fstream>
 
 #include "Public/lcp.h"
 
-class StorageProvider : lcp::IStorageProvider
+class StorageProvider : public lcp::IStorageProvider
 {
+    typedef std::map<std::string, std::string> StringsMap;
+
 public:
-    virtual std::string Get(const std::string & vaultId, const std::string & key)
+    virtual void SetValue(const std::string & vaultId, const std::string & key, const std::string & value)
     {
+        StringsMap * vaultPtr = this->FindVault(vaultId);
+        auto res = vaultPtr->insert(std::make_pair(key, value));
+        if (!res.second)
+        {
+            throw std::runtime_error("Duplicate record");
+        }
+    }
+
+    virtual std::string GetValue(const std::string & vaultId, const std::string & key)
+    {
+        StringsMap * vaultPtr = this->FindVault(vaultId);
+        auto res = vaultPtr->find(key);
+        if (res != vaultPtr->end())
+            return res->second;
         return std::string();
     }
 
-    virtual void Set(const std::string & vaultId, const std::string & key, const std::string & value)
+    virtual lcp::MapIterator<std::string> * EnumerateVault(const std::string & vaultId)
     {
-
+        StringsMap * vaultPtr = this->FindVault(vaultId);
+        return new lcp::MapIterator<std::string>(*vaultPtr);
     }
+
+private:
+    StringsMap * FindVault(const std::string & vaultId)
+    {
+        StringsMap * mapPtr = nullptr;
+        if (vaultId == lcp::UserKeysVaultId)
+        {
+            mapPtr = &m_userKeysVault;
+        }
+        else if (vaultId == lcp::LicenseRightsVaultId)
+        {
+            mapPtr = &m_licienseRightsVault;
+        }
+        else
+        {
+            throw std::runtime_error("Vault was not found");
+        }
+        return mapPtr;
+    }
+
+private:
+    StringsMap m_userKeysVault;
+    StringsMap m_licienseRightsVault;
 };
 
-int main()
+int main(int argc, char ** argv)
 {
     try
     {
-        const char jsonLicense[] =
+        const char jsonLicenseSpec[] =
             u8"{ \"id\": \"ef15e740-697f-11e3-949a-0800200c9a66\","
             "\"issued\": \"2013-11-04T01:08:15+01:00\","
             "\"updated\": \"2014-02-21T09:44:17+01:00\","
@@ -101,21 +143,68 @@ int main()
             "}"
         "}";
 
-        lcp::LcpServiceCreator creator;
-        lcp::ILcpService * rawSvcPtr = nullptr;
-        std::string rootCertificate;
+        std::fstream mobyDickLicenseFile("c:\\Users\\Main\\Documents\\BitBucket\\mantano-lcp-client\\src\\LcpCryptoLibTest\\license.lcpl");
+        std::string mobyDickLicenseStr(
+            (std::istreambuf_iterator<char>(mobyDickLicenseFile)),
+            std::istreambuf_iterator<char>()
+            );
+
+        std::string testbase64Cert = "MIIC1jCCAb6gAwIBAgIQKDb7Oazo77RIbUBWHaRaWzANBgkqhkiG9w0BAQUFADAU"
+            "MRIwEAYDVQQDEwlsb2NhbGhvc3QwHhcNMTUwNzMwMTQyMDMwWhcNMjAwNzMwMDAw"
+            "MDAwWjAUMRIwEAYDVQQDEwlsb2NhbGhvc3QwggEiMA0GCSqGSIb3DQEBAQUAA4IB"
+            "DwAwggEKAoIBAQC7uvRfxl0aJQLD929XkAY0C/keu5Rx2Z1MyQr7RdZh2AS1lmdl"
+            "QASJt4TSchkosWE5LrAGoRyonR7fYS38+xNN2kV0yTQhMjOBddqHuZEvgzKkJiDK"
+            "A4d355RgY/mp2vNlxaQpHNSMTq73OmuwSLYHsB3IhcRnnSa6ZOZ4zh0fMp+Pw9L1"
+            "ZX0PjhKElXHRdMIfjNBXs7OUk5tjBrpZIqL0zcUaLfTnaG85WTzzhYshtVzdg8Wy"
+            "/pU1ckNvOiY9m9sE77VwIZpQ7ENKxLkPuFhVnzpJEVv0FGOe1CaYWlY7xOTGJsYI"
+            "glBALtczRciq5SK8n9APt2pL7EJTCCr18PCPAgMBAAGjJDAiMAsGA1UdDwQEAwIE"
+            "sDATBgNVHSUEDDAKBggrBgEFBQcDATANBgkqhkiG9w0BAQUFAAOCAQEAMSmWkvN5"
+            "RLfyHPpCIZm98Io42R2W5ti52bJcH9sRqLL+N1YyLtVzxnlkjT6F8Q9zo30F0o7J"
+            "L29DBRXdi3LX8Px5qX4qRrmGKJRXbP4QV9IP4j12z7ZWh+YASWW5+lwlAYA2wsX1"
+            "doBC7iwDCbEAWAPY7hMfjGEvMTP3oObEPMbTWcwmia2W+brB2cgKy6mnhUZP9KLe"
+            "vf42VGLQyKzvbVFcrg0nk33r/85Pw+/eWUya3QIGHZj86j9amyZl1APuUT7997cj"
+            "Lii1sC5fv3GHHUGAfoHKkosCGJhmXU6VP7y7sdOQ0weiZCHtuikYmNvoLs/jr1rE"
+            "91yNXO9v5kh/0w==";
+
+        std::string rootCertificate = "MIICOzCCAaQCCQDc/yCIGe/zZjANBgkqhkiG9w0BAQUFADBiMQswCQYDVQQGEwJG"
+            "UjEPMA0GA1UECBMGRnJhbmNlMQ4wDAYDVQQHEwVQYXJpczEQMA4GA1UEChMHTWFu"
+            "dGFubzEgMB4GCSqGSIb3DQEJARYRbW1lbnVAbWFudGFuby5jb20wHhcNMTUxMTIz"
+            "MTcwMDM0WhcNMTYxMTIyMTcwMDM0WjBiMQswCQYDVQQGEwJGUjEPMA0GA1UECBMG"
+            "RnJhbmNlMQ4wDAYDVQQHEwVQYXJpczEQMA4GA1UEChMHTWFudGFubzEgMB4GCSqG"
+            "SIb3DQEJARYRbW1lbnVAbWFudGFuby5jb20wgZ8wDQYJKoZIhvcNAQEBBQADgY0A"
+            "MIGJAoGBALqiIMlTO8ZCOk9HVudSIcnnkztYmnRrt95s6saqErNHlIxEuHFVQqnB"
+            "aK166xAgKqXdRi8hK7sDapT2SolWg4y4nNo7sUdbs+woRIjV1fuoZCqMMCrplgRL"
+            "oB12b4J4bifkw9hFTpyq+0k6zDzejHPl6+OfIEEuN9oUIiX7Uvm1AgMBAAEwDQYJ"
+            "KoZIhvcNAQEFBQADgYEAeZQWt5ZUCM6FqH1bkb7KGVkKaw4WABv0MPb57hc4JqCA"
+            "du1u5AqRJ6Ama5WPxsOQhQ6tAEinUI6KTnnn/Hr5mFIOYKiVZb8kUll5Q5dLPXY4"
+            "mRVA/lWpVs01xsDQFHIQpI9KJk4XsA85qrvFhFl9SSbZGWzgMcEvf0Yw9GLuLYU=";
+
         lcp::INetProvider * netProvider = nullptr;
-        lcp::IStorageProvider * storageProvider = nullptr;
-        lcp::Status res = creator.CreateLcpService(rootCertificate, netProvider, storageProvider, &rawSvcPtr);
+        std::unique_ptr<lcp::IStorageProvider> storageProvider(new StorageProvider());
+
+        lcp::ILcpService * rawSvcPtr = nullptr;
+        lcp::LcpServiceCreator creator;
+        lcp::Status res = creator.CreateLcpService(rootCertificate, netProvider, storageProvider.get(), &rawSvcPtr);
         std::unique_ptr<lcp::ILcpService> lcpService(rawSvcPtr);
         if (lcp::Status::IsSuccess(res))
         {
             lcp::ILicense * rawLicPtr = nullptr;
-            res = lcpService->OpenLicense(jsonLicense, &rawLicPtr);
-            if (lcp::Status::IsSuccess(res))
+            res = lcpService->OpenLicense(mobyDickLicenseStr, &rawLicPtr);
+            //res = lcpService->OpenLicense(jsonLicenseSpec, &rawLicPtr);
+            std::unique_ptr<lcp::ILicense> license(rawLicPtr);
+            if (lcp::Status::IsSuccess(res) || res.ResultCode == lcp::StCodeCover::ErrorOpeningLicenseStillEncrypted)
             {
-                std::cout << rawLicPtr->Content() << std::endl;
+                std::cout << license->Content() << std::endl;
                 std::cout << "License parsed successfully!" << std::endl;
+
+                if (!license->Decrypted())
+                {
+                    res = lcpService->DecryptLicense(license.get(), "White whales are huge!");
+                    if (!lcp::Status::IsSuccess(res))
+                    {
+                        std::cout << res.Extension << std::endl;
+                    }
+                }
             }
             else
             {

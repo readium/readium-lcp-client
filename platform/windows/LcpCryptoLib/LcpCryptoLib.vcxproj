@@ -60,6 +60,7 @@
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Sha256HashAlgorithm.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\SimpleKeyProvider.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\UserLcpNode.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\UUIDGenerator.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\LcpCryptoLib\AesCbcSymmetricAlgorithm.cpp" />
@@ -71,8 +72,6 @@
     <ClCompile Include="..\..\..\src\LcpCryptoLib\DateTime.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\EncryptionProfileNames.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\EncryptionProfilesManager.cpp" />
-    <ClCompile Include="..\..\..\src\LcpCryptoLib\ILinks.cpp" />
-    <ClCompile Include="..\..\..\src\LcpCryptoLib\IRights.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\JsonCanonicalizer.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\JsonValueReader.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\Lcp1dot0EncryptionProfile.cpp" />
@@ -85,6 +84,7 @@
     <ClCompile Include="..\..\..\src\LcpCryptoLib\RsaSha256SignatureAlgorithm.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\Sha256HashAlgorithm.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\UserLcpNode.cpp" />
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\UUIDGenerator.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{260B5BB3-0BEF-4DC9-AC6F-E848FF487B2B}</ProjectGuid>

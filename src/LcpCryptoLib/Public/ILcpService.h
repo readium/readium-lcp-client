@@ -58,6 +58,17 @@ namespace lcp
             bool firstDataBlock = true
             ) = 0;
 
+        // Registers the given User Key in the storage provider. It can 
+        // be used to pre-fill the User Keys provided by an external 
+        // service. Optional provider and user identifiers can be given 
+        // to optimize the validation of a license.
+        virtual Status AddUserKey(const std::string & userKey) = 0;
+        virtual Status AddUserKey(
+            const std::string & userKey,
+            const std::string & userId,
+            const std::string & providerId
+            ) = 0;
+
         virtual ~ILcpService() {}
     };
 }
