@@ -161,6 +161,8 @@ namespace lcp
         {
             return Status(StCodeCover::ErrorDecryptionCommonError, ex.GetWhat());
         }
+        
+        return Status(StCodeCover::ErrorCommonSuccess);
     }
 
     Status CryptoppCryptoProvider::DecryptLicenseData(
