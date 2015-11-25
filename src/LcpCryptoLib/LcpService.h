@@ -25,16 +25,17 @@ namespace lcp
         // ILcpService
         virtual Status OpenLicense(const std::string & licenseJson, ILicense ** license);
 
+        virtual Status CreateDecryptionContext(IDecryptionContext ** decryptionContext);
         virtual Status DecryptLicense(ILicense * license, const std::string & userPassphrase);
         virtual Status DecryptData(
             ILicense * license,
+            IDecryptionContext * context,
             const unsigned char * data,
             const size_t dataLength,
             unsigned char * decryptedData,
             size_t inDecryptedDataLength,
             size_t * outDecryptedDataLength,
-            const std::string & algorithm,
-            bool firstDataBlock = true
+            const std::string & algorithm
             );
 
         Status AddUserKey(const std::string & userKey);

@@ -10,14 +10,6 @@
 #include "rapidjson/filewritestream.h"
 #include "Public/lcp.h"
 
-// #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-// #define READ_MODE "rb"
-// #define WRITE_MODE "wb"
-// #else
-// #define READ_MODE "r"
-// #define WRITE_MODE "w"
-// #endif
-
 class TestStorageProvider : public lcp::IStorageProvider
 {
     typedef std::map<std::string, std::string> StringsMap;

@@ -12,6 +12,7 @@
 #include "UUIDGenerator.h"
 #include "Public/IStorageProvider.h"
 #include "Public/INetProvider.h"
+#include "DecryptionContextImpl.h"
 
 namespace lcp
 {
@@ -199,15 +200,37 @@ namespace lcp
         return Status(StCodeCover::ErrorOpeningLicenseStillEncrypted);
     }
 
+    Status LcpService::CreateDecryptionContext(IDecryptionContext ** decryptionContext)
+    {
+        try
+        {
+            if (decryptionContext == nullptr)
+            {
+                return Status(StCodeCover::ErrorCommonError, "decryptionContext is nullptr");
+            }
+            Status res = Status(StCodeCover::ErrorCommonSuccess);
+            *decryptionContext = new DecryptionContextImpl();
+            return res;
+        }
+        catch (const StatusException & ex)
+        {
+            return ex.ResultStatus();
+        }
+        catch (const std::exception & ex)
+        {
+            return Status(StCodeCover::ErrorCommonError, ex.what());
+        }
+    }
+
     Status LcpService::DecryptData(
         ILicense * license,
+        IDecryptionContext * context,
         const unsigned char * data,
         const size_t dataLength,
         unsigned char * decryptedData,
         size_t inDecryptedDataLength,
         size_t * outDecryptedDataLength,
-        const std::string & algorithm,
-        bool firstDataBlock
+        const std::string & algorithm
         )
     {
         try
@@ -218,6 +241,10 @@ namespace lcp
             }
 
             IEncryptionProfile * profile = m_encryptionProfilesManager->GetProfile(license->Crypto()->EncryptionProfile());
+            if (profile == nullptr)
+            {
+                return Status(StCodeCover::ErrorCommonEncryptionProfileNotFound);
+            }
             if (algorithm != profile->PublicationAlgorithm())
             {
                 return Status(StCodeCover::ErrorCommonAlgorithmMismatch);
@@ -231,13 +258,13 @@ namespace lcp
 
             return m_cryptoProvider->DecryptPublicationData(
                 license,
+                context,
                 keyProvider,
                 data,
                 dataLength,
                 decryptedData,
                 inDecryptedDataLength,
-                outDecryptedDataLength,
-                firstDataBlock
+                outDecryptedDataLength
                 );
         }
         catch (const StatusException & ex)

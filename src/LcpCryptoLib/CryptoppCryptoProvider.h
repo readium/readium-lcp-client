@@ -48,13 +48,13 @@ namespace lcp
 
         virtual Status DecryptPublicationData(
             ILicense * license,
+            IDecryptionContext * context,
             IKeyProvider * keyProvider,
             const unsigned char * data,
             const size_t dataLength,
             unsigned char * decryptedData,
             size_t inDecryptedDataLength,
-            size_t * outDecryptedDataLength,
-            bool containsIv
+            size_t * outDecryptedDataLength
             );
 
     private:

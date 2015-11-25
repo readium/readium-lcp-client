@@ -88,9 +88,15 @@ int main(int argc, char ** argv)
             "}"
         "}";
 
-        std::fstream mobyDickLicenseFile("..\\..\\..\\src\\testing-data\\license.lcpl");
+        std::fstream mobyDickLicenseFile("..\\..\\..\\src\\testing-data\\moby-dick-20120118.epub\\META-INF\\license.lcpl");
         std::string mobyDickLicenseStr(
             (std::istreambuf_iterator<char>(mobyDickLicenseFile)),
+            std::istreambuf_iterator<char>()
+            );
+
+        std::fstream encryptedData("..\\..\\..\\src\\testing-data\\moby-dick-20120118.epub\\OPS\\chapter_001.xhtml", std::ios::in | std::ios::binary);
+        std::string encryptedDataStr(
+            (std::istreambuf_iterator<char>(encryptedData)),
             std::istreambuf_iterator<char>()
             );
 
@@ -155,6 +161,36 @@ int main(int argc, char ** argv)
         {
             std::cout << "License decrypted successfully by user key from the storage!" << std::endl;
         }
+
+        lcp::IDecryptionContext * rawContext = nullptr;
+        res = lcpService->CreateDecryptionContext(&rawContext);
+        if (!lcp::Status::IsSuccess(res))
+        {
+            std::cout << "Status: " << res.ResultCode << "; Extension: " << res.Extension << std::endl;
+            std::cin.get();
+            return 0;
+        }
+
+        rawContext->SetFirstRange(true);
+        size_t outSize = 0;
+        std::vector<unsigned char> decrypted(encryptedDataStr.size());
+        res = lcpService->DecryptData(
+            rawLicPtr,
+            rawContext,
+            reinterpret_cast<const unsigned char *>(encryptedDataStr.data()),
+            encryptedDataStr.size(),
+            decrypted.data(),
+            decrypted.size(),
+            &outSize,
+            "http://www.w3.org/2001/04/xmlenc#aes256-cbc"
+            );
+        if (!lcp::Status::IsSuccess(res))
+        {
+            std::cout << "Status: " << res.ResultCode << "; Extension: " << res.Extension << std::endl;
+            std::cin.get();
+            return 0;
+        }
+
         storageProvider.Flush();
     }
     catch (const std::exception & ex)
