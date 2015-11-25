@@ -12,5 +12,6 @@
 #include "ILinks.h"
 #include "IUser.h"
 #include "IRights.h"
+#include "IDecryptionContext.h"
 
 #endif // __LCP_PUBLIC_INTERFACES_H__

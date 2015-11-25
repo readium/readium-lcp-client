@@ -7,6 +7,7 @@
 #include "DateTime.h"
 #include "IKeyProvider.h"
 #include "CryptoppUtils.h"
+#include "DecryptionContextImpl.h"
 
 namespace lcp
 {
@@ -210,13 +211,13 @@ namespace lcp
 
     Status CryptoppCryptoProvider::DecryptPublicationData(
         ILicense * license,
+        IDecryptionContext * context,
         IKeyProvider * keyProvider,
         const unsigned char * data,
         const size_t dataLength,
         unsigned char * decryptedData,
         size_t inDecryptedDataLength,
-        size_t * outDecryptedDataLength,
-        bool containsIv
+        size_t * outDecryptedDataLength
         )
     {
         try
@@ -229,7 +230,7 @@ namespace lcp
 
             std::unique_ptr<ISymmetricAlgorithm> algorithm(profile->CreatePublicationAlgorithm(keyProvider->ContentKey()));
             *outDecryptedDataLength = algorithm->Decrypt(
-                data, dataLength, decryptedData, inDecryptedDataLength, containsIv
+                data, dataLength, decryptedData, inDecryptedDataLength, context
                 );
 
             return Status(StCodeCover::ErrorCommonSuccess);

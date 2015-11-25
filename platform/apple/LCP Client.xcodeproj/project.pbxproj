@@ -55,6 +55,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		5A34200F1C0626E700BA3683 /* IDecryptionContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDecryptionContext.h; sourceTree = "<group>"; };
+		5A3420101C06270700BA3683 /* DecryptionContextImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DecryptionContextImpl.h; sourceTree = "<group>"; };
+		5A3420111C06271700BA3683 /* IDecryptionContext.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IDecryptionContext.h; sourceTree = "<group>"; };
 		5A4C17B51C0479A400DC8DCD /* AesCbcSymmetricAlgorithm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AesCbcSymmetricAlgorithm.cpp; sourceTree = "<group>"; };
 		5A4C17B61C0479A400DC8DCD /* AesCbcSymmetricAlgorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AesCbcSymmetricAlgorithm.h; sourceTree = "<group>"; };
 		5A4C17B71C0479A400DC8DCD /* AlgorithmNames.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AlgorithmNames.cpp; sourceTree = "<group>"; };
@@ -201,6 +204,7 @@
 				5A4C17C31C0479A400DC8DCD /* CryptoppUtils.h */,
 				5A4C17C41C0479A400DC8DCD /* DateTime.cpp */,
 				5A4C17C51C0479A400DC8DCD /* DateTime.h */,
+				5A3420101C06270700BA3683 /* DecryptionContextImpl.h */,
 				5A4C17C61C0479A400DC8DCD /* EncryptionProfileNames.cpp */,
 				5A4C17C71C0479A400DC8DCD /* EncryptionProfileNames.h */,
 				5A4C17C81C0479A400DC8DCD /* EncryptionProfilesManager.cpp */,
@@ -245,6 +249,7 @@
 			isa = PBXGroup;
 			children = (
 				5A4C17DD1C0479A400DC8DCD /* ICrypto.h */,
+				5A3420111C06271700BA3683 /* IDecryptionContext.h */,
 				5A4C17DE1C0479A400DC8DCD /* ILcpService.h */,
 				5A4C17DF1C0479A400DC8DCD /* ILicense.h */,
 				5A4C17E01C0479A400DC8DCD /* ILinks.h */,
@@ -264,6 +269,7 @@
 			isa = PBXGroup;
 			children = (
 				5A4C180D1C0479B800DC8DCD /* ICrypto.h */,
+				5A34200F1C0626E700BA3683 /* IDecryptionContext.h */,
 				5A4C180E1C0479B800DC8DCD /* ILcpService.h */,
 				5A4C180F1C0479B800DC8DCD /* ILicense.h */,
 				5A4C18101C0479B800DC8DCD /* ILinks.h */,

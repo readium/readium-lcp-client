@@ -7,6 +7,8 @@
 
 namespace lcp
 {
+    class IDecryptionContext;
+
     class ISymmetricAlgorithm
     {
     public:
@@ -17,12 +19,12 @@ namespace lcp
             size_t dataLength,
             unsigned char * decryptedData,
             size_t decryptedDataLength,
-            bool containsIv = true
+            IDecryptionContext * context = nullptr
             ) = 0;
 
         virtual std::string Decrypt(
             const std::string & encryptedDataBase64,
-            bool containsIv = true
+            IDecryptionContext * context = nullptr
             ) = 0;
 
         virtual ~ISymmetricAlgorithm() {}

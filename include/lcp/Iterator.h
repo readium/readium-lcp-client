@@ -38,7 +38,7 @@ namespace lcp
 
         typename Container::value_type const * Current() const
         {
-            if (IsDone())
+            if (!IsDone())
             {
                 throw std::out_of_range("Iterator is out of range");
             }

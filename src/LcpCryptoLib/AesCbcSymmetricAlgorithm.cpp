@@ -2,6 +2,7 @@
 #include "AesCbcSymmetricAlgorithm.h"
 #include "AlgorithmNames.h"
 #include "CryptoppUtils.h"
+#include "DecryptionContextImpl.h"
 
 namespace lcp
 {
@@ -33,7 +34,7 @@ namespace lcp
 
     std::string AesCbcSymmetricAlgorithm::Decrypt(
         const std::string & encryptedDataBase64,
-        bool containsIv
+        IDecryptionContext * context
         )
     {
         CryptoPP::SecByteBlock rawData;
@@ -41,11 +42,15 @@ namespace lcp
 
         const unsigned char * cipherData = rawData.data();
         size_t cipherSize = rawData.size();
-        if (containsIv)
-        {
-            this->BuildIV(rawData.data(), rawData.size(), &cipherData, &cipherSize);
-        }
 
+        this->ProcessDecryptionContext(
+            context,
+            rawData.data(),
+            rawData.size(),
+            &cipherData,
+            &cipherSize
+            );
+            
         std::string decryptedDataStr;
         
         CryptoPP::ArraySource source(
@@ -63,24 +68,27 @@ namespace lcp
         size_t dataLength,
         unsigned char * decryptedData,
         size_t decryptedDataLength,
-        bool containsIv
+        IDecryptionContext * context
         )
     {
         const unsigned char * cipherData = data;
         size_t cipherSize = dataLength;
-        if (containsIv)
-        {
-            this->BuildIV(data, dataLength, &cipherData, &cipherSize);
-        }
+
+        this->ProcessDecryptionContext(
+            context,
+            data,
+            dataLength,
+            &cipherData,
+            &cipherSize
+            );
 
         CryptoPP::StreamTransformationFilter filter(m_decryptor);
-        size_t put = filter.Put(cipherData, cipherSize);
-        assert(put == cipherSize);
+        filter.Put(cipherData, cipherSize);
 
         filter.MessageEnd();
         size_t resultSize = static_cast<size_t>(filter.MaxRetrievable());
 
-        if (resultSize < decryptedDataLength)
+        if (decryptedDataLength < resultSize)
         {
             throw std::invalid_argument("decrypted data buffer is too small");
         }
@@ -89,7 +97,41 @@ namespace lcp
         return resultSize;
     }
 
-    void AesCbcSymmetricAlgorithm::BuildIV(
+    void AesCbcSymmetricAlgorithm::ProcessDecryptionContext(
+        IDecryptionContext * context,
+        const unsigned char * data,
+        size_t dataLength,
+        const unsigned char ** cipherData,
+        size_t * cipherSize
+        )
+    {
+        if (context != nullptr)
+        {
+            DecryptionContextImpl * contextImpl = dynamic_cast<DecryptionContextImpl *>(context);
+            if (contextImpl == nullptr)
+            {
+                throw std::runtime_error("Cannot cast IDecryptionContext to DecryptionContextImpl");
+            }
+
+            if (contextImpl->IsFirstRange())
+            {
+                KeyType iv = this->BuildIV(data, dataLength, cipherData, cipherSize);
+                m_decryptor.SetKeyWithIV(&m_key.at(0), m_key.size(), &iv.at(0));
+                contextImpl->SetIV(iv);
+            }
+            else if (contextImpl->HasIV())
+            {
+                m_decryptor.SetKeyWithIV(&m_key.at(0), m_key.size(), &contextImpl->IV().at(0));
+            }
+        }
+        else
+        {
+            KeyType iv = this->BuildIV(data, dataLength, cipherData, cipherSize);
+            m_decryptor.SetKeyWithIV(&m_key.at(0), m_key.size(), &iv.at(0));
+        }
+    }
+
+    KeyType AesCbcSymmetricAlgorithm::BuildIV(
         const unsigned char * data,
         size_t dataLength,
         const unsigned char ** cipherData,
@@ -98,17 +140,18 @@ namespace lcp
     {
         // Length of block equals to length of IV
         size_t blockAndIvSize = CryptoPP::AES::BLOCKSIZE;
-        CryptoPP::SecByteBlock iv(blockAndIvSize);
+        KeyType iv;
+        iv.resize(blockAndIvSize);
 
         if (dataLength < blockAndIvSize + blockAndIvSize)
         {
             throw std::invalid_argument("input data to decrypt is too small");
         }
 
-        iv.Assign(data, blockAndIvSize);
+        iv.assign(data, data + blockAndIvSize);
         *cipherData = data + blockAndIvSize;
         *cipherSize = dataLength - blockAndIvSize;
 
-        m_decryptor.SetKeyWithIV(&m_key.at(0), m_key.size(), iv.data());
+        return iv;
     }
 }

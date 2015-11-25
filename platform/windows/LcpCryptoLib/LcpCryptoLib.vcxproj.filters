@@ -164,6 +164,12 @@
     <ClInclude Include="..\..\..\src\LcpCryptoLib\UUIDGenerator.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\DecryptionContextImpl.h">
+      <Filter>Header Files\Crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\IDecryptionContext.h">
+      <Filter>Header Files\PublicInterfaces</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\LcpCryptoLib\LcpService.cpp">

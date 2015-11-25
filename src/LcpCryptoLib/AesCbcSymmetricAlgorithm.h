@@ -27,7 +27,7 @@ namespace lcp
 
         virtual std::string Decrypt(
             const std::string & encryptedDataBase64,
-            bool containsIv = true
+            IDecryptionContext * context = nullptr
             );
 
         virtual size_t Decrypt(
@@ -35,11 +35,19 @@ namespace lcp
             size_t dataLength,
             unsigned char * decryptedData,
             size_t decryptedDataLength,
-            bool containsIv = true
+            IDecryptionContext * context = nullptr
             );
 
     private:
-        void BuildIV(
+        KeyType BuildIV(
+            const unsigned char * data,
+            size_t dataLength,
+            const unsigned char ** cipherData,
+            size_t * cipherSize
+            );
+
+        void ProcessDecryptionContext(
+            IDecryptionContext * context,
             const unsigned char * data,
             size_t dataLength,
             const unsigned char ** cipherData,
@@ -49,7 +57,6 @@ namespace lcp
     private:
         KeySize m_keySize;
         KeyType m_key;
-        KeyType m_iv;
         CryptoPP::CBC_Mode<CryptoPP::AES>::Decryption m_decryptor;
     };
 }

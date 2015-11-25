@@ -9,6 +9,7 @@ namespace lcp
     class ILicense;
     class INetProvider;
     class IStorageProvider;
+    class IDecryptionContext;
 
     class IClientProvider
     {
@@ -42,20 +43,24 @@ namespace lcp
         // stored inside the storage provider for future retrieval.
         virtual Status DecryptLicense(ILicense * license, const std::string & userPassphrase) = 0;
 
+        // Creates Decryption Context for multiple calls on the same message/stream/file
+        virtual Status CreateDecryptionContext(IDecryptionContext ** decryptionContext) = 0;
+
         // Decrypts and returns the given bytes using the given License.
         // dataLength is the size of the encrypted data
         // decryptedDataLength will be set to the size of the decrypted
         // data. Algorithm parameter must be the same as in the
-        // Encryption Profile
+        // Encryption Profile. IDecryptionContext may be null if we need
+        // to decrypt data in one shot
         virtual Status DecryptData(
             ILicense * license,
+            IDecryptionContext * context,
             const unsigned char * data,
             const size_t dataLength,
             unsigned char * decryptedData,
             size_t inDecryptedDataLength,
             size_t * outDecryptedDataLength,
-            const std::string & algorithm,
-            bool firstDataBlock = true
+            const std::string & algorithm
             ) = 0;
 
         // Registers the given User Key in the storage provider. It can 
