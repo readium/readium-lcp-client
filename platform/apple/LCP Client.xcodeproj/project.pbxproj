@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5A01157C1C07651D006F1A6F /* LcpiOSStorageProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A0115771C07651D006F1A6F /* LcpiOSStorageProvider.mm */; };
+		5A01157D1C07651D006F1A6F /* UICKeyChainStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A01157B1C07651D006F1A6F /* UICKeyChainStore.m */; };
 		5A4C17F61C0479A400DC8DCD /* AesCbcSymmetricAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A4C17B51C0479A400DC8DCD /* AesCbcSymmetricAlgorithm.cpp */; };
 		5A4C17F71C0479A400DC8DCD /* AlgorithmNames.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A4C17B71C0479A400DC8DCD /* AlgorithmNames.cpp */; };
 		5A4C17F81C0479A400DC8DCD /* Certificate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A4C17BB1C0479A400DC8DCD /* Certificate.cpp */; };
@@ -44,6 +46,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5A0115761C07651D006F1A6F /* LcpiOSStorageProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LcpiOSStorageProvider.h; sourceTree = "<group>"; };
+		5A0115771C07651D006F1A6F /* LcpiOSStorageProvider.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LcpiOSStorageProvider.mm; sourceTree = "<group>"; };
+		5A01157A1C07651D006F1A6F /* UICKeyChainStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UICKeyChainStore.h; sourceTree = "<group>"; };
+		5A01157B1C07651D006F1A6F /* UICKeyChainStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UICKeyChainStore.m; sourceTree = "<group>"; };
 		5A3420101C06270700BA3683 /* DecryptionContextImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DecryptionContextImpl.h; sourceTree = "<group>"; };
 		5A3420111C06271700BA3683 /* IDecryptionContext.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IDecryptionContext.h; sourceTree = "<group>"; };
 		5A4C17B51C0479A400DC8DCD /* AesCbcSymmetricAlgorithm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AesCbcSymmetricAlgorithm.cpp; sourceTree = "<group>"; };
@@ -163,6 +169,33 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5A0115751C07651D006F1A6F /* Sources (iOS) */ = {
+			isa = PBXGroup;
+			children = (
+				5A0115761C07651D006F1A6F /* LcpiOSStorageProvider.h */,
+				5A0115771C07651D006F1A6F /* LcpiOSStorageProvider.mm */,
+				5A0115781C07651D006F1A6F /* third-parties */,
+			);
+			path = "Sources (iOS)";
+			sourceTree = "<group>";
+		};
+		5A0115781C07651D006F1A6F /* third-parties */ = {
+			isa = PBXGroup;
+			children = (
+				5A0115791C07651D006F1A6F /* UICKeyChainStore */,
+			);
+			path = "third-parties";
+			sourceTree = "<group>";
+		};
+		5A0115791C07651D006F1A6F /* UICKeyChainStore */ = {
+			isa = PBXGroup;
+			children = (
+				5A01157A1C07651D006F1A6F /* UICKeyChainStore.h */,
+				5A01157B1C07651D006F1A6F /* UICKeyChainStore.m */,
+			);
+			path = UICKeyChainStore;
+			sourceTree = "<group>";
+		};
 		5A4C17B41C0479A400DC8DCD /* LcpCryptoLib */ = {
 			isa = PBXGroup;
 			children = (
@@ -270,14 +303,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		5AAEEF011BF9D3FC003CF710 /* src */ = {
+		5AAEEF011BF9D3FC003CF710 /* Sources (Common) */ = {
 			isa = PBXGroup;
 			children = (
 				5A517DC61C0751E60005877F /* LcpContentFilter */,
 				5A4C17B41C0479A400DC8DCD /* LcpCryptoLib */,
 				5AAEEF311BF9D3FC003CF710 /* third-parties */,
 			);
-			name = src;
+			name = "Sources (Common)";
 			path = ../../src;
 			sourceTree = "<group>";
 		};
@@ -374,7 +407,8 @@
 			isa = PBXGroup;
 			children = (
 				5ACE2E7D1BF21EBE00AC0585 /* LCP Client.xcconfig */,
-				5AAEEF011BF9D3FC003CF710 /* src */,
+				5A0115751C07651D006F1A6F /* Sources (iOS) */,
+				5AAEEF011BF9D3FC003CF710 /* Sources (Common) */,
 				5ACE2E0C1BF21D7900AC0585 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -460,6 +494,7 @@
 			files = (
 				5A4C18031C0479A400DC8DCD /* LcpServiceCreator.cpp in Sources */,
 				5A4C18071C0479A400DC8DCD /* RootLcpNode.cpp in Sources */,
+				5A01157C1C07651D006F1A6F /* LcpiOSStorageProvider.mm in Sources */,
 				5A4C180B1C0479A400DC8DCD /* UUIDGenerator.cpp in Sources */,
 				5A4C18001C0479A400DC8DCD /* JsonValueReader.cpp in Sources */,
 				5A4C18021C0479A400DC8DCD /* LcpService.cpp in Sources */,
@@ -480,6 +515,7 @@
 				5A4C18061C0479A400DC8DCD /* RightsLcpNode.cpp in Sources */,
 				5A4C180A1C0479A400DC8DCD /* UserLcpNode.cpp in Sources */,
 				5A4C17FA1C0479A400DC8DCD /* CryptoppCryptoProvider.cpp in Sources */,
+				5A01157D1C07651D006F1A6F /* UICKeyChainStore.m in Sources */,
 				5A4C17F61C0479A400DC8DCD /* AesCbcSymmetricAlgorithm.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
