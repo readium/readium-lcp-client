@@ -10,7 +10,7 @@
 
 namespace lcp
 {
-    class AppleStorageProvider : public IStorageProvider
+    class LcpiOSStorageProvider : public IStorageProvider
     {
     public:
         virtual std::string GetValue(const std::string &vaultId, const std::string &key);

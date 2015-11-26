@@ -13,14 +13,14 @@ namespace lcp
 {
     typedef std::map<std::string, std::string> StringsMap;
     
-    std::string AppleStorageProvider::GetValue(const std::string &vaultId, const std::string &nativeKey)
+    std::string LcpiOSStorageProvider::GetValue(const std::string &vaultId, const std::string &nativeKey)
     {
         UICKeyChainStore *keychain = this->GetKeyChainOfVault(vaultId);
         NSString *key = this->GetStringFromNativeString(nativeKey);
         return [[keychain stringForKey:key] UTF8String] ?: "";
     }
     
-    void AppleStorageProvider::SetValue(const std::string &vaultId, const std::string &nativeKey, const std::string &nativeValue)
+    void LcpiOSStorageProvider::SetValue(const std::string &vaultId, const std::string &nativeKey, const std::string &nativeValue)
     {
         UICKeyChainStore *keychain = this->GetKeyChainOfVault(vaultId);
         NSString *key = this->GetStringFromNativeString(nativeKey);
@@ -31,7 +31,7 @@ namespace lcp
         [keychain setString:value forKey:key];
     }
     
-    UICKeyChainStore *AppleStorageProvider::GetKeyChainOfVault(const std::string &vaultId)
+    UICKeyChainStore *LcpiOSStorageProvider::GetKeyChainOfVault(const std::string &vaultId)
     {
         UICKeyChainStore *keychain;
         
@@ -44,7 +44,7 @@ namespace lcp
         return keychain;
     }
     
-    MapIterator<std::string> *AppleStorageProvider::EnumerateVault(const std::string &vaultId)
+    MapIterator<std::string> *LcpiOSStorageProvider::EnumerateVault(const std::string &vaultId)
     {
         StringsMap vault;
         UICKeyChainStore *keychain = this->GetKeyChainOfVault(vaultId);
@@ -61,7 +61,7 @@ namespace lcp
         return new MapIterator<std::string>(vault);
     }
     
-    NSString *AppleStorageProvider::GetStringFromNativeString(const std::string &nativeString)
+    NSString *LcpiOSStorageProvider::GetStringFromNativeString(const std::string &nativeString)
     {
         NSString *string = [NSString stringWithUTF8String:nativeString.c_str()];
         return ([string length] > 0) ? string : nil;
