@@ -1,2 +1,6 @@
 
-HEADER_SEARCH_PATHS = ../../src/third-parties
+READIUM_PATH = ../../../readium-sdk
+READIUM_INCLUDE_PATHS = ${READIUM_PATH}/Platform/Apple/include ${SDKROOT}/usr/include/libxml2
+
+
+HEADER_SEARCH_PATHS = ../../src/third-parties ${READIUM_INCLUDE_PATHS}

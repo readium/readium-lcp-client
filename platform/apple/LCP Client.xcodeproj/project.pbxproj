@@ -29,6 +29,7 @@
 		5A4C18091C0479A400DC8DCD /* Sha256HashAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A4C17EF1C0479A400DC8DCD /* Sha256HashAlgorithm.cpp */; };
 		5A4C180A1C0479A400DC8DCD /* UserLcpNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A4C17F21C0479A400DC8DCD /* UserLcpNode.cpp */; };
 		5A4C180B1C0479A400DC8DCD /* UUIDGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A4C17F41C0479A400DC8DCD /* UUIDGenerator.cpp */; };
+		5A517DCA1C0751E60005877F /* LcpContentFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A517DC71C0751E60005877F /* LcpContentFilter.cpp */; };
 		5A5C61531C04C01800185159 /* libcryptopp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A5C61521C04BFF500185159 /* libcryptopp.a */; };
 /* End PBXBuildFile section */
 
@@ -42,20 +43,7 @@
 		};
 /* End PBXContainerItemProxy section */
 
-/* Begin PBXCopyFilesBuildPhase section */
-		5ACE2E191BF21D8C00AC0585 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "include/$(PRODUCT_NAME)";
-			dstSubfolderSpec = 16;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
-		5A34200F1C0626E700BA3683 /* IDecryptionContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDecryptionContext.h; sourceTree = "<group>"; };
 		5A3420101C06270700BA3683 /* DecryptionContextImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DecryptionContextImpl.h; sourceTree = "<group>"; };
 		5A3420111C06271700BA3683 /* IDecryptionContext.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IDecryptionContext.h; sourceTree = "<group>"; };
 		5A4C17B51C0479A400DC8DCD /* AesCbcSymmetricAlgorithm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AesCbcSymmetricAlgorithm.cpp; sourceTree = "<group>"; };
@@ -122,18 +110,9 @@
 		5A4C17F31C0479A400DC8DCD /* UserLcpNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserLcpNode.h; sourceTree = "<group>"; };
 		5A4C17F41C0479A400DC8DCD /* UUIDGenerator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UUIDGenerator.cpp; sourceTree = "<group>"; };
 		5A4C17F51C0479A400DC8DCD /* UUIDGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UUIDGenerator.h; sourceTree = "<group>"; };
-		5A4C180D1C0479B800DC8DCD /* ICrypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ICrypto.h; sourceTree = "<group>"; };
-		5A4C180E1C0479B800DC8DCD /* ILcpService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ILcpService.h; sourceTree = "<group>"; };
-		5A4C180F1C0479B800DC8DCD /* ILicense.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ILicense.h; sourceTree = "<group>"; };
-		5A4C18101C0479B800DC8DCD /* ILinks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ILinks.h; sourceTree = "<group>"; };
-		5A4C18111C0479B800DC8DCD /* INetProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = INetProvider.h; sourceTree = "<group>"; };
-		5A4C18121C0479B800DC8DCD /* IRights.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IRights.h; sourceTree = "<group>"; };
-		5A4C18131C0479B800DC8DCD /* IStorageProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IStorageProvider.h; sourceTree = "<group>"; };
-		5A4C18141C0479B800DC8DCD /* Iterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Iterator.h; sourceTree = "<group>"; };
-		5A4C18151C0479B800DC8DCD /* IUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IUser.h; sourceTree = "<group>"; };
-		5A4C18161C0479B800DC8DCD /* lcp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lcp.h; sourceTree = "<group>"; };
-		5A4C18171C0479B800DC8DCD /* LcpServiceCreator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LcpServiceCreator.h; sourceTree = "<group>"; };
-		5A4C18181C0479B800DC8DCD /* LcpStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LcpStatus.h; sourceTree = "<group>"; };
+		5A517DC71C0751E60005877F /* LcpContentFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LcpContentFilter.cpp; sourceTree = "<group>"; };
+		5A517DC91C0751E60005877F /* LcpContentFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LcpContentFilter.h; sourceTree = "<group>"; };
+		5A517DD51C075C700005877F /* LcpFilterContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LcpFilterContext.h; sourceTree = "<group>"; };
 		5A5C614D1C04BFF500185159 /* cryptopp.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cryptopp.xcodeproj; path = cryptopp/cryptopp.xcodeproj; sourceTree = "<group>"; };
 		5AAEF18B1BF9D3FD003CF710 /* allocators.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = allocators.h; sourceTree = "<group>"; };
 		5AAEF18C1BF9D3FD003CF710 /* document.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = document.h; sourceTree = "<group>"; };
@@ -265,24 +244,22 @@
 			path = Public;
 			sourceTree = "<group>";
 		};
-		5A4C180C1C0479B800DC8DCD /* lcp */ = {
+		5A517DC61C0751E60005877F /* LcpContentFilter */ = {
 			isa = PBXGroup;
 			children = (
-				5A4C180D1C0479B800DC8DCD /* ICrypto.h */,
-				5A34200F1C0626E700BA3683 /* IDecryptionContext.h */,
-				5A4C180E1C0479B800DC8DCD /* ILcpService.h */,
-				5A4C180F1C0479B800DC8DCD /* ILicense.h */,
-				5A4C18101C0479B800DC8DCD /* ILinks.h */,
-				5A4C18111C0479B800DC8DCD /* INetProvider.h */,
-				5A4C18121C0479B800DC8DCD /* IRights.h */,
-				5A4C18131C0479B800DC8DCD /* IStorageProvider.h */,
-				5A4C18141C0479B800DC8DCD /* Iterator.h */,
-				5A4C18151C0479B800DC8DCD /* IUser.h */,
-				5A4C18161C0479B800DC8DCD /* lcp.h */,
-				5A4C18171C0479B800DC8DCD /* LcpServiceCreator.h */,
-				5A4C18181C0479B800DC8DCD /* LcpStatus.h */,
+				5A517DC71C0751E60005877F /* LcpContentFilter.cpp */,
+				5A517DD51C075C700005877F /* LcpFilterContext.h */,
+				5A517DC81C0751E60005877F /* Public */,
 			);
-			path = lcp;
+			path = LcpContentFilter;
+			sourceTree = "<group>";
+		};
+		5A517DC81C0751E60005877F /* Public */ = {
+			isa = PBXGroup;
+			children = (
+				5A517DC91C0751E60005877F /* LcpContentFilter.h */,
+			);
+			path = Public;
 			sourceTree = "<group>";
 		};
 		5A5C614E1C04BFF500185159 /* Products */ = {
@@ -296,6 +273,7 @@
 		5AAEEF011BF9D3FC003CF710 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				5A517DC61C0751E60005877F /* LcpContentFilter */,
 				5A4C17B41C0479A400DC8DCD /* LcpCryptoLib */,
 				5AAEEF311BF9D3FC003CF710 /* third-parties */,
 			);
@@ -392,21 +370,11 @@
 			path = utf8;
 			sourceTree = "<group>";
 		};
-		5AAEF1B11BF9D3FD003CF710 /* include */ = {
-			isa = PBXGroup;
-			children = (
-				5A4C180C1C0479B800DC8DCD /* lcp */,
-			);
-			name = include;
-			path = ../../include;
-			sourceTree = "<group>";
-		};
 		5ACE2E021BF21D7900AC0585 = {
 			isa = PBXGroup;
 			children = (
 				5ACE2E7D1BF21EBE00AC0585 /* LCP Client.xcconfig */,
 				5AAEEF011BF9D3FC003CF710 /* src */,
-				5AAEF1B11BF9D3FD003CF710 /* include */,
 				5ACE2E0C1BF21D7900AC0585 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -428,7 +396,6 @@
 			buildPhases = (
 				5ACE2E171BF21D8C00AC0585 /* Sources */,
 				5ACE2E181BF21D8C00AC0585 /* Frameworks */,
-				5ACE2E191BF21D8C00AC0585 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -496,6 +463,7 @@
 				5A4C180B1C0479A400DC8DCD /* UUIDGenerator.cpp in Sources */,
 				5A4C18001C0479A400DC8DCD /* JsonValueReader.cpp in Sources */,
 				5A4C18021C0479A400DC8DCD /* LcpService.cpp in Sources */,
+				5A517DCA1C0751E60005877F /* LcpContentFilter.cpp in Sources */,
 				5A4C17F91C0479A400DC8DCD /* CryptoLcpNode.cpp in Sources */,
 				5A4C17FE1C0479A400DC8DCD /* EncryptionProfilesManager.cpp in Sources */,
 				5A4C18081C0479A400DC8DCD /* RsaSha256SignatureAlgorithm.cpp in Sources */,
