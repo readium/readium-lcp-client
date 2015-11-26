@@ -136,7 +136,7 @@ int main(int argc, char ** argv)
         lcp::ILicense * rawLicPtr = nullptr;
         res = lcpService->OpenLicense(mobyDickLicenseStr, &rawLicPtr);
         //res = lcpService->OpenLicense(jsonLicenseSpec, &rawLicPtr);
-        if (!lcp::Status::IsSuccess(res) && !(res.ResultCode == lcp::StCodeCover::ErrorOpeningLicenseStillEncrypted))
+        if (!lcp::Status::IsSuccess(res))
         {
             std::cout << "Status: " << res.ResultCode << "; Extension: " << res.Extension << std::endl;
             std::cin.get();

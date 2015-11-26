@@ -56,9 +56,6 @@
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\IRights.h">
       <Filter>Header Files\PublicInterfaces</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\Iterator.h">
-      <Filter>Header Files\PublicInterfaces</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\IUser.h">
       <Filter>Header Files\PublicInterfaces</Filter>
     </ClInclude>
@@ -168,6 +165,12 @@
       <Filter>Header Files\Crypto</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\IDecryptionContext.h">
+      <Filter>Header Files\PublicInterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\IValueIterator.h">
+      <Filter>Header Files\PublicInterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\ContainerIterator.h">
       <Filter>Header Files\PublicInterfaces</Filter>
     </ClInclude>
   </ItemGroup>

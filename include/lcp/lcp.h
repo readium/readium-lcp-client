@@ -2,7 +2,8 @@
 #define __LCP_PUBLIC_INTERFACES_H__
 
 #include "LcpStatus.h"
-#include "Iterator.h"
+#include "IValueIterator.h"
+#include "ContainerIterator.h"
 #include "INetProvider.h"
 #include "IStorageProvider.h"
 #include "LcpServiceCreator.h"

@@ -51,8 +51,9 @@
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\INetProvider.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\IRights.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\IStorageProvider.h" />
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\Iterator.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\ContainerIterator.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\IUser.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\IValueIterator.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\lcp.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\LcpServiceCreator.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\LcpStatus.h" />

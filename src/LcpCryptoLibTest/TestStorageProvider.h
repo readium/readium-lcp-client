@@ -142,7 +142,7 @@ public:
         return std::string();
     }
 
-    virtual lcp::MapIterator<std::string> * EnumerateVault(const std::string & vaultId)
+    virtual lcp::IValueIterator<std::string> * EnumerateVault(const std::string & vaultId)
     {
         StringsMap * vaultPtr = this->FindVault(vaultId);
         return new lcp::MapIterator<std::string>(*vaultPtr);

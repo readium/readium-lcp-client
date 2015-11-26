@@ -59,8 +59,6 @@ namespace lcp
             ErrorOpeningContentProviderCertificateNotStarted,
             // The Content Provider Certificate is expired
             ErrorOpeningContentProviderCertificateExpired,
-            // No User Key found in the Storage to decrypt the license
-            ErrorOpeningLicenseStillEncrypted,
 
             // ErrorAcquisition
 

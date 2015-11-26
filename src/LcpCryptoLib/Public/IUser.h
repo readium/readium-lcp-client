@@ -1,7 +1,7 @@
 #ifndef __I_LCP_USER_H__
 #define __I_LCP_USER_H__
 
-#include "Iterator.h"
+#include "IValueIterator.h"
 
 namespace lcp
 {

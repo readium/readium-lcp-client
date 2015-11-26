@@ -82,7 +82,10 @@ namespace lcp
             
             if (!(*license)->Decrypted())
             {
-                return this->DecryptLicenseByStorage(*license);
+                res = this->DecryptLicenseByStorage(*license);
+                if (Status::IsSuccess(res) || res.ResultCode == StCodeCover::ErrorDecryptionLicenseEncrypted)
+                    return Status(StCodeCover::ErrorCommonSuccess);
+                return res;
             }
             return Status(StCodeCover::ErrorCommonSuccess);
         }
@@ -187,17 +190,17 @@ namespace lcp
             }
         }
 
-        std::unique_ptr<MapIterator<std::string> > it(m_storageProvider->EnumerateVault(UserKeysVaultId));
+        std::unique_ptr<IValueIterator<std::string> > it(m_storageProvider->EnumerateVault(UserKeysVaultId));
         for (it->First(); !it->IsDone(); it->Next())
         {
             KeyType userKey;
-            Status res = m_cryptoProvider->ConvertHexToKey(it->Current()->second, userKey);
+            Status res = m_cryptoProvider->ConvertHexToKey(it->Current(), userKey);
 
             res = this->DecryptLicenseByUserKey(license, userKey);
             if (Status::IsSuccess(res))
                 return res;
         }
-        return Status(StCodeCover::ErrorOpeningLicenseStillEncrypted);
+        return Status(StCodeCover::ErrorDecryptionLicenseEncrypted);
     }
 
     Status LcpService::CreateDecryptionContext(IDecryptionContext ** decryptionContext)

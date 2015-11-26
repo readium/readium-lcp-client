@@ -9,9 +9,6 @@ namespace lcp
         virtual bool IsFirstRange() const = 0;
         virtual void SetFirstRange(bool value) = 0;
         virtual ~IDecryptionContext() {}
-
-    protected:
-        bool m_firstPart;
     };
 }
 
