@@ -24,7 +24,7 @@ namespace lcp {
         LcpContentFilter(LcpContentFilter &&o) : ContentFilter(move(o)) {}
         
         virtual void *FilterData(FilterContext *context, void *data, size_t len, size_t *outputLen) OVERRIDE;
-        virtual OperatingMode GetOperatingMode() const OVERRIDE { return OperatingMode::RequiresCompleteData; }
+        virtual OperatingMode GetOperatingMode() const OVERRIDE { return OperatingMode::SupportsByteRanges; }
     
         static void Register(ILcpService *const lcpService);
     
