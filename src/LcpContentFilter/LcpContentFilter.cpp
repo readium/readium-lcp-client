@@ -12,6 +12,8 @@
 #include <ePub3/package.h>
 #include <ePub3/utilities/byte_stream.h>
 
+static std::string const LcpLicensePath = "META-INF/license.lcpl";
+
 namespace lcp {
     bool LcpContentFilter::SniffLcpContent(ConstManifestItemPtr item)
     {
@@ -24,7 +26,7 @@ namespace lcp {
     {
         LcpFilterContext *lcpContext = (LcpFilterContext *)context;
         unsigned char *decryptedData = new unsigned char[len];
-        Status res = lcpService->DecryptData(m_license.get(), NULL, (const unsigned char *)data, len, decryptedData, len, outputLen, lcpContext->Algorithm());
+        Status res = lcpService->DecryptData(m_license, NULL, (const unsigned char *)data, len, decryptedData, len, outputLen, lcpContext->Algorithm());
         if (!Status::IsSuccess(res)) {
             delete [] decryptedData;
             *outputLen = len;
@@ -48,49 +50,33 @@ namespace lcp {
     
     ContentFilterPtr LcpContentFilter::Factory(ConstPackagePtr package)
     {
-        unique_ptr<ArchiveReader> licenseReader = package->GetContainer()->GetArchive()->ReaderAtPath("META-INF/license.lcpl");
-        if (!licenseReader) {
-            std::cout << "LCP: No license.lcpl found in the package" << std::endl;
+        ContainerPtr container = package->GetContainer();
+        if (!container->FileExistsAtPath(LcpLicensePath)) {
             return nullptr;
         }
         
-        std::shared_ptr<LcpContentFilter> contentFilter = nullptr;
+        // read license.lcpl
+        std::unique_ptr<ePub3::ByteStream> stream = container->ReadStreamAtPath(LcpLicensePath);
+        void *buffer = nullptr;
+        size_t length = stream->ReadAllBytes(&buffer);
+        std::string licenseJSON((char *)buffer, length);
+        free (buffer);
         
-        size_t licenseSize = licenseReader->total_size();
-        unsigned char *licenseJSON = new unsigned char[licenseSize];
-        
-        if (licenseReader->read(licenseJSON, licenseSize) == -1) {
-            std::cout << "LCP: Failed to read license.lcpl" << std::endl;
-            
-        } else {
-            ILicense * rawLicPtr = nullptr;
-            Status res = lcpService->OpenLicense(std::string(reinterpret_cast<char*>(licenseJSON)), &rawLicPtr);
-            if (Status::IsSuccess(res) || res.ResultCode == StCodeCover::StatusCode::ErrorOpeningLicenseStillEncrypted) {
-                std::cout << "LCP: License parsed successfully <" << rawLicPtr->Content() << ">" << std::endl;
-                
-                if (!rawLicPtr->Decrypted()) {
-                    res = lcpService->DecryptLicense(rawLicPtr, "White whales are huge!");
-                    if (Status::IsSuccess(res)) {
-                        std::cout << "LCP: License decrypted successfully!" << std::endl;
-                    } else {
-                        std::cout << "LCP: Failed to decrypt license: " << res.ResultCode << " <" << res.Extension << ">" << std::endl;
-                    }
-                    
-                } else {
-                    std::cout << "LCP: License decrypted successfully by user key from the storage!" << std::endl;
-                }
-                
-                contentFilter = New(std::shared_ptr<ILicense>(rawLicPtr));
-            }
+        // create content filter
+        shared_ptr<LcpContentFilter> contentFilter = nullptr;
+        ILicense *license;
+        Status res = lcpService->OpenLicense(licenseJSON, &license);
+        if (Status::IsSuccess(res)) {
+            cout << "LCP: License parsed successfully <" << license->Content() << ">" << endl;
+            return New(license);
         }
         
-        free(licenseJSON);
-        return contentFilter;
+        return nullptr;
     }
     
-    std::shared_ptr<ILcpService> LcpContentFilter::lcpService = nullptr;
+    ILcpService *LcpContentFilter::lcpService = NULL;
     
-    void LcpContentFilter::Register(std::shared_ptr<ILcpService> lcpService)
+    void LcpContentFilter::Register(ILcpService *const lcpService)
     {
         LcpContentFilter::lcpService = lcpService;
         FilterManager::Instance()->RegisterFilter("LcpFilter", MustAccessRawBytes, LcpContentFilter::Factory);
