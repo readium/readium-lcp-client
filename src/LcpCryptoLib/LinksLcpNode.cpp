@@ -3,6 +3,7 @@
 #include "LinksLcpNode.h"
 #include "JsonValueReader.h"
 #include "LcpUtils.h"
+#include "Public/ContainerIterator.h"
 
 namespace lcp
 {
@@ -55,6 +56,35 @@ namespace lcp
             [&result](const LinksMap::value_type & val) { return val.second; }
         );
         return result;
+    }
+
+    Link LinksLcpNode::GetLink(const std::string & name) const
+    {
+        auto it = m_linksMultiMap.find(name);
+        if (it != m_linksMultiMap.end())
+        {
+            return it->second;
+        }
+        else
+        {
+            throw std::runtime_error("Can not find element with name: " + name);
+        }
+    }
+
+    bool LinksLcpNode::HasMany(const std::string & name) const
+    {
+        auto range = m_linksMultiMap.equal_range(name);
+        return std::distance(range.first, range.second) > 1;
+    }
+
+    bool LinksLcpNode::Has(const std::string & name) const
+    {
+        return (m_linksMultiMap.find(name) != m_linksMultiMap.end());
+    }
+
+    IValueIterator<Link> * LinksLcpNode::Enumerate() const
+    {
+        return new MultiMapIterator<Link>(m_linksMultiMap);
     }
 
     Link LinksLcpNode::ParseLinkValues(const rapidjson::Value & linkObject, JsonValueReader * reader)

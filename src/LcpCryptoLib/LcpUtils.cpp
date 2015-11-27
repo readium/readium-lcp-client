@@ -67,8 +67,7 @@ namespace lcp
         Utf8ConstIt leftEndIt(left.end(), left.begin(), left.end());
         Utf8ConstIt rightBeginIt(right.begin(), right.begin(), right.end());
         
-        return true;
-        //return std::equal(leftBeginIt, leftEndIt, rightBeginIt);
+        return std::equal(leftBeginIt, leftEndIt, rightBeginIt);
     }
 
     bool LexicographicalCompareUtf8(const std::string & left, const std::string & right)

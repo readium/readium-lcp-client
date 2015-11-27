@@ -3,6 +3,7 @@
 #include <fstream>
 #include "Public/lcp.h"
 #include "TestStorageProvider.h"
+//#include "TestNetProvider.h"
 
 int main(int argc, char ** argv)
 {
@@ -119,12 +120,12 @@ int main(int argc, char ** argv)
             "hoU8QCRfW2yPKRjiw2TeEHGJWV/QHcL74yTDNZZW3OHfF2tyiTNnzu4dX5k09Q8i"
             "gNBrawNJbGxYeRSVi6/AqZ8tX1g61G0SJ9w=";
 
-        lcp::INetProvider * netProvider = nullptr;
+        //TestNetProvider netProvider;
         TestStorageProvider storageProvider("..\\..\\..\\src\\testing-data\\storage.json");
 
         lcp::ILcpService * rawSvcPtr = nullptr;
         lcp::LcpServiceCreator creator;
-        lcp::Status res = creator.CreateLcpService(rootCertificate, netProvider, &storageProvider, &rawSvcPtr);
+        lcp::Status res = creator.CreateLcpService(rootCertificate, nullptr, &storageProvider, nullptr, &rawSvcPtr);
         std::unique_ptr<lcp::ILcpService> lcpService(rawSvcPtr);
         if (!lcp::Status::IsSuccess(res))
         {

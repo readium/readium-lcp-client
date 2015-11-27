@@ -6,6 +6,7 @@
 #include "ContainerIterator.h"
 #include "INetProvider.h"
 #include "IStorageProvider.h"
+#include "IFileSystemProvider.h"
 #include "LcpServiceCreator.h"
 #include "ILcpService.h"
 #include "ILicense.h"

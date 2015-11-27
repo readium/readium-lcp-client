@@ -13,6 +13,7 @@
 #include "Public/IStorageProvider.h"
 #include "Public/INetProvider.h"
 #include "DecryptionContextImpl.h"
+#include "Acquisition.h"
 
 namespace lcp
 {
@@ -21,11 +22,13 @@ namespace lcp
     LcpService::LcpService(
         const std::string & rootCertificate,
         INetProvider * netProvider,
-        IStorageProvider * storageProvider
+        IStorageProvider * storageProvider,
+        IFileSystemProvider * fileSystemProvider
         )
         : m_rootCertificate(rootCertificate)
         , m_netProvider(netProvider)
         , m_storageProvider(storageProvider)
+        , m_fileSystemProvider(fileSystemProvider)
         , m_jsonReader(new JsonValueReader())
         , m_encryptionProfilesManager(new EncryptionProfilesManager())
         , m_cryptoProvider(new CryptoppCryptoProvider(m_encryptionProfilesManager.get()))
@@ -39,7 +42,7 @@ namespace lcp
         {
             if (license == nullptr)
             {
-                return Status(StCodeCover::ErrorCommonError, "license is nullptr");
+                return Status(StCodeCover::ErrorCommonFail, "license is nullptr");
             }
 
             std::string canonicalJson = this->CalculateCanonicalForm(licenseJson);
@@ -72,14 +75,14 @@ namespace lcp
             Status res = rootNode->VerifyNode(rootNode.get(), this, m_cryptoProvider.get());
             if (!Status::IsSuccess(res))
                 return res;
-            
+
             auto insertRes = m_licenses.insert(std::make_pair(std::move(canonicalJson), std::move(rootNode)));
             if (!insertRes.second)
             {
-                return Status(StCodeCover::ErrorCommonError, "Two License instances with the same canonical form");
+                return Status(StCodeCover::ErrorCommonFail, "Two License instances with the same canonical form");
             }
             *license = insertRes.first->second.get();
-            
+
             if (!(*license)->Decrypted())
             {
                 res = this->DecryptLicenseByStorage(*license);
@@ -95,7 +98,7 @@ namespace lcp
         }
         catch (const std::exception & ex)
         {
-            return Status(StCodeCover::ErrorCommonError, ex.what());
+            return Status(StCodeCover::ErrorCommonFail, ex.what());
         }
     }
 
@@ -105,7 +108,7 @@ namespace lcp
         {
             if (license == nullptr)
             {
-                return Status(StCodeCover::ErrorCommonError, "license is nullptr");
+                return Status(StCodeCover::ErrorCommonFail, "license is nullptr");
             }
 
             KeyType userKey;
@@ -125,7 +128,7 @@ namespace lcp
         }
         catch (const std::exception & ex)
         {
-            return Status(StCodeCover::ErrorCommonError, ex.what());
+            return Status(StCodeCover::ErrorCommonFail, ex.what());
         }
     }
 
@@ -139,7 +142,7 @@ namespace lcp
         RootLcpNode * rootNode = dynamic_cast<RootLcpNode *>(license);
         if (rootNode == nullptr)
         {
-            return Status(StCodeCover::ErrorCommonError, "Can not cast ILicense to ILcpNode");
+            return Status(StCodeCover::ErrorCommonFail, "Can not cast ILicense to ILcpNode");
         }
 
         rootNode->SetKeyProvider(std::unique_ptr<IKeyProvider>(new SimpleKeyProvider(userKey, contentKey)));
@@ -209,7 +212,7 @@ namespace lcp
         {
             if (decryptionContext == nullptr)
             {
-                return Status(StCodeCover::ErrorCommonError, "decryptionContext is nullptr");
+                return Status(StCodeCover::ErrorCommonFail, "decryptionContext is nullptr");
             }
             Status res = Status(StCodeCover::ErrorCommonSuccess);
             *decryptionContext = new DecryptionContextImpl();
@@ -221,7 +224,7 @@ namespace lcp
         }
         catch (const std::exception & ex)
         {
-            return Status(StCodeCover::ErrorCommonError, ex.what());
+            return Status(StCodeCover::ErrorCommonFail, ex.what());
         }
     }
 
@@ -240,7 +243,7 @@ namespace lcp
         {
             if (license == nullptr)
             {
-                return Status(StCodeCover::ErrorCommonError, "license is nullptr");
+                return Status(StCodeCover::ErrorCommonFail, "license is nullptr");
             }
 
             IEncryptionProfile * profile = m_encryptionProfilesManager->GetProfile(license->Crypto()->EncryptionProfile());
@@ -256,7 +259,7 @@ namespace lcp
             IKeyProvider * keyProvider = dynamic_cast<IKeyProvider *>(license);
             if (keyProvider == nullptr)
             {
-                return Status(StCodeCover::ErrorCommonError, "Can not cast ILicense to IKeyProvider");
+                return Status(StCodeCover::ErrorCommonFail, "Can not cast ILicense to IKeyProvider");
             }
 
             return m_cryptoProvider->DecryptPublicationData(
@@ -276,7 +279,7 @@ namespace lcp
         }
         catch (const std::exception & ex)
         {
-            return Status(StCodeCover::ErrorCommonError, ex.what());
+            return Status(StCodeCover::ErrorCommonFail, ex.what());
         }
     }
 
@@ -304,7 +307,7 @@ namespace lcp
         }
         catch (const std::exception & ex)
         {
-            return Status(StCodeCover::ErrorCommonError, ex.what());
+            return Status(StCodeCover::ErrorCommonFail, ex.what());
         }
     }
 
@@ -335,7 +338,41 @@ namespace lcp
         }
         catch (const std::exception & ex)
         {
-            return Status(StCodeCover::ErrorCommonError, ex.what());
+            return Status(StCodeCover::ErrorCommonFail, ex.what());
+        }
+    }
+
+    Status LcpService::AcquirePublication(
+        const std::string & publicationPath,
+        ILicense * license,
+        IAcquisition ** acquisition
+        )
+    {
+        try
+        {
+            if (acquisition == nullptr)
+            {
+                return Status(StCodeCover::ErrorCommonFail, "acquisition is nullptr");
+            }
+            if (m_netProvider == nullptr)
+            {
+                return Status(StCodeCover::ErrorCommonNoNetProvider);
+            }
+            *acquisition = new Acquisition(
+                license,
+                m_fileSystemProvider,
+                m_netProvider,
+                publicationPath
+                );
+            return Status(StCodeCover::ErrorCommonSuccess);
+        }
+        catch (const StatusException & ex)
+        {
+            return ex.ResultStatus();
+        }
+        catch (const std::exception & ex)
+        {
+            return Status(StCodeCover::ErrorCommonFail, ex.what());
         }
     }
 
@@ -352,6 +389,11 @@ namespace lcp
     IStorageProvider * LcpService::StorageProvider() const
     {
         return m_storageProvider;
+    }
+
+    IFileSystemProvider * LcpService::FileSystemProvider() const
+    {
+        return m_fileSystemProvider;
     }
 
     bool LcpService::FindLicense(const std::string & canonicalJson, ILicense ** license)

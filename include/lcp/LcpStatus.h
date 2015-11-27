@@ -18,7 +18,7 @@ namespace lcp
             // No Error
             ErrorCommonSuccess,
             // Common Error
-            ErrorCommonError,
+            ErrorCommonFail,
             // No NetProvider implementation has been given.
             ErrorCommonNoNetProvider,
             // No StorageProvider implementation has been given.
@@ -66,6 +66,10 @@ namespace lcp
             ErrorAcquisitionNoAcquisitionLink,
             // The downloaded publication doesn't match the license hash.
             ErrorAcquisitionPublicationCorrupted,
+            // Acquisition link has wrong type
+            ErrorAcquisitionPublicationWrongType,
+            // Cannot open file to write
+            ErrorAcquisitionInvalidFilePath,
 
             // ErrorDecryption
 

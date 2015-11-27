@@ -16,6 +16,10 @@ namespace lcp
 
     public:
         // ILinks
+        virtual IValueIterator<Link> * Enumerate() const;
+        virtual bool Has(const std::string & name) const;
+        virtual Link GetLink(const std::string & name) const;
+        virtual bool HasMany(const std::string & name) const;
         virtual std::vector<Link> GetLinks(const std::string & name) const;
 
     private:

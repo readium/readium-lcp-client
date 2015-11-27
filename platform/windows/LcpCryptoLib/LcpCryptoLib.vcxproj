@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Acquisition.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\AesCbcSymmetricAlgorithm.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\AlgorithmNames.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\BaseLcpNode.h" />
@@ -30,6 +31,8 @@
     <ClInclude Include="..\..\..\src\LcpCryptoLib\CryptoppCryptoProvider.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\DateTime.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\DecryptionContextImpl.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\DefaultFileSystemProvider.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\DownloadRequest.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\EncryptionProfileNames.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\EncryptionProfilesManager.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\ICertificate.h" />
@@ -43,8 +46,11 @@
     <ClInclude Include="..\..\..\src\LcpCryptoLib\LcpService.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\LcpUtils.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\LinksLcpNode.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\IAcquistion.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\IAcquistionCallback.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\ICrypto.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\IDecryptionContext.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\IFileSystemProvider.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\ILcpService.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\ILicense.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\ILinks.h" />
@@ -66,6 +72,7 @@
     <ClInclude Include="..\..\..\src\LcpCryptoLib\UUIDGenerator.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\Acquisition.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\AesCbcSymmetricAlgorithm.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\AlgorithmNames.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\Certificate.cpp" />
@@ -163,7 +170,9 @@
       <AdditionalIncludeDirectories>../../../src/third-parties</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>
+      </DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -176,7 +185,9 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../../../src/third-parties</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>
+      </DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -191,7 +202,9 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../../../src/third-parties</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>
+      </DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -208,7 +221,9 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../../../src/third-parties</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>
+      </DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

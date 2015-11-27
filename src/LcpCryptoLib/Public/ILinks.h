@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include "LcpStatus.h"
+#include "IValueIterator.h"
 
 namespace lcp
 {
@@ -25,9 +26,11 @@ namespace lcp
     class ILinks
     {
     public:
+        virtual IValueIterator<Link> * Enumerate() const = 0;
+        virtual bool Has(const std::string & name) const = 0;
+        virtual Link GetLink(const std::string & name) const = 0;
+        virtual bool HasMany(const std::string & name) const = 0;
         virtual std::vector<Link> GetLinks(const std::string & name) const = 0;
-        //virtual Status Enumerate(IIterator<Link> ** iterator) const = 0;
-        //virtual bool IsArray(const std::string & name) const = 0;
         virtual ~ILinks() {}
     };
 

@@ -23,5 +23,8 @@
     <ClInclude Include="..\..\..\src\LcpCryptoLibTest\TestStorageProvider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLibTest\TestNetProvider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

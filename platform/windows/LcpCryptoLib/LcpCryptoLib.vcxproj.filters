@@ -36,6 +36,12 @@
     <Filter Include="Source Files\Utils">
       <UniqueIdentifier>{c1da2584-02a5-4b14-bf36-c277e13ac8d2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Acquisition">
+      <UniqueIdentifier>{31a37cf5-f231-494c-97e1-d6359d442614}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Acquisition">
+      <UniqueIdentifier>{fe79dd43-2ef3-4466-a740-3193d4cfebd3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\LcpCryptoLib\LcpService.h">
@@ -173,6 +179,24 @@
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\ContainerIterator.h">
       <Filter>Header Files\PublicInterfaces</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\IAcquistion.h">
+      <Filter>Header Files\PublicInterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\IAcquistionCallback.h">
+      <Filter>Header Files\PublicInterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Acquisition.h">
+      <Filter>Header Files\Acquisition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\DownloadRequest.h">
+      <Filter>Header Files\Acquisition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\IFileSystemProvider.h">
+      <Filter>Header Files\PublicInterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\DefaultFileSystemProvider.h">
+      <Filter>Header Files\Acquisition</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\LcpCryptoLib\LcpService.cpp">
@@ -240,6 +264,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\LcpCryptoLib\UUIDGenerator.cpp">
       <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\Acquisition.cpp">
+      <Filter>Source Files\Acquisition</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -19,7 +19,8 @@ namespace lcp
         LcpService(
             const std::string & rootCertificate,
             INetProvider * netProvider,
-            IStorageProvider * storageProvider
+            IStorageProvider * storageProvider,
+            IFileSystemProvider * fileSystemProvider
             );
 
         // ILcpService
@@ -38,16 +39,23 @@ namespace lcp
             const std::string & algorithm
             );
 
-        Status AddUserKey(const std::string & userKey);
-        Status AddUserKey(
+        virtual Status AddUserKey(const std::string & userKey);
+        virtual Status AddUserKey(
             const std::string & userKey,
             const std::string & userId,
             const std::string & providerId
             );
 
+        virtual Status AcquirePublication(
+            const std::string & publicationPath,
+            ILicense * license,
+            IAcquisition ** acquisition
+            );
+
         virtual std::string RootCertificate() const;
         virtual INetProvider * NetProvider() const;
         virtual IStorageProvider * StorageProvider() const;
+        virtual IFileSystemProvider * FileSystemProvider() const;
         
     private:
         bool FindLicense(const std::string & canonicalJson, ILicense ** license);
@@ -63,6 +71,7 @@ namespace lcp
         std::string m_rootCertificate;
         INetProvider * m_netProvider;
         IStorageProvider * m_storageProvider;
+        IFileSystemProvider * m_fileSystemProvider;
 
         std::unique_ptr<JsonValueReader> m_jsonReader;
         std::unique_ptr<EncryptionProfilesManager> m_encryptionProfilesManager;

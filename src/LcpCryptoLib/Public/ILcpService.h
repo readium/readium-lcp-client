@@ -9,7 +9,10 @@ namespace lcp
     class ILicense;
     class INetProvider;
     class IStorageProvider;
+    class IFileSystemProvider;
     class IDecryptionContext;
+    class IAcquisition;
+    class IAcquisitionCallback;
 
     class IClientProvider
     {
@@ -26,6 +29,11 @@ namespace lcp
         // to store and retrieve safely any JSON value by the library.
         // To be set by the library's client.
         virtual IStorageProvider * StorageProvider() const = 0;
+
+        // Shared implementation of the file system provider, used for
+        // any calls to file system. To be set by the library's client.
+        // If it's not set by the client, default implementation is used
+        virtual IFileSystemProvider * FileSystemProvider() const = 0;
 
         virtual ~IClientProvider() {}
     };
@@ -72,6 +80,21 @@ namespace lcp
             const std::string & userKey,
             const std::string & userId,
             const std::string & providerId
+            ) = 0;
+
+        // Will download the publication from the Content Provider using
+        // the given License. The License will be put inside the
+        // publication after the download is completed.
+        // The downloaded publication will be copied to the given
+        // publication path.
+        // You should provide an AcquisitionCallback implementation to be 
+        // notified when the acquisition ends. The Acquisition object can
+        // be used by the Client to query the status of the Acquisition 
+        // and to cancel it.
+        virtual Status AcquirePublication(
+            const std::string & publicationPath,
+            ILicense * license,
+            IAcquisition ** acquisition
             ) = 0;
 
         virtual ~ILcpService() {}
