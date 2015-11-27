@@ -43,17 +43,17 @@ namespace lcp
     {
     public:
         explicit LinearContainerIterator(const Container & container)
-            : ContainerIterator(container)
+            : ContainerIterator<ValueType, Container>(container)
         {
         }
 
         virtual const ValueType & Current() const
         {
-            if (IsDone())
+            if (ContainerIterator<ValueType, Container>::IsDone())
             {
                 throw std::out_of_range("Iterator is out of range");
             }
-            return *m_current;
+            return *ContainerIterator<ValueType, Container>::m_current;
         }
     };
 
@@ -62,17 +62,17 @@ namespace lcp
     {
     public:
         explicit AssociativeIterator(const Container & container)
-            : ContainerIterator(container)
+            : ContainerIterator<ValueType, Container>(container)
         {
         }
 
         virtual const ValueType & Current() const
         {
-            if (IsDone())
+            if (ContainerIterator<ValueType, Container>::IsDone())
             {
                 throw std::out_of_range("Iterator is out of range");
             }
-            return m_current->second;
+            return ContainerIterator<ValueType, Container>::m_current->second;
         }
     };
 
