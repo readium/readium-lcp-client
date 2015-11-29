@@ -103,7 +103,11 @@ namespace lcp
 
     Status RootLcpNode::VerifyNode(ILicense * license, IClientProvider * clientProvider, ICryptoProvider * cryptoProvider)
     {
-        cryptoProvider->VerifyLicense(clientProvider->RootCertificate(), license);
+        Status res = cryptoProvider->VerifyLicense(clientProvider->RootCertificate(), license);
+        if (!Status::IsSuccess(res))
+        {
+            return res;
+        }
         return BaseLcpNode::VerifyNode(license, clientProvider, cryptoProvider);
     }
 

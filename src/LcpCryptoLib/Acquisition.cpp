@@ -1,8 +1,11 @@
 #include <memory>
 #include "Acquisition.h"
 #include "DownloadRequest.h"
-#include "Public/ILinks.h"
 #include "LcpUtils.h"
+#include "Public/ILinks.h"
+#include "Public/IFileSystemProvider.h"
+#include "Public/ILicense.h"
+#include "ICryptoProvider.h"
 
 namespace lcp
 {
@@ -13,11 +16,13 @@ namespace lcp
         ILicense * license,
         IFileSystemProvider * fileSystemProvider,
         INetProvider * netProvider,
+        ICryptoProvider * cryptoProvider,
         const std::string & publicationPath
         )
         : m_license(license)
         , m_fileSystemProvider(fileSystemProvider)
         , m_netProvider(netProvider)
+        , m_cryptoProvider(cryptoProvider)
         , m_callback(nullptr)
         , m_publicationPath(publicationPath)
     {
@@ -34,7 +39,8 @@ namespace lcp
             {
                 return Status(StCodeCover::ErrorAcquisitionNoAcquisitionLink);
             }
-            Link publicationLink = links->GetLink(Publication);
+            Link publicationLink;
+            links->GetLink(Publication, publicationLink);
             if (publicationLink.type != PublicationType)
             {
                 return Status(StCodeCover::ErrorAcquisitionPublicationWrongType);

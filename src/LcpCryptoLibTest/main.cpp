@@ -59,7 +59,7 @@ int main(int argc, char ** argv)
                 "\"copy\" : 2048,"
                 "\"tts\" : true,"
                 "\"start\" : \"2013-11-04T01:08:15+01:00\","
-                "\"end\" : \"2013-11-25T01:08:15+01:00\","
+                "\"end\" : \"2016-11-25T01:08:15+01:00\","
                 "\"http://www.imaginaryebookretailer.com/lcp/rights/tweet\" : true,"
                 "\"http://www.imaginaryebookretailer.com/lcp/rights/tweet234\" : 2.4894324894e-5,"
                 "\"http://www.imaginaryebookretailer.com/lcp/rights/tweet234546\" : 0e-5,"
@@ -102,24 +102,20 @@ int main(int argc, char ** argv)
             std::istreambuf_iterator<char>()
             );
 
-        std::string rootCertificate = "MIIDRjCCAq+gAwIBAgIJAMfRkXzjGB0rMA0GCSqGSIb3DQEBBQUAMHYxCzAJBgNV"
-            "BAYTAkZSMQ8wDQYDVQQIDAZGcmFuY2UxDjAMBgNVBAcMBVBhcmlzMRAwDgYDVQQK"
-            "DAdNYW50YW5vMRAwDgYDVQQDDAdNYW50YW5vMSIwIAYJKoZIhvcNAQkBFhNzdXBw"
-            "b3J0QG1hbnRhbm8uY29tMB4XDTE1MTEyNDEyMjM1N1oXDTQ1MTExNjEyMjM1N1ow"
-            "djELMAkGA1UEBhMCRlIxDzANBgNVBAgMBkZyYW5jZTEOMAwGA1UEBwwFUGFyaXMx"
-            "EDAOBgNVBAoMB01hbnRhbm8xEDAOBgNVBAMMB01hbnRhbm8xIjAgBgkqhkiG9w0B"
-            "CQEWE3N1cHBvcnRAbWFudGFuby5jb20wgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJ"
-            "AoGBAMI6xYGeIyijZ7/ha0GBmhe1VkUGtYiNPS4EqAJux57931cRCg6M8DkgyEnM"
-            "Mu8hJBI+HCuFqPd3+IPsWt3aIChsJ2e2Th1ZmhEMGcO0m4JaXmONwj18dS8v9aZt"
-            "OM1C+TP7UxV3VepYHM7ahYvtPA0yeC/ddb/pEveg/4O077EvAgMBAAGjgdswgdgw"
-            "DAYDVR0TBAUwAwEB/zAdBgNVHQ4EFgQUKPgrvZlHIFg5aLtfhIeqeDa5cHkwgagG"
-            "A1UdIwSBoDCBnYAUKPgrvZlHIFg5aLtfhIeqeDa5cHmheqR4MHYxCzAJBgNVBAYT"
-            "AkZSMQ8wDQYDVQQIDAZGcmFuY2UxDjAMBgNVBAcMBVBhcmlzMRAwDgYDVQQKDAdN"
-            "YW50YW5vMRAwDgYDVQQDDAdNYW50YW5vMSIwIAYJKoZIhvcNAQkBFhNzdXBwb3J0"
-            "QG1hbnRhbm8uY29tggkAx9GRfOMYHSswDQYJKoZIhvcNAQEFBQADgYEAOFax2o1B"
-            "zmY2V4GQYTr41QlOkTyOk2UEtyBtCwsGKXH02H+Vu7wEqBKMVL9+QQTtqCSFlEPA"
-            "hoU8QCRfW2yPKRjiw2TeEHGJWV/QHcL74yTDNZZW3OHfF2tyiTNnzu4dX5k09Q8i"
-            "gNBrawNJbGxYeRSVi6/AqZ8tX1g61G0SJ9w=";
+        std::string rootCertificate = "MIIDEjCCAfoCCQDwMOjkYYOjPjANBgkqhkiG9w0BAQUFADBLMQswCQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZ"
+            "vcm5pYTETMBEGA1UEBxMKRXZlcnl3aGVyZTESMBAGA1UEAxMJbG9jYWxob3N0MB4XDTE0MDEwMjIxMjYxNloXDTE1MDEwMjIxMjYxNlowS"
+            "zELMAkGA1UEBhMCVVMxEzARBgNVBAgTCkNhbGlmb3JuaWExEzARBgNVBAcTCkV2ZXJ5d2hlcmUxEjAQBgNVBAMTCWxvY2FsaG9zdDCCASI"
+            "wDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAOpCRECG7icpf0H37kuAM7s42oqggBoikoTpo5yapy+s5eFSp8HSqwhIYgZ4SghNLkj3e"
+            "652SALav7chyZ2vWvitZycY+aq50n5UTTxDvdwsC5ZNeTycuzVWZALKGhV7VUPEhtWZNm0gruntronNa8l2WS0aF7P5SbhJ65SDQGprFFa"
+            "YOSyN6550P3kqaAO7tDddcA1cmuIIDRf8tOIIeMkBFk1Qf+lh+3uRP2wztOTECSMRxX/hIkCe5DRFDK2MuDUyc/iY8IbY0hMFFGw5J7MWO"
+            "wZLBOaZHX+Lf5lOYByPbMH78O0dda6T+tLYAVzsmJdHJFtaRguCaJVtSXKQUAMCAwEAATANBgkqhkiG9w0BAQUFAAOCAQEAi9HIM+FMfqX"
+            "sRUY0rGxLlw403f3YtAG/ohzt5i8DKiKUG3YAnwRbL/VzXLZaHru7XBC40wmKefKqoA0RHyNEddXgtY/aXzOlfTvp+xirop+D4DwJIbaj8"
+            "/wHKWYGBucA/VgGY7JeSYYTUSuz2RoYtjPNRELIXN8A+D+nkJ3dxdFQ6jFfVfahN3nCIgRqRIOt1KaNI39CShccCaWJ5DeSASLXLPcEjrTi"
+            "/pyDzC4kLF0VjHYlKT7lq5RkMO6GeC+7YFvJtAyssM2nqunA2lUgyQHb1q4Ih/dcYOACubtBwW0ITpHz8N7eO+r1dtH/BF4yxeWl6p5kGLvuPXNU21ThgA==\","
+            "\"value\" : \"q/3IInic9c/EaJHyG1Kkqk5v1zlJNsiQBmxz4lykhyD3dA2jg2ZzrOenYU9GxP/xhe5H5Kt2WaJ/hnt8+GWrEx1QOwnNE"
+            "ij5CmIpZ63yRNKnFS5rSRnDMYmQT/fkUYco7BUi7MPPU6OFf4+kaToNWl8m/ZlMxDcS3BZnVhSEKzUNQn1f2y3sUcXjes7wHbImDc6dRthbL"
+            "/E+assh5HEqakrDuA4lM8XNfukEYQJnivqhqMLOGM33RnS5nZKrPPK/c2F/vGjJffSrlX3W3Jlds0/MZ6wtVeKIugR06c56V6+qKsnMLAQJa"
+            "eOxxBXmbFdAEyplP9irn4D9tQZKqbbMIw==";
 
         TestNetProvider netProvider;
         TestStorageProvider storageProvider("..\\..\\..\\src\\testing-data\\storage.json");
@@ -211,6 +207,18 @@ int main(int argc, char ** argv)
             std::cin.get();
             return 0;
         }
+
+        lcp::IRightsService * service = lcpService->GetRightsService();
+        bool boolRes = service->HasRight(rawLicPtr, lcp::PrintRight);
+        boolRes = service->HasRight(rawLicPtr, lcp::CopyRight);
+        boolRes = service->HasRight(rawLicPtr, lcp::TtsRight);
+
+        boolRes = service->Consume(rawLicPtr, lcp::PrintRight, 200);
+        boolRes = service->Consume(rawLicPtr, lcp::CopyRight, 500);
+        std::string newCopyVal = service->GetValue(rawLicPtr, lcp::CopyRight);
+
+        service->SetValue(rawLicPtr, lcp::PrintRight, "200000");
+        service->SetValue(rawLicPtr, "http://www.righttorewrite/com", "true");
 
         storageProvider.Flush();
     }

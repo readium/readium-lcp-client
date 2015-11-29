@@ -14,6 +14,7 @@
 #include "Public/INetProvider.h"
 #include "DecryptionContextImpl.h"
 #include "Acquisition.h"
+#include "RightsService.h"
 
 namespace lcp
 {
@@ -29,6 +30,7 @@ namespace lcp
         , m_netProvider(netProvider)
         , m_storageProvider(storageProvider)
         , m_fileSystemProvider(fileSystemProvider)
+        , m_rightsService(new RightsService(m_storageProvider))
         , m_jsonReader(new JsonValueReader())
         , m_encryptionProfilesManager(new EncryptionProfilesManager())
         , m_cryptoProvider(new CryptoppCryptoProvider(m_encryptionProfilesManager.get()))
@@ -86,6 +88,10 @@ namespace lcp
             if (!(*license)->Decrypted())
             {
                 res = this->DecryptLicenseByStorage(*license);
+                if (Status::IsSuccess(res))
+                {
+                    m_rightsService->SyncRightsFromStorage(*license);
+                }
                 if (Status::IsSuccess(res) || res.ResultCode == StCodeCover::ErrorDecryptionLicenseEncrypted)
                     return Status(StCodeCover::ErrorCommonSuccess);
                 return res;
@@ -193,7 +199,7 @@ namespace lcp
             }
         }
 
-        std::unique_ptr<IValueIterator<std::string> > it(m_storageProvider->EnumerateVault(UserKeysVaultId));
+        std::unique_ptr<KvStringsIterator > it(m_storageProvider->EnumerateVault(UserKeysVaultId));
         for (it->First(); !it->IsDone(); it->Next())
         {
             KeyType userKey;
@@ -362,6 +368,7 @@ namespace lcp
                 license,
                 m_fileSystemProvider,
                 m_netProvider,
+                m_cryptoProvider.get(),
                 publicationPath
                 );
             return Status(StCodeCover::ErrorCommonSuccess);
@@ -374,6 +381,11 @@ namespace lcp
         {
             return Status(StCodeCover::ErrorCommonFail, ex.what());
         }
+    }
+
+    IRightsService * LcpService::GetRightsService() const
+    {
+        return m_rightsService.get();
     }
 
     std::string LcpService::RootCertificate() const
@@ -413,8 +425,8 @@ namespace lcp
         return canonicalizer.CanonicalLicense();
     }
 
-    std::string LcpService::BuildStorageProviderKey(const std::string & part1, const std::string & part2)
+    std::string LcpService::BuildStorageProviderKey(const std::string & providerId, const std::string & userId)
     {
-        return part1 + "@" + part2;
+        return providerId + "@" + userId;
     }
 }

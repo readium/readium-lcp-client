@@ -11,8 +11,9 @@ namespace lcp
         virtual std::string Id() const = 0;
         virtual std::string Email() const = 0;
         virtual std::string Name() const = 0;
+        virtual bool HasUserValue(const std::string & name) const = 0;
         virtual bool GetUserValue(const std::string & name, std::string & value) const = 0;
-        //virtual Status Enumerate(Iterator<std::string> ** iterator) const = 0;
+        virtual KvStringsIterator * Enumerate() const = 0;
         virtual ~IUser() {}
     };
 }

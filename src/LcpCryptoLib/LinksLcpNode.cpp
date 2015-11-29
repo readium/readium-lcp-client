@@ -46,29 +46,26 @@ namespace lcp
         BaseLcpNode::ParseNode(linksObject, reader);
     }
 
-    std::vector<Link> LinksLcpNode::GetLinks(const std::string & name) const
+    bool LinksLcpNode::GetLinks(const std::string & name, std::vector<Link> & links) const
     {
-        std::vector<Link> result;
         std::pair<LinksMapConstIt, LinksMapConstIt> range = m_linksMultiMap.equal_range(name);
         std::transform(
             range.first, range.second,
-            std::back_inserter(result),
-            [&result](const LinksMap::value_type & val) { return val.second; }
+            std::back_inserter(links),
+            [&links](const LinksMap::value_type & val) { return val.second; }
         );
-        return result;
+        return !links.empty();
     }
 
-    Link LinksLcpNode::GetLink(const std::string & name) const
+    bool LinksLcpNode::GetLink(const std::string & name, Link & link) const
     {
         auto it = m_linksMultiMap.find(name);
         if (it != m_linksMultiMap.end())
         {
-            return it->second;
+            link = it->second;
+            return true;
         }
-        else
-        {
-            throw std::runtime_error("Can not find element with name: " + name);
-        }
+        return false;
     }
 
     bool LinksLcpNode::HasMany(const std::string & name) const
@@ -82,7 +79,7 @@ namespace lcp
         return (m_linksMultiMap.find(name) != m_linksMultiMap.end());
     }
 
-    IValueIterator<Link> * LinksLcpNode::Enumerate() const
+    IKeyValueIterator<std::string, Link> * LinksLcpNode::Enumerate() const
     {
         return new MultiMapIterator<Link>(m_linksMultiMap);
     }

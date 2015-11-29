@@ -16,11 +16,11 @@ namespace lcp
 
     public:
         // ILinks
-        virtual IValueIterator<Link> * Enumerate() const;
+        virtual IKeyValueIterator<std::string, Link> * Enumerate() const;
         virtual bool Has(const std::string & name) const;
-        virtual Link GetLink(const std::string & name) const;
+        virtual bool GetLink(const std::string & name, Link & link) const;
         virtual bool HasMany(const std::string & name) const;
-        virtual std::vector<Link> GetLinks(const std::string & name) const;
+        virtual bool GetLinks(const std::string & name, std::vector<Link> & links) const;
 
     private:
         Link ParseLinkValues(const rapidjson::Value & linkObject, JsonValueReader * reader);

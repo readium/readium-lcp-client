@@ -13,6 +13,7 @@ namespace lcp
     class IDecryptionContext;
     class IAcquisition;
     class IAcquisitionCallback;
+    class IRightsService;
 
     class IClientProvider
     {
@@ -96,6 +97,9 @@ namespace lcp
             ILicense * license,
             IAcquisition ** acquisition
             ) = 0;
+
+        // Returns the rights service, exposing any license right API.
+        virtual IRightsService * GetRightsService() const = 0;
 
         virtual ~ILcpService() {}
     };

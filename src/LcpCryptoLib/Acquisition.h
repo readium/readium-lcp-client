@@ -5,11 +5,13 @@
 #include "Public/IAcquistion.h"
 #include "Public/IAcquistionCallback.h"
 #include "Public/INetProvider.h"
-#include "Public/IFileSystemProvider.h"
-#include "Public/ILicense.h"
 
 namespace lcp
 {
+    class ILicense;
+    class ICryptoProvider;
+    class IFileSystemProvider;
+
     class Acquisition : public IAcquisition, public INetProviderCallback
     {
     public:
@@ -17,6 +19,7 @@ namespace lcp
             ILicense * license,
             IFileSystemProvider * fileSystemProvider,
             INetProvider * netProvider,
+            ICryptoProvider * cryptoProvider,
             const std::string & publicationPath
             );
 
@@ -39,6 +42,7 @@ namespace lcp
         ILicense * m_license;
         IFileSystemProvider * m_fileSystemProvider;
         INetProvider * m_netProvider;
+        ICryptoProvider * m_cryptoProvider;
         std::string m_publicationPath;
 
         IAcquisitionCallback * m_callback;

@@ -8,8 +8,9 @@ namespace lcp
     class IRights
     {
     public:
+        virtual KvStringsIterator * Enumerate() const = 0;
+        virtual bool HasRightValue(const std::string & name) const = 0;
         virtual bool GetRightValue(const std::string & name, std::string & value) const = 0;
-        //virtual Status Enumerate(Iterator<std::string> ** iterator) const = 0;
         virtual ~IRights() {}
     };
 

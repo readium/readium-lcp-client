@@ -4,6 +4,7 @@
 #include "LcpUtils.h"
 #include "BaseLcpNode.h"
 #include "Public/IRights.h"
+#include "IRightsManager.h"
 
 namespace lcp
 {
@@ -26,7 +27,7 @@ namespace lcp
         static int UNLIMITED;
     };
 
-    class RightsLcpNode : public BaseLcpNode, public IRights
+    class RightsLcpNode : public BaseLcpNode, public IRights, public IRightsManager
     {
     public:
         // ILcpNode
@@ -35,9 +36,21 @@ namespace lcp
 
     public:
         // IRights
+        virtual KvStringsIterator * Enumerate() const;
+        virtual bool HasRightValue(const std::string & name) const;
         virtual bool GetRightValue(const std::string & name, std::string & value) const;
 
+    public:
+        // IRightsManager
+        virtual bool HasRight(const std::string & name) const;
+        virtual bool Consume(const std::string & name);
+        virtual bool Consume(const std::string & name, int amount);
+        virtual void SetRightValue(const std::string & name, const std::string & value);
+
     private:
+        void SetRightValueInMap(const std::string & name, const std::string & value);
+        bool DoesLicenseStart() const;
+        bool DoesLicenseExpired() const;
         void FillRegisteredFields(const std::string & name, const rapidjson::Value & value);
 
     private:

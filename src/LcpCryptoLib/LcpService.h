@@ -8,6 +8,7 @@
 
 namespace lcp
 {
+    class RightsService;
     class JsonValueReader;
     class EncryptionProfilesManager;
     class ICryptoProvider;
@@ -52,6 +53,8 @@ namespace lcp
             IAcquisition ** acquisition
             );
 
+        virtual IRightsService * GetRightsService() const;
+
         virtual std::string RootCertificate() const;
         virtual INetProvider * NetProvider() const;
         virtual IStorageProvider * StorageProvider() const;
@@ -65,7 +68,7 @@ namespace lcp
         Status AddDecryptedUserKey(ILicense * license, const KeyType & userKey);
 
         std::string CalculateCanonicalForm(const std::string & licenseJson);
-        std::string BuildStorageProviderKey(const std::string & part1, const std::string & part2);
+        std::string BuildStorageProviderKey(const std::string & providerId, const std::string & userId);
 
     private:
         std::string m_rootCertificate;
@@ -73,6 +76,7 @@ namespace lcp
         IStorageProvider * m_storageProvider;
         IFileSystemProvider * m_fileSystemProvider;
 
+        std::unique_ptr<RightsService> m_rightsService;
         std::unique_ptr<JsonValueReader> m_jsonReader;
         std::unique_ptr<EncryptionProfilesManager> m_encryptionProfilesManager;
         std::unique_ptr<ICryptoProvider> m_cryptoProvider;

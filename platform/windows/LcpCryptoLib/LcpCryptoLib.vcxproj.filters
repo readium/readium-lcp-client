@@ -176,9 +176,6 @@
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\IValueIterator.h">
       <Filter>Header Files\PublicInterfaces</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\ContainerIterator.h">
-      <Filter>Header Files\PublicInterfaces</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\IAcquistion.h">
       <Filter>Header Files\PublicInterfaces</Filter>
     </ClInclude>
@@ -195,6 +192,18 @@
       <Filter>Header Files\PublicInterfaces</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\DefaultFileSystemProvider.h">
+      <Filter>Header Files\PublicInterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\IRightsService.h">
+      <Filter>Header Files\PublicInterfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\RightsService.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\IRightsManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\ContainerIterator.h">
       <Filter>Header Files\PublicInterfaces</Filter>
     </ClInclude>
   </ItemGroup>
@@ -267,6 +276,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\LcpCryptoLib\Acquisition.cpp">
       <Filter>Source Files\Acquisition</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\RightsService.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

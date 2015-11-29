@@ -18,5 +18,6 @@
 #include "IDecryptionContext.h"
 #include "IAcquistion.h"
 #include "IAcquistionCallback.h"
+#include "IRightsService.h"
 
 #endif // __LCP_PUBLIC_INTERFACES_H__

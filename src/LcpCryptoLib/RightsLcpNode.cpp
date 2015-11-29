@@ -2,6 +2,7 @@
 #include "JsonValueReader.h"
 #include "LcpUtils.h"
 #include "DateTime.h"
+#include "Public/ContainerIterator.h"
 
 namespace lcp
 {
@@ -18,26 +19,105 @@ namespace lcp
         return false;
     }
 
-    Status RightsLcpNode::VerifyNode(ILicense * license, IClientProvider * clientProvider, ICryptoProvider * cryptoProvider)
+    KvStringsIterator * RightsLcpNode::Enumerate() const
     {
-        DateTime now = DateTime::Now();
-        
-        if (!m_rights.start.empty())
+        return new MapIterator<std::string>(m_rights.valuesMap);
+    }
+
+    bool RightsLcpNode::HasRightValue(const std::string & name) const
+    {
+        return (m_rights.valuesMap.find(name) != m_rights.valuesMap.end());
+    }
+
+    bool RightsLcpNode::HasRight(const std::string & name) const
+    {
+        if (name == PrintRight)
         {
-            DateTime started(m_rights.start);
-            if (now < started)
+            return m_rights.print == RightsInfo::UNLIMITED || m_rights.print > 0;
+        }
+        else if (name == CopyRight)
+        {
+            return m_rights.copy == RightsInfo::UNLIMITED || m_rights.copy > 0;
+        }
+        else if (name == TtsRight)
+        {
+            return m_rights.tts;
+        }
+        else if (name == StartRight)
+        {
+            return this->DoesLicenseStart();
+        }
+        else if (name == EndRight)
+        {
+            return !this->DoesLicenseExpired();
+        }
+        return true;
+    }
+
+    bool RightsLcpNode::Consume(const std::string & name)
+    {
+        return this->Consume(name, 1);
+    }
+
+    bool RightsLcpNode::Consume(const std::string & name, int amount)
+    {
+        bool result = false;
+        if (name == PrintRight)
+        {
+            if (m_rights.print >= amount)
             {
-                return Status(StCodeCover::ErrorOpeningLicenseNotStarted);
+                m_rights.print -= amount;
+                this->SetRightValueInMap(name, std::to_string(m_rights.print));
+                result = true;
+            }
+            else if (m_rights.print == RightsInfo::UNLIMITED)
+            {
+                result = true;
             }
         }
-
-        if (!m_rights.end.empty())
+        else if (name == CopyRight)
         {
-            DateTime expired(m_rights.end);
-            if (now > expired)
+            if (m_rights.copy >= amount)
             {
-                return Status(StCodeCover::ErrorOpeningLicenseExpired);
+                m_rights.copy -= amount;
+                this->SetRightValueInMap(name, std::to_string(m_rights.copy));
+                result = true;
             }
+            else if (m_rights.copy == RightsInfo::UNLIMITED)
+            {
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    void RightsLcpNode::SetRightValue(const std::string & name, const std::string & value)
+    {
+        if (name == PrintRight)
+        {
+            m_rights.print = std::stoi(value);
+        }
+        else if (name == CopyRight)
+        {
+            m_rights.copy = std::stoi(value);
+        }
+        else if (name == TtsRight)
+        {
+            m_rights.tts = StringToBool(value);
+        }
+
+        this->SetRightValueInMap(name, value);
+    }
+
+    Status RightsLcpNode::VerifyNode(ILicense * license, IClientProvider * clientProvider, ICryptoProvider * cryptoProvider)
+    {
+        if (!this->DoesLicenseStart())
+        {
+            return Status(StCodeCover::ErrorOpeningLicenseNotStarted);
+        }
+        if (this->DoesLicenseExpired())
+        {
+            return Status(StCodeCover::ErrorOpeningLicenseExpired);
         }
 
         return BaseLcpNode::VerifyNode(license, clientProvider, cryptoProvider);
@@ -64,6 +144,47 @@ namespace lcp
         }
 
         BaseLcpNode::ParseNode(rightsObject, reader);
+    }
+
+    void RightsLcpNode::SetRightValueInMap(const std::string & name, const std::string & value)
+    {
+        auto it = m_rights.valuesMap.find(name);
+        if (it != m_rights.valuesMap.end())
+        {
+            it->second = value;
+        }
+        else
+        {
+            m_rights.valuesMap.insert(std::make_pair(name, value));
+        }
+    }
+
+    bool RightsLcpNode::DoesLicenseStart() const
+    {
+        DateTime now = DateTime::Now();
+        if (!m_rights.start.empty())
+        {
+            DateTime started(m_rights.start);
+            if (now < started)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    bool RightsLcpNode::DoesLicenseExpired() const
+    {
+        DateTime now = DateTime::Now();
+        if (!m_rights.end.empty())
+        {
+            DateTime expired(m_rights.end);
+            if (now > expired)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     void RightsLcpNode::FillRegisteredFields(const std::string & name, const rapidjson::Value & value)

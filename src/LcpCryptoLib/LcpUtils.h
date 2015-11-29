@@ -26,6 +26,7 @@ namespace lcp
         Status m_status;
     };
 
+    bool StringToBool(const std::string & val);
     std::string BoolToString(bool val);
     std::string DoubleToExponentString(const double & value);
 

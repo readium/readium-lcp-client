@@ -10,6 +10,11 @@ namespace lcp
         return (val) ? "true" : "false";
     }
 
+    bool StringToBool(const std::string & val)
+    {
+        return (val == "true") ? true : false;
+    }
+
     //TODO: for tests
     //"0e-15";
     //".0e-15";

@@ -30,7 +30,9 @@ namespace lcp
         virtual std::string Id() const;
         virtual std::string Email() const;
         virtual std::string Name() const;
+        virtual bool HasUserValue(const std::string & name) const;
         virtual bool GetUserValue(const std::string & name, std::string & value) const;
+        virtual KvStringsIterator * Enumerate() const;
 
     private:
         void FillRegisteredFields(const std::string & name, const std::string & value);

@@ -129,8 +129,7 @@ public:
     virtual void SetValue(const std::string & vaultId, const std::string & key, const std::string & value)
     {
         StringsMap * vaultPtr = this->FindVault(vaultId);
-        auto res = vaultPtr->insert(std::make_pair(key, value));
-        res;
+        (*vaultPtr)[key] = value;
     }
 
     virtual std::string GetValue(const std::string & vaultId, const std::string & key)
@@ -142,7 +141,7 @@ public:
         return std::string();
     }
 
-    virtual lcp::IValueIterator<std::string> * EnumerateVault(const std::string & vaultId)
+    virtual lcp::KvStringsIterator * EnumerateVault(const std::string & vaultId)
     {
         StringsMap * vaultPtr = this->FindVault(vaultId);
         return new lcp::MapIterator<std::string>(*vaultPtr);

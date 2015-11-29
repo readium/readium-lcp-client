@@ -1,8 +1,7 @@
 #include "UserLcpNode.h"
 #include "JsonValueReader.h"
 #include "ICryptoProvider.h"
-
-#pragma optimize( "", off )
+#include "Public/ContainerIterator.h"
 
 namespace lcp
 {
@@ -30,6 +29,16 @@ namespace lcp
             return true;
         }
         return false;
+    }
+
+    bool UserLcpNode::HasUserValue(const std::string & name) const
+    {
+        return (m_userInfo.valuesMap.find(name) != m_userInfo.valuesMap.end());
+    }
+
+    KvStringsIterator * UserLcpNode::Enumerate() const
+    {
+        return new MapIterator<std::string>(m_userInfo.valuesMap);
     }
     
     Status UserLcpNode::DecryptNode(ILicense * license, IKeyProvider * keyProvider, ICryptoProvider * cryptoProvider)

@@ -11,7 +11,7 @@ namespace lcp
     public:
         virtual void SetValue(const std::string & vaultId, const std::string & key, const std::string & value) = 0;
         virtual std::string GetValue(const std::string & vaultId, const std::string & key) = 0;
-        virtual IValueIterator<std::string> * EnumerateVault(const std::string & vaultId) = 0;
+        virtual KvStringsIterator * EnumerateVault(const std::string & vaultId) = 0;
         virtual ~IStorageProvider() {}
     };
 
