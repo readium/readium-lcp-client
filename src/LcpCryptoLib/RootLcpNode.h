@@ -52,8 +52,8 @@ namespace lcp
         virtual bool Decrypted() const;
 
     public:
-        virtual const KeyType & UserKey() const;
-        virtual const KeyType & ContentKey() const;
+        virtual KeyType UserKey() const;
+        virtual KeyType ContentKey() const;
 
     private:
         RootInfo m_rootInfo;

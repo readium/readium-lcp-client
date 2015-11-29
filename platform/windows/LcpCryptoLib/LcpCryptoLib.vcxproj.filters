@@ -194,8 +194,8 @@
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\IFileSystemProvider.h">
       <Filter>Header Files\PublicInterfaces</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\DefaultFileSystemProvider.h">
-      <Filter>Header Files\Acquisition</Filter>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\DefaultFileSystemProvider.h">
+      <Filter>Header Files\PublicInterfaces</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

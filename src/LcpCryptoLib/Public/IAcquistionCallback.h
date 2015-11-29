@@ -12,7 +12,7 @@ namespace lcp
     public:
         virtual void OnAcquisitionStarted(IAcquisition * acquisition) = 0;
         virtual void OnAcquisitionProgressed(IAcquisition * acquisition, float progress) = 0;
-        virtual void OnAcquisitionCancelled(IAcquisition * acquisition) = 0;
+        virtual void OnAcquisitionCanceled(IAcquisition * acquisition) = 0;
         virtual void OnAcquisitionEnded(IAcquisition * acquisition, Status result) = 0;
         virtual ~IAcquisitionCallback() {}
     };

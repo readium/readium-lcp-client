@@ -78,7 +78,7 @@ namespace lcp
         return m_decrypted;
     }
 
-    const KeyType & RootLcpNode::UserKey() const
+    KeyType RootLcpNode::UserKey() const
     {
         if (m_keyProvider != nullptr)
         {
@@ -87,7 +87,7 @@ namespace lcp
         return std::move(KeyType());
     }
 
-    const KeyType & RootLcpNode::ContentKey() const
+    KeyType RootLcpNode::ContentKey() const
     {
         if (m_keyProvider != nullptr)
         {

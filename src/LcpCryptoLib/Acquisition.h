@@ -29,7 +29,7 @@ namespace lcp
         // INetProviderCallback
         virtual void OnRequestStarted(INetRequest * request);
         virtual void OnRequestProgressed(INetRequest * request, float progress);
-        virtual void OnRequestCancelled(INetRequest * request);
+        virtual void OnRequestCanceled(INetRequest * request);
         virtual void OnRequestEnded(INetRequest * request, Status result);
 
     public:

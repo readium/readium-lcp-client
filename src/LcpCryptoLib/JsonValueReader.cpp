@@ -60,7 +60,7 @@ namespace lcp
         return false;
     }
 
-    int  JsonValueReader::ReadInteger(const std::string & name, const rapidjson::Value & jsonValue)
+    int JsonValueReader::ReadInteger(const std::string & name, const rapidjson::Value & jsonValue)
     {
         auto it = jsonValue.FindMember(name.c_str());
         if (it != jsonValue.MemberEnd() && it->value.IsInt())

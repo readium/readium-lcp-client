@@ -15,12 +15,12 @@ namespace lcp
         {
         }
 
-        virtual const KeyType & UserKey() const
+        virtual KeyType UserKey() const
         {
             return m_userKey;
         }
 
-        virtual const KeyType & ContentKey() const
+        virtual KeyType ContentKey() const
         {
             return m_contentKey;
         }

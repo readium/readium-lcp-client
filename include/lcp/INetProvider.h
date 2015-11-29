@@ -9,8 +9,8 @@ namespace lcp
     {
     public:
         virtual std::string Url() const = 0;
-        virtual bool Cancelled() const = 0;
-        virtual void SetCancelled(bool value) = 0;
+        virtual bool Canceled() const = 0;
+        virtual void SetCanceled(bool value) = 0;
         virtual ~INetRequest() {}
     };
 
@@ -26,7 +26,7 @@ namespace lcp
     public:
         virtual void OnRequestStarted(INetRequest * request) = 0;
         virtual void OnRequestProgressed(INetRequest * request, float progress) = 0;
-        virtual void OnRequestCancelled(INetRequest * request) = 0;
+        virtual void OnRequestCanceled(INetRequest * request) = 0;
         virtual void OnRequestEnded(INetRequest * request, Status result) = 0;
         virtual ~INetProviderCallback() {}
     };

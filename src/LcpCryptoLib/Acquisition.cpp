@@ -7,7 +7,7 @@
 namespace lcp
 {
     /*static*/ const char * Acquisition::PublicationType = u8"application/epub+zip";
-    /*static*/ const float Acquisition::DownloadCoefficient = 0.9;
+    /*static*/ const float Acquisition::DownloadCoefficient = static_cast<float>(0.9);
 
     Acquisition::Acquisition(
         ILicense * license,
@@ -27,6 +27,8 @@ namespace lcp
     {
         try
         {
+            m_callback = callback;
+
             ILinks * links = m_license->Links();
             if (!links->Has(Publication))
             {
@@ -61,7 +63,7 @@ namespace lcp
 
     void Acquisition::Cancel()
     {
-        m_request->SetCancelled(true);
+        m_request->SetCanceled(true);
     }
 
     std::string Acquisition::PublicationPath() const
@@ -88,11 +90,11 @@ namespace lcp
             m_callback->OnAcquisitionProgressed(this, progress * DownloadCoefficient);
         }
     }
-    void Acquisition::OnRequestCancelled(INetRequest * request)
+    void Acquisition::OnRequestCanceled(INetRequest * request)
     {
         if (m_callback != nullptr)
         {
-            m_callback->OnAcquisitionCancelled(this);
+            m_callback->OnAcquisitionCanceled(this);
         }
     }
     void Acquisition::OnRequestEnded(INetRequest * request, Status result)

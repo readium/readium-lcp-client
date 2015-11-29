@@ -3,7 +3,8 @@
 #include <fstream>
 #include "Public/lcp.h"
 #include "TestStorageProvider.h"
-//#include "TestNetProvider.h"
+#include "TestNetProvider.h"
+#include "TestAcquisitionCallback.h"
 
 int main(int argc, char ** argv)
 {
@@ -120,12 +121,13 @@ int main(int argc, char ** argv)
             "hoU8QCRfW2yPKRjiw2TeEHGJWV/QHcL74yTDNZZW3OHfF2tyiTNnzu4dX5k09Q8i"
             "gNBrawNJbGxYeRSVi6/AqZ8tX1g61G0SJ9w=";
 
-        //TestNetProvider netProvider;
+        TestNetProvider netProvider;
         TestStorageProvider storageProvider("..\\..\\..\\src\\testing-data\\storage.json");
+        lcp::DefaultFileSystemProvider fsProvider;
 
         lcp::ILcpService * rawSvcPtr = nullptr;
         lcp::LcpServiceCreator creator;
-        lcp::Status res = creator.CreateLcpService(rootCertificate, nullptr, &storageProvider, nullptr, &rawSvcPtr);
+        lcp::Status res = creator.CreateLcpService(rootCertificate, &netProvider, &storageProvider, &fsProvider, &rawSvcPtr);
         std::unique_ptr<lcp::ILcpService> lcpService(rawSvcPtr);
         if (!lcp::Status::IsSuccess(res))
         {
@@ -185,6 +187,24 @@ int main(int argc, char ** argv)
             &outSize,
             "http://www.w3.org/2001/04/xmlenc#aes256-cbc"
             );
+        if (!lcp::Status::IsSuccess(res))
+        {
+            std::cout << "Status: " << res.ResultCode << "; Extension: " << res.Extension << std::endl;
+            std::cin.get();
+            return 0;
+        }
+
+        lcp::IAcquisition * rawAcqPtr = nullptr;
+        res = lcpService->AcquirePublication("..\\..\\..\\src\\testing-data\\result.epub", rawLicPtr, &rawAcqPtr);
+        std::unique_ptr<lcp::IAcquisition> acquisition(rawAcqPtr);
+        if (!lcp::Status::IsSuccess(res))
+        {
+            std::cout << "Status: " << res.ResultCode << "; Extension: " << res.Extension << std::endl;
+            std::cin.get();
+            return 0;
+        }
+        TestAcquisitionCallback callback;
+        res = acquisition->Start(&callback);
         if (!lcp::Status::IsSuccess(res))
         {
             std::cout << "Status: " << res.ResultCode << "; Extension: " << res.Extension << std::endl;

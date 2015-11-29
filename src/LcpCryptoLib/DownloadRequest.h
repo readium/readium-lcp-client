@@ -28,11 +28,11 @@ namespace lcp
         {
             return m_url;
         }
-        virtual bool Cancelled() const
+        virtual bool Canceled() const
         {
             return m_canceled;
         }
-        virtual void SetCancelled(bool value)
+        virtual void SetCanceled(bool value)
         {
             m_canceled = value;
         }

@@ -31,7 +31,6 @@
     <ClInclude Include="..\..\..\src\LcpCryptoLib\CryptoppCryptoProvider.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\DateTime.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\DecryptionContextImpl.h" />
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\DefaultFileSystemProvider.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\DownloadRequest.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\EncryptionProfileNames.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\EncryptionProfilesManager.h" />
@@ -46,6 +45,7 @@
     <ClInclude Include="..\..\..\src\LcpCryptoLib\LcpService.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\LcpUtils.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\LinksLcpNode.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\DefaultFileSystemProvider.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\IAcquistion.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\IAcquistionCallback.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\ICrypto.h" />

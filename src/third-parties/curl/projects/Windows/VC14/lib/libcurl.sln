@@ -1,5 +1,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2015
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libcurl", "libcurl.vcxproj", "{DA6F56B4-06A4-441D-AD70-AC5A7D51FADB}"
 EndProject
 Global
@@ -82,8 +84,8 @@ Global
 		{DA6F56B4-06A4-441D-AD70-AC5A7D51FADB}.DLL Debug - DLL wolfSSL|Win32.Build.0 = DLL Debug - DLL wolfSSL|Win32
 		{DA6F56B4-06A4-441D-AD70-AC5A7D51FADB}.DLL Debug - DLL wolfSSL|x64.ActiveCfg = DLL Debug - DLL wolfSSL|x64
 		{DA6F56B4-06A4-441D-AD70-AC5A7D51FADB}.DLL Debug - DLL wolfSSL|x64.Build.0 = DLL Debug - DLL wolfSSL|x64
-		{DA6F56B4-06A4-441D-AD70-AC5A7D51FADB}.DLL Debug|Win32.ActiveCfg = DLL Debug|Win32
-		{DA6F56B4-06A4-441D-AD70-AC5A7D51FADB}.DLL Debug|Win32.Build.0 = DLL Debug|Win32
+		{DA6F56B4-06A4-441D-AD70-AC5A7D51FADB}.DLL Debug|Win32.ActiveCfg = LIB Debug|Win32
+		{DA6F56B4-06A4-441D-AD70-AC5A7D51FADB}.DLL Debug|Win32.Build.0 = LIB Debug|Win32
 		{DA6F56B4-06A4-441D-AD70-AC5A7D51FADB}.DLL Debug|x64.ActiveCfg = DLL Debug|x64
 		{DA6F56B4-06A4-441D-AD70-AC5A7D51FADB}.DLL Debug|x64.Build.0 = DLL Debug|x64
 		{DA6F56B4-06A4-441D-AD70-AC5A7D51FADB}.DLL Release - DLL OpenSSL - DLL LibSSH2|Win32.ActiveCfg = DLL Release - DLL OpenSSL - DLL LibSSH2|Win32

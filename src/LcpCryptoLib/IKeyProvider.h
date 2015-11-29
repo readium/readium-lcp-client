@@ -8,8 +8,8 @@ namespace lcp
     class IKeyProvider
     {
     public:
-        virtual const KeyType & UserKey() const = 0;
-        virtual const KeyType & ContentKey() const = 0;
+        virtual KeyType UserKey() const = 0;
+        virtual KeyType ContentKey() const = 0;
         virtual ~IKeyProvider() {}
     };
 }
