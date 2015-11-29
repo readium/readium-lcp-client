@@ -2,8 +2,6 @@
 #include "Acquisition.h"
 #include "DownloadRequest.h"
 #include "LcpUtils.h"
-#include "Public/ILinks.h"
-#include "Public/IFileSystemProvider.h"
 #include "Public/ILicense.h"
 #include "ICryptoProvider.h"
 
@@ -55,7 +53,7 @@ namespace lcp
             m_request.reset(new DownloadRequest(publicationLink.href, m_file.get()));
             m_netProvider->StartDownloadRequest(m_request.get(), this);
 
-            return Status(StCodeCover::ErrorCommonSuccess);
+            return this->CheckPublicationHash(publicationLink);
         }
         catch (const StatusException & ex)
         {
@@ -65,6 +63,28 @@ namespace lcp
         {
             return Status(StCodeCover::ErrorCommonFail, ex.what());
         }
+    }
+
+    Status Acquisition::CheckPublicationHash(const Link & link)
+    {
+        if (!link.hash.empty())
+        {
+            std::vector<unsigned char> rawHash;
+            Status res = m_cryptoProvider->CalculateFileHash(m_file.get(), rawHash);
+            if (!Status::IsSuccess(res))
+                return res;
+
+            std::string hexHash;
+            res = m_cryptoProvider->ConvertRawToHex(rawHash, hexHash);
+            if (!Status::IsSuccess(res))
+                return res;
+
+            if (hexHash != link.hash)
+            {
+                return Status(StCodeCover::ErrorAcquisitionPublicationCorrupted);
+            }
+        }
+        return Status(StCodeCover::ErrorCommonSuccess);
     }
 
     void Acquisition::Cancel()
@@ -79,7 +99,7 @@ namespace lcp
 
     std::string Acquisition::SuggestedFileName() const
     {
-        return m_request->SuggestedPath();
+        return m_request->SuggestedFileName();
     }
 
     void Acquisition::OnRequestStarted(INetRequest * request)

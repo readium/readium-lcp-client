@@ -9,7 +9,7 @@
 
 static size_t position = 0;
 
-size_t CallbackWriteFile(void *ptr, size_t size, size_t nmemb, lcp::IFile * file)
+size_t CallbackWriteFile(void *ptr, size_t size, size_t nmemb, lcp::IWritableFile * file)
 {
     try
     {

@@ -3,7 +3,7 @@
 
 namespace lcp
 {
-    class IFile;
+    class IWritableFile;
 
     class INetRequest
     {
@@ -17,8 +17,8 @@ namespace lcp
     class IDownloadRequest : public INetRequest
     {
     public:
-        virtual IFile * DestinationFile() const = 0;
-        virtual std::string SuggestedPath() const = 0;
+        virtual IWritableFile * DestinationFile() const = 0;
+        virtual std::string SuggestedFileName() const = 0;
     };
 
     class INetProviderCallback

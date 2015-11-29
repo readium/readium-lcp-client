@@ -5,12 +5,13 @@
 #include "Public/IAcquistion.h"
 #include "Public/IAcquistionCallback.h"
 #include "Public/INetProvider.h"
+#include "Public/IFileSystemProvider.h"
+#include "Public/ILinks.h"
 
 namespace lcp
 {
     class ILicense;
     class ICryptoProvider;
-    class IFileSystemProvider;
 
     class Acquisition : public IAcquisition, public INetProviderCallback
     {
@@ -37,6 +38,9 @@ namespace lcp
 
     public:
         static const char * PublicationType;
+
+    private:
+        Status CheckPublicationHash(const Link & link);
 
     private:
         ILicense * m_license;

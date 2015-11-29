@@ -9,6 +9,7 @@ namespace lcp
     {
     public:
         virtual size_t Read(size_t position, void * pBuffer, size_t sizeToRead) = 0;
+        virtual size_t GetSize() = 0;
         virtual ~IReadableFile() {}
     };
 

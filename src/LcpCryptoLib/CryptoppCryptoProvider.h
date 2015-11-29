@@ -29,14 +29,19 @@ namespace lcp
             KeyType & contentKey
             );
 
-        virtual Status ConvertKeyToHex(
-            const KeyType & key,
+        virtual Status CalculateFileHash(
+            IReadableFile * readableFile,
+            std::vector<unsigned char> & rawHash
+            );
+
+        virtual Status ConvertRawToHex(
+            const std::vector<unsigned char> & data,
             std::string & hex
             );
 
-        virtual Status ConvertHexToKey(
+        virtual Status ConvertHexToRaw(
             const std::string & hex,
-            KeyType & key
+            std::vector<unsigned char> & data
             );
 
         virtual Status DecryptLicenseData(

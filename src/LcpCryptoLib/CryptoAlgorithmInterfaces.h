@@ -35,12 +35,9 @@ namespace lcp
     public:
         virtual std::string Name() const = 0;
         virtual size_t DigestSize() const = 0;
-
-        virtual KeyType CalculateHash(const std::string & dataStr) = 0;
-        virtual KeyType CalculateHash(
-            const unsigned char * data,
-            const size_t dataLength
-            ) = 0;
+        virtual void UpdateHash(const std::string & dataStr) = 0;
+        virtual void UpdateHash(const unsigned char * data, const size_t dataLength) = 0;
+        virtual KeyType Hash() = 0;
         
         virtual ~IHashAlgorithm() {}
     };

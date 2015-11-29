@@ -50,6 +50,12 @@ namespace lcp
             return sizeToRead;
         }
 
+        virtual size_t GetSize()
+        {
+            m_fstream.seekg(0, std::ios::end);
+            return m_fstream.tellg();
+        }
+
         ~DefaultFile()
         {
             m_fstream.close();

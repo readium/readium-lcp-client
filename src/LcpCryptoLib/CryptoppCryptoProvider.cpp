@@ -3,11 +3,13 @@
 #include "EncryptionProfilesManager.h"
 #include "Public/ILicense.h"
 #include "Public/ICrypto.h"
+#include "Public/IFileSystemProvider.h"
 #include "Certificate.h"
 #include "DateTime.h"
 #include "IKeyProvider.h"
 #include "CryptoppUtils.h"
 #include "DecryptionContextImpl.h"
+#include "Sha256HashAlgorithm.h"
 
 namespace lcp
 {
@@ -107,10 +109,8 @@ namespace lcp
             }
 
             std::unique_ptr<IHashAlgorithm> hashAlgorithm(profile->CreateUserKeyAlgorithm());
-            userKey = hashAlgorithm->CalculateHash(userPassphrase);
-
-            std::string hex;
-            Status res = this->ConvertKeyToHex(userKey, hex);
+            hashAlgorithm->UpdateHash(userPassphrase);
+            userKey = hashAlgorithm->Hash();
 
             std::unique_ptr<ISymmetricAlgorithm> contentKeyAlgorithm(profile->CreateContentKeyAlgorithm(userKey));
             std::string id = contentKeyAlgorithm->Decrypt(license->Crypto()->UserKeyCheck());
@@ -152,14 +152,49 @@ namespace lcp
         }
     }
 
-    Status CryptoppCryptoProvider::ConvertKeyToHex(
-        const KeyType & key,
+    Status CryptoppCryptoProvider::CalculateFileHash(
+        IReadableFile * readableFile,
+        std::vector<unsigned char> & rawHash
+        )
+    {
+        try
+        {
+            Sha256HashAlgorithm algorithm;
+            size_t bufferSize = 1024 * 1024;
+            std::vector<unsigned char> buffer(bufferSize);
+            
+            size_t pos = 0;
+            size_t sizeToRead = bufferSize;
+            size_t fileSize = readableFile->GetSize();
+            while (pos != fileSize)
+            {
+                sizeToRead = (fileSize - pos > bufferSize) ? bufferSize : fileSize - pos;
+                size_t read = readableFile->Read(pos, buffer.data(), sizeToRead);
+                if (read != sizeToRead)
+                {
+                    return Status(StCodeCover::ErrorCommonFail, "Can not read from file");
+                }
+                algorithm.UpdateHash(buffer.data(), sizeToRead);
+                pos += sizeToRead;
+            }
+            rawHash = algorithm.Hash();
+
+            return Status(StCodeCover::ErrorCommonSuccess);
+        }
+        catch (const CryptoPP::Exception & ex)
+        {
+            return Status(StCodeCover::ErrorDecryptionLicenseEncrypted, ex.GetWhat());
+        }
+    }
+
+    Status CryptoppCryptoProvider::ConvertRawToHex(
+        const std::vector<unsigned char> & data,
         std::string & hex
         )
     {
         try
         {
-            hex = CryptoppUtils::KeyToHex(key);
+            hex = CryptoppUtils::RawToHex(data);
             return Status(StCodeCover::ErrorCommonSuccess);
         }
         catch (const CryptoPP::Exception & ex)
@@ -168,14 +203,14 @@ namespace lcp
         }
     }
 
-    Status CryptoppCryptoProvider::ConvertHexToKey(
+    Status CryptoppCryptoProvider::ConvertHexToRaw(
         const std::string & hex,
-        KeyType & key
+        std::vector<unsigned char> & data
         )
     {
         try
         {
-            key = CryptoppUtils::HexToKey(hex);
+            data = CryptoppUtils::HexToRaw(hex);
             return Status(StCodeCover::ErrorCommonSuccess);
         }
         catch (const CryptoPP::Exception & ex)

@@ -8,6 +8,7 @@ namespace lcp
 {
     class ILicense;
     class IKeyProvider;
+    class IReadableFile;
     class IDecryptionContext;
 
     class ICryptoProvider
@@ -30,14 +31,19 @@ namespace lcp
             KeyType & contentKey
             ) = 0;
 
-        virtual Status ConvertKeyToHex(
-            const KeyType & key,
+        virtual Status CalculateFileHash(
+            IReadableFile * readableFile,
+            std::vector<unsigned char> & rawHash
+            ) = 0;
+
+        virtual Status ConvertRawToHex(
+            const std::vector<unsigned char> & data,
             std::string & hex
             ) = 0;
 
-        virtual Status ConvertHexToKey(
+        virtual Status ConvertHexToRaw(
             const std::string & hex,
-            KeyType & key
+            std::vector<unsigned char> & key
             ) = 0;
 
         virtual Status DecryptLicenseData(

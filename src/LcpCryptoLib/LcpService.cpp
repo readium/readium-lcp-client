@@ -158,7 +158,7 @@ namespace lcp
     Status LcpService::AddDecryptedUserKey(ILicense * license, const KeyType & userKey)
     {
         std::string hexUserKey;
-        Status res = m_cryptoProvider->ConvertKeyToHex(userKey, hexUserKey);
+        Status res = m_cryptoProvider->ConvertRawToHex(userKey, hexUserKey);
         if (!Status::IsSuccess(res))
             return res;
 
@@ -191,7 +191,7 @@ namespace lcp
             if (!userKeyHex.empty())
             {
                 KeyType userKey;
-                Status res = m_cryptoProvider->ConvertHexToKey(userKeyHex, userKey);
+                Status res = m_cryptoProvider->ConvertHexToRaw(userKeyHex, userKey);
                 if (!Status::IsSuccess(res))
                     return res;
 
@@ -203,7 +203,7 @@ namespace lcp
         for (it->First(); !it->IsDone(); it->Next())
         {
             KeyType userKey;
-            Status res = m_cryptoProvider->ConvertHexToKey(it->Current(), userKey);
+            Status res = m_cryptoProvider->ConvertHexToRaw(it->Current(), userKey);
 
             res = this->DecryptLicenseByUserKey(license, userKey);
             if (Status::IsSuccess(res))

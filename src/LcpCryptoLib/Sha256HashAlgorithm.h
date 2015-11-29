@@ -1,6 +1,7 @@
 #ifndef __SHA256_HASH_ALGORITHM_H__
 #define __SHA256_HASH_ALGORITHM_H__
 
+#include <cryptopp/sha.h>
 #include "CryptoAlgorithmInterfaces.h"
 
 namespace lcp
@@ -10,11 +11,12 @@ namespace lcp
     public:
         virtual std::string Name() const;
         virtual size_t DigestSize() const;
-        virtual KeyType CalculateHash(const std::string & dataStr);
-        virtual KeyType CalculateHash(
-            const unsigned char * data,
-            const size_t dataLength
-            );
+        virtual void UpdateHash(const std::string & dataStr);
+        virtual void UpdateHash(const unsigned char * data, const size_t dataLength);
+        virtual KeyType Hash();
+
+    private:
+        CryptoPP::SHA256 m_sha256;
     };
 }
 

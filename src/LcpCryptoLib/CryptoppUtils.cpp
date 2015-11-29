@@ -71,7 +71,7 @@ namespace lcp
         return result;
     }
 
-    std::string CryptoppUtils::KeyToHex(const KeyType & key)
+    std::string CryptoppUtils::RawToHex(const std::vector<unsigned char> & key)
     {
         std::string hex;
         CryptoPP::ArraySource hexSource(
@@ -86,18 +86,18 @@ namespace lcp
         return hex;
     }
 
-    KeyType CryptoppUtils::HexToKey(const std::string & hex)
+    std::vector<unsigned char> CryptoppUtils::HexToRaw(const std::string & hex)
     {
-        KeyType key(hex.size() / 2);
+        std::vector<unsigned char> value(hex.size() / 2);
         CryptoPP::StringSource(
             hex, true,
             new CryptoPP::HexDecoder(
                 new CryptoPP::ArraySink(
-                    &key.at(0), key.size()
+                    &value.at(0), value.size()
                     )
                 )
             );
-        return key;
+        return value;
     }
 
     void CryptoppUtils::Base64ToSecBlock(const std::string & base64, SecByteBlock & result)
