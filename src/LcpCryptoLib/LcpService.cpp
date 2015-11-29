@@ -252,6 +252,11 @@ namespace lcp
                 return Status(StCodeCover::ErrorCommonFail, "license is nullptr");
             }
 
+            if (!license->Decrypted())
+            {
+                return Status(StCodeCover::ErrorDecryptionLicenseEncrypted);
+            }
+            
             IEncryptionProfile * profile = m_encryptionProfilesManager->GetProfile(license->Crypto()->EncryptionProfile());
             if (profile == nullptr)
             {

@@ -13,26 +13,27 @@
 #include <ePub3/filter.h>
 
 using namespace ePub3;
+using namespace std;
 
 namespace lcp {
     class LcpContentFilter : public ContentFilter, public PointerType<LcpContentFilter>
     {
     public:
-        LcpContentFilter(std::shared_ptr<ILicense> license) : ContentFilter(SniffLcpContent), m_license(license) {}
+        LcpContentFilter(ILicense *license) : ContentFilter(SniffLcpContent), m_license(license) {}
         LcpContentFilter(const LcpContentFilter &o) : ContentFilter(o) {}
-        LcpContentFilter(LcpContentFilter &&o) : ContentFilter(std::move(o)) {}
+        LcpContentFilter(LcpContentFilter &&o) : ContentFilter(move(o)) {}
         
         virtual void *FilterData(FilterContext *context, void *data, size_t len, size_t *outputLen) OVERRIDE;
-        virtual OperatingMode GetOperatingMode() const OVERRIDE { return OperatingMode::RequiresCompleteData; }
+        virtual OperatingMode GetOperatingMode() const OVERRIDE { return OperatingMode::SupportsByteRanges; }
     
-        static void Register(std::shared_ptr<ILcpService> lcpService);
+        static void Register(ILcpService *const lcpService);
     
     protected:
-        std::shared_ptr<ILicense> m_license;
+        ILicense *m_license;
         virtual FilterContext *InnerMakeFilterContext(ConstManifestItemPtr item) const OVERRIDE;
     
     private:
-        static std::shared_ptr<ILcpService> lcpService;
+        static ILcpService *lcpService;
         static bool SniffLcpContent(ConstManifestItemPtr item);
         static ContentFilterPtr Factory(ConstPackagePtr package);
     };
