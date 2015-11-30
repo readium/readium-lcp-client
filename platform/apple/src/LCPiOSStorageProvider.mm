@@ -19,7 +19,12 @@ namespace lcp
     public:
         explicit iOSKeyChainIterator(UICKeyChainStore *keyChain) : m_index(0)
         {
-            m_items = [keyChain allItems];
+            m_keys = [keyChain allKeys];
+            
+            m_values->resize([m_keys count]);
+            for (NSString *key in m_keys) {
+                m_values->push_back([[keyChain stringForKey:key] UTF8String]);
+            }
         }
         
         iOSKeyChainIterator() {}
@@ -36,7 +41,7 @@ namespace lcp
         
         virtual bool IsDone() const
         {
-            return m_index >= [m_items count];
+            return m_index >= m_values->size();
         }
         
         virtual const string & Current() const
@@ -45,8 +50,7 @@ namespace lcp
                 throw out_of_range("Iterator is out of range");
             }
  
-#warning FIXME: this is temporary
-            return std::move(std::string([m_items[m_index][@"value"] UTF8String]));
+            return m_values->at(m_index);
         }
         
         virtual std::string CurrentKey() const
@@ -55,11 +59,12 @@ namespace lcp
                 throw out_of_range("Iterator is out of range");
             }
  
-            return [m_items[m_index][@"key"] UTF8String];
+            return [m_keys[m_index] UTF8String];
         }
         
     protected:
-        NSArray *m_items;
+        vector<string> *m_values;
+        NSArray *m_keys;
         uint m_index;
     };
     
