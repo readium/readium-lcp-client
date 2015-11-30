@@ -17,7 +17,8 @@ namespace lcp {
             : m_filteredBytesCount(0)
         {}
         
-        virtual ~LcpFilterContext() {}
+        virtual ~LcpFilterContext()
+        {}
         
         virtual bool IsFirstRange() const
         {
@@ -26,12 +27,12 @@ namespace lcp {
         
         IDecryptionContext *DecryptionContext() const
         {
-            return m_decryptionContext;
+            return m_decryptionContext.get();
         }
         
         void SetDecryptionContext(IDecryptionContext *decryptionContext)
         {
-            m_decryptionContext = decryptionContext;
+            m_decryptionContext = std::unique_ptr<IDecryptionContext>(decryptionContext);
             m_decryptionContext->SetFirstRange(m_filteredBytesCount == 0);
         }
         
@@ -52,7 +53,7 @@ namespace lcp {
         }
         
     protected:
-        IDecryptionContext *m_decryptionContext;
+        std::unique_ptr<IDecryptionContext> m_decryptionContext;
         size_t m_filteredBytesCount;
         std::string m_algorithm;
     };

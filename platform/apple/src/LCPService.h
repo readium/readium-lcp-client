@@ -15,17 +15,22 @@ namespace lcp {
 }
 #endif
 
+@class LCPAcquisition;
 @class LCPLicense;
 
 @interface LCPService : NSObject
 
-+ (instancetype)serviceWithRootCertificate:(NSString *)rootCertificate netProvider:(lcp::INetProvider *)netProvider storageProvider:(lcp::IStorageProvider *)storageProvider error:(NSError **)error;
++ (instancetype)serviceWithRootCertificate:(NSString *)rootCertificate error:(NSError **)error;
 
-- (instancetype)initWithRootCertificate:(NSString *)rootCertificate netProvider:(lcp::INetProvider *)netProvider storageProvider:(lcp::IStorageProvider *)storageProvider error:(NSError **)error NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithRootCertificate:(NSString *)rootCertificate error:(NSError **)error NS_DESIGNATED_INITIALIZER;
 
+#ifdef __cplusplus
 - (lcp::ILcpService *)nativeService;
+#endif
 
 - (LCPLicense *)openLicense:(NSString *)licenseJSON error:(NSError **)error;
 - (BOOL)decryptLicense:(LCPLicense *)license passphrase:(NSString *)passphrase error:(NSError **)error;
+
+- (LCPAcquisition *)acquirePublication:(LCPLicense *)license toPath:(NSString *)publicationPath error:(NSError **)error;
 
 @end

@@ -21,9 +21,9 @@ namespace lcp
         {
             m_keys = [keyChain allKeys];
             
-            m_values->resize([m_keys count]);
+            m_values.resize([m_keys count]);
             for (NSString *key in m_keys) {
-                m_values->push_back([[keyChain stringForKey:key] UTF8String]);
+                m_values.push_back([[keyChain stringForKey:key] UTF8String]);
             }
         }
         
@@ -41,7 +41,7 @@ namespace lcp
         
         virtual bool IsDone() const
         {
-            return m_index >= m_values->size();
+            return m_index >= m_values.size();
         }
         
         virtual const string & Current() const
@@ -50,7 +50,7 @@ namespace lcp
                 throw out_of_range("Iterator is out of range");
             }
  
-            return m_values->at(m_index);
+            return m_values.at(m_index);
         }
         
         virtual std::string CurrentKey() const
@@ -63,7 +63,7 @@ namespace lcp
         }
         
     protected:
-        vector<string> *m_values;
+        vector<string> m_values;
         NSArray *m_keys;
         uint m_index;
     };

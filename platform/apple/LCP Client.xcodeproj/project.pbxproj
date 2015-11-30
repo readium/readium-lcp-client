@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5A01168E1C088BA4006F1A6F /* LCPAcquisition.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A0116811C088BA4006F1A6F /* LCPAcquisition.m */; };
+		5A01168E1C088BA4006F1A6F /* LCPAcquisition.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A0116811C088BA4006F1A6F /* LCPAcquisition.mm */; };
 		5A01168F1C088BA4006F1A6F /* LCPError.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A0116831C088BA4006F1A6F /* LCPError.mm */; };
 		5A0116901C088BA4006F1A6F /* LCPiOSStorageProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A0116851C088BA4006F1A6F /* LCPiOSStorageProvider.mm */; };
 		5A0116911C088BA4006F1A6F /* LCPLicense.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A0116871C088BA4006F1A6F /* LCPLicense.mm */; };
@@ -39,6 +39,7 @@
 		5A6EEB051C0C53FD0003A6DC /* Sha256HashAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A6EEAE91C0C53FD0003A6DC /* Sha256HashAlgorithm.cpp */; };
 		5A6EEB061C0C53FD0003A6DC /* UserLcpNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A6EEAEC1C0C53FD0003A6DC /* UserLcpNode.cpp */; };
 		5A6EEB071C0C53FD0003A6DC /* UUIDGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A6EEAEE1C0C53FD0003A6DC /* UUIDGenerator.cpp */; };
+		5A6EEB0A1C0C61CD0003A6DC /* LCPiOSNetProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A6EEB081C0C61CD0003A6DC /* LCPiOSNetProvider.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,7 +54,7 @@
 
 /* Begin PBXFileReference section */
 		5A0116801C088BA4006F1A6F /* LCPAcquisition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCPAcquisition.h; sourceTree = "<group>"; };
-		5A0116811C088BA4006F1A6F /* LCPAcquisition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LCPAcquisition.m; sourceTree = "<group>"; };
+		5A0116811C088BA4006F1A6F /* LCPAcquisition.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LCPAcquisition.mm; sourceTree = "<group>"; };
 		5A0116821C088BA4006F1A6F /* LCPError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCPError.h; sourceTree = "<group>"; };
 		5A0116831C088BA4006F1A6F /* LCPError.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LCPError.mm; sourceTree = "<group>"; };
 		5A0116841C088BA4006F1A6F /* LCPiOSStorageProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCPiOSStorageProvider.h; sourceTree = "<group>"; };
@@ -146,6 +147,8 @@
 		5A6EEAED1C0C53FD0003A6DC /* UserLcpNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserLcpNode.h; sourceTree = "<group>"; };
 		5A6EEAEE1C0C53FD0003A6DC /* UUIDGenerator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UUIDGenerator.cpp; sourceTree = "<group>"; };
 		5A6EEAEF1C0C53FD0003A6DC /* UUIDGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UUIDGenerator.h; sourceTree = "<group>"; };
+		5A6EEB081C0C61CD0003A6DC /* LCPiOSNetProvider.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LCPiOSNetProvider.mm; sourceTree = "<group>"; };
+		5A6EEB091C0C61CD0003A6DC /* LCPiOSNetProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCPiOSNetProvider.h; sourceTree = "<group>"; };
 		5AAEF18B1BF9D3FD003CF710 /* allocators.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = allocators.h; sourceTree = "<group>"; };
 		5AAEF18C1BF9D3FD003CF710 /* document.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = document.h; sourceTree = "<group>"; };
 		5AAEF18D1BF9D3FD003CF710 /* encodedstream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = encodedstream.h; sourceTree = "<group>"; };
@@ -199,11 +202,13 @@
 			isa = PBXGroup;
 			children = (
 				5A0116801C088BA4006F1A6F /* LCPAcquisition.h */,
-				5A0116811C088BA4006F1A6F /* LCPAcquisition.m */,
+				5A0116811C088BA4006F1A6F /* LCPAcquisition.mm */,
 				5A0116821C088BA4006F1A6F /* LCPError.h */,
 				5A0116831C088BA4006F1A6F /* LCPError.mm */,
 				5A0116841C088BA4006F1A6F /* LCPiOSStorageProvider.h */,
 				5A0116851C088BA4006F1A6F /* LCPiOSStorageProvider.mm */,
+				5A6EEB091C0C61CD0003A6DC /* LCPiOSNetProvider.h */,
+				5A6EEB081C0C61CD0003A6DC /* LCPiOSNetProvider.mm */,
 				5A0116861C088BA4006F1A6F /* LCPLicense.h */,
 				5A0116871C088BA4006F1A6F /* LCPLicense.mm */,
 				5A0116881C088BA4006F1A6F /* LCPService.h */,
@@ -547,8 +552,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5A01168E1C088BA4006F1A6F /* LCPAcquisition.m in Sources */,
+				5A01168E1C088BA4006F1A6F /* LCPAcquisition.mm in Sources */,
 				5A6EEAF01C0C53FD0003A6DC /* Acquisition.cpp in Sources */,
+				5A6EEB0A1C0C61CD0003A6DC /* LCPiOSNetProvider.mm in Sources */,
 				5A6EEAFE1C0C53FD0003A6DC /* LcpServiceCreator.cpp in Sources */,
 				5A0116921C088BA4006F1A6F /* LCPService.mm in Sources */,
 				5A6EEB041C0C53FD0003A6DC /* RsaSha256SignatureAlgorithm.cpp in Sources */,

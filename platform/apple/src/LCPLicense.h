@@ -22,5 +22,4 @@ namespace lcp {
 
 - (instancetype)initWithLicense:(lcp::ILicense *)nativeLicense NS_DESIGNATED_INITIALIZER;
 
-
 @end

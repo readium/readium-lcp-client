@@ -5,12 +5,15 @@
 
 #import "LCPService.h"
 
+#import "DefaultFileSystemProvider.h"
 #import "ILcpService.h"
 #import "ILicense.h"
 #import "LcpServiceCreator.h"
+#import "LCPAcquisition.h"
 #import "LCPError.h"
 #import "LCPLicense.h"
-
+#import "LCPiOSNetProvider.h"
+#import "LCPiOSStorageProvider.h"
 #import <iostream>
 
 @interface LCPService () {
@@ -20,22 +23,32 @@
 
 @implementation LCPService
 
-+ (instancetype)serviceWithRootCertificate:(NSString *)rootCertificate netProvider:(lcp::INetProvider *)netProvider storageProvider:(lcp::IStorageProvider *)storageProvider error:(NSError **)error
++ (instancetype)serviceWithRootCertificate:(NSString *)rootCertificate error:(NSError **)error
 {
-    return [[self alloc] initWithRootCertificate:rootCertificate netProvider:netProvider storageProvider:storageProvider error:error];
+    return [[self alloc] initWithRootCertificate:rootCertificate error:error];
 }
 
 
 - (instancetype)init
 {
-    return [self initWithRootCertificate:nil netProvider:nullptr storageProvider:nullptr error:NULL];
+    return [self initWithRootCertificate:nil error:NULL];
 }
 
-- (instancetype)initWithRootCertificate:(NSString *)rootCertificate netProvider:(lcp::INetProvider *)netProvider storageProvider:(lcp::IStorageProvider *)storageProvider error:(NSError **)error
+- (instancetype)initWithRootCertificate:(NSString *)rootCertificate error:(NSError **)error
 {
     lcp::ILcpService *service = nullptr;
     lcp::LcpServiceCreator factory;
-    lcp::Status status = factory.CreateLcpService([rootCertificate UTF8String], netProvider, storageProvider, nullptr, &service);
+    lcp::IStorageProvider *storageProvider;
+    lcp::INetProvider *netProvider;
+    lcp::IFileSystemProvider *fileSystemProvider;
+    
+#if TARGET_OS_IPHONE
+    storageProvider = new lcp::iOSStorageProvider();
+    netProvider = new lcp::iOSNetProvider();
+    fileSystemProvider = new lcp::DefaultFileSystemProvider();
+#endif
+    
+    lcp::Status status = factory.CreateLcpService([rootCertificate UTF8String], netProvider, storageProvider, fileSystemProvider, &service);
     
     if (![self checkStatus:status error:error]) {
         return nil;
@@ -75,6 +88,19 @@
 {
     lcp::Status status = _nativeService->DecryptLicense(license.nativeLicense, [passphrase UTF8String]);
     return [self checkStatus:status error:error];
+}
+
+- (LCPAcquisition *)acquirePublication:(LCPLicense *)license toPath:(NSString *)publicationPath error:(NSError **)error
+{
+    LCPAcquisition *acquisition;
+    lcp::IAcquisition *nativeAcquisition;
+    
+    lcp::Status status = _nativeService->AcquirePublication([publicationPath UTF8String], license.nativeLicense, &nativeAcquisition);
+    if ([self checkStatus:status error:error]) {
+        acquisition = [[LCPAcquisition alloc] initWithAcquisition:nativeAcquisition];
+    }
+    
+    return acquisition;
 }
 
 - (BOOL)checkStatus:(lcp::Status)status error:(NSError **)error

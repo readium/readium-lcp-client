@@ -1,6 +1,9 @@
 #ifndef __I_NET_PROVIDER_H__
 #define __I_NET_PROVIDER_H__
 
+#include <string>
+#include "LcpStatus.h"
+
 namespace lcp
 {
     class IWritableFile;

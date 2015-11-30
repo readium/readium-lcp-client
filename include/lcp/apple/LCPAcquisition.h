@@ -5,6 +5,12 @@
 
 #import <Foundation/Foundation.h>
 
+#ifdef __cplusplus
+namespace lcp {
+    class IAcquisition;
+}
+#endif
+
 @class LCPAcquisition;
 
 @protocol LCPAcquisitionDelegate
@@ -20,9 +26,17 @@
 
 @interface LCPAcquisition : NSObject
 
+@property (weak, nonatomic) id<LCPAcquisitionDelegate> delegate;
+
 @property (readonly, nonatomic) NSString *publicationPath;
 @property (readonly, nonatomic) NSString *suggestedFilename;
 
+#ifdef __cplusplus
+@property (readonly, nonatomic) lcp::IAcquisition *nativeAcquisition;
+- (instancetype)initWithAcquisition:(lcp::IAcquisition *)nativeAcquisition NS_DESIGNATED_INITIALIZER;
+#endif
+
+- (void)startWithDelegate:(id<LCPAcquisitionDelegate>)delegate;
 - (void)cancel;
 
 @end
