@@ -5,12 +5,12 @@
 
 #include "LcpContentFilter.h"
 
-#include "DecryptionContextImpl.h"
+#include "IDecryptionContext.h"
 #include <ePub3/filter.h>
 #include <vector>
 
 namespace lcp {
-    class LcpFilterContext : public RangeFilterContext, public DecryptionContextImpl
+    class LcpFilterContext : public RangeFilterContext
     {
     public:
         LcpFilterContext()
@@ -22,6 +22,17 @@ namespace lcp {
         virtual bool IsFirstRange() const
         {
             return m_filteredBytesCount == 0;
+        }
+        
+        IDecryptionContext *DecryptionContext() const
+        {
+            return m_decryptionContext;
+        }
+        
+        void SetDecryptionContext(IDecryptionContext *decryptionContext)
+        {
+            m_decryptionContext = decryptionContext;
+            m_decryptionContext->SetFirstRange(m_filteredBytesCount == 0);
         }
         
         std::string Algorithm() const
@@ -37,9 +48,11 @@ namespace lcp {
         void AddFilteredBytesCount(size_t filteredBytesCount)
         {
             m_filteredBytesCount += filteredBytesCount;
+            m_decryptionContext->SetFirstRange(m_filteredBytesCount == 0);
         }
         
     protected:
+        IDecryptionContext *m_decryptionContext;
         size_t m_filteredBytesCount;
         std::string m_algorithm;
     };

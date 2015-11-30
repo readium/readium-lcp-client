@@ -14,18 +14,15 @@ using namespace std;
 
 namespace lcp
 {
-    class NSArrayValueIterator : public IValueIterator<string>
+    class iOSKeyChainIterator : public KvStringsIterator
     {
     public:
-        explicit NSArrayValueIterator(NSArray *array) : m_index(0)
+        explicit iOSKeyChainIterator(UICKeyChainStore *keyChain) : m_index(0)
         {
-            m_values->resize([array count]);
-            for (NSString *value in array) {
-                m_values->push_back([value UTF8String]);
-            }
+            m_items = [keyChain allItems];
         }
         
-        ~NSArrayValueIterator() {}
+        iOSKeyChainIterator() {}
         
         virtual void First()
         {
@@ -39,7 +36,7 @@ namespace lcp
         
         virtual bool IsDone() const
         {
-            return m_index >= m_values->size();
+            return m_index >= [m_items count];
         }
         
         virtual const string & Current() const
@@ -48,49 +45,59 @@ namespace lcp
                 throw out_of_range("Iterator is out of range");
             }
  
-            return m_values->at(m_index);
+#warning FIXME: this is temporary
+            return std::move(std::string([m_items[m_index][@"value"] UTF8String]));
+        }
+        
+        virtual std::string CurrentKey() const
+        {
+            if (IsDone()) {
+                throw out_of_range("Iterator is out of range");
+            }
+ 
+            return [m_items[m_index][@"key"] UTF8String];
         }
         
     protected:
-        vector<string> *m_values;
+        NSArray *m_items;
         uint m_index;
     };
     
     string iOSStorageProvider::GetValue(const string &vaultId, const string &nativeKey)
     {
-        UICKeyChainStore *keychain = this->GetKeyChainOfVault(vaultId);
+        UICKeyChainStore *keyChain = this->GetKeyChainOfVault(vaultId);
         NSString *key = this->GetStringFromNativeString(nativeKey);
-        return [[keychain stringForKey:key] UTF8String] ?: "";
+        return [[keyChain stringForKey:key] UTF8String] ?: "";
     }
     
     void iOSStorageProvider::SetValue(const string &vaultId, const string &nativeKey, const string &nativeValue)
     {
-        UICKeyChainStore *keychain = this->GetKeyChainOfVault(vaultId);
+        UICKeyChainStore *keyChain = this->GetKeyChainOfVault(vaultId);
         NSString *key = this->GetStringFromNativeString(nativeKey);
         NSString *value = this->GetStringFromNativeString(nativeValue);
-        if (!keychain || !key || !value)
+        if (!keyChain || !key || !value)
             return;
         
-        [keychain setString:value forKey:key];
+        [keyChain setString:value forKey:key];
     }
     
     UICKeyChainStore *iOSStorageProvider::GetKeyChainOfVault(const string &vaultId)
     {
-        UICKeyChainStore *keychain;
+        UICKeyChainStore *keyChain;
         
         NSString *service = this->GetStringFromNativeString(vaultId);
         if ([service length] > 0) {
             service = [NSString stringWithFormat:MNOLCPStorageProviderServiceTemplate, service];
-            keychain = [UICKeyChainStore keyChainStoreWithService:service];
+            keyChain = [UICKeyChainStore keyChainStoreWithService:service];
         }
         
-        return keychain;
+        return keyChain;
     }
     
-    IValueIterator<string> *iOSStorageProvider::EnumerateVault(const string & vaultId)
+    KvStringsIterator *iOSStorageProvider::EnumerateVault(const std::string &vaultId)
     {
-        UICKeyChainStore *keychain = this->GetKeyChainOfVault(vaultId);
-        return keychain ? new NSArrayValueIterator([keychain allItems]) : nullptr;
+        UICKeyChainStore *keyChain = this->GetKeyChainOfVault(vaultId);
+        return keyChain ? new iOSKeyChainIterator(keyChain) : nullptr;
     }
     
     NSString *iOSStorageProvider::GetStringFromNativeString(const string &nativeString)

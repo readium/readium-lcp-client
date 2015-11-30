@@ -73,12 +73,16 @@ namespace lcp {
             if (bytesToRead == 0) {
                 return nullptr;
             }
+            
+            if (bytesToRead < 32) {
+                bytesToRead = 32;
+            }
 
             uint8_t *buffer = context->GetAllocateTemporaryByteBuffer(bytesToRead);
             ByteStream::size_type readBytes = byteStream->ReadBytes(buffer, bytesToRead);
             
             uint8_t *decryptedData = new unsigned char[readBytes];
-            Status res = lcpService->DecryptData(m_license, context, (const unsigned char *)buffer, readBytes, decryptedData, readBytes, outputLen, context->Algorithm());
+            Status res = lcpService->DecryptData(m_license, context->DecryptionContext(), (const unsigned char *)buffer, readBytes, decryptedData, readBytes, outputLen, context->Algorithm());
             
             
             if (!Status::IsSuccess(res)) {
@@ -93,14 +97,18 @@ namespace lcp {
     
     FilterContext *LcpContentFilter::InnerMakeFilterContext(ConstManifestItemPtr item) const
     {
-        LcpFilterContext *context = new LcpFilterContext();
+        LcpFilterContext *filterContext = new LcpFilterContext();
+        
+        IDecryptionContext *decryptionContext;
+        lcpService->CreateDecryptionContext(&decryptionContext);
+        filterContext->SetDecryptionContext(decryptionContext);
         
         EncryptionInfoPtr encryptionInfo = item->GetEncryptionInfo();
         if (encryptionInfo != nullptr) {
-            context->SetAlgorithm(std::string(encryptionInfo->Algorithm().data()));
+            filterContext->SetAlgorithm(std::string(encryptionInfo->Algorithm().data()));
         }
         
-        return context;
+        return filterContext;
     }
     
     ContentFilterPtr LcpContentFilter::Factory(ConstPackagePtr package)
