@@ -12,6 +12,12 @@
 #include <ePub3/package.h>
 #include <ePub3/utilities/byte_stream.h>
 
+#if DEBUG
+#define LOG(msg) std::cout << "LCP: " << msg << std::endl
+#else
+#define LOG(msg)
+#endif
+
 static std::string const LcpLicensePath = "META-INF/license.lcpl";
 
 namespace lcp {
@@ -19,7 +25,11 @@ namespace lcp {
     {
         // See for LCP detection: https://docs.google.com/document/d/1oNfXQZRSGqwpexLrhw0-0a2taEvVDXS9cPs8oBKLb0U/edit#bookmark=id.fdwd1ub4whd8
         EncryptionInfoPtr encryption = item->GetEncryptionInfo();
-        return (encryption != nullptr && encryption->KeyRetrievalMethodType() == "http://readium.org/2014/01/lcp#EncryptedContentKey");
+        bool encrypted = (encryption != nullptr && encryption->KeyRetrievalMethodType() == "http://readium.org/2014/01/lcp#EncryptedContentKey");
+        
+        LOG("Resource <" << item->Href() << "> " << (encrypted ? "is" : "is not") << " encrypted");
+        
+        return encrypted;
     }
     
     void *LcpContentFilter::FilterData(FilterContext *filterContext, void *data, size_t len, size_t *outputLen)
@@ -130,8 +140,10 @@ namespace lcp {
         ILicense *license;
         Status res = lcpService->OpenLicense(licenseJSON, &license);
         if (Status::IsSuccess(res)) {
-            cout << "LCP: License parsed successfully <" << license->Content() << ">" << endl;
+            LOG("License parsed successfully <" << license->Content() << ">");
             return New(license);
+        } else {
+            LOG("Failed to parse license <" << res.ResultCode << ": " << res.Extension << ">");
         }
         
         return nullptr;

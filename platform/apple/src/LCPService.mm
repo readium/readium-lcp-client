@@ -16,6 +16,12 @@
 #import "LCPiOSStorageProvider.h"
 #import <iostream>
 
+#if DEBUG
+#define LOG(msg) std::cout << "LCP: " << msg << std::endl
+#else
+#define LOG(msg)
+#endif
+
 @interface LCPService () {
     std::shared_ptr<lcp::ILcpService> _nativeService;
 }
@@ -79,6 +85,9 @@
     
     if ([self checkStatus:status error:error]) {
         license = [[LCPLicense alloc] initWithLicense:nativeLicense];
+        LOG("Open license " << (nativeLicense->Decrypted() ? "(decrypted)" : "(still encrypted)"));
+    } else {
+        LOG("Failed to open license <" << status.ResultCode << ": " << status.Extension << ">");
     }
     
     return license;
