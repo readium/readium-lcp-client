@@ -7,16 +7,13 @@
 #include <curl/curl.h>
 #include "Public/lcp.h"
 
-static size_t position = 0;
-
-size_t CallbackWriteFile(void *ptr, size_t size, size_t nmemb, lcp::IWritableFile * file)
+size_t CallbackWriteFile(void *ptr, size_t size, size_t nmemb, lcp::IWritableStream * stream)
 {
     try
     {
         size_t sizeToWrite = size * nmemb;
-        size_t retSize = file->Write(position, ptr, sizeToWrite);
-        position += sizeToWrite;
-        return retSize;
+        stream->Write(static_cast<const unsigned char *>(ptr), sizeToWrite);
+        return sizeToWrite;
     }
     catch (const std::exception & ex)
     {
@@ -74,7 +71,7 @@ public:
 
         curl_easy_setopt(curl, CURLOPT_URL, request->Url().c_str());
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, CallbackWriteFile);
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, request->DestinationFile());
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, request->DestinationStream());
         curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 0);
         curl_easy_setopt(curl, CURLOPT_PROGRESSFUNCTION, CallbackProgress);
 
@@ -84,7 +81,6 @@ public:
         curl_easy_setopt(curl, CURLOPT_PROGRESSDATA, networkInfo.get());
 
         callback->OnRequestStarted(request);
-        position = 0;
         res = curl_easy_perform(curl);
         if (res == CURLE_OK)
         {

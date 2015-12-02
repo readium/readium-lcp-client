@@ -6,7 +6,7 @@
 
 namespace lcp
 {
-    class IWritableFile;
+    class IWritableStream;
 
     class INetRequest
     {
@@ -20,8 +20,10 @@ namespace lcp
     class IDownloadRequest : public INetRequest
     {
     public:
-        virtual IWritableFile * DestinationFile() const = 0;
+        virtual IWritableStream * DestinationStream() const = 0;
+        virtual std::string DestinationPath() const = 0;
         virtual std::string SuggestedFileName() const = 0;
+        virtual void SetSuggestedFileName(const std::string & fileName) = 0;
     };
 
     class INetProviderCallback

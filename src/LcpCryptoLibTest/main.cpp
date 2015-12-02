@@ -90,18 +90,6 @@ int main(int argc, char ** argv)
             "}"
         "}";
 
-        std::fstream mobyDickLicenseFile("..\\..\\..\\src\\testing-data\\moby-dick-20120118.epub\\META-INF\\license.lcpl");
-        std::string mobyDickLicenseStr(
-            (std::istreambuf_iterator<char>(mobyDickLicenseFile)),
-            std::istreambuf_iterator<char>()
-            );
-
-        std::fstream encryptedData("..\\..\\..\\src\\testing-data\\moby-dick-20120118.epub\\OPS\\chapter_001.xhtml", std::ios::in | std::ios::binary);
-        std::string encryptedDataStr(
-            (std::istreambuf_iterator<char>(encryptedData)),
-            std::istreambuf_iterator<char>()
-            );
-
         std::string rootCertificate = "MIIDRjCCAq+gAwIBAgIJAMfRkXzjGB0rMA0GCSqGSIb3DQEBBQUAMHYxCzAJBgNV"
             "BAYTAkZSMQ8wDQYDVQQIDAZGcmFuY2UxDjAMBgNVBAcMBVBhcmlzMRAwDgYDVQQK"
             "DAdNYW50YW5vMRAwDgYDVQQDDAdNYW50YW5vMSIwIAYJKoZIhvcNAQkBFhNzdXBw"
@@ -136,6 +124,12 @@ int main(int argc, char ** argv)
             return 0;
         }
 
+        std::fstream mobyDickLicenseFile("..\\..\\..\\src\\testing-data\\moby-dick-20120118.epub\\META-INF\\license.lcpl");
+        std::string mobyDickLicenseStr(
+            (std::istreambuf_iterator<char>(mobyDickLicenseFile)),
+            std::istreambuf_iterator<char>()
+            );
+
         lcp::ILicense * rawLicPtr = nullptr;
         res = lcpService->OpenLicense(mobyDickLicenseStr, &rawLicPtr);
         //res = lcpService->OpenLicense(jsonLicenseSpec, &rawLicPtr);
@@ -165,23 +159,19 @@ int main(int argc, char ** argv)
             std::cout << "License decrypted successfully by user key from the storage!" << std::endl;
         }
 
-        lcp::IDecryptionContext * rawContext = nullptr;
-        res = lcpService->CreateDecryptionContext(&rawContext);
-        if (!lcp::Status::IsSuccess(res))
-        {
-            std::cout << "Status: " << res.ResultCode << "; Extension: " << res.Extension << std::endl;
-            std::cin.get();
-            return 0;
-        }
+        // One-shot decryption
+        std::fstream encryptedFile("..\\..\\..\\src\\testing-data\\moby-dick-20120118.epub\\OPS\\chapter_001.xhtml", std::ios::in | std::ios::binary);
+        std::string encryptedFileStr(
+            (std::istreambuf_iterator<char>(encryptedFile)),
+            std::istreambuf_iterator<char>()
+            );
 
-        rawContext->SetFirstRange(true);
         size_t outSize = 0;
-        std::vector<unsigned char> decrypted(encryptedDataStr.size());
+        std::vector<unsigned char> decrypted(encryptedFileStr.size());
         res = lcpService->DecryptData(
             rawLicPtr,
-            rawContext,
-            reinterpret_cast<const unsigned char *>(encryptedDataStr.data()),
-            encryptedDataStr.size(),
+            reinterpret_cast<const unsigned char *>(encryptedFileStr.data()),
+            encryptedFileStr.size(),
             decrypted.data(),
             decrypted.size(),
             &outSize,
@@ -193,6 +183,60 @@ int main(int argc, char ** argv)
             std::cin.get();
             return 0;
         }
+        decrypted.resize(outSize);
+        encryptedFile.close();
+
+        //Ranged decryption
+        std::unique_ptr<lcp::IFile> file(fsProvider.GetFile(
+            "..\\..\\..\\src\\testing-data\\moby-dick-20120118.epub\\OPS\\chapter_001.xhtml",
+            lcp::IFileSystemProvider::ReadOnly)
+            );
+
+        lcp::IEncryptedStream * rawEncryptedStream = nullptr;
+        res = lcpService->CreateEncryptedDataStream(
+            rawLicPtr,
+            file.get(),
+            "http://www.w3.org/2001/04/xmlenc#aes256-cbc",
+            &rawEncryptedStream
+            );
+        std::unique_ptr<lcp::IEncryptedStream> encryptedStream(rawEncryptedStream);
+        if (!lcp::Status::IsSuccess(res))
+        {
+            std::cout << "Status: " << res.ResultCode << "; Extension: " << res.Extension << std::endl;
+            std::cin.get();
+            return 0;
+        }
+
+        std::vector<unsigned char> decryptedStart(32);
+        encryptedStream->SetReadPosition(0);
+        encryptedStream->Read(decryptedStart.data(), decryptedStart.size());
+
+        std::vector<unsigned char> decryptedMiddleRange(32);
+        encryptedStream->SetReadPosition(32);
+        encryptedStream->Read(decryptedMiddleRange.data(), decryptedMiddleRange.size());
+
+        std::vector<unsigned char> decryptedLastRange(32);
+        encryptedStream->SetReadPosition(encryptedStream->DecryptedSize() - 32);
+        encryptedStream->Read(decryptedLastRange.data(), decryptedLastRange.size());
+
+
+        /*context.SetDecryptionRange(file->GetSize() - 32, 32);
+        std::vector<unsigned char> decryptedLastRange(32);
+        res = lcpService->DecryptData(
+            rawLicPtr,
+            &context,
+            file.get(),
+            decryptedLastRange.data(),
+            decryptedLastRange.size(),
+            "http://www.w3.org/2001/04/xmlenc#aes256-cbc"
+            );
+        if (!lcp::Status::IsSuccess(res))
+        {
+            std::cout << "Status: " << res.ResultCode << "; Extension: " << res.Extension << std::endl;
+            std::cin.get();
+            return 0;
+        }*/
+
 
         lcp::IAcquisition * rawAcqPtr = nullptr;
         res = lcpService->AcquirePublication("..\\..\\..\\src\\testing-data\\result.epub", rawLicPtr, &rawAcqPtr);

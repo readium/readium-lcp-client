@@ -8,6 +8,7 @@
 namespace lcp
 {
     class IDecryptionContext;
+    class IReadableStream;
 
     class ISymmetricAlgorithm
     {
@@ -18,14 +19,21 @@ namespace lcp
             const unsigned char * data,
             size_t dataLength,
             unsigned char * decryptedData,
-            size_t decryptedDataLength,
-            IDecryptionContext * context = nullptr
+            size_t decryptedDataLength
             ) = 0;
 
         virtual std::string Decrypt(
-            const std::string & encryptedDataBase64,
-            IDecryptionContext * context = nullptr
+            const std::string & encryptedDataBase64
             ) = 0;
+
+        virtual void Decrypt(
+            IDecryptionContext * context,
+            IReadableStream * stream,
+            unsigned char * decryptedData,
+            size_t decryptedDataLength
+            ) = 0;
+
+        virtual size_t PlainTextSize(IReadableStream * stream) = 0;
 
         virtual ~ISymmetricAlgorithm() {}
     };

@@ -20,13 +20,16 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\src\LcpCryptoLibTest\TestStorageProvider.h">
+    <ClInclude Include="..\..\..\src\LcpCryptoLibTestTools\DecryptionContextImpl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\LcpCryptoLibTest\TestNetProvider.h">
+    <ClInclude Include="..\..\..\src\LcpCryptoLibTestTools\TestAcquisitionCallback.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\LcpCryptoLibTest\TestAcquisitionCallback.h">
+    <ClInclude Include="..\..\..\src\LcpCryptoLibTestTools\TestNetProvider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLibTestTools\TestStorageProvider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

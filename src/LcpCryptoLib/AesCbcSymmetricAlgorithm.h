@@ -3,6 +3,7 @@
 
 #include <cryptopp/aes.h>
 #include <cryptopp/modes.h>
+#include <cryptopp/filters.h>
 #include "CryptoAlgorithmInterfaces.h"
 
 namespace lcp
@@ -26,28 +27,35 @@ namespace lcp
         virtual std::string Name() const;
 
         virtual std::string Decrypt(
-            const std::string & encryptedDataBase64,
-            IDecryptionContext * context = nullptr
+            const std::string & encryptedDataBase64
             );
 
         virtual size_t Decrypt(
             const unsigned char * data,
             size_t dataLength,
             unsigned char * decryptedData,
-            size_t decryptedDataLength,
-            IDecryptionContext * context = nullptr
+            size_t decryptedDataLength
             );
+
+        virtual void Decrypt(
+            IDecryptionContext * context,
+            IReadableStream * stream,
+            unsigned char * decryptedData,
+            size_t decryptedDataLength
+            );
+
+        size_t PlainTextSize(IReadableStream * stream);
 
     private:
-        KeyType BuildIV(
+        size_t InnerDecrypt(
             const unsigned char * data,
             size_t dataLength,
-            const unsigned char ** cipherData,
-            size_t * cipherSize
+            unsigned char * decryptedData,
+            size_t decryptedDataLength,
+            CryptoPP::BlockPaddingSchemeDef::BlockPaddingScheme padding
             );
 
-        void ProcessDecryptionContext(
-            IDecryptionContext * context,
+        KeyType BuildIV(
             const unsigned char * data,
             size_t dataLength,
             const unsigned char ** cipherData,

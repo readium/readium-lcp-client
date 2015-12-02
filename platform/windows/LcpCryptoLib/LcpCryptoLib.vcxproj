@@ -36,6 +36,7 @@
     <ClInclude Include="..\..\..\src\LcpCryptoLib\EncryptionProfilesManager.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\ICertificate.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\ICryptoProvider.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\IDecryptionContext.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\IEncryptionProfile.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\IKeyProvider.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\ILcpNode.h" />
@@ -51,7 +52,7 @@
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\IAcquistion.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\IAcquistionCallback.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\ICrypto.h" />
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\IDecryptionContext.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\StreamInterfaces.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\IFileSystemProvider.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\ILcpService.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\ILicense.h" />
@@ -71,6 +72,7 @@
     <ClInclude Include="..\..\..\src\LcpCryptoLib\RsaSha256SignatureAlgorithm.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Sha256HashAlgorithm.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\SimpleKeyProvider.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\SymmetricAlgorithmEncryptedStream.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\UserLcpNode.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\UUIDGenerator.h" />
   </ItemGroup>
@@ -97,6 +99,7 @@
     <ClCompile Include="..\..\..\src\LcpCryptoLib\RootLcpNode.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\RsaSha256SignatureAlgorithm.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\Sha256HashAlgorithm.cpp" />
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\SymmetricAlgorithmEncryptedStream.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\UserLcpNode.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\UUIDGenerator.cpp" />
   </ItemGroup>

@@ -1,43 +1,24 @@
 #ifndef __DECRYPTION_CONTEXT_IMPL_H__
 #define __DECRYPTION_CONTEXT_IMPL_H__
 
-#include <vector>
-#include "Public/IDecryptionContext.h"
+#include "IDecryptionContext.h"
 
-namespace lcp
+class DecryptionContextImpl : public lcp::IDecryptionContext
 {
-    class DecryptionContextImpl : public IDecryptionContext
+public:
+    virtual lcp::DecRangeInfo GetDecryptionRange() const
     {
-    public:
-        DecryptionContextImpl()
-            : m_firstPart(false)
-        {
-        }
-        virtual bool IsFirstRange() const
-        {
-            return m_firstPart;
-        }
-        virtual void SetFirstRange(bool value)
-        {
-            m_firstPart = value;
-        }
-        virtual bool HasIV() const
-        {
-            return !m_iv.empty();
-        }
-        virtual void SetIV(const std::vector<unsigned char> & iv)
-        {
-            m_iv = iv;
-        }
-        virtual std::vector<unsigned char> IV() const
-        {
-            return m_iv;
-        }
+        return m_rangeInfo;
+    }
 
-    protected:
-        bool m_firstPart;
-        std::vector<unsigned char> m_iv;
-    };
-}
+    virtual void SetDecryptionRange(size_t position, size_t length)
+    {
+        m_rangeInfo.position = position;
+        m_rangeInfo.length = length;
+    }
+
+private:
+    lcp::DecRangeInfo m_rangeInfo;
+};
 
 #endif //__DECRYPTION_CONTEXT_IMPL_H__

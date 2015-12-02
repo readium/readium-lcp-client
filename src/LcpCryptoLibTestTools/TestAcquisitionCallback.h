@@ -1,6 +1,7 @@
 #ifndef __TEST_ACQUISITION_CALLBACK_H__
 #define __TEST_ACQUISITION_CALLBACK_H__
 
+#include <iostream>
 #include "Public/lcp.h"
 
 class TestAcquisitionCallback : public lcp::IAcquisitionCallback

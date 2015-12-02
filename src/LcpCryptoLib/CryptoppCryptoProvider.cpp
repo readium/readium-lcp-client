@@ -8,8 +8,8 @@
 #include "DateTime.h"
 #include "IKeyProvider.h"
 #include "CryptoppUtils.h"
-#include "DecryptionContextImpl.h"
 #include "Sha256HashAlgorithm.h"
+#include "SymmetricAlgorithmEncryptedStream.h"
 
 namespace lcp
 {
@@ -153,7 +153,7 @@ namespace lcp
     }
 
     Status CryptoppCryptoProvider::CalculateFileHash(
-        IReadableFile * readableFile,
+        IReadableStream * readableStream,
         std::vector<unsigned char> & rawHash
         )
     {
@@ -163,19 +163,15 @@ namespace lcp
             size_t bufferSize = 1024 * 1024;
             std::vector<unsigned char> buffer(bufferSize);
             
-            size_t pos = 0;
+            size_t read = 0;
             size_t sizeToRead = bufferSize;
-            size_t fileSize = readableFile->GetSize();
-            while (pos != fileSize)
+            size_t fileSize = readableStream->Size();
+            while (read != fileSize)
             {
-                sizeToRead = (fileSize - pos > bufferSize) ? bufferSize : fileSize - pos;
-                size_t read = readableFile->Read(pos, buffer.data(), sizeToRead);
-                if (read != sizeToRead)
-                {
-                    return Status(StCodeCover::ErrorCommonFail, "Can not read from file");
-                }
+                sizeToRead = (fileSize - read > bufferSize) ? bufferSize : fileSize - read;
+                readableStream->Read(buffer.data(), sizeToRead);
                 algorithm.UpdateHash(buffer.data(), sizeToRead);
-                pos += sizeToRead;
+                read += sizeToRead;
             }
             rawHash = algorithm.Hash();
 
@@ -246,7 +242,6 @@ namespace lcp
 
     Status CryptoppCryptoProvider::DecryptPublicationData(
         ILicense * license,
-        IDecryptionContext * context,
         IKeyProvider * keyProvider,
         const unsigned char * data,
         const size_t dataLength,
@@ -265,10 +260,36 @@ namespace lcp
 
             std::unique_ptr<ISymmetricAlgorithm> algorithm(profile->CreatePublicationAlgorithm(keyProvider->ContentKey()));
             *outDecryptedDataLength = algorithm->Decrypt(
-                data, dataLength, decryptedData, inDecryptedDataLength, context
+                data, dataLength, decryptedData, inDecryptedDataLength
                 );
 
             return Status(StCodeCover::ErrorCommonSuccess);
+        }
+        catch (const CryptoPP::Exception & ex)
+        {
+            return Status(StCodeCover::ErrorDecryptionCommonError, ex.GetWhat());
+        }
+    }
+
+    Status CryptoppCryptoProvider::CreateEncryptedPublicationStream(
+        ILicense * license,
+        IKeyProvider * keyProvider,
+        IReadableStream * stream,
+        IEncryptedStream ** encStream
+        )
+    {
+        try
+        {
+            IEncryptionProfile * profile = m_encryptionProfilesManager->GetProfile(license->Crypto()->EncryptionProfile());
+            if (profile == nullptr)
+            {
+                return Status(StCodeCover::ErrorCommonEncryptionProfileNotFound);
+            }
+
+            Status res(StCodeCover::ErrorCommonSuccess);
+            std::unique_ptr<ISymmetricAlgorithm> algorithm(profile->CreatePublicationAlgorithm(keyProvider->ContentKey()));
+            *encStream = new SymmetricAlgorithmEncryptedStream(stream, std::move(algorithm));
+            return res;
         }
         catch (const CryptoPP::Exception & ex)
         {

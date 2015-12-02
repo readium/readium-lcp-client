@@ -91,7 +91,7 @@ namespace lcptest
             lword size = encoder.MaxRetrievable();
             if (size > 0 && size <= SIZE_MAX)
             {
-                base64Sign.resize(size);
+                base64Sign.resize(static_cast<size_t>(size));
                 encoder.Get((byte *)base64Sign.data(), base64Sign.size());
             }
         }
@@ -105,7 +105,7 @@ namespace lcptest
             lword size = certQueue.MaxRetrievable();
             if (size > 0 && size <= SIZE_MAX)
             {
-                rawCert.resize(size);
+                rawCert.resize(static_cast<size_t>(size));
                 certQueue.Get(rawCert.data(), rawCert.size());
 
                 Base64Encoder encoder;
@@ -114,7 +114,7 @@ namespace lcptest
                 lword base64Size = encoder.MaxRetrievable();
                 if (base64Size > 0 && base64Size <= SIZE_MAX)
                 {
-                    base64Cert.resize(base64Size);
+                    base64Cert.resize(static_cast<size_t>(base64Size));
                     encoder.Get((byte *)base64Cert.data(), base64Cert.size());
                 }
             }
@@ -133,7 +133,7 @@ namespace lcptest
             lword size = decoderSign.MaxRetrievable();
             if (size > 0 && size <= SIZE_MAX)
             {
-                rawDecodedSign.resize(size);
+                rawDecodedSign.resize(static_cast<size_t>(size));
                 decoderSign.Get((byte *)rawDecodedSign.data(), rawDecodedSign.size());
             }
         }
@@ -188,7 +188,7 @@ namespace lcptest
             lword size = decoderCert.MaxRetrievable();
             if (size > 0 && size <= SIZE_MAX)
             {
-                rawDecodedCert.resize(size);
+                rawDecodedCert.resize(static_cast<size_t>(size));
                 decoderCert.Get((byte *)rawDecodedCert.data(), rawDecodedCert.size());
             }
         }

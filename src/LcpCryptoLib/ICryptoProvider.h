@@ -8,8 +8,8 @@ namespace lcp
 {
     class ILicense;
     class IKeyProvider;
-    class IReadableFile;
-    class IDecryptionContext;
+    class IReadableStream;
+    class IEncryptedStream;
 
     class ICryptoProvider
     {
@@ -32,7 +32,7 @@ namespace lcp
             ) = 0;
 
         virtual Status CalculateFileHash(
-            IReadableFile * readableFile,
+            IReadableStream * readableStream,
             std::vector<unsigned char> & rawHash
             ) = 0;
 
@@ -55,13 +55,19 @@ namespace lcp
 
         virtual Status DecryptPublicationData(
             ILicense * license,
-            IDecryptionContext * context,
             IKeyProvider * keyProvider,
             const unsigned char * data,
             const size_t dataLength,
             unsigned char * decryptedData,
             size_t inDecryptedDataLength,
             size_t * outDecryptedDataLength
+            ) = 0;
+
+        virtual Status CreateEncryptedPublicationStream(
+            ILicense * license,
+            IKeyProvider * keyProvider,
+            IReadableStream * stream,
+            IEncryptedStream ** encStream
             ) = 0;
 
         virtual ~ICryptoProvider() {}

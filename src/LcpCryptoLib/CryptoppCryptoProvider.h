@@ -30,7 +30,7 @@ namespace lcp
             );
 
         virtual Status CalculateFileHash(
-            IReadableFile * readableFile,
+            IReadableStream * readableStream,
             std::vector<unsigned char> & rawHash
             );
 
@@ -53,13 +53,19 @@ namespace lcp
 
         virtual Status DecryptPublicationData(
             ILicense * license,
-            IDecryptionContext * context,
             IKeyProvider * keyProvider,
             const unsigned char * data,
             const size_t dataLength,
             unsigned char * decryptedData,
             size_t inDecryptedDataLength,
             size_t * outDecryptedDataLength
+            );
+
+        virtual Status CreateEncryptedPublicationStream(
+            ILicense * license,
+            IKeyProvider * keyProvider,
+            IReadableStream * stream,
+            IEncryptedStream ** encStream
             );
 
     private:

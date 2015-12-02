@@ -96,7 +96,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;CURL_STATICLIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../../../src/LcpCryptoLib;../../../src/third-parties;../../../src/third-parties/curl/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../src/LcpCryptoLib;../../../src/third-parties;../../../src/third-parties/curl/include;../../../src/LcpCryptoLibTestTools</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -115,7 +115,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;CURL_STATICLIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../../../src/LcpCryptoLib;../../../src/third-parties;../../../src/third-parties/curl/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../src/LcpCryptoLib;../../../src/third-parties;../../../src/third-parties/curl/include;../../../src/LcpCryptoLibTestTools</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -136,7 +136,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;CURL_STATICLIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../../../src/LcpCryptoLib;../../../src/third-parties;../../../src/third-parties/curl/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../src/LcpCryptoLib;../../../src/third-parties;../../../src/third-parties/curl/include;../../../src/LcpCryptoLibTestTools</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -159,7 +159,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;CURL_STATICLIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../../../src/LcpCryptoLib;../../../src/third-parties;../../../src/third-parties/curl/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../src/LcpCryptoLib;../../../src/third-parties;../../../src/third-parties/curl/include;../../../src/LcpCryptoLibTestTools</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -185,9 +185,10 @@
     <ClCompile Include="..\..\..\src\LcpCryptoLibTest\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\src\LcpCryptoLibTest\TestAcquisitionCallback.h" />
-    <ClInclude Include="..\..\..\src\LcpCryptoLibTest\TestNetProvider.h" />
-    <ClInclude Include="..\..\..\src\LcpCryptoLibTest\TestStorageProvider.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLibTestTools\DecryptionContextImpl.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLibTestTools\TestAcquisitionCallback.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLibTestTools\TestNetProvider.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLibTestTools\TestStorageProvider.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

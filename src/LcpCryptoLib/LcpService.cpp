@@ -12,7 +12,6 @@
 #include "UUIDGenerator.h"
 #include "Public/IStorageProvider.h"
 #include "Public/INetProvider.h"
-#include "DecryptionContextImpl.h"
 #include "Acquisition.h"
 #include "RightsService.h"
 
@@ -212,31 +211,8 @@ namespace lcp
         return Status(StCodeCover::ErrorDecryptionLicenseEncrypted);
     }
 
-    Status LcpService::CreateDecryptionContext(IDecryptionContext ** decryptionContext)
-    {
-        try
-        {
-            if (decryptionContext == nullptr)
-            {
-                return Status(StCodeCover::ErrorCommonFail, "decryptionContext is nullptr");
-            }
-            Status res = Status(StCodeCover::ErrorCommonSuccess);
-            *decryptionContext = new DecryptionContextImpl();
-            return res;
-        }
-        catch (const StatusException & ex)
-        {
-            return ex.ResultStatus();
-        }
-        catch (const std::exception & ex)
-        {
-            return Status(StCodeCover::ErrorCommonFail, ex.what());
-        }
-    }
-
     Status LcpService::DecryptData(
         ILicense * license,
-        IDecryptionContext * context,
         const unsigned char * data,
         const size_t dataLength,
         unsigned char * decryptedData,
@@ -275,13 +251,64 @@ namespace lcp
 
             return m_cryptoProvider->DecryptPublicationData(
                 license,
-                context,
                 keyProvider,
                 data,
                 dataLength,
                 decryptedData,
                 inDecryptedDataLength,
                 outDecryptedDataLength
+                );
+        }
+        catch (const StatusException & ex)
+        {
+            return ex.ResultStatus();
+        }
+        catch (const std::exception & ex)
+        {
+            return Status(StCodeCover::ErrorCommonFail, ex.what());
+        }
+    }
+
+    Status LcpService::CreateEncryptedDataStream(
+        ILicense * license,
+        IReadableStream * stream,
+        const std::string & algorithm,
+        IEncryptedStream ** encStream
+        )
+    {
+        try
+        {
+            if (license == nullptr || encStream == nullptr)
+            {
+                return Status(StCodeCover::ErrorCommonFail, "wrong input params");
+            }
+
+            if (!license->Decrypted())
+            {
+                return Status(StCodeCover::ErrorDecryptionLicenseEncrypted);
+            }
+
+            IEncryptionProfile * profile = m_encryptionProfilesManager->GetProfile(license->Crypto()->EncryptionProfile());
+            if (profile == nullptr)
+            {
+                return Status(StCodeCover::ErrorCommonEncryptionProfileNotFound);
+            }
+            if (algorithm != profile->PublicationAlgorithm())
+            {
+                return Status(StCodeCover::ErrorCommonAlgorithmMismatch);
+            }
+
+            IKeyProvider * keyProvider = dynamic_cast<IKeyProvider *>(license);
+            if (keyProvider == nullptr)
+            {
+                return Status(StCodeCover::ErrorCommonFail, "Can not cast ILicense to IKeyProvider");
+            }
+
+            return m_cryptoProvider->CreateEncryptedPublicationStream(
+                license,
+                keyProvider,
+                stream,
+                encStream
                 );
         }
         catch (const StatusException & ex)
