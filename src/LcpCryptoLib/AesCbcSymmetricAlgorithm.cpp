@@ -120,7 +120,6 @@ namespace lcp
         // For cipher text in the middle, previous block used for XOR
         size_t readPosition = rangeInfo.position - blockOffset;
 
-
         // Count blocks to read
         // First block for IV or previous block to perform XOR
         size_t blocksCount = 1;
@@ -169,7 +168,7 @@ namespace lcp
 
         if (outSize < rangeInfo.length)
         {
-            throw std::runtime_error("Wrong range length");
+            throw std::out_of_range("range length is out of range");
         }
 
         outBuffer.resize(outSize);

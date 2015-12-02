@@ -215,27 +215,13 @@ int main(int argc, char ** argv)
         encryptedStream->SetReadPosition(32);
         encryptedStream->Read(decryptedMiddleRange.data(), decryptedMiddleRange.size());
 
+        std::vector<unsigned char> decryptedMiddleRange2(46);
+        encryptedStream->SetReadPosition(78);
+        encryptedStream->Read(decryptedMiddleRange2.data(), decryptedMiddleRange2.size());
+
         std::vector<unsigned char> decryptedLastRange(32);
         encryptedStream->SetReadPosition(encryptedStream->DecryptedSize() - 32);
         encryptedStream->Read(decryptedLastRange.data(), decryptedLastRange.size());
-
-
-        /*context.SetDecryptionRange(file->GetSize() - 32, 32);
-        std::vector<unsigned char> decryptedLastRange(32);
-        res = lcpService->DecryptData(
-            rawLicPtr,
-            &context,
-            file.get(),
-            decryptedLastRange.data(),
-            decryptedLastRange.size(),
-            "http://www.w3.org/2001/04/xmlenc#aes256-cbc"
-            );
-        if (!lcp::Status::IsSuccess(res))
-        {
-            std::cout << "Status: " << res.ResultCode << "; Extension: " << res.Extension << std::endl;
-            std::cin.get();
-            return 0;
-        }*/
 
 
         lcp::IAcquisition * rawAcqPtr = nullptr;
