@@ -14,12 +14,14 @@ namespace lcp {
 
 @interface LCPLicense : NSObject
 
-@property (readonly, nonatomic) lcp::ILicense *nativeLicense;
 @property (readonly, nonatomic) NSString *identifier;
 @property (readonly, nonatomic) BOOL isDecrypted;
 
 @property (readonly, nonatomic) NSString *userHint;
 
+#ifdef __cplusplus
+@property (readonly, nonatomic) lcp::ILicense *nativeLicense;
 - (instancetype)initWithLicense:(lcp::ILicense *)nativeLicense NS_DESIGNATED_INITIALIZER;
+#endif
 
 @end

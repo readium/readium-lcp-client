@@ -1,6 +1,8 @@
 #ifndef __STREAM_INTERFACES_H__
 #define __STREAM_INTERFACES_H__
 
+#include <stdlib.h>
+
 namespace lcp
 {
     class IReadableStream

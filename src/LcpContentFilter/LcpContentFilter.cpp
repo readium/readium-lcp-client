@@ -7,6 +7,8 @@
 
 #include "IDecryptionContext.h"
 #include "LcpFilterContext.h"
+#include "LcpSeekableByteStreamAdapter.h"
+#include "StreamInterfaces.h"
 #include <ePub3/container.h>
 #include <ePub3/filter_manager.h>
 #include <ePub3/package.h>
@@ -27,7 +29,7 @@ namespace lcp {
         EncryptionInfoPtr encryption = item->GetEncryptionInfo();
         bool encrypted = (encryption != nullptr && encryption->KeyRetrievalMethodType() == "http://readium.org/2014/01/lcp#EncryptedContentKey");
         
-        LOG("Resource <" << item->Href() << "> " << (encrypted ? "is" : "is not") << " encrypted");
+//        LOG("Resource <" << item->Href() << "> " << (encrypted ? "is" : "is not") << " encrypted");
         
         return encrypted;
     }
@@ -50,7 +52,7 @@ namespace lcp {
             // that means is that, in this circumstance, this filter is one
             // filter in a chain of filters.
             uint8_t *buffer = new unsigned char[len];
-            Status res = lcpService->DecryptData(m_license, NULL, (const unsigned char *)data, len, buffer, len, outputLen, context->Algorithm());
+            Status res = lcpService->DecryptData(m_license, (const unsigned char *)data, len, buffer, len, outputLen, context->Algorithm());
             if (!Status::IsSuccess(res)) {
                 delete [] buffer;
                 return nullptr;
@@ -69,49 +71,59 @@ namespace lcp {
                 return nullptr;
             }
             
-            ByteStream::size_type bytesToRead = 0;
+            SeekableByteStreamAdapter *readableStream = new SeekableByteStreamAdapter(byteStream);
             
+            IEncryptedStream *encryptedStream;
+            Status status = lcpService->CreateEncryptedDataStream(m_license, readableStream, context->Algorithm(), &encryptedStream);
+            if (!Status::IsSuccess(status)) {
+                LOG("Failed to create readable stream");
+                return nullptr;
+            }
+            
+            ByteStream::size_type bytesToRead = 0;
             if (!context->GetByteRange().IsFullRange()) { // range requests only
+                encryptedStream->SetReadPosition(context->GetByteRange().Location());
                 bytesToRead = (ByteStream::size_type)(context->GetByteRange().Length());
-                byteStream->Seek(context->GetByteRange().Location(), std::ios::beg);
                 
             } else { // whole file  only
-                byteStream->Seek(0, std::ios::beg);
-                bytesToRead = byteStream->BytesAvailable();
+                encryptedStream->SetReadPosition(0);
+                bytesToRead = encryptedStream->DecryptedSize();
             }
             
             if (bytesToRead == 0) {
                 return nullptr;
             }
             
-            if (bytesToRead < 32) {
-                bytesToRead = 32;
-            }
-
             uint8_t *buffer = context->GetAllocateTemporaryByteBuffer(bytesToRead);
-            ByteStream::size_type readBytes = byteStream->ReadBytes(buffer, bytesToRead);
+#warning FIXME: handle exception
+            encryptedStream->Read(buffer, bytesToRead);
+            *outputLen = bytesToRead;
             
-            uint8_t *decryptedData = new unsigned char[readBytes];
-            Status res = lcpService->DecryptData(m_license, context->DecryptionContext(), (const unsigned char *)buffer, readBytes, decryptedData, readBytes, outputLen, context->Algorithm());
-            
-            
-            if (!Status::IsSuccess(res)) {
-                delete [] decryptedData;
-                return nullptr;
-            }
-            
-            context->AddFilteredBytesCount(readBytes);
-            return decryptedData;
+            return buffer;
         }
+    }
+    
+    ByteStream::size_type LcpContentFilter::BytesAvailable(FilterContext *filterContext, SeekableByteStream *byteStream) const
+    {
+        LcpFilterContext *context = dynamic_cast<LcpFilterContext *>(filterContext);
+        if (context != nullptr) {
+            SeekableByteStreamAdapter *readableStream = new SeekableByteStreamAdapter(byteStream);
+            IEncryptedStream *encryptedStream;
+            Status status = lcpService->CreateEncryptedDataStream(m_license, readableStream, context->Algorithm(), &encryptedStream);
+            
+            if (Status::IsSuccess(status)) {
+                return encryptedStream->DecryptedSize();
+            } else {
+                LOG("Failed to create readable stream");
+            }
+        }
+        
+        return byteStream->BytesAvailable();
     }
     
     FilterContext *LcpContentFilter::InnerMakeFilterContext(ConstManifestItemPtr item) const
     {
         LcpFilterContext *filterContext = new LcpFilterContext();
-        
-        IDecryptionContext *decryptionContext;
-        lcpService->CreateDecryptionContext(&decryptionContext);
-        filterContext->SetDecryptionContext(decryptionContext);
         
         EncryptionInfoPtr encryptionInfo = item->GetEncryptionInfo();
         if (encryptionInfo != nullptr) {

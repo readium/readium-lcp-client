@@ -5,13 +5,10 @@
 
 #import <Foundation/Foundation.h>
 
-
 static NSString *const LCPErrorDomain = @"com.mantano.lcp.error";
 static NSString *const LCPErrorExtensionKey = @"LCPErrorExtension";
 
-
 #ifdef __cplusplus
-
 namespace lcp {
     class Status;
 }

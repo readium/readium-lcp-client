@@ -13,7 +13,7 @@ namespace lcp {
 
 @class LCPAcquisition;
 
-@protocol LCPAcquisitionDelegate
+@protocol LCPAcquisitionDelegate <NSObject>
 @optional
 
 - (void)lcpAcquisitionDidStart:(LCPAcquisition *)acquisition;

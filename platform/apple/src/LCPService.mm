@@ -95,7 +95,13 @@
 
 - (BOOL)decryptLicense:(LCPLicense *)license passphrase:(NSString *)passphrase error:(NSError **)error
 {
-    lcp::Status status = _nativeService->DecryptLicense(license.nativeLicense, [passphrase UTF8String]);
+    if (license.isDecrypted)
+        return YES;
+    
+    lcp::Status status = lcp::StCodeCover::ErrorDecryptionLicenseEncrypted;
+    if (passphrase) {
+        status = _nativeService->DecryptLicense(license.nativeLicense, [passphrase UTF8String]);
+    }
     return [self checkStatus:status error:error];
 }
 

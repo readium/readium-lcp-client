@@ -52,7 +52,10 @@
     if (!request)
         return;
     
-#warning TODO: set suggested filename
+    NSString *filename = response.suggestedFilename;
+    if (filename.length > 0) {
+        request->SetSuggestedFileName([filename UTF8String]);
+    }
 }
 
 - (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)task didWriteData:(int64_t)bytesWritten totalBytesWritten:(int64_t)received totalBytesExpectedToWrite:(int64_t)expected
@@ -86,7 +89,7 @@
     if (!request || !callback)
         return;
     
-    NSString *toPath = [NSString stringWithUTF8String:((lcp::IFile *)request->DestinationFile())->GetPath().c_str()];
+    NSString *toPath = [NSString stringWithUTF8String:request->DestinationPath().c_str()];
     
     NSError *error;
     [[NSFileManager defaultManager] removeItemAtPath:toPath error:NULL];
@@ -95,35 +98,6 @@
         callback->OnRequestEnded(request, lcp::Status(lcp::StCodeCover::ErrorNetworkingRequestFailed, "Can't move the downloaded file to destination path"));
     }
 }
-
-// Used only if we use a DataTask instead of a DownloadTask, by using the IWritableFile
-
-//- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data
-//{
-//    lcp::IDownloadRequest *request;
-//    lcp::INetProviderCallback *callback;
-//    [self getRequest:&request callback:&callback forTask:dataTask];
-//    if (!request || !callback)
-//        return;
-//    
-//    if (request->Canceled()) {
-//        [dataTask cancel];
-//        [self taskEnded:dataTask];
-//        callback->OnRequestCanceled(request);
-//        
-//        
-//    } else {
-//        float received = dataTask.countOfBytesReceived;
-//        float expected = dataTask.countOfBytesExpectedToReceive;
-//        float progress = -1;
-//        if (expected > 0) {
-//            progress = received / expected;
-//        }
-//        
-//        request->DestinationFile()->Write(received, data.bytes, data.length);
-//        callback->OnRequestProgressed(request, progress);
-//    }
-//}
 
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error
 
