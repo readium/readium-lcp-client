@@ -17,7 +17,7 @@ namespace lcp
         virtual std::string Id() const = 0;
 
         // Used when validating the signature of the license.
-        virtual const std::string & Content() const = 0;
+        virtual std::string Content() const = 0;
 
         // Date when the license was first issued (ISO 8601).
         virtual std::string Issued() const = 0;

@@ -20,9 +20,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\src\LcpCryptoLibTestTools\DecryptionContextImpl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\LcpCryptoLibTestTools\TestAcquisitionCallback.h">
       <Filter>Header Files</Filter>
     </ClInclude>

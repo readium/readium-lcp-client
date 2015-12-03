@@ -1,4 +1,6 @@
 #include <memory>
+#include <sstream>
+#include "ziplib/Source/ZipLib/ZipFile.h"
 #include "Acquisition.h"
 #include "DownloadRequest.h"
 #include "LcpUtils.h"
@@ -8,7 +10,6 @@
 namespace lcp
 {
     /*static*/ const char * Acquisition::PublicationType = u8"application/epub+zip";
-    /*static*/ const float Acquisition::DownloadCoefficient = static_cast<float>(0.9);
 
     Acquisition::Acquisition(
         ILicense * license,
@@ -37,9 +38,9 @@ namespace lcp
             {
                 return Status(StCodeCover::ErrorAcquisitionNoAcquisitionLink);
             }
-            Link publicationLink;
-            links->GetLink(Publication, publicationLink);
-            if (publicationLink.type != PublicationType)
+            
+            links->GetLink(Publication, m_publicationLink);
+            if (m_publicationLink.type != PublicationType)
             {
                 return Status(StCodeCover::ErrorAcquisitionPublicationWrongType);
             }
@@ -50,10 +51,10 @@ namespace lcp
                 return Status(StCodeCover::ErrorAcquisitionInvalidFilePath);
             }
 
-            m_request.reset(new DownloadRequest(publicationLink.href, m_file.get()));
+            m_request.reset(new DownloadRequest(m_publicationLink.href, m_file.get()));
             m_netProvider->StartDownloadRequest(m_request.get(), this);
 
-            return this->CheckPublicationHash(publicationLink);
+            return Status(StCodeCover::ErrorCommonSuccess);
         }
         catch (const StatusException & ex)
         {
@@ -94,7 +95,7 @@ namespace lcp
 
     std::string Acquisition::PublicationPath() const
     {
-        return m_file->GetPath();
+        return m_publicationPath;
     }
 
     std::string Acquisition::SuggestedFileName() const
@@ -109,13 +110,15 @@ namespace lcp
             m_callback->OnAcquisitionStarted(this);
         }
     }
+
     void Acquisition::OnRequestProgressed(INetRequest * request, float progress)
     {
         if (m_callback != nullptr)
         {
-            m_callback->OnAcquisitionProgressed(this, progress * DownloadCoefficient);
+            m_callback->OnAcquisitionProgressed(this, progress);
         }
     }
+
     void Acquisition::OnRequestCanceled(INetRequest * request)
     {
         if (m_callback != nullptr)
@@ -123,11 +126,46 @@ namespace lcp
             m_callback->OnAcquisitionCanceled(this);
         }
     }
+
     void Acquisition::OnRequestEnded(INetRequest * request, Status result)
     {
-        if (m_callback != nullptr)
+        try
         {
-            m_callback->OnAcquisitionEnded(this, result);
+            if (!Status::IsSuccess(result))
+            {
+                if (m_callback != nullptr)
+                {
+                    m_callback->OnAcquisitionEnded(this, result);
+                }
+                return;
+            }
+
+            Status hashCheckResult = this->CheckPublicationHash(m_publicationLink);
+            if (!Status::IsSuccess(hashCheckResult))
+            {
+                if (m_callback != nullptr)
+                {
+                    m_callback->OnAcquisitionEnded(this, hashCheckResult);
+                }
+                return;
+            }
+
+            // Release the epub file to perform zip operations
+            m_file.reset();
+            std::stringstream licenseStream(m_license->Content());
+            ZipFile::AddFile(m_publicationPath, licenseStream, "META-INF/license.lcpl");
+
+            if (m_callback != nullptr)
+            {
+                m_callback->OnAcquisitionEnded(this, Status(StCodeCover::ErrorCommonSuccess));
+            }
+        }
+        catch (const std::exception & ex)
+        {
+            if (m_callback != nullptr)
+            {
+                m_callback->OnAcquisitionEnded(this, Status(StCodeCover::ErrorCommonFail, ex.what()));
+            }
         }
     }
 }

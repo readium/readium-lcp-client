@@ -33,7 +33,7 @@ namespace lcp
         return m_rootInfo.id;
     }
 
-    const std::string & RootLcpNode::Content() const
+    std::string RootLcpNode::Content() const
     {
         return m_rootInfo.content;
     }

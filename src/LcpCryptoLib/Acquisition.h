@@ -49,12 +49,10 @@ namespace lcp
         ICryptoProvider * m_cryptoProvider;
         std::string m_publicationPath;
 
+        Link m_publicationLink;
         IAcquisitionCallback * m_callback;
         std::unique_ptr<IFile> m_file;
         std::unique_ptr<IDownloadRequest> m_request;
-
-    private:
-        static const float DownloadCoefficient;
     };
 }
 
