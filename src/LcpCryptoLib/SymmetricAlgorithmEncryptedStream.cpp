@@ -9,8 +9,8 @@ namespace lcp
         std::unique_ptr<ISymmetricAlgorithm> algorithm
         )
         : m_stream(stream)
+        , m_algorithm(std::move(algorithm))
     {
-        m_algorithm = std::move(algorithm);
     }
 
     size_t SymmetricAlgorithmEncryptedStream::DecryptedSize()

@@ -76,14 +76,14 @@ namespace lcp
 
     size_t AesCbcSymmetricAlgorithm::PlainTextSize(IReadableStream * stream)
     {
-        if (stream->Size() < CryptoPP::AES::BLOCKSIZE * 2)
+        if (stream->Size() < CryptoPP::AES::BLOCKSIZE + CryptoPP::AES::IV_LENGTH)
         {
             throw std::out_of_range("Invalid encrypted file, size is out of range");
         }
 
-        size_t readPosition = stream->Size() - CryptoPP::AES::BLOCKSIZE * 2;
+        size_t readPosition = stream->Size() - (CryptoPP::AES::BLOCKSIZE + CryptoPP::AES::IV_LENGTH);
         stream->SetReadPosition(readPosition);
-        std::vector<unsigned char> inBuffer(CryptoPP::AES::BLOCKSIZE * 2);
+        std::vector<unsigned char> inBuffer(CryptoPP::AES::BLOCKSIZE + CryptoPP::AES::IV_LENGTH);
         std::vector<unsigned char> outBuffer(inBuffer.size());
         stream->Read(&inBuffer.at(0), inBuffer.size());
 
