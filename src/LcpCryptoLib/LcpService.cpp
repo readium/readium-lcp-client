@@ -18,6 +18,7 @@
 namespace lcp
 {
     /*static*/ std::string LcpService::UnknownProvider = "UnknownProvider";
+    /*static*/ std::string LcpService::UnknownUserId = "UnknownUserId";
 
     LcpService::LcpService(
         const std::string & rootCertificate,
@@ -29,7 +30,7 @@ namespace lcp
         , m_netProvider(netProvider)
         , m_storageProvider(storageProvider)
         , m_fileSystemProvider(fileSystemProvider)
-        , m_rightsService(new RightsService(m_storageProvider))
+        , m_rightsService(new RightsService(m_storageProvider, UnknownUserId))
         , m_jsonReader(new JsonValueReader())
         , m_encryptionProfilesManager(new EncryptionProfilesManager())
         , m_cryptoProvider(new CryptoppCryptoProvider(m_encryptionProfilesManager.get()))
@@ -154,6 +155,15 @@ namespace lcp
         return rootNode->DecryptNode(license, rootNode, m_cryptoProvider.get());
     }
 
+    Status LcpService::DecryptLicenseByHexUserKey(ILicense * license, const std::string & hexUserKey)
+    {
+        KeyType userKey;
+        Status res = m_cryptoProvider->ConvertHexToRaw(hexUserKey, userKey);
+        if (!Status::IsSuccess(res))
+            return res;
+        return this->DecryptLicenseByUserKey(license, userKey);
+    }
+
     Status LcpService::AddDecryptedUserKey(ILicense * license, const KeyType & userKey)
     {
         std::string hexUserKey;
@@ -164,11 +174,11 @@ namespace lcp
         std::string userId = license->User()->Id();
         if (!userId.empty())
         {
-            res = this->AddUserKey(hexUserKey, userId, license->Provider());
+            res = this->AddUserKey(hexUserKey, userId, license->Provider(), license->Id());
         }
         else
         {
-            res = this->AddUserKey(hexUserKey);
+            res = this->AddUserKey(hexUserKey, UnknownUserId, license->Provider(), license->Id());
         }
         return res;
     }
@@ -180,31 +190,19 @@ namespace lcp
             return Status(StCodeCover::ErrorCommonNoStorageProvider);
         }
 
-        std::string userId = license->User()->Id();
-        if (!userId.empty())
+        std::string userKeyHex = m_storageProvider->GetValue(
+            UserKeysVaultId,
+            BuildStorageProviderKey(license)
+            );
+        if (!userKeyHex.empty())
         {
-            std::string userKeyHex = m_storageProvider->GetValue(
-                UserKeysVaultId,
-                BuildStorageProviderKey(license->Provider(), userId)
-                );
-            if (!userKeyHex.empty())
-            {
-                KeyType userKey;
-                Status res = m_cryptoProvider->ConvertHexToRaw(userKeyHex, userKey);
-                if (!Status::IsSuccess(res))
-                    return res;
-
-                return this->DecryptLicenseByUserKey(license, userKey);
-            }
+            return this->DecryptLicenseByHexUserKey(license, userKeyHex);
         }
 
-        std::unique_ptr<KvStringsIterator > it(m_storageProvider->EnumerateVault(UserKeysVaultId));
+        std::unique_ptr<KvStringsIterator> it(m_storageProvider->EnumerateVault(UserKeysVaultId));
         for (it->First(); !it->IsDone(); it->Next())
         {
-            KeyType userKey;
-            Status res = m_cryptoProvider->ConvertHexToRaw(it->Current(), userKey);
-
-            res = this->DecryptLicenseByUserKey(license, userKey);
+            Status res = this->DecryptLicenseByHexUserKey(license, it->Current());
             if (Status::IsSuccess(res))
                 return res;
         }
@@ -325,19 +323,7 @@ namespace lcp
     {
         try
         {
-            if (m_storageProvider == nullptr)
-            {
-                return Status(StCodeCover::ErrorCommonNoStorageProvider);
-            }
-
-            std::string guid = m_uuidGenerator->GenerateUUID();
-            m_storageProvider->SetValue(
-                UserKeysVaultId,
-                BuildStorageProviderKey(UnknownProvider, guid),
-                userKey
-                );
-
-            return Status(StCodeCover::ErrorCommonSuccess);
+            return this->AddUserKey(userKey, UnknownUserId, UnknownProvider);
         }
         catch (const StatusException & ex)
         {
@@ -357,6 +343,28 @@ namespace lcp
     {
         try
         {
+            std::string randomLicenseId = m_uuidGenerator->GenerateUUID();
+            return this->AddUserKey(userKey, userId, providerId, randomLicenseId);
+        }
+        catch (const StatusException & ex)
+        {
+            return ex.ResultStatus();
+        }
+        catch (const std::exception & ex)
+        {
+            return Status(StCodeCover::ErrorCommonFail, ex.what());
+        }
+    }
+
+    Status LcpService::AddUserKey(
+        const std::string & userKey,
+        const std::string & userId,
+        const std::string & providerId,
+        const std::string & licenseId
+        )
+    {
+        try
+        {
             if (m_storageProvider == nullptr)
             {
                 return Status(StCodeCover::ErrorCommonNoStorageProvider);
@@ -364,7 +372,7 @@ namespace lcp
 
             m_storageProvider->SetValue(
                 UserKeysVaultId,
-                BuildStorageProviderKey(providerId, userId),
+                BuildStorageProviderKey(providerId, userId, licenseId),
                 userKey
                 );
 
@@ -380,7 +388,7 @@ namespace lcp
         }
     }
 
-    Status LcpService::AcquirePublication(
+    Status LcpService::CreatePublicationAcquisition(
         const std::string & publicationPath,
         ILicense * license,
         IAcquisition ** acquisition
@@ -457,8 +465,26 @@ namespace lcp
         return canonicalizer.CanonicalLicense();
     }
 
-    std::string LcpService::BuildStorageProviderKey(const std::string & providerId, const std::string & userId)
+    std::string LcpService::BuildStorageProviderKey(
+        const std::string & providerId,
+        const std::string & userId,
+        const std::string & licenseId
+        )
     {
-        return providerId + "@" + userId;
+        std::stringstream keyStream;
+        keyStream << providerId << "@" << userId << "@" << licenseId;
+        return keyStream.str();
+    }
+
+    std::string LcpService::BuildStorageProviderKey(ILicense * license)
+    {
+        std::string userId = license->User()->Id();
+        if (userId.empty())
+        {
+            userId = UnknownUserId;
+        }
+        std::stringstream keyStream;
+        keyStream << license->Provider() << "@" << userId << "@" << license->Id();
+        return keyStream.str();
     }
 }

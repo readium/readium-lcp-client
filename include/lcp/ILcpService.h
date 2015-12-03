@@ -86,6 +86,12 @@ namespace lcp
             const std::string & userId,
             const std::string & providerId
             ) = 0;
+        virtual Status AddUserKey(
+            const std::string & userKey,
+            const std::string & userId,
+            const std::string & providerId,
+            const std::string & licenseId
+            ) = 0;
 
         // Will download the publication from the Content Provider using
         // the given License. The License will be put inside the
@@ -96,7 +102,7 @@ namespace lcp
         // notified when the acquisition ends. The Acquisition object can
         // be used by the Client to query the status of the Acquisition 
         // and to cancel it.
-        virtual Status AcquirePublication(
+        virtual Status CreatePublicationAcquisition(
             const std::string & publicationPath,
             ILicense * license,
             IAcquisition ** acquisition

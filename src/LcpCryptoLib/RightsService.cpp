@@ -1,4 +1,5 @@
 #include <memory>
+#include <sstream>
 #include "RightsService.h"
 #include "Public/ILicense.h"
 #include "Public/IRights.h"
@@ -8,15 +9,16 @@
 
 namespace lcp
 {
-    RightsService::RightsService(IStorageProvider * storageProvider)
+    RightsService::RightsService(IStorageProvider * storageProvider, const std::string & unknownUserId)
         : m_storageProvider(storageProvider)
+        , m_unknownUserId(unknownUserId)
     {
     }
 
     void RightsService::SyncRightsFromStorage(ILicense * license)
     {
         IRightsManager * rightsManager = this->PerformChecks(license);
-        std::string keyPrefix = this->BuildStorageProviderRightsKeyPrefix(license->Provider(), license->User()->Id());
+        std::string keyPrefix = this->BuildStorageProviderRightsKeyPrefix(license);
 
         std::unique_ptr<KvStringsIterator> rightsIt(m_storageProvider->EnumerateVault(LicenseRightsVaultId));
         for (rightsIt->First(); !rightsIt->IsDone(); rightsIt->Next())
@@ -51,9 +53,7 @@ namespace lcp
 
             m_storageProvider->SetValue(
                 LicenseRightsVaultId,
-                this->BuildStorageProviderRightsKey(
-                    license->Provider(), license->User()->Id(), rightId
-                    ),
+                this->BuildStorageProviderRightsKey(license, rightId),
                 currentValue
                 );
             return true;
@@ -68,9 +68,7 @@ namespace lcp
 
         m_storageProvider->SetValue(
             LicenseRightsVaultId,
-            this->BuildStorageProviderRightsKey(
-                license->Provider(), license->User()->Id(), rightId
-                ),
+            this->BuildStorageProviderRightsKey(license, rightId),
             value
             );
     }
@@ -83,35 +81,30 @@ namespace lcp
             return value;
         }
         return std::string();
+    }
 
-        /* Read from storage
-        if (m_storageProvider == nullptr)
+    std::string RightsService::BuildStorageProviderRightsKey(ILicense * license, const std::string & rightId) const
+    {
+        std::string userId = license->User()->Id();
+        if (userId.empty())
         {
-            throw std::runtime_error("StorageProvider is nullptr");
+            userId = m_unknownUserId;
         }
-        return m_storageProvider->GetValue(
-            LicenseRightsVaultId,
-            this->BuildStorageProviderRightsKey(
-                license->Provider(), license->User()->Id(), rightId
-                )
-            );*/
+        std::stringstream keyStream;
+        keyStream << license->Provider() << "@" << userId << "@" << license->Id() << "@" << rightId;
+        return keyStream.str();
     }
 
-    std::string RightsService::BuildStorageProviderRightsKey(
-        const std::string & providerId,
-        const std::string & userId,
-        const std::string & rightId
-        ) const
+    std::string RightsService::BuildStorageProviderRightsKeyPrefix(ILicense * license) const
     {
-        return providerId + "@" + userId + "@" + rightId;
-    }
-
-    std::string RightsService::BuildStorageProviderRightsKeyPrefix(
-        const std::string & providerId,
-        const std::string & userId
-        ) const
-    {
-        return providerId + "@" + userId;
+        std::string userId = license->User()->Id();
+        if (userId.empty())
+        {
+            userId = m_unknownUserId;
+        }
+        std::stringstream keyStream;
+        keyStream << license->Provider() << "@" << userId << "@" << license->Id();
+        return keyStream.str();
     }
 
     std::string RightsService::ExtractRightsKey(const std::string & storageProviderKey) const

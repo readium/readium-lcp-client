@@ -52,8 +52,14 @@ namespace lcp
             const std::string & userId,
             const std::string & providerId
             );
+        virtual Status AddUserKey(
+            const std::string & userKey,
+            const std::string & userId,
+            const std::string & providerId,
+            const std::string & licenseId
+            );
 
-        virtual Status AcquirePublication(
+        virtual Status CreatePublicationAcquisition(
             const std::string & publicationPath,
             ILicense * license,
             IAcquisition ** acquisition
@@ -70,11 +76,17 @@ namespace lcp
         bool FindLicense(const std::string & canonicalJson, ILicense ** license);
 
         Status DecryptLicenseByUserKey(ILicense * license, const KeyType & userKey);
+        Status DecryptLicenseByHexUserKey(ILicense * license, const std::string & hexUserKey);
         Status DecryptLicenseByStorage(ILicense * license);
         Status AddDecryptedUserKey(ILicense * license, const KeyType & userKey);
 
         std::string CalculateCanonicalForm(const std::string & licenseJson);
-        std::string BuildStorageProviderKey(const std::string & providerId, const std::string & userId);
+        std::string BuildStorageProviderKey(ILicense * license);
+        std::string BuildStorageProviderKey(
+            const std::string & providerId,
+            const std::string & userId,
+            const std::string & licenseId
+            );
 
     private:
         std::string m_rootCertificate;
@@ -91,6 +103,7 @@ namespace lcp
 
     private:
         static std::string UnknownProvider;
+        static std::string UnknownUserId;
     };
 }
 #endif //__LCP_SERVICE_H__

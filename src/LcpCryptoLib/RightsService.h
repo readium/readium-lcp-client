@@ -11,7 +11,7 @@ namespace lcp
     class RightsService : public IRightsService
     {
     public:
-        explicit RightsService(IStorageProvider * storageProvider);
+        explicit RightsService(IStorageProvider * storageProvider, const std::string & unknownUserId);
         void SyncRightsFromStorage(ILicense * license);
 
     public:
@@ -24,19 +24,13 @@ namespace lcp
 
     private:
         IRightsManager * PerformChecks(ILicense * license) const;
-        std::string BuildStorageProviderRightsKeyPrefix(
-            const std::string & providerId,
-            const std::string & userId
-            ) const;
-        std::string BuildStorageProviderRightsKey(
-            const std::string & providerId,
-            const std::string & userId,
-            const std::string & rightId
-            ) const;
+        std::string BuildStorageProviderRightsKeyPrefix(ILicense * license) const;
+        std::string BuildStorageProviderRightsKey(ILicense * license, const std::string & rightId) const;
         std::string ExtractRightsKey(const std::string & storageProviderKey) const;
 
     private:
         IStorageProvider * m_storageProvider;
+        std::string m_unknownUserId;
     };
 }
 

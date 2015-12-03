@@ -225,7 +225,7 @@ int main(int argc, char ** argv)
 
 
         lcp::IAcquisition * rawAcqPtr = nullptr;
-        res = lcpService->AcquirePublication("..\\..\\..\\src\\testing-data\\result.epub", rawLicPtr, &rawAcqPtr);
+        res = lcpService->CreatePublicationAcquisition("..\\..\\..\\src\\testing-data\\result.epub", rawLicPtr, &rawAcqPtr);
         std::unique_ptr<lcp::IAcquisition> acquisition(rawAcqPtr);
         if (!lcp::Status::IsSuccess(res))
         {
