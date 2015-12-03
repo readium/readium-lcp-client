@@ -53,7 +53,7 @@ public:
                 const rapidjson::Value & vaultUserKeys = doc[lcp::LicenseRightsVaultId];
                 for (auto it = vaultUserKeys.MemberBegin(); it != vaultUserKeys.MemberEnd(); ++it)
                 {
-                    auto res = m_userKeysVault.insert(std::make_pair(
+                    auto res = m_licienseRightsVault.insert(std::make_pair(
                         std::string(it->name.GetString(), it->name.GetStringLength()),
                         std::string(it->value.GetString(), it->value.GetStringLength()))
                         );

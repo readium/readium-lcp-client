@@ -8,15 +8,42 @@ namespace lcp
 {
     /*static*/ int RightsInfo::UNLIMITED = -1;
 
-    bool RightsLcpNode::GetRightValue(const std::string & name, std::string & value) const
+    void RightsLcpNode::ParseNode(const rapidjson::Value & parentObject, JsonValueReader * reader)
     {
-        auto it = m_rights.valuesMap.find(name);
-        if (it != m_rights.valuesMap.end())
+        const rapidjson::Value & rightsObject = reader->ReadObject("rights", parentObject);
+        if (!rightsObject.IsNull())
         {
-            value = it->second;
-            return true;
+            for (auto it = rightsObject.MemberBegin(); it != rightsObject.MemberEnd(); ++it)
+            {
+                std::string name = it->name.GetString();
+
+                std::string strValue = reader->ConvertToString(it->value);
+                bool res = m_rights.valuesMap.insert(std::make_pair(name, strValue)).second;
+                if (!res)
+                {
+                    throw std::runtime_error("Duplicate rights value");
+                }
+
+                this->FillRegisteredFields(name, it->value);
+            }
         }
-        return false;
+        this->SetDefaultRightValuesInMap();
+
+        BaseLcpNode::ParseNode(rightsObject, reader);
+    }
+
+    Status RightsLcpNode::VerifyNode(ILicense * license, IClientProvider * clientProvider, ICryptoProvider * cryptoProvider)
+    {
+        if (!this->DoesLicenseStart())
+        {
+            return Status(StCodeCover::ErrorOpeningLicenseNotStarted);
+        }
+        if (this->DoesLicenseExpired())
+        {
+            return Status(StCodeCover::ErrorOpeningLicenseExpired);
+        }
+
+        return BaseLcpNode::VerifyNode(license, clientProvider, cryptoProvider);
     }
 
     KvStringsIterator * RightsLcpNode::Enumerate() const
@@ -29,29 +56,33 @@ namespace lcp
         return (m_rights.valuesMap.find(name) != m_rights.valuesMap.end());
     }
 
-    bool RightsLcpNode::HasRight(const std::string & name) const
+    bool RightsLcpNode::GetRightValue(const std::string & name, std::string & value) const
+    {
+        auto it = m_rights.valuesMap.find(name);
+        if (it != m_rights.valuesMap.end())
+        {
+            value = it->second;
+            return true;
+        }
+        return false;
+    }
+
+    void RightsLcpNode::SetRightValue(const std::string & name, const std::string & value)
     {
         if (name == PrintRight)
         {
-            return m_rights.print == RightsInfo::UNLIMITED || m_rights.print > 0;
+            m_rights.print = std::stoi(value);
         }
         else if (name == CopyRight)
         {
-            return m_rights.copy == RightsInfo::UNLIMITED || m_rights.copy > 0;
+            m_rights.copy = std::stoi(value);
         }
         else if (name == TtsRight)
         {
-            return m_rights.tts;
+            m_rights.tts = StringToBool(value);
         }
-        else if (name == StartRight)
-        {
-            return this->DoesLicenseStart();
-        }
-        else if (name == EndRight)
-        {
-            return !this->DoesLicenseExpired();
-        }
-        return true;
+
+        this->SetRightValueInMap(name, value);
     }
 
     bool RightsLcpNode::Consume(const std::string & name)
@@ -91,65 +122,51 @@ namespace lcp
         return result;
     }
 
-    void RightsLcpNode::SetRightValue(const std::string & name, const std::string & value)
+    bool RightsLcpNode::HasRight(const std::string & name) const
     {
         if (name == PrintRight)
         {
-            m_rights.print = std::stoi(value);
+            return m_rights.print == RightsInfo::UNLIMITED || m_rights.print > 0;
         }
         else if (name == CopyRight)
         {
-            m_rights.copy = std::stoi(value);
+            return m_rights.copy == RightsInfo::UNLIMITED || m_rights.copy > 0;
         }
         else if (name == TtsRight)
         {
-            m_rights.tts = StringToBool(value);
+            return m_rights.tts;
         }
-
-        this->SetRightValueInMap(name, value);
+        else if (name == StartRight)
+        {
+            return this->DoesLicenseStart();
+        }
+        else if (name == EndRight)
+        {
+            return !this->DoesLicenseExpired();
+        }
+        return true;
     }
 
-    Status RightsLcpNode::VerifyNode(ILicense * license, IClientProvider * clientProvider, ICryptoProvider * cryptoProvider)
+    void RightsLcpNode::SetDefaultRightValuesInMap()
     {
-        if (!this->DoesLicenseStart())
+        if (m_rights.valuesMap.find(PrintRight) == m_rights.valuesMap.end())
         {
-            return Status(StCodeCover::ErrorOpeningLicenseNotStarted);
+            this->SetRightValueInMap(PrintRight, std::to_string(m_rights.print));
         }
-        if (this->DoesLicenseExpired())
+        if (m_rights.valuesMap.find(CopyRight) == m_rights.valuesMap.end())
         {
-            return Status(StCodeCover::ErrorOpeningLicenseExpired);
+            this->SetRightValueInMap(CopyRight, std::to_string(m_rights.copy));
         }
-
-        return BaseLcpNode::VerifyNode(license, clientProvider, cryptoProvider);
-    }
-
-    void RightsLcpNode::ParseNode(const rapidjson::Value & parentObject, JsonValueReader * reader)
-    {
-        const rapidjson::Value & rightsObject = reader->ReadObject("rights", parentObject);
-        if (!rightsObject.IsNull())
+        if (m_rights.valuesMap.find(TtsRight) == m_rights.valuesMap.end())
         {
-            for (auto it = rightsObject.MemberBegin(); it != rightsObject.MemberEnd(); ++it)
-            {
-                std::string name = it->name.GetString();
-
-                std::string strValue = reader->ConvertToString(it->value);
-                bool res = m_rights.valuesMap.insert(std::make_pair(name, strValue)).second;
-                if (!res)
-                {
-                    throw std::runtime_error("Duplicate rights value");
-                }
-
-                this->FillRegisteredFields(name, it->value);
-            }
+            this->SetRightValueInMap(CopyRight, BoolToString(m_rights.tts));
         }
-
-        BaseLcpNode::ParseNode(rightsObject, reader);
     }
 
     void RightsLcpNode::SetRightValueInMap(const std::string & name, const std::string & value)
     {
         auto it = m_rights.valuesMap.find(name);
-        if (it != m_rights.valuesMap.end())
+        if (it != m_rights.valuesMap.end() && it->second != value)
         {
             it->second = value;
         }

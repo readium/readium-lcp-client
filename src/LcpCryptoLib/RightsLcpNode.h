@@ -49,6 +49,7 @@ namespace lcp
 
     private:
         void SetRightValueInMap(const std::string & name, const std::string & value);
+        void SetDefaultRightValuesInMap();
         bool DoesLicenseStart() const;
         bool DoesLicenseExpired() const;
         void FillRegisteredFields(const std::string & name, const rapidjson::Value & value);

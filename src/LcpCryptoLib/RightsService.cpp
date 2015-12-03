@@ -117,11 +117,11 @@ namespace lcp
     std::string RightsService::ExtractRightsKey(const std::string & storageProviderKey) const
     {
         size_t pos = storageProviderKey.find_last_of("@");
-        if (pos == std::string::npos)
+        if (pos == std::string::npos || pos + 1 == storageProviderKey.size())
         {
             throw std::runtime_error("Wrong storage provider rights key format: " + storageProviderKey);
         }
-        return storageProviderKey.substr(pos);
+        return storageProviderKey.substr(pos + 1);
     }
 
     IRightsManager * RightsService::PerformChecks(ILicense * license) const
