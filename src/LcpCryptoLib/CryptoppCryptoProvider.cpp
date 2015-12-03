@@ -122,7 +122,7 @@ namespace lcp
         }
         catch (const CryptoPP::Exception & ex)
         {
-            return Status(StCodeCover::ErrorDecryptionLicenseEncrypted, ex.GetWhat());
+            return Status(StCodeCover::ErrorDecryptionUserPassphraseNotValid, ex.GetWhat());
         }
     }
 
@@ -179,7 +179,7 @@ namespace lcp
         }
         catch (const CryptoPP::Exception & ex)
         {
-            return Status(StCodeCover::ErrorDecryptionLicenseEncrypted, ex.GetWhat());
+            return Status(StCodeCover::ErrorDecryptionCommonError, ex.GetWhat());
         }
     }
 
@@ -267,7 +267,7 @@ namespace lcp
         }
         catch (const CryptoPP::Exception & ex)
         {
-            return Status(StCodeCover::ErrorDecryptionCommonError, ex.GetWhat());
+            return Status(StCodeCover::ErrorDecryptionPublicationEncrypted, ex.GetWhat());
         }
     }
 
@@ -293,7 +293,7 @@ namespace lcp
         }
         catch (const CryptoPP::Exception & ex)
         {
-            return Status(StCodeCover::ErrorDecryptionCommonError, ex.GetWhat());
+            return Status(StCodeCover::ErrorDecryptionPublicationEncrypted, ex.GetWhat());
         }
     }
 }

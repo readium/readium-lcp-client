@@ -32,6 +32,7 @@ namespace lcp
             DecryptionContextImpl context;
             context.SetDecryptionRange(m_readPosition, sizeToRead);
             m_algorithm->Decrypt(&context, m_stream, pBuffer, sizeToRead);
+            m_readPosition += sizeToRead;
         }
         catch (const CryptoPP::Exception & ex)
         {
