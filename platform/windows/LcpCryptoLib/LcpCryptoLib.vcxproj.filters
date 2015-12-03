@@ -289,8 +289,5 @@
     <ClCompile Include="..\..\..\src\LcpCryptoLib\SymmetricAlgorithmEncryptedStream.cpp">
       <Filter>Source Files\Crypto</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\LcpCryptoLib\Public\DefaultFileSystemProvider.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>

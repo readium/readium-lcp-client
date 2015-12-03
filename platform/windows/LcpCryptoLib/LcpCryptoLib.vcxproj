@@ -94,7 +94,6 @@
     <ClCompile Include="..\..\..\src\LcpCryptoLib\LcpServiceCreator.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\LcpUtils.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\LinksLcpNode.cpp" />
-    <ClCompile Include="..\..\..\src\LcpCryptoLib\Public\DefaultFileSystemProvider.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\RightsLcpNode.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\RightsService.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\RootLcpNode.cpp" />

@@ -358,7 +358,7 @@ namespace lcptest
             decrypted.size()
             );
         
-        std::vector<unsigned char> encryptedBuffer(m_file->Size());
+        std::vector<unsigned char> encryptedBuffer(static_cast<size_t>(m_file->Size()));
         m_file->SetReadPosition(0);
         m_file->Read(&encryptedBuffer.at(0), encryptedBuffer.size());
         std::string decryptedBuffer(encryptedBuffer.size(), 0);

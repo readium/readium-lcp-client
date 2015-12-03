@@ -79,7 +79,7 @@ namespace lcp
             ErrorDecryptionLicenseEncrypted,
             // The Publication is still encrypted and can't be used to decrypt data.
             ErrorDecryptionPublicationEncrypted,
-            //
+            // Error of crypto library
             ErrorDecryptionCommonError,
 
             // ErrorNetworking

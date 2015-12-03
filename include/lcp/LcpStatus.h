@@ -75,10 +75,11 @@ namespace lcp
 
             // The given User Pass phrase is not valid for this License
             ErrorDecryptionUserPassphraseNotValid,
-            // The License is still encrypted and can't be used to decrypt 
-            // data.
+            // The License is still encrypted and can't be used to decrypt data.
             ErrorDecryptionLicenseEncrypted,
-            //
+            // The Publication is still encrypted and can't be used to decrypt data.
+            ErrorDecryptionPublicationEncrypted,
+            // Error of crypto library
             ErrorDecryptionCommonError,
 
             // ErrorNetworking

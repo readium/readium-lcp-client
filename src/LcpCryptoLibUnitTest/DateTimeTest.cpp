@@ -126,4 +126,12 @@ namespace lcptest
         lcp::DateTime right("2015-11-11T22:21:37Z");
         ASSERT_TRUE(left != right);
     }
+
+    TEST(DateTimeTest, DateWithFractionalSecondsPart)
+    {
+        std::string timeStr = "2015-11-11T22:21:37.984546-02:00";
+        lcp::DateTime object(timeStr);
+        ASSERT_EQ(object.ToTime(), 1447266097);
+        ASSERT_STREQ("2015-11-11T22:21:37.984546-02:00", object.ToString().c_str());
+    }
 }

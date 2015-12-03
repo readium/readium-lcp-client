@@ -8,7 +8,7 @@
 namespace lcp
 {
     class ILicense;
-    
+
     struct UserInfo
     {
         std::string id;
