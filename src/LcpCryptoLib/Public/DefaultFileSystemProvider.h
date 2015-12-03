@@ -34,31 +34,31 @@ namespace lcp
             return m_path;
         }
 
-        virtual void SetReadPosition(size_t pos)
+        virtual void SetReadPosition(int64_t pos)
         {
             m_readPosition = pos;
             this->InternalSetPosition(pos);
         }
 
-        virtual size_t ReadPosition() const
+        virtual int64_t ReadPosition() const
         {
             return m_readPosition;
         }
 
-        virtual void SetWritePosition(size_t pos)
+        virtual void SetWritePosition(int64_t pos)
         {
             m_writePosition = pos;
             this->InternalSetPosition(pos);
         }
 
-        virtual size_t WritePosition() const
+        virtual int64_t WritePosition() const
         {
             return m_writePosition;
         }
 
-        virtual void Write(const unsigned char * pBuffer, size_t sizeToWrite)
+        virtual void Write(const unsigned char * pBuffer, int64_t sizeToWrite)
         {
-            size_t curPos = m_fstream.tellg();
+            int64_t curPos = m_fstream.tellg();
             if (curPos != m_writePosition)
             {
                 this->InternalSetPosition(m_writePosition);
@@ -74,9 +74,9 @@ namespace lcp
             this->InternalSetPosition(m_writePosition);
         }
 
-        virtual void Read(unsigned char * pBuffer, size_t sizeToRead)
+        virtual void Read(unsigned char * pBuffer, int64_t sizeToRead)
         {
-            long long curPos = m_fstream.tellg();
+            int64_t curPos = m_fstream.tellg();
             if (curPos != m_readPosition)
             {
                 this->InternalSetPosition(m_readPosition);
@@ -92,7 +92,7 @@ namespace lcp
             this->InternalSetPosition(m_readPosition);
         }
 
-        virtual size_t Size()
+        virtual int64_t Size()
         {
             m_fstream.seekg(0, std::ios::end);
             return m_fstream.tellg();
@@ -104,7 +104,7 @@ namespace lcp
         }
 
     private:
-        void InternalSetPosition(size_t pos)
+        void InternalSetPosition(int64_t pos)
         {
             m_fstream.seekg(pos, std::ios::beg);
             if (m_fstream.bad() || m_fstream.fail() || m_fstream.eof())
@@ -123,8 +123,8 @@ namespace lcp
     private:
         std::string m_path;
         std::fstream m_fstream;
-        size_t m_writePosition;
-        size_t m_readPosition;
+        int64_t m_writePosition;
+        int64_t m_readPosition;
     };
 
     class DefaultFileSystemProvider : public IFileSystemProvider

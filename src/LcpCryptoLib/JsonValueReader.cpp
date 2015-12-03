@@ -1,4 +1,3 @@
-#include "rapidjson/document.h"
 #include "JsonValueReader.h"
 #include "LcpUtils.h"
 

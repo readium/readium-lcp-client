@@ -5,11 +5,6 @@
 #include "rapidjson/document.h"
 #include "Public/LcpStatus.h"
 
-// namespace rapidjson
-// {
-//     class Value;
-// }
-
 namespace lcp
 {
     class JsonValueReader

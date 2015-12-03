@@ -81,7 +81,7 @@ namespace lcp
             throw std::out_of_range("Invalid encrypted file, size is out of range");
         }
 
-        size_t readPosition = stream->Size() - (CryptoPP::AES::BLOCKSIZE + CryptoPP::AES::BLOCKSIZE);
+        size_t readPosition = static_cast<size_t>(stream->Size()) - (CryptoPP::AES::BLOCKSIZE + CryptoPP::AES::BLOCKSIZE);
         stream->SetReadPosition(readPosition);
         std::vector<unsigned char> inBuffer(CryptoPP::AES::BLOCKSIZE + CryptoPP::AES::BLOCKSIZE);
         std::vector<unsigned char> outBuffer(inBuffer.size());
@@ -95,7 +95,7 @@ namespace lcp
             BlockPaddingSchemeDef::DEFAULT_PADDING
             );
 
-        return stream->Size()
+        return static_cast<size_t>(stream->Size())
             - CryptoPP::AES::BLOCKSIZE // minus IV or previous block
             - (CryptoPP::AES::BLOCKSIZE - outSize) % CryptoPP::AES::BLOCKSIZE; // minus padding part
     }

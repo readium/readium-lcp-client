@@ -13,7 +13,7 @@ namespace lcp
     {
     }
 
-    size_t SymmetricAlgorithmEncryptedStream::DecryptedSize()
+    int64_t SymmetricAlgorithmEncryptedStream::DecryptedSize()
     {
         try
         {
@@ -25,13 +25,13 @@ namespace lcp
         }
     }
 
-    void SymmetricAlgorithmEncryptedStream::Read(unsigned char * pBuffer, size_t sizeToRead)
+    void SymmetricAlgorithmEncryptedStream::Read(unsigned char * pBuffer, int64_t sizeToRead)
     {
         try
         {
             DecryptionContextImpl context;
-            context.SetDecryptionRange(m_readPosition, sizeToRead);
-            m_algorithm->Decrypt(&context, m_stream, pBuffer, sizeToRead);
+            context.SetDecryptionRange(static_cast<size_t>(m_readPosition), static_cast<size_t>(sizeToRead));
+            m_algorithm->Decrypt(&context, m_stream, pBuffer, static_cast<size_t>(sizeToRead));
             m_readPosition += sizeToRead;
         }
         catch (const CryptoPP::Exception & ex)
@@ -40,17 +40,17 @@ namespace lcp
         }
     }
 
-    void SymmetricAlgorithmEncryptedStream::SetReadPosition(size_t pos)
+    void SymmetricAlgorithmEncryptedStream::SetReadPosition(int64_t pos)
     {
         m_readPosition = pos;
     }
 
-    size_t SymmetricAlgorithmEncryptedStream::ReadPosition() const
+    int64_t SymmetricAlgorithmEncryptedStream::ReadPosition() const
     {
         return m_readPosition;
     }
 
-    size_t SymmetricAlgorithmEncryptedStream::Size()
+    int64_t SymmetricAlgorithmEncryptedStream::Size()
     {
         return m_stream->Size();
     }

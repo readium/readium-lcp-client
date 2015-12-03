@@ -165,7 +165,7 @@ namespace lcp
             
             size_t read = 0;
             size_t sizeToRead = bufferSize;
-            size_t fileSize = readableStream->Size();
+            size_t fileSize = static_cast<size_t>(readableStream->Size());
             while (read != fileSize)
             {
                 sizeToRead = (fileSize - read > bufferSize) ? bufferSize : fileSize - read;

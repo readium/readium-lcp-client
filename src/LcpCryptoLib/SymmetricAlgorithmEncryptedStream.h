@@ -16,16 +16,16 @@ namespace lcp
             );
 
         // IEncryptedStream
-        virtual size_t DecryptedSize();
+        virtual int64_t DecryptedSize();
 
         // IReadableStream
-        virtual void Read(unsigned char * pBuffer, size_t sizeToRead);
-        virtual void SetReadPosition(size_t pos);
-        virtual size_t ReadPosition() const;
-        virtual size_t Size();
+        virtual void Read(unsigned char * pBuffer, int64_t sizeToRead);
+        virtual void SetReadPosition(int64_t pos);
+        virtual int64_t ReadPosition() const;
+        virtual int64_t Size();
 
     private:
-        size_t m_readPosition;
+        int64_t m_readPosition;
         IReadableStream * m_stream;
         std::unique_ptr<ISymmetricAlgorithm> m_algorithm;
     };
