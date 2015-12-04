@@ -21,9 +21,8 @@ namespace lcp
         {
             m_keys = [keyChain allKeys];
             
-            m_values.resize([m_keys count]);
             for (NSString *key in m_keys) {
-                m_values.push_back([[keyChain stringForKey:key] UTF8String]);
+                m_values.push_back(std::string([[keyChain stringForKey:key] UTF8String]));
             }
         }
         
@@ -103,6 +102,12 @@ namespace lcp
     {
         UICKeyChainStore *keyChain = this->GetKeyChainOfVault(vaultId);
         return keyChain ? new iOSKeyChainIterator(keyChain) : nullptr;
+    }
+    
+    void iOSStorageProvider::EraseVault(const std::string &vaultId)
+    {
+        UICKeyChainStore *keyChain = this->GetKeyChainOfVault(vaultId);
+        [keyChain removeAllItems];
     }
     
     NSString *iOSStorageProvider::GetStringFromNativeString(const string &nativeString)
