@@ -39,7 +39,8 @@ namespace lcp
     public:
         // ILicense
         virtual std::string Id() const;
-        virtual std::string Content() const;
+        virtual std::string CanonicalContent() const;
+        virtual std::string OriginalContent() const;
         virtual std::string Issued() const;
         virtual std::string Updated() const;
         virtual std::string Provider() const;

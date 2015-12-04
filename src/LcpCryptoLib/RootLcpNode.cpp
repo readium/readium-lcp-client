@@ -33,9 +33,14 @@ namespace lcp
         return m_rootInfo.id;
     }
 
-    std::string RootLcpNode::Content() const
+    std::string RootLcpNode::CanonicalContent() const
     {
         return m_rootInfo.content;
+    }
+
+    std::string RootLcpNode::OriginalContent() const
+    {
+        return m_licenseJson;
     }
 
     std::string RootLcpNode::Issued() const

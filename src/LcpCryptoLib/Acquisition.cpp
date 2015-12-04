@@ -152,7 +152,7 @@ namespace lcp
 
             // Release the epub file to perform zip operations
             m_file.reset();
-            std::stringstream licenseStream(m_license->Content());
+            std::stringstream licenseStream(m_license->OriginalContent());
             ZipFile::AddFile(m_publicationPath, licenseStream, "META-INF/license.lcpl");
 
             if (m_callback != nullptr)

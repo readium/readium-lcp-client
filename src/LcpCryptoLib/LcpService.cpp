@@ -172,15 +172,11 @@ namespace lcp
             return res;
 
         std::string userId = license->User()->Id();
-        if (!userId.empty())
+        if (userId.empty())
         {
-            res = this->AddUserKey(hexUserKey, userId, license->Provider(), license->Id());
+            userId = UnknownUserId;
         }
-        else
-        {
-            res = this->AddUserKey(hexUserKey, UnknownUserId, license->Provider(), license->Id());
-        }
-        return res;
+        return this->AddUserKey(hexUserKey, userId, license->Provider(), license->Id());
     }
 
     Status LcpService::DecryptLicenseByStorage(ILicense * license)

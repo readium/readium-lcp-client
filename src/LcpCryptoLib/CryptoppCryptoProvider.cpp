@@ -60,7 +60,7 @@ namespace lcp
             {
                 return Status(StCodeCover::ErrorOpeningContentProviderCertificateNotVerified);
             }
-            if (!providerCertificate->VerifyMessage(license->Content(), license->Crypto()->Signature()))
+            if (!providerCertificate->VerifyMessage(license->CanonicalContent(), license->Crypto()->Signature()))
             {
                 return Status(StCodeCover::ErrorOpeningLicenseSignatureNotValid);
             }

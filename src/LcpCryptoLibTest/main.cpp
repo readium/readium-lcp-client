@@ -140,7 +140,7 @@ int main(int argc, char ** argv)
             return 0;
         }
 
-        std::cout << rawLicPtr->Content() << std::endl;
+        std::cout << rawLicPtr->CanonicalContent() << std::endl;
         std::cout << "License parsed successfully!" << std::endl;
 
         if (!rawLicPtr->Decrypted())
