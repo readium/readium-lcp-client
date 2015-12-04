@@ -196,7 +196,10 @@ namespace lcp
             );
         if (!userKeyHex.empty())
         {
-            return this->DecryptLicenseByHexUserKey(license, userKeyHex);
+            Status res = this->DecryptLicenseByHexUserKey(license, userKeyHex);
+            if (Status::IsSuccess(res)) {
+                return res;
+            }
         }
 
         std::unique_ptr<KvStringsIterator> it(m_storageProvider->EnumerateVault(UserKeysVaultId));

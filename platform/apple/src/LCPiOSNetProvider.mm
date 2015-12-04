@@ -45,19 +45,6 @@
     }
 }
 
-- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveResponse:(NSURLResponse *)response completionHandler:(void (^)(NSURLSessionResponseDisposition))completionHandler
-{
-    lcp::IDownloadRequest *request;
-    [self getRequest:&request callback:NULL forTask:dataTask];
-    if (!request)
-        return;
-    
-    NSString *filename = response.suggestedFilename;
-    if (filename.length > 0) {
-        request->SetSuggestedFileName([filename UTF8String]);
-    }
-}
-
 - (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)task didWriteData:(int64_t)bytesWritten totalBytesWritten:(int64_t)received totalBytesExpectedToWrite:(int64_t)expected
 {
     lcp::IDownloadRequest *request;
@@ -88,6 +75,11 @@
     [self getRequest:&request callback:&callback forTask:task];
     if (!request || !callback)
         return;
+    
+    NSString *filename = task.response.suggestedFilename;
+    if (filename.length > 0) {
+        request->SetSuggestedFileName([filename UTF8String]);
+    }
     
     NSString *toPath = [NSString stringWithUTF8String:request->DestinationPath().c_str()];
     

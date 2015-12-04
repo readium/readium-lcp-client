@@ -16,6 +16,7 @@ namespace lcp
         virtual std::string GetValue(const std::string &vaultId, const std::string &key);
         virtual void SetValue(const std::string &vaultId, const std::string &key, const std::string &value);
         virtual KvStringsIterator *EnumerateVault(const std::string &vaultId);
+        void EraseVault(const std::string &vaultId);
         
     private:
         NSString *GetStringFromNativeString(const std::string &nativeString);
