@@ -105,12 +105,12 @@
     return [self checkStatus:status error:error];
 }
 
-- (LCPAcquisition *)acquirePublication:(LCPLicense *)license toPath:(NSString *)publicationPath error:(NSError **)error
+- (LCPAcquisition *)createAcquisition:(LCPLicense *)license publicationPath:(NSString *)publicationPath error:(NSError **)error
 {
     LCPAcquisition *acquisition;
     lcp::IAcquisition *nativeAcquisition;
     
-    lcp::Status status = _nativeService->AcquirePublication([publicationPath UTF8String], license.nativeLicense, &nativeAcquisition);
+    lcp::Status status = _nativeService->CreatePublicationAcquisition([publicationPath UTF8String], license.nativeLicense, &nativeAcquisition);
     if ([self checkStatus:status error:error]) {
         acquisition = [[LCPAcquisition alloc] initWithAcquisition:nativeAcquisition];
     }

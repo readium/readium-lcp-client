@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "4273FD4A0AA7B99FF8F2066F0312A9510815B462",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "4273FD4A0AA7B99FF8F2066F0312A9510815B462" : 0,
+    "9581619829FA695F5414245957B767B22088B7EE" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "40CFFB2A-D5FF-4D14-AD64-56749D5F2BD6",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "4273FD4A0AA7B99FF8F2066F0312A9510815B462" : "mantano-lcp-client\/",
+    "9581619829FA695F5414245957B767B22088B7EE" : ""
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "ziplib",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "src\/third-parties\/ziplib\/ziplib.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "bitbucket.org:mantano\/mantano-lcp-client.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "4273FD4A0AA7B99FF8F2066F0312A9510815B462"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:readium\/SDKLauncher-iOS.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "9581619829FA695F5414245957B767B22088B7EE"
+    }
+  ]
+}

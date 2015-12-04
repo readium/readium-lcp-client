@@ -76,6 +76,11 @@ namespace lcp
     return self;
 }
 
+- (void)dealloc
+{
+    delete _nativeAcquisition;
+}
+
 - (NSString *)publicationPath
 {
     return [self stringFromNativeString:self.nativeAcquisition->PublicationPath()];
