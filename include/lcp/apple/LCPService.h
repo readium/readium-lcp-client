@@ -31,6 +31,6 @@ namespace lcp {
 - (LCPLicense *)openLicense:(NSString *)licenseJSON error:(NSError **)error;
 - (BOOL)decryptLicense:(LCPLicense *)license passphrase:(NSString *)passphrase error:(NSError **)error;
 
-- (LCPAcquisition *)acquirePublication:(LCPLicense *)license toPath:(NSString *)publicationPath error:(NSError **)error;
+- (LCPAcquisition *)createAcquisition:(LCPLicense *)license publicationPath:(NSString *)publicationPath error:(NSError **)error;
 
 @end

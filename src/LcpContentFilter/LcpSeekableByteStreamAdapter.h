@@ -16,22 +16,22 @@ namespace lcp
     public:
         SeekableByteStreamAdapter(ePub3::SeekableByteStream *byteStream) : m_byteStream(byteStream) {}
         
-        virtual void Read(unsigned char * pBuffer, size_t sizeToRead)
+        virtual void Read(unsigned char * pBuffer, int64_t sizeToRead)
         {
             m_byteStream->ReadBytes(pBuffer, sizeToRead);
         }
         
-        virtual void SetReadPosition(size_t pos)
+        virtual void SetReadPosition(int64_t pos)
         {
             m_byteStream->Seek(pos, std::ios::beg);
         }
         
-        virtual size_t ReadPosition() const
+        virtual int64_t ReadPosition() const
         {
             return m_byteStream->Position();
         }
         
-        virtual size_t Size()
+        virtual int64_t Size()
         {
             return m_byteStream->Position() + m_byteStream->BytesAvailable();
         }
