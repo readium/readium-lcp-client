@@ -140,7 +140,7 @@ namespace lcp
         return m_isoTime;
     }
 
-    std::time_t DateTime::ToTime() const
+    std::int64_t DateTime::ToTime() const
     {
         return m_time;
     }

@@ -134,4 +134,12 @@ namespace lcptest
         ASSERT_EQ(object.ToTime(), 1447266097);
         ASSERT_STREQ("2015-11-11T22:21:37.984546-02:00", object.ToString().c_str());
     }
+
+    TEST(DateTimeTest, 2038YearBugIn32BitSystemsTest)
+    {
+        std::string timeStr = "2045-11-11T22:21:37-02:00";
+        lcp::DateTime object(timeStr);
+        ASSERT_EQ(object.ToTime(), 2394037297);
+        ASSERT_STREQ("2045-11-11T22:21:37-02:00", object.ToString().c_str());
+    }
 }

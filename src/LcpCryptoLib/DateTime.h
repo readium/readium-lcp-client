@@ -18,7 +18,7 @@ namespace lcp
         DateTime & operator= (DateTime && right);
 
         std::string ToString() const;
-        std::time_t ToTime() const;
+        std::int64_t ToTime() const;
         std::tm ToTm() const;
         
         bool operator==(const DateTime & right);
@@ -47,7 +47,7 @@ namespace lcp
 
     private:
         std::string m_isoTime;
-        std::time_t m_time;
+        std::int64_t m_time;
         std::tm m_tm;
     };
 
