@@ -13,8 +13,9 @@
 		5A0116911C088BA4006F1A6F /* LCPLicense.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A0116871C088BA4006F1A6F /* LCPLicense.mm */; };
 		5A0116921C088BA4006F1A6F /* LCPService.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A0116891C088BA4006F1A6F /* LCPService.mm */; };
 		5A0116931C088BA4006F1A6F /* UICKeyChainStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A01168D1C088BA4006F1A6F /* UICKeyChainStore.m */; };
+		5A2D65501C170EAB00ED4673 /* time64.c in Sources */ = {isa = PBXBuildFile; fileRef = 5A2D654C1C170EAB00ED4673 /* time64.c */; };
 		5A517DCA1C0751E60005877F /* LcpContentFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A517DC71C0751E60005877F /* LcpContentFilter.cpp */; };
-		5A5C61531C04C01800185159 /* libcryptopp (iOS).a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A5C61521C04BFF500185159 /* libcryptopp (iOS).a */; };
+		5A5C61531C04C01800185159 /* libcryptopp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A5C61521C04BFF500185159 /* libcryptopp.a */; };
 		5A6EEB0A1C0C61CD0003A6DC /* LCPiOSNetProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A6EEB081C0C61CD0003A6DC /* LCPiOSNetProvider.mm */; };
 		5AA9E25E1C119FBE006470DD /* libziplib (iOS).a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AA9E25D1C119FAD006470DD /* libziplib (iOS).a */; };
 		5ABE4A9A1C0F434400FA5A55 /* Acquisition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5ABE4A481C0F434400FA5A55 /* Acquisition.cpp */; };
@@ -74,6 +75,10 @@
 		5A0116891C088BA4006F1A6F /* LCPService.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LCPService.mm; sourceTree = "<group>"; };
 		5A01168C1C088BA4006F1A6F /* UICKeyChainStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UICKeyChainStore.h; sourceTree = "<group>"; };
 		5A01168D1C088BA4006F1A6F /* UICKeyChainStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UICKeyChainStore.m; sourceTree = "<group>"; };
+		5A2D654C1C170EAB00ED4673 /* time64.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = time64.c; sourceTree = "<group>"; };
+		5A2D654D1C170EAB00ED4673 /* time64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = time64.h; sourceTree = "<group>"; };
+		5A2D654E1C170EAB00ED4673 /* time64_config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = time64_config.h; sourceTree = "<group>"; };
+		5A2D654F1C170EAB00ED4673 /* time64_limits.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = time64_limits.h; sourceTree = "<group>"; };
 		5A517DC71C0751E60005877F /* LcpContentFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LcpContentFilter.cpp; sourceTree = "<group>"; };
 		5A517DC91C0751E60005877F /* LcpContentFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LcpContentFilter.h; sourceTree = "<group>"; };
 		5A517DD51C075C700005877F /* LcpFilterContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LcpFilterContext.h; sourceTree = "<group>"; };
@@ -206,7 +211,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5AA9E25E1C119FBE006470DD /* libziplib (iOS).a in Frameworks */,
-				5A5C61531C04C01800185159 /* libcryptopp (iOS).a in Frameworks */,
+				5A5C61531C04C01800185159 /* libcryptopp.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -260,6 +265,17 @@
 			name = Sources;
 			sourceTree = "<group>";
 		};
+		5A2D654B1C170EAB00ED4673 /* time64 */ = {
+			isa = PBXGroup;
+			children = (
+				5A2D654C1C170EAB00ED4673 /* time64.c */,
+				5A2D654D1C170EAB00ED4673 /* time64.h */,
+				5A2D654E1C170EAB00ED4673 /* time64_config.h */,
+				5A2D654F1C170EAB00ED4673 /* time64_limits.h */,
+			);
+			path = time64;
+			sourceTree = "<group>";
+		};
 		5A517DC61C0751E60005877F /* LcpContentFilter */ = {
 			isa = PBXGroup;
 			children = (
@@ -282,7 +298,7 @@
 		5A5C614E1C04BFF500185159 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				5A5C61521C04BFF500185159 /* libcryptopp (iOS).a */,
+				5A5C61521C04BFF500185159 /* libcryptopp.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -311,6 +327,7 @@
 			children = (
 				5AA9E2581C119FAD006470DD /* ziplib.xcodeproj */,
 				5A5C614D1C04BFF500185159 /* cryptopp.xcodeproj */,
+				5A2D654B1C170EAB00ED4673 /* time64 */,
 				5AAEF18A1BF9D3FD003CF710 /* rapidjson */,
 				5AAEF1AB1BF9D3FD003CF710 /* utf8-cpp */,
 			);
@@ -570,10 +587,10 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		5A5C61521C04BFF500185159 /* libcryptopp (iOS).a */ = {
+		5A5C61521C04BFF500185159 /* libcryptopp.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
-			path = "libcryptopp (iOS).a";
+			path = libcryptopp.a;
 			remoteRef = 5A5C61511C04BFF500185159 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -611,6 +628,7 @@
 				5ABE4AAB1C0F434400FA5A55 /* RightsLcpNode.cpp in Sources */,
 				5ABE4AAD1C0F434400FA5A55 /* RootLcpNode.cpp in Sources */,
 				5ABE4AA11C0F434400FA5A55 /* DateTime.cpp in Sources */,
+				5A2D65501C170EAB00ED4673 /* time64.c in Sources */,
 				5ABE4AB01C0F434400FA5A55 /* SymmetricAlgorithmEncryptedStream.cpp in Sources */,
 				5ABE4AA51C0F434400FA5A55 /* JsonValueReader.cpp in Sources */,
 				5ABE4A9B1C0F434400FA5A55 /* AesCbcSymmetricAlgorithm.cpp in Sources */,
