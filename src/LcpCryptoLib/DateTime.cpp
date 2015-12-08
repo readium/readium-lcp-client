@@ -113,7 +113,7 @@ namespace lcp
 
     bool DateTime::operator==(const DateTime & right)
     {
-        return std::difftime(this->m_time, right.m_time) == 0;
+        return this->m_time == right.m_time;
     }
 
     bool DateTime::operator!=(const DateTime & right)
@@ -123,12 +123,12 @@ namespace lcp
 
     bool DateTime::operator< (const DateTime & right)
     {
-        return std::difftime(this->m_time, right.m_time) < 0;
+        return this->m_time < right.m_time;
     }
 
     bool DateTime::operator> (const DateTime & right)
     {
-        return std::difftime(this->m_time, right.m_time) > 0;
+        return this->m_time > right.m_time;
     }
 
     std::string DateTime::ToString() const
