@@ -33,7 +33,7 @@
 
 - (NSString *)identifier
 {
-    return [self stringFromNativeString:_nativeLicense->Id()];
+    return [NSString stringWithUTF8String:_nativeLicense->Id().c_str()];
 }
 
 - (BOOL)isDecrypted
@@ -43,12 +43,7 @@
 
 - (NSString *)userHint
 {
-    return [self stringFromNativeString:_nativeLicense->Crypto()->UserKeyHint()];
-}
-
-- (NSString *)stringFromNativeString:(std::string)nativeString
-{
-    return [NSString stringWithCString:nativeString.c_str() encoding:NSUTF8StringEncoding];
+    return [NSString stringWithUTF8String:_nativeLicense->Crypto()->UserKeyHint().c_str()];
 }
 
 @end

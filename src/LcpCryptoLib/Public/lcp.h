@@ -11,6 +11,7 @@
 #include "DefaultFileSystemProvider.h"
 #include "LcpServiceCreator.h"
 #include "ILcpService.h"
+#include "IRightsService.h"
 #include "ILicense.h"
 #include "ICrypto.h"
 #include "ILinks.h"

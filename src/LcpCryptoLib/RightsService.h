@@ -16,9 +16,9 @@ namespace lcp
 
     public:
         // IRightsService
-        virtual bool HasRight(ILicense * license, const std::string & rightId) const;
-        virtual bool Consume(ILicense * license, const std::string & rightId);
-        virtual bool Consume(ILicense * license, const std::string & rightId, int amount);
+        virtual bool CanUseRight(ILicense * license, const std::string & rightId) const;
+        virtual bool UseRight(ILicense * license, const std::string & rightId);
+        virtual bool UseRight(ILicense * license, const std::string & rightId, int amount);
         virtual void SetValue(ILicense * license, const std::string & rightId, const std::string & value);
         virtual std::string GetValue(ILicense * license, const std::string & rightId) const;
 

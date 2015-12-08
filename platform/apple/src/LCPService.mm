@@ -8,6 +8,8 @@
 #import "DefaultFileSystemProvider.h"
 #import "ILcpService.h"
 #import "ILicense.h"
+#import "IRights.h"
+#import "IRightsService.h"
 #import "LcpServiceCreator.h"
 #import "LCPAcquisition.h"
 #import "LCPError.h"
@@ -21,6 +23,13 @@
 #else
 #define LOG(msg)
 #endif
+
+NSString *const LCPRightPrint = @(lcp::PrintRight);
+NSString *const LCPRightCopy = @(lcp::CopyRight);
+NSString *const LCPRightTTS = @(lcp::TtsRight);
+NSString *const LCPRightStart = @(lcp::StartRight);
+NSString *const LCPRightEnd = @(lcp::EndRight);
+
 
 @interface LCPService () {
     std::shared_ptr<lcp::ILcpService> _nativeService;
@@ -128,6 +137,32 @@
     }
     
     return YES;
+}
+
+- (BOOL)canUseRight:(NSString *)rightIdentifier license:(LCPLicense *)license
+{
+    return self.nativeService->GetRightsService()->CanUseRight(license.nativeLicense, [rightIdentifier UTF8String]);
+}
+
+- (BOOL)useRight:(NSString *)rightIdentifier license:(LCPLicense *)license
+{
+    return self.nativeService->GetRightsService()->UseRight(license.nativeLicense, [rightIdentifier UTF8String]);
+}
+
+- (BOOL)useRight:(NSString *)rightIdentifier amount:(NSInteger)amount license:(LCPLicense *)license
+{
+    return self.nativeService->GetRightsService()->UseRight(license.nativeLicense, [rightIdentifier UTF8String], (int)amount);
+}
+
+- (NSString *)valueForRight:(NSString *)rightIdentifier license:(LCPLicense *)license
+{
+    std::string value = self.nativeService->GetRightsService()->GetValue(license.nativeLicense, [rightIdentifier UTF8String]);
+    return [NSString stringWithUTF8String:value.c_str()];
+}
+
+- (void)setValue:(NSString *)value forRight:(NSString *)rightIdentifier license:(LCPLicense *)license
+{
+    self.nativeService->GetRightsService()->SetValue(license.nativeLicense, [rightIdentifier UTF8String], [value UTF8String]);
 }
 
 @end

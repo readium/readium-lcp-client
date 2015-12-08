@@ -4,6 +4,7 @@
 #include "LcpUtils.h"
 #include "BaseLcpNode.h"
 #include "Public/IRights.h"
+#include "Public/IRightsService.h"
 #include "IRightsManager.h"
 
 namespace lcp
@@ -11,8 +12,8 @@ namespace lcp
     struct RightsInfo
     {
         RightsInfo()
-            : print(UNLIMITED)
-            , copy(UNLIMITED)
+            : print(IRightsService::UNLIMITED)
+            , copy(IRightsService::UNLIMITED)
             , tts(true)
         {
         }
@@ -23,8 +24,6 @@ namespace lcp
         std::string start;
         std::string end;
         StringsMap valuesMap;
-
-        static int UNLIMITED;
     };
 
     class RightsLcpNode : public BaseLcpNode, public IRights, public IRightsManager
@@ -42,9 +41,9 @@ namespace lcp
 
     public:
         // IRightsManager
-        virtual bool HasRight(const std::string & name) const;
-        virtual bool Consume(const std::string & name);
-        virtual bool Consume(const std::string & name, int amount);
+        virtual bool CanUseRight(const std::string & name) const;
+        virtual bool UseRight(const std::string & name);
+        virtual bool UseRight(const std::string & name, int amount);
         virtual void SetRightValue(const std::string & name, const std::string & value);
 
     private:

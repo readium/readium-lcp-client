@@ -9,6 +9,8 @@
 
 namespace lcp
 {
+    /* static */ int IRightsService::UNLIMITED = -1;
+    
     RightsService::RightsService(IStorageProvider * storageProvider, const std::string & unknownUserId)
         : m_storageProvider(storageProvider)
         , m_unknownUserId(unknownUserId)
@@ -32,21 +34,21 @@ namespace lcp
         }
     }
 
-    bool RightsService::HasRight(ILicense * license, const std::string & rightId) const
+    bool RightsService::CanUseRight(ILicense * license, const std::string & rightId) const
     {
         IRightsManager * rightsManager = this->PerformChecks(license);
-        return rightsManager->HasRight(rightId);
+        return rightsManager->CanUseRight(rightId);
     }
 
-    bool RightsService::Consume(ILicense * license, const std::string & rightId)
+    bool RightsService::UseRight(ILicense * license, const std::string & rightId)
     {
-        return this->Consume(license, rightId, 1);
+        return this->UseRight(license, rightId, 1);
     }
 
-    bool RightsService::Consume(ILicense * license, const std::string & rightId, int amount)
+    bool RightsService::UseRight(ILicense * license, const std::string & rightId, int amount)
     {
         IRightsManager * rightsManager = this->PerformChecks(license);
-        if (rightsManager->Consume(rightId, amount))
+        if (rightsManager->UseRight(rightId, amount))
         {
             std::string currentValue;
             license->Rights()->GetRightValue(rightId, currentValue);
