@@ -1,8 +1,7 @@
 #include <sstream>
 #include <iomanip>
-#include <ctime>
-#include "DateTime.h"
 #include <regex>
+#include "DateTime.h"
 
 namespace lcp
 {
@@ -18,11 +17,13 @@ namespace lcp
     /*static*/ DateTime DateTime::Now()
     {
         DateTime utcNow;
-        std::time(&utcNow.m_time);
-        std::tm * utcTmPtr = nullptr;
-        utcTmPtr = std::gmtime(&utcNow.m_time);
+        std::time_t currentTime = { 0 };
+        std::time(&currentTime);
+        utcNow.m_time = currentTime;
+        TM * utcTmPtr = nullptr;
+        utcTmPtr = gmtime64(&utcNow.m_time);
         utcNow.m_tm = *utcTmPtr;
-        utcNow.m_time = std::mktime(&utcNow.m_tm);
+        utcNow.m_time = mktime64(&utcNow.m_tm);
         return utcNow;
     }
 
@@ -140,12 +141,12 @@ namespace lcp
         return m_isoTime;
     }
 
-    std::int64_t DateTime::ToTime() const
+    Time64_T DateTime::ToTime() const
     {
         return m_time;
     }
 
-    std::tm DateTime::ToTm() const
+    TM DateTime::ToTm() const
     {
         return m_tm;
     }
@@ -156,7 +157,7 @@ namespace lcp
         {
             throw std::runtime_error("Cannot parse iso time");
         }
-        m_time = std::mktime(&m_tm);
+        m_time = mktime64(&m_tm);
     }
 
     void DateTime::ProcessIsoTimeZoneTime(const std::string & isoTime)
@@ -171,7 +172,7 @@ namespace lcp
             throw std::runtime_error("Cannot parse iso time");
         }
 
-        std::tm timeZone = {};
+        TM timeZone = {};
         if (!TimeStringToTm(timeZonePart, "%H:%M", timeZone))
         {
             throw std::runtime_error("Cannot parse iso time");
@@ -187,7 +188,7 @@ namespace lcp
             m_tm.tm_hour -= timeZone.tm_hour;
             m_tm.tm_min -= timeZone.tm_min;
         }
-        m_time = std::mktime(&m_tm);
+        m_time = mktime64(&m_tm);
     }
 
     /*static*/ std::string DateTime::JointToNormalIsoFormat(const std::string & jointTime, bool isUtc)
@@ -210,12 +211,28 @@ namespace lcp
         return result;
     }
 
-    /*static*/ bool DateTime::TimeStringToTm(const std::string & time, const std::string & format, std::tm & result)
+    /*static*/ bool DateTime::TimeStringToTm(const std::string & time, const std::string & format, TM & result)
     {
         result = {};
+        std::tm tempResult = {};
         std::istringstream strm(time);
-        strm >> std::get_time(&result, format.c_str());
+        strm >> std::get_time(&tempResult, format.c_str());
+        result = TmToTm64(tempResult);
         return (!strm.fail());
     }
 
+    /*static*/ TM DateTime::TmToTm64(const std::tm & from)
+    {
+        TM res = {};
+        res.tm_year = from.tm_year;
+        res.tm_yday = from.tm_yday;
+        res.tm_mon = from.tm_mon;
+        res.tm_mday = from.tm_mday;
+        res.tm_wday = from.tm_wday;
+        res.tm_hour = from.tm_hour;
+        res.tm_min = from.tm_min;
+        res.tm_sec = from.tm_sec;
+        res.tm_isdst = from.tm_isdst;
+        return res;
+    }
 }

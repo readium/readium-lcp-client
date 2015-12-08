@@ -2,7 +2,7 @@
 #define __DATE_TIME_H__
 
 #include <string>
-#include <ctime>
+#include "time64.h"
 
 namespace lcp
 {
@@ -18,8 +18,8 @@ namespace lcp
         DateTime & operator= (DateTime && right);
 
         std::string ToString() const;
-        std::int64_t ToTime() const;
-        std::tm ToTm() const;
+        Time64_T ToTime() const;
+        TM ToTm() const;
         
         bool operator==(const DateTime & right);
         bool operator!=(const DateTime & right);
@@ -43,12 +43,14 @@ namespace lcp
         void ProcessIsoTimeZoneTime(const std::string & isoTime);
 
         static std::string JointToNormalIsoFormat(const std::string & jointTime, bool isUtc);
-        static bool TimeStringToTm(const std::string & time, const std::string & format, std::tm & result);
+        static bool TimeStringToTm(const std::string & time, const std::string & format, TM & result);
+
+        static TM TmToTm64(const std::tm & from);
 
     private:
         std::string m_isoTime;
-        std::int64_t m_time;
-        std::tm m_tm;
+        Time64_T m_time;
+        TM m_tm;
     };
 
 }

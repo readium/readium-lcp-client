@@ -142,4 +142,9 @@ namespace lcptest
         ASSERT_EQ(object.ToTime(), 2394037297);
         ASSERT_STREQ("2045-11-11T22:21:37-02:00", object.ToString().c_str());
     }
+
+    TEST(DateTimeTest, DateTimeNow)
+    {
+        lcp::DateTime now = lcp::DateTime::Now();
+    }
 }
