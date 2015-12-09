@@ -34,36 +34,44 @@ namespace lcp
         
         virtual void OnAcquisitionStarted(IAcquisition *acquisition)
         {
-            id<LCPAcquisitionDelegate> delegate = m_acquisition.delegate;
-            if ([delegate respondsToSelector:@selector(lcpAcquisitionDidStart:)]) {
-                [delegate lcpAcquisitionDidStart:m_acquisition];
-            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                id<LCPAcquisitionDelegate> delegate = m_acquisition.delegate;
+                if ([delegate respondsToSelector:@selector(lcpAcquisitionDidStart:)]) {
+                    [delegate lcpAcquisitionDidStart:m_acquisition];
+                }
+            });
         }
         
         virtual void OnAcquisitionProgressed(IAcquisition *acquisition, float progress)
         {
-            id<LCPAcquisitionDelegate> delegate = m_acquisition.delegate;
-            if ([delegate respondsToSelector:@selector(lcpAcquisition:didProgress:)]) {
-                [delegate lcpAcquisition:m_acquisition didProgress:progress];
-            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                id<LCPAcquisitionDelegate> delegate = m_acquisition.delegate;
+                if ([delegate respondsToSelector:@selector(lcpAcquisition:didProgress:)]) {
+                    [delegate lcpAcquisition:m_acquisition didProgress:progress];
+                }
+            });
         }
         
         virtual void OnAcquisitionCanceled(IAcquisition *acquisition)
         {
-            id<LCPAcquisitionDelegate> delegate = m_acquisition.delegate;
-            if ([delegate respondsToSelector:@selector(lcpAcquisitionDidCancel:)]) {
-                [delegate lcpAcquisitionDidCancel:m_acquisition];
-            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                id<LCPAcquisitionDelegate> delegate = m_acquisition.delegate;
+                if ([delegate respondsToSelector:@selector(lcpAcquisitionDidCancel:)]) {
+                    [delegate lcpAcquisitionDidCancel:m_acquisition];
+                }
+            });
         }
         
         virtual void OnAcquisitionEnded(IAcquisition *acquisition, Status status)
         {
-            id<LCPAcquisitionDelegate> delegate = m_acquisition.delegate;
-            if ([delegate respondsToSelector:@selector(lcpAcquisition:didEnd:error:)]) {
-                BOOL success = Status::IsSuccess(status);
-                NSError *error = success ? nil : LCPErrorFromStatus(status);
-                [delegate lcpAcquisition:m_acquisition didEnd:success error:error];
-            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                id<LCPAcquisitionDelegate> delegate = m_acquisition.delegate;
+                if ([delegate respondsToSelector:@selector(lcpAcquisition:didEnd:error:)]) {
+                    BOOL success = Status::IsSuccess(status);
+                    NSError *error = success ? nil : LCPErrorFromStatus(status);
+                    [delegate lcpAcquisition:m_acquisition didEnd:success error:error];
+                }
+            });
         }
     };
 }
@@ -108,6 +116,7 @@ namespace lcp
 {
     self.delegate = delegate;
     self.callback = new lcp::AppleAcquisitionCallback(self);
+    
     self.nativeAcquisition->Start(self.callback);
 }
 

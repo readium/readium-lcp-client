@@ -18,8 +18,13 @@
 
 #import <Foundation/Foundation.h>
 
-static NSString *const LCPErrorDomain = @"com.mantano.lcp.error";
-static NSString *const LCPErrorExtensionKey = @"LCPErrorExtension";
+extern NSString *const LCPErrorDomain;
+extern NSString *const LCPErrorExtensionKey;
+
+// Not an enum because these are actually aliases to the C++ enum values.
+// We don't want to compile this header as an Objective-C++ file.
+extern NSInteger const LCPErrorDecryptionLicenseEncrypted;
+extern NSInteger const LCPErrorDecryptionUserPassphraseNotValid;
 
 #ifdef __cplusplus
 namespace lcp {

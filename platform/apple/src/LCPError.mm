@@ -19,9 +19,17 @@
 #import "LcpStatus.h"
 #import "LCPError.h"
 
-NSError *LCPErrorFromStatus(lcp::Status status)
+NSString *const LCPErrorDomain = @"com.mantano.lcp.error";
+NSString *const LCPErrorExtensionKey = @"LCPErrorExtension";
+
+using namespace lcp;
+
+NSInteger const LCPErrorDecryptionLicenseEncrypted = StCodeCover::ErrorDecryptionLicenseEncrypted;
+NSInteger const LCPErrorDecryptionUserPassphraseNotValid = StCodeCover::ErrorDecryptionUserPassphraseNotValid;
+
+NSError *LCPErrorFromStatus(Status status)
 {
-    if (lcp::Status::IsSuccess(status)) {
+    if (Status::IsSuccess(status)) {
         return nil;
     }
     
