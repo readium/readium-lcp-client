@@ -82,7 +82,6 @@
     <ClInclude Include="..\..\..\src\LcpCryptoLib\SymmetricAlgorithmEncryptedStream.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\ThreadTimer.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\UserLcpNode.h" />
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\UUIDGenerator.h" />
     <ClInclude Include="..\..\..\src\third-parties\time64\time64.h" />
     <ClInclude Include="..\..\..\src\third-parties\time64\time64_config.h" />
     <ClInclude Include="..\..\..\src\third-parties\time64\time64_limits.h" />
@@ -117,7 +116,6 @@
     <ClCompile Include="..\..\..\src\LcpCryptoLib\SymmetricAlgorithmEncryptedStream.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\ThreadTimer.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\UserLcpNode.cpp" />
-    <ClCompile Include="..\..\..\src\LcpCryptoLib\UUIDGenerator.cpp" />
     <ClCompile Include="..\..\..\src\third-parties\time64\time64.c" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

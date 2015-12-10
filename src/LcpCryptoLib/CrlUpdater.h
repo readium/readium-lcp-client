@@ -23,6 +23,7 @@
 #include <mutex>
 #include <condition_variable>
 #include "ICertificate.h"
+#include "SimpleMemoryWritableStream.h"
 #include "Public/INetProvider.h"
 
 namespace lcp
@@ -30,7 +31,6 @@ namespace lcp
     class ThreadTimer;
     class CrlDownloader;
     class IDownloadRequest;
-    class SimpleMemoryWritableStream;
 
     class CrlUpdater : public INetProviderCallback
     {
@@ -72,7 +72,7 @@ namespace lcp
         mutable std::mutex m_downloadSync;
         std::condition_variable m_conditionDownload;
 
-        static const int TenMinutesPeriod = 1000 * 60 * 10;
+        static const int TenMinutesPeriod;
     };
 }
 

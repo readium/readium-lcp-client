@@ -1,6 +1,6 @@
 //
-//  Created by Mickaël Menu, Artem Brazhnikov on 11/15.
-//  Copyright © 2015 Mantano. All rights reserved.
+//  Created by MickaÃ«l Menu, Artem Brazhnikov on 11/15.
+//  Copyright Â© 2015 Mantano. All rights reserved.
 //
 //  This program is distributed in the hope that it will be useful, but WITHOUT ANY
 //  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
@@ -38,7 +38,7 @@ namespace lcp
     class IDownloadRequest : public INetRequest
     {
     public:
-        // INetProvider writes downloaded data in?? the stream,
+        // INetProvider writes downloaded data into the stream,
         // may not be used if INetProvider uses the DestinationPath
         virtual IWritableStream * DestinationStream() const = 0;
         // Returns whether IDownloadRequest uses path or not
@@ -62,11 +62,8 @@ namespace lcp
     class INetProvider
     {
     public:
+        // Asynchronous network request
         virtual void StartDownloadRequest(
-            IDownloadRequest * request,
-            INetProviderCallback * callback
-            ) = 0;
-        virtual void StartDownloadRequestAsync(
             IDownloadRequest * request,
             INetProviderCallback * callback
             ) = 0;

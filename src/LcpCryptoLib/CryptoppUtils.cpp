@@ -19,6 +19,7 @@
 #include <sstream>
 #include <cryptopp/base64.h>
 #include <cryptopp/hex.h>
+#include <cryptopp/osrng.h>
 #include "CryptoppUtils.h"
 #include "LcpUtils.h"
 
@@ -86,6 +87,19 @@ namespace lcp
             throw std::runtime_error("result data is empty");
         }
         return result;
+    }
+
+    std::string CryptoppUtils::GenerateUuid()
+    {
+        const static int UuidRawSize = 16;
+
+        AutoSeededRandomPool rnd;
+        std::vector<unsigned char> guid(UuidRawSize);
+        rnd.GenerateBlock(guid.data(), guid.size());
+
+        std::stringstream guidHex;
+        guidHex << RawToHex(guid);
+        return guidHex.str().insert(8, 1, '-').insert(13, 1, '-').insert(18, 1, '-').insert(23, 1, '-');
     }
 
     std::string CryptoppUtils::RawToHex(const std::vector<unsigned char> & key)

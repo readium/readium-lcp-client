@@ -177,6 +177,9 @@
     <ProjectReference Include="..\..\..\src\third-parties\cryptopp\cryptlib.vcxproj">
       <Project>{3423ec9a-52e4-4a4d-9753-edebc38785ef}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\src\third-parties\curl\projects\Windows\VC14\lib\libcurl.vcxproj">
+      <Project>{da6f56b4-06a4-441d-ad70-ac5a7d51fadb}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\src\third-parties\ziplib\Source\ZipLib\extlibs\zlib\zlib_cryptolib.vcxproj">
       <Project>{baeb16b3-db4c-432f-9e6a-2acadea0691d}</Project>
     </ProjectReference>

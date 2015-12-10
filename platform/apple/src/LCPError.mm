@@ -24,8 +24,8 @@ NSString *const LCPErrorExtensionKey = @"LCPErrorExtension";
 
 using namespace lcp;
 
-NSInteger const LCPErrorDecryptionLicenseEncrypted = StCodeCover::ErrorDecryptionLicenseEncrypted;
-NSInteger const LCPErrorDecryptionUserPassphraseNotValid = StCodeCover::ErrorDecryptionUserPassphraseNotValid;
+NSInteger const LCPErrorDecryptionLicenseEncrypted = StatusCode::ErrorDecryptionLicenseEncrypted;
+NSInteger const LCPErrorDecryptionUserPassphraseNotValid = StatusCode::ErrorDecryptionUserPassphraseNotValid;
 
 NSError *LCPErrorFromStatus(Status status)
 {

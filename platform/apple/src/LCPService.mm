@@ -37,15 +37,17 @@
 #define LOG(msg)
 #endif
 
-NSString *const LCPRightPrint = @(lcp::PrintRight);
-NSString *const LCPRightCopy = @(lcp::CopyRight);
-NSString *const LCPRightTTS = @(lcp::TtsRight);
-NSString *const LCPRightStart = @(lcp::StartRight);
-NSString *const LCPRightEnd = @(lcp::EndRight);
+using namespace lcp;
+
+NSString *const LCPRightPrint = @(PrintRight);
+NSString *const LCPRightCopy = @(CopyRight);
+NSString *const LCPRightTTS = @(TtsRight);
+NSString *const LCPRightStart = @(StartRight);
+NSString *const LCPRightEnd = @(EndRight);
 
 
 @interface LCPService () {
-    std::shared_ptr<lcp::ILcpService> _nativeService;
+    std::shared_ptr<ILcpService> _nativeService;
 }
 @end
 
@@ -64,19 +66,19 @@ NSString *const LCPRightEnd = @(lcp::EndRight);
 
 - (instancetype)initWithRootCertificate:(NSString *)rootCertificate error:(NSError **)error
 {
-    lcp::ILcpService *service = nullptr;
-    lcp::LcpServiceCreator factory;
-    lcp::IStorageProvider *storageProvider;
-    lcp::INetProvider *netProvider;
-    lcp::IFileSystemProvider *fileSystemProvider;
+    ILcpService *service = nullptr;
+    LcpServiceCreator factory;
+    IStorageProvider *storageProvider;
+    INetProvider *netProvider;
+    IFileSystemProvider *fileSystemProvider;
     
 #if TARGET_OS_IPHONE
-    storageProvider = new lcp::iOSStorageProvider();
-    netProvider = new lcp::iOSNetProvider();
-    fileSystemProvider = new lcp::DefaultFileSystemProvider();
+    storageProvider = new iOSStorageProvider();
+    netProvider = new iOSNetProvider();
+    fileSystemProvider = new DefaultFileSystemProvider();
 #endif
     
-    lcp::Status status = factory.CreateLcpService([rootCertificate UTF8String], netProvider, storageProvider, fileSystemProvider, &service);
+    Status status = factory.CreateLcpService([rootCertificate UTF8String], netProvider, storageProvider, fileSystemProvider, &service);
     
     if (![self checkStatus:status error:error]) {
         return nil;
@@ -84,13 +86,13 @@ NSString *const LCPRightEnd = @(lcp::EndRight);
     
     self = [super init];
     if (self) {
-        _nativeService = std::shared_ptr<lcp::ILcpService>(service);
+        _nativeService = std::shared_ptr<ILcpService>(service);
     }
     
     return self;
 }
 
-- (lcp::ILcpService *)nativeService
+- (ILcpService *)nativeService
 {
     return _nativeService ? _nativeService.get() : nullptr;
 }
@@ -102,8 +104,8 @@ NSString *const LCPRightEnd = @(lcp::EndRight);
     
     LCPLicense *license;
     
-    lcp::ILicense *nativeLicense;
-    lcp::Status status = _nativeService->OpenLicense([licenseJSON UTF8String], &nativeLicense);
+    ILicense *nativeLicense;
+    Status status = _nativeService->OpenLicense([licenseJSON UTF8String], &nativeLicense);
     
     if ([self checkStatus:status error:error]) {
         license = [[LCPLicense alloc] initWithLicense:nativeLicense];
@@ -120,7 +122,7 @@ NSString *const LCPRightEnd = @(lcp::EndRight);
     if (license.isDecrypted)
         return YES;
     
-    lcp::Status status = lcp::StCodeCover::ErrorDecryptionLicenseEncrypted;
+    Status status = StatusCode::ErrorDecryptionLicenseEncrypted;
     if (passphrase) {
         status = _nativeService->DecryptLicense(license.nativeLicense, [passphrase UTF8String]);
     }
@@ -130,9 +132,9 @@ NSString *const LCPRightEnd = @(lcp::EndRight);
 - (LCPAcquisition *)createAcquisition:(LCPLicense *)license publicationPath:(NSString *)publicationPath error:(NSError **)error
 {
     LCPAcquisition *acquisition;
-    lcp::IAcquisition *nativeAcquisition;
+    IAcquisition *nativeAcquisition;
     
-    lcp::Status status = _nativeService->CreatePublicationAcquisition([publicationPath UTF8String], license.nativeLicense, &nativeAcquisition);
+    Status status = _nativeService->CreatePublicationAcquisition([publicationPath UTF8String], license.nativeLicense, &nativeAcquisition);
     if ([self checkStatus:status error:error]) {
         acquisition = [[LCPAcquisition alloc] initWithAcquisition:nativeAcquisition];
     }
@@ -140,9 +142,9 @@ NSString *const LCPRightEnd = @(lcp::EndRight);
     return acquisition;
 }
 
-- (BOOL)checkStatus:(lcp::Status)status error:(NSError **)error
+- (BOOL)checkStatus:(Status)status error:(NSError **)error
 {
-    if (!lcp::Status::IsSuccess(status)) {
+    if (!Status::IsSuccess(status)) {
         if (error != NULL) {
             *error = LCPErrorFromStatus(status);
         }

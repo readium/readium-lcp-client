@@ -27,6 +27,8 @@
 
 namespace lcp
 {
+    const int CrlUpdater::TenMinutesPeriod = 1000 * 60 * 10;
+    
     CrlUpdater::CrlUpdater(
         INetProvider * netProvider,
         ICertificateRevocationList * revocationList,
@@ -97,7 +99,7 @@ namespace lcp
     {
         m_crlStream.reset(new SimpleMemoryWritableStream());
         m_downloadRequest.reset(new DownloadInMemoryRequest(url, m_crlStream.get()));
-        m_netProvider->StartDownloadRequestAsync(m_downloadRequest.get(), this);
+        m_netProvider->StartDownloadRequest(m_downloadRequest.get(), this);
         m_requestRunning = true;
     }
 
