@@ -64,6 +64,8 @@ namespace lcp
             std::vector<unsigned char> & key
             ) = 0;
 
+        virtual Status GenerateUuid(std::string & uuid) = 0;
+
         virtual Status DecryptLicenseData(
             const std::string & dataBase64,
             ILicense * license,

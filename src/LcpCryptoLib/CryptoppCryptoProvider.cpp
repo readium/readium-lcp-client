@@ -259,6 +259,19 @@ namespace lcp
         }
     }
 
+    Status CryptoppCryptoProvider::GenerateUuid(std::string & uuid)
+    {
+        try
+        {
+            uuid = CryptoppUtils::GenerateUuid();
+            return Status(StatusCode::ErrorCommonSuccess);
+        }
+        catch (const CryptoPP::Exception & ex)
+        {
+            return Status(StatusCode::ErrorDecryptionCommonError, ex.GetWhat());
+        }
+    }
+
     Status CryptoppCryptoProvider::DecryptLicenseData(
         const std::string & dataBase64,
         ILicense * license,
@@ -344,7 +357,11 @@ namespace lcp
     Status CryptoppCryptoProvider::ProcessRevokation(ICertificate * providerCertificate)
     {
         bool containedAnyUrlBefore = m_crlUpdater->ContainsAnyUrl();
-        m_crlUpdater->UpdateCrlDistributionPoints(providerCertificate->DistributionPoints());
+
+        if (providerCertificate->DistributionPoints() != nullptr)
+        {
+            m_crlUpdater->UpdateCrlDistributionPoints(providerCertificate->DistributionPoints());
+        }
 
         // First time processing of the CRL
         if (!containedAnyUrlBefore && m_crlUpdater->ContainsAnyUrl())

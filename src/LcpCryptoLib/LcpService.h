@@ -30,7 +30,6 @@ namespace lcp
     class JsonValueReader;
     class EncryptionProfilesManager;
     class ICryptoProvider;
-    class UUIDGenerator;
 
     class LcpService : public ILcpService
     {
@@ -116,7 +115,6 @@ namespace lcp
         std::unique_ptr<JsonValueReader> m_jsonReader;
         std::unique_ptr<EncryptionProfilesManager> m_encryptionProfilesManager;
         std::unique_ptr<ICryptoProvider> m_cryptoProvider;
-        std::unique_ptr<UUIDGenerator> m_uuidGenerator;
         std::map<std::string, std::unique_ptr<ILicense> > m_licenses;
 
     private:

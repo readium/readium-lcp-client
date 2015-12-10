@@ -35,6 +35,7 @@ namespace lcp
         static std::vector<unsigned char> Base64ToVector(const std::string & base64);
         static std::string RawToHex(const std::vector<unsigned char> & key);
         static std::vector<unsigned char> HexToRaw(const std::string & hex);
+        static std::string GenerateUuid();
 
         class Cert
         {

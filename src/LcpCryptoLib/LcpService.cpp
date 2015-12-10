@@ -27,7 +27,6 @@
 #include "EncryptionProfilesManager.h"
 #include "CryptoppCryptoProvider.h"
 #include "SimpleKeyProvider.h"
-#include "UUIDGenerator.h"
 #include "Public/IStorageProvider.h"
 #include "Public/INetProvider.h"
 #include "Acquisition.h"
@@ -52,7 +51,6 @@ namespace lcp
         , m_jsonReader(new JsonValueReader())
         , m_encryptionProfilesManager(new EncryptionProfilesManager())
         , m_cryptoProvider(new CryptoppCryptoProvider(m_encryptionProfilesManager.get(), m_netProvider))
-        , m_uuidGenerator(new UUIDGenerator())
     {
     }
 
@@ -360,7 +358,12 @@ namespace lcp
     {
         try
         {
-            std::string randomLicenseId = m_uuidGenerator->GenerateUUID();
+            std::string randomLicenseId;
+            Status res = m_cryptoProvider->GenerateUuid(randomLicenseId);
+            if (!Status::IsSuccess(res))
+            {
+                return res;
+            }
             return this->AddUserKey(userKey, userId, providerId, randomLicenseId);
         }
         catch (const StatusException & ex)
