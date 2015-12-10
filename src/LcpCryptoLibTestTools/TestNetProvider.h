@@ -96,7 +96,7 @@ int CallbackProgress(NetworkInfo * networkInfo, double t, double d, double ultot
 class TestNetProvider : public lcp::INetProvider
 {
 public:
-    virtual void StartDownloadRequest(
+    void Worker(
         lcp::IDownloadRequest * request,
         lcp::INetProviderCallback * callback
         )
@@ -157,12 +157,12 @@ public:
         curl_easy_cleanup(curl);
     }
 
-    virtual void StartDownloadRequestAsync(
+    virtual void StartDownloadRequest(
         lcp::IDownloadRequest * request,
         lcp::INetProviderCallback * callback
         )
     {
-        std::thread downloadThread(&TestNetProvider::StartDownloadRequest, this, request, callback);
+        std::thread downloadThread(&TestNetProvider::Worker, this, request, callback);
         downloadThread.detach();
     }
 };

@@ -62,11 +62,8 @@ namespace lcp
     class INetProvider
     {
     public:
+        // Asynchronous network request
         virtual void StartDownloadRequest(
-            IDownloadRequest * request,
-            INetProviderCallback * callback
-            ) = 0;
-        virtual void StartDownloadRequestAsync(
             IDownloadRequest * request,
             INetProviderCallback * callback
             ) = 0;
