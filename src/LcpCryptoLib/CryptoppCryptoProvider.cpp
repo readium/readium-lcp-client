@@ -1,19 +1,7 @@
 //
 //  Created by Artem Brazhnikov on 11/15.
 //  Copyright © 2015 Mantano. All rights reserved.
-//
-//  This program is distributed in the hope that it will be useful, but WITHOUT ANY
-//  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-//
-//  Licensed under Gnu Affero General Public License Version 3 (provided, notwithstanding this notice,
-//  Readium Foundation reserves the right to license this material under a different separate license,
-//  and if you have done so, the terms of that separate license control and the following references
-//  to GPL do not apply).
-//
-//  This program is free software: you can redistribute it and/or modify it under the terms of the GNU
-//  Affero General Public License as published by the Free Software Foundation, either version 3 of
-//  the License, or (at your option) any later version. You should have received a copy of the GNU
-//  Affero General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//  Any commercial use is strictly prohibited.
 //
 
 #include <functional>
@@ -37,16 +25,24 @@ namespace lcp
 {
     CryptoppCryptoProvider::CryptoppCryptoProvider(
         EncryptionProfilesManager * encryptionProfilesManager,
-        INetProvider * netProvider
+        INetProvider * netProvider,
+        const std::string & defaultCrlUrl
         )
         : m_encryptionProfilesManager(encryptionProfilesManager)
     {
         m_revocationList.reset(new CertificateRevocationList());
         m_threadTimer.reset(new ThreadTimer());
-        m_crlUpdater.reset(new CrlUpdater(netProvider, m_revocationList.get(), m_threadTimer.get()));
+        m_crlUpdater.reset(new CrlUpdater(netProvider, m_revocationList.get(), m_threadTimer.get(), defaultCrlUrl));
 
         m_threadTimer->SetHandler(std::bind(&CrlUpdater::Update, m_crlUpdater.get()));
         m_threadTimer->SetAutoReset(true);
+
+        if (m_crlUpdater->ContainsAnyUrl())
+        {
+            m_threadTimer->SetUsage(ThreadTimer::DurationUsage);
+            m_threadTimer->SetDuration(ThreadTimer::DurationType(ThreadTimer::DurationType::zero()));
+            m_threadTimer->Start();
+        }
     }
 
     CryptoppCryptoProvider::~CryptoppCryptoProvider()
@@ -98,7 +94,7 @@ namespace lcp
                 return Status(StatusCode::ErrorOpeningContentProviderCertificateNotVerified);
             }
 
-            Status res = this->ProcessRevokation(providerCertificate.get());
+            Status res = this->ProcessRevokation(rootCertificate.get(), providerCertificate.get());
             if (!Status::IsSuccess(res))
             {
                 return res;
@@ -354,14 +350,12 @@ namespace lcp
         }
     }
 
-    Status CryptoppCryptoProvider::ProcessRevokation(ICertificate * providerCertificate)
+    Status CryptoppCryptoProvider::ProcessRevokation(ICertificate * rootCertificate, ICertificate * providerCertificate)
     {
         bool containedAnyUrlBefore = m_crlUpdater->ContainsAnyUrl();
 
-        if (providerCertificate->DistributionPoints() != nullptr)
-        {
-            m_crlUpdater->UpdateCrlDistributionPoints(providerCertificate->DistributionPoints());
-        }
+        m_crlUpdater->UpdateCrlUrls(rootCertificate->DistributionPoints());
+        m_crlUpdater->UpdateCrlUrls(providerCertificate->DistributionPoints());
 
         // First time processing of the CRL
         if (!containedAnyUrlBefore && m_crlUpdater->ContainsAnyUrl())

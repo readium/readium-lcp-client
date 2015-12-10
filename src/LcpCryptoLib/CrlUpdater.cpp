@@ -1,19 +1,7 @@
 //
 //  Created by Artem Brazhnikov on 11/15.
 //  Copyright © 2015 Mantano. All rights reserved.
-//
-//  This program is distributed in the hope that it will be useful, but WITHOUT ANY
-//  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-//
-//  Licensed under Gnu Affero General Public License Version 3 (provided, notwithstanding this notice,
-//  Readium Foundation reserves the right to license this material under a different separate license,
-//  and if you have done so, the terms of that separate license control and the following references
-//  to GPL do not apply).
-//
-//  This program is free software: you can redistribute it and/or modify it under the terms of the GNU
-//  Affero General Public License as published by the Free Software Foundation, either version 3 of
-//  the License, or (at your option) any later version. You should have received a copy of the GNU
-//  Affero General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//  Any commercial use is strictly prohibited.
 //
 
 #include <algorithm>
@@ -32,7 +20,8 @@ namespace lcp
     CrlUpdater::CrlUpdater(
         INetProvider * netProvider,
         ICertificateRevocationList * revocationList,
-        ThreadTimer * threadTimer
+        ThreadTimer * threadTimer,
+        const std::string & defaultCrlUrl
         )
         : m_requestRunning(false)
         , m_netProvider(netProvider)
@@ -40,13 +29,17 @@ namespace lcp
         , m_threadTimer(threadTimer)
         , m_currentRequestStatus(Status(StatusCode::ErrorCommonSuccess))
     {
+        if (!defaultCrlUrl.empty())
+        {
+            m_crlUrls.push_back(defaultCrlUrl);
+        }
     }
 
-    void CrlUpdater::UpdateCrlDistributionPoints(ICrlDistributionPoints * distributionPoints)
+    void CrlUpdater::UpdateCrlUrls(ICrlDistributionPoints * distributionPoints)
     {
         std::unique_lock<std::mutex> locker(m_downloadSync);
 
-        if (distributionPoints->HasCrlDistributionPoints())
+        if (distributionPoints != nullptr && distributionPoints->HasCrlDistributionPoints())
         {
             const StringsList & newUrls = distributionPoints->CrlDistributionPointUrls();
             std::copy_if(
