@@ -1,0 +1,261 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Acquisition.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\AesCbcSymmetricAlgorithm.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\AlgorithmNames.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\BaseDownloadRequest.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\BaseLcpNode.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\CanonicalWriter.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Certificate.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\CertificateExtension.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\CertificateRevocationList.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\CrlDistributionPoints.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\CrlUpdater.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\CryptoppUtils.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\CryptoAlgorithmInterfaces.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\CryptoLcpNode.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\CryptoppCryptoProvider.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\DateTime.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\DecryptionContextImpl.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\DownloadInMemoryRequest.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\DownloadInFileRequest.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\EncryptionProfileNames.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\EncryptionProfilesManager.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\ICertificate.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\ICryptoProvider.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\IDecryptionContext.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\IEncryptionProfile.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\IKeyProvider.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\ILcpNode.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\IRightsManager.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\JsonCanonicalizer.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\JsonValueReader.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Lcp1dot0EncryptionProfile.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\LcpService.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\LcpUtils.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\LinksLcpNode.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\SimpleMemoryWritableStream.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\ContainerIterator.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\DefaultFileSystemProvider.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\IAcquistion.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\IAcquistionCallback.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\ICrypto.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\StreamInterfaces.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\IFileSystemProvider.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\ILcpService.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\ILicense.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\ILinks.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\INetProvider.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\IRights.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\IRightsService.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\IStorageProvider.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\IUser.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\IValueIterator.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\lcp.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\LcpServiceCreator.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\LcpStatus.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\RightsLcpNode.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\RightsService.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\RootLcpNode.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\RsaSha256SignatureAlgorithm.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Sha256HashAlgorithm.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\SimpleKeyProvider.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\SymmetricAlgorithmEncryptedStream.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\ThreadTimer.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\UserLcpNode.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\UUIDGenerator.h" />
+    <ClInclude Include="..\..\..\src\third-parties\time64\time64.h" />
+    <ClInclude Include="..\..\..\src\third-parties\time64\time64_config.h" />
+    <ClInclude Include="..\..\..\src\third-parties\time64\time64_limits.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\Acquisition.cpp" />
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\AesCbcSymmetricAlgorithm.cpp" />
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\AlgorithmNames.cpp" />
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\Certificate.cpp" />
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\CertificateExtension.cpp" />
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\CertificateRevocationList.cpp" />
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\CrlDistributionPoints.cpp" />
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\CrlUpdater.cpp" />
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\CryptoppUtils.cpp" />
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\CryptoLcpNode.cpp" />
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\CryptoppCryptoProvider.cpp" />
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\DateTime.cpp" />
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\EncryptionProfileNames.cpp" />
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\EncryptionProfilesManager.cpp" />
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\JsonCanonicalizer.cpp" />
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\JsonValueReader.cpp" />
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\Lcp1dot0EncryptionProfile.cpp" />
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\LcpService.cpp" />
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\LcpServiceCreator.cpp" />
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\LcpUtils.cpp" />
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\LinksLcpNode.cpp" />
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\RightsLcpNode.cpp" />
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\RightsService.cpp" />
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\RootLcpNode.cpp" />
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\RsaSha256SignatureAlgorithm.cpp" />
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\Sha256HashAlgorithm.cpp" />
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\SymmetricAlgorithmEncryptedStream.cpp" />
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\ThreadTimer.cpp" />
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\UserLcpNode.cpp" />
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\UUIDGenerator.cpp" />
+    <ClCompile Include="..\..\..\src\third-parties\time64\time64.c" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{260B5BB3-0BEF-4DC9-AC6F-E848FF487B2B}</ProjectGuid>
+    <RootNamespace>LcpCryptoLib</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)..\..\lib\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)..\..\obj\$(Platform)\$(ProjectName)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)..\..\lib\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)..\..\obj\$(Platform)\$(ProjectName)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)..\..\lib\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)..\..\obj\$(Platform)\$(ProjectName)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)..\..\lib\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)..\..\obj\$(Platform)\$(ProjectName)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>../../../src/third-parties</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>
+      </DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>../../../src/third-parties</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>
+      </DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>../../../src/third-parties</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>
+      </DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>../../../src/third-parties</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>
+      </DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

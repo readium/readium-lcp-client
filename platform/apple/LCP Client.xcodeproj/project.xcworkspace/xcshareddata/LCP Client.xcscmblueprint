@@ -1,0 +1,37 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "4273FD4A0AA7B99FF8F2066F0312A9510815B462",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "4273FD4A0AA7B99FF8F2066F0312A9510815B462" : 0,
+    "F877AB78EFAD39423C3244AC0BA1BB5868DCCB23" : 0,
+    "4DEFC45CAD2D57E317F89A80ED078F36923AF49A" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "576AAB73-8D88-48A9-BFA4-28A47946924B",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "4273FD4A0AA7B99FF8F2066F0312A9510815B462" : "mantano-lcp-client\/",
+    "F877AB78EFAD39423C3244AC0BA1BB5868DCCB23" : "..\/..\/..\/..",
+    "4DEFC45CAD2D57E317F89A80ED078F36923AF49A" : ".."
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "LCP Client",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "build\/apple\/LCP Client.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "bitbucket.org:mantano\/mantano-lcp-client.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "4273FD4A0AA7B99FF8F2066F0312A9510815B462"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "bitbucket.org:mantano\/mantano-readium-sdk-ios-bridge.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "4DEFC45CAD2D57E317F89A80ED078F36923AF49A"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "bitbucket.org:mantano\/mantano-reader-for-ios.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "F877AB78EFAD39423C3244AC0BA1BB5868DCCB23"
+    }
+  ]
+}
