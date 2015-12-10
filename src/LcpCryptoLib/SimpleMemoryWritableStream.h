@@ -42,7 +42,7 @@ namespace lcp
         {
             size_t convSizeToWrite = static_cast<size_t>(sizeToWrite);
             this->EnsureSize(m_position + convSizeToWrite);
-            memcpy_s(&m_buffer.at(m_position), convSizeToWrite, pBuffer, convSizeToWrite);
+            std::copy(pBuffer, pBuffer + convSizeToWrite, m_buffer.begin() + m_position);
         }
 
         virtual void SetWritePosition(int64_t pos)
