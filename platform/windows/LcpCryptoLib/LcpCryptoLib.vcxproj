@@ -22,16 +22,22 @@
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Acquisition.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\AesCbcSymmetricAlgorithm.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\AlgorithmNames.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\BaseDownloadRequest.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\BaseLcpNode.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\CanonicalWriter.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Certificate.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\CertificateExtension.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\CertificateRevocationList.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\CrlDistributionPoints.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\CrlUpdater.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\CryptoppUtils.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\CryptoAlgorithmInterfaces.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\CryptoLcpNode.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\CryptoppCryptoProvider.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\DateTime.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\DecryptionContextImpl.h" />
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\DownloadRequest.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\DownloadInMemoryRequest.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\DownloadInFileRequest.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\EncryptionProfileNames.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\EncryptionProfilesManager.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\ICertificate.h" />
@@ -47,6 +53,7 @@
     <ClInclude Include="..\..\..\src\LcpCryptoLib\LcpService.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\LcpUtils.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\LinksLcpNode.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\SimpleMemoryWritableStream.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\ContainerIterator.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\DefaultFileSystemProvider.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\IAcquistion.h" />
@@ -73,14 +80,22 @@
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Sha256HashAlgorithm.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\SimpleKeyProvider.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\SymmetricAlgorithmEncryptedStream.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\ThreadTimer.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\UserLcpNode.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\UUIDGenerator.h" />
+    <ClInclude Include="..\..\..\src\third-parties\time64\time64.h" />
+    <ClInclude Include="..\..\..\src\third-parties\time64\time64_config.h" />
+    <ClInclude Include="..\..\..\src\third-parties\time64\time64_limits.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\LcpCryptoLib\Acquisition.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\AesCbcSymmetricAlgorithm.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\AlgorithmNames.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\Certificate.cpp" />
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\CertificateExtension.cpp" />
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\CertificateRevocationList.cpp" />
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\CrlDistributionPoints.cpp" />
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\CrlUpdater.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\CryptoppUtils.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\CryptoLcpNode.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\CryptoppCryptoProvider.cpp" />
@@ -100,8 +115,10 @@
     <ClCompile Include="..\..\..\src\LcpCryptoLib\RsaSha256SignatureAlgorithm.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\Sha256HashAlgorithm.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\SymmetricAlgorithmEncryptedStream.cpp" />
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\ThreadTimer.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\UserLcpNode.cpp" />
     <ClCompile Include="..\..\..\src\LcpCryptoLib\UUIDGenerator.cpp" />
+    <ClCompile Include="..\..\..\src\third-parties\time64\time64.c" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{260B5BB3-0BEF-4DC9-AC6F-E848FF487B2B}</ProjectGuid>

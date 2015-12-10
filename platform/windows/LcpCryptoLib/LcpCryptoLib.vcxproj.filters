@@ -42,6 +42,12 @@
     <Filter Include="Source Files\Acquisition">
       <UniqueIdentifier>{fe79dd43-2ef3-4466-a740-3193d4cfebd3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Crypto\Cryptopp">
+      <UniqueIdentifier>{96b92df5-7718-47da-a458-4b02747a8687}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Crypto\Cryptopp">
+      <UniqueIdentifier>{0f89f03e-0670-4005-a0fa-cf514e338f8a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\LcpCryptoLib\LcpService.h">
@@ -83,9 +89,6 @@
     <ClInclude Include="..\..\..\src\LcpCryptoLib\CryptoLcpNode.h">
       <Filter>Header Files\Nodes</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\CryptoppCryptoProvider.h">
-      <Filter>Header Files\Crypto</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\LcpCryptoLib\ICryptoProvider.h">
       <Filter>Header Files\Crypto</Filter>
     </ClInclude>
@@ -113,13 +116,7 @@
     <ClInclude Include="..\..\..\src\LcpCryptoLib\ICertificate.h">
       <Filter>Header Files\Crypto</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\Certificate.h">
-      <Filter>Header Files\Crypto</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\LcpCryptoLib\IEncryptionProfile.h">
-      <Filter>Header Files\Crypto</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\Lcp1dot0EncryptionProfile.h">
       <Filter>Header Files\Crypto</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\LcpCryptoLib\AlgorithmNames.h">
@@ -134,22 +131,10 @@
     <ClInclude Include="..\..\..\src\LcpCryptoLib\CryptoAlgorithmInterfaces.h">
       <Filter>Header Files\Crypto</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\RsaSha256SignatureAlgorithm.h">
-      <Filter>Header Files\Crypto</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\LcpCryptoLib\EncryptionProfileNames.h">
       <Filter>Header Files\Crypto</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\Sha256HashAlgorithm.h">
-      <Filter>Header Files\Crypto</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\AesCbcSymmetricAlgorithm.h">
-      <Filter>Header Files\Crypto</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\LcpCryptoLib\EncryptionProfilesManager.h">
-      <Filter>Header Files\Crypto</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\CryptoppUtils.h">
       <Filter>Header Files\Crypto</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\LcpCryptoLib\IKeyProvider.h">
@@ -177,9 +162,6 @@
       <Filter>Header Files\PublicInterfaces</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Acquisition.h">
-      <Filter>Header Files\Acquisition</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\DownloadRequest.h">
       <Filter>Header Files\Acquisition</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\IFileSystemProvider.h">
@@ -212,6 +194,63 @@
     <ClInclude Include="..\..\..\src\LcpCryptoLib\IDecryptionContext.h">
       <Filter>Header Files\Crypto</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\AesCbcSymmetricAlgorithm.h">
+      <Filter>Header Files\Crypto\Cryptopp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Certificate.h">
+      <Filter>Header Files\Crypto\Cryptopp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\CryptoppCryptoProvider.h">
+      <Filter>Header Files\Crypto\Cryptopp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\CryptoppUtils.h">
+      <Filter>Header Files\Crypto\Cryptopp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\RsaSha256SignatureAlgorithm.h">
+      <Filter>Header Files\Crypto\Cryptopp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Sha256HashAlgorithm.h">
+      <Filter>Header Files\Crypto\Cryptopp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\Lcp1dot0EncryptionProfile.h">
+      <Filter>Header Files\Crypto\Cryptopp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\third-parties\time64\time64.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\third-parties\time64\time64_config.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\third-parties\time64\time64_limits.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\CertificateExtension.h">
+      <Filter>Header Files\Crypto\Cryptopp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\CertificateRevocationList.h">
+      <Filter>Header Files\Crypto\Cryptopp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\CrlDistributionPoints.h">
+      <Filter>Header Files\Crypto\Cryptopp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\ThreadTimer.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\CrlUpdater.h">
+      <Filter>Header Files\Crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\DownloadInMemoryRequest.h">
+      <Filter>Header Files\Crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\BaseDownloadRequest.h">
+      <Filter>Header Files\Acquisition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\DownloadInFileRequest.h">
+      <Filter>Header Files\Acquisition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\SimpleMemoryWritableStream.h">
+      <Filter>Header Files\Crypto</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\LcpCryptoLib\LcpService.cpp">
@@ -219,12 +258,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\LcpCryptoLib\LcpServiceCreator.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\LcpCryptoLib\Certificate.cpp">
-      <Filter>Source Files\Crypto</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\LcpCryptoLib\CryptoppCryptoProvider.cpp">
-      <Filter>Source Files\Crypto</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\LcpCryptoLib\CryptoLcpNode.cpp">
       <Filter>Source Files\Nodes</Filter>
@@ -250,25 +283,10 @@
     <ClCompile Include="..\..\..\src\LcpCryptoLib\AlgorithmNames.cpp">
       <Filter>Source Files\Crypto</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\LcpCryptoLib\AesCbcSymmetricAlgorithm.cpp">
-      <Filter>Source Files\Crypto</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\LcpCryptoLib\Lcp1dot0EncryptionProfile.cpp">
-      <Filter>Source Files\Crypto</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\LcpCryptoLib\EncryptionProfileNames.cpp">
       <Filter>Source Files\Crypto</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\LcpCryptoLib\Sha256HashAlgorithm.cpp">
-      <Filter>Source Files\Crypto</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\LcpCryptoLib\EncryptionProfilesManager.cpp">
-      <Filter>Source Files\Crypto</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\LcpCryptoLib\RsaSha256SignatureAlgorithm.cpp">
-      <Filter>Source Files\Crypto</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\LcpCryptoLib\CryptoppUtils.cpp">
       <Filter>Source Files\Crypto</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\LcpCryptoLib\DateTime.cpp">
@@ -287,6 +305,45 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\LcpCryptoLib\SymmetricAlgorithmEncryptedStream.cpp">
+      <Filter>Source Files\Crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\AesCbcSymmetricAlgorithm.cpp">
+      <Filter>Source Files\Crypto\Cryptopp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\Certificate.cpp">
+      <Filter>Source Files\Crypto\Cryptopp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\CryptoppCryptoProvider.cpp">
+      <Filter>Source Files\Crypto\Cryptopp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\CryptoppUtils.cpp">
+      <Filter>Source Files\Crypto\Cryptopp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\Sha256HashAlgorithm.cpp">
+      <Filter>Source Files\Crypto\Cryptopp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\RsaSha256SignatureAlgorithm.cpp">
+      <Filter>Source Files\Crypto\Cryptopp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\Lcp1dot0EncryptionProfile.cpp">
+      <Filter>Source Files\Crypto\Cryptopp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\third-parties\time64\time64.c">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\CertificateExtension.cpp">
+      <Filter>Source Files\Crypto\Cryptopp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\CertificateRevocationList.cpp">
+      <Filter>Source Files\Crypto\Cryptopp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\CrlDistributionPoints.cpp">
+      <Filter>Source Files\Crypto\Cryptopp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\ThreadTimer.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\LcpCryptoLib\CrlUpdater.cpp">
       <Filter>Source Files\Crypto</Filter>
     </ClCompile>
   </ItemGroup>
