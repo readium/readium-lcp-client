@@ -1,6 +1,6 @@
 //
 //  Created by Artem Brazhnikov on 11/15.
-//  Copyright Â© 2015 Mantano. All rights reserved.
+//  Copyright © 2015 Mantano. All rights reserved.
 //
 //  This program is distributed in the hope that it will be useful, but WITHOUT ANY
 //  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
@@ -24,6 +24,8 @@
 
 namespace lcp
 {
+    /*static*/ int RightsInfo::UNLIMITED = -1;
+
     void RightsLcpNode::ParseNode(const rapidjson::Value & parentObject, JsonValueReader * reader)
     {
         const rapidjson::Value & rightsObject = reader->ReadObject("rights", parentObject);
@@ -101,12 +103,12 @@ namespace lcp
         this->SetRightValueInMap(name, value);
     }
 
-    bool RightsLcpNode::UseRight(const std::string & name)
+    bool RightsLcpNode::Consume(const std::string & name)
     {
-        return this->UseRight(name, 1);
+        return this->Consume(name, 1);
     }
 
-    bool RightsLcpNode::UseRight(const std::string & name, int amount)
+    bool RightsLcpNode::Consume(const std::string & name, int amount)
     {
         bool result = false;
         if (name == PrintRight)
@@ -117,7 +119,7 @@ namespace lcp
                 this->SetRightValueInMap(name, std::to_string(m_rights.print));
                 result = true;
             }
-            else if (m_rights.print == IRightsService::UNLIMITED)
+            else if (m_rights.print == RightsInfo::UNLIMITED)
             {
                 result = true;
             }
@@ -130,7 +132,7 @@ namespace lcp
                 this->SetRightValueInMap(name, std::to_string(m_rights.copy));
                 result = true;
             }
-            else if (m_rights.copy == IRightsService::UNLIMITED)
+            else if (m_rights.copy == RightsInfo::UNLIMITED)
             {
                 result = true;
             }
@@ -138,15 +140,15 @@ namespace lcp
         return result;
     }
 
-    bool RightsLcpNode::CanUseRight(const std::string & name) const
+    bool RightsLcpNode::HasRight(const std::string & name) const
     {
         if (name == PrintRight)
         {
-            return m_rights.print == IRightsService::UNLIMITED || m_rights.print > 0;
+            return m_rights.print == RightsInfo::UNLIMITED || m_rights.print > 0;
         }
         else if (name == CopyRight)
         {
-            return m_rights.copy == IRightsService::UNLIMITED || m_rights.copy > 0;
+            return m_rights.copy == RightsInfo::UNLIMITED || m_rights.copy > 0;
         }
         else if (name == TtsRight)
         {
@@ -160,10 +162,7 @@ namespace lcp
         {
             return !this->DoesLicenseExpired();
         }
-        else
-        {
-            throw std::invalid_argument("only rights part of the specification are recognized");
-        }
+        return true;
     }
 
     void RightsLcpNode::SetDefaultRightValuesInMap()

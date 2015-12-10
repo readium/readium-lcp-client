@@ -1,6 +1,6 @@
 //
 //  Created by Artem Brazhnikov on 11/15.
-//  Copyright Â© 2015 Mantano. All rights reserved.
+//  Copyright © 2015 Mantano. All rights reserved.
 //
 //  This program is distributed in the hope that it will be useful, but WITHOUT ANY
 //  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
@@ -20,7 +20,7 @@
 #include <sstream>
 #include "ziplib/Source/ZipLib/ZipFile.h"
 #include "Acquisition.h"
-#include "DownloadRequest.h"
+#include "DownloadInFileRequest.h"
 #include "LcpUtils.h"
 #include "Public/ILicense.h"
 #include "ICryptoProvider.h"
@@ -69,7 +69,7 @@ namespace lcp
                 return Status(StCodeCover::ErrorAcquisitionInvalidFilePath);
             }
 
-            m_request.reset(new DownloadRequest(m_publicationLink.href, m_file.get()));
+            m_request.reset(new DownloadInFileRequest(m_publicationLink.href, m_file.get()));
             m_netProvider->StartDownloadRequest(m_request.get(), this);
 
             return Status(StCodeCover::ErrorCommonSuccess);

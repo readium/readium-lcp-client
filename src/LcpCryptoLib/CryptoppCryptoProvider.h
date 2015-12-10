@@ -1,6 +1,6 @@
 //
 //  Created by Artem Brazhnikov on 11/15.
-//  Copyright Â© 2015 Mantano. All rights reserved.
+//  Copyright © 2015 Mantano. All rights reserved.
 //
 //  This program is distributed in the hope that it will be useful, but WITHOUT ANY
 //  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
@@ -19,16 +19,26 @@
 #ifndef __CRYPTOPP_CRYPTO_PROVIDER_H__
 #define __CRYPTOPP_CRYPTO_PROVIDER_H__
 
+#include <memory>
 #include "ICryptoProvider.h"
 
 namespace lcp
 {
     class EncryptionProfilesManager;
+    class INetProvider;
+    class ICertificate;
+    class ICertificateRevocationList;
+    class CrlUpdater;
+    class ThreadTimer;
 
     class CryptoppCryptoProvider : public ICryptoProvider
     {
     public:
-        explicit CryptoppCryptoProvider(EncryptionProfilesManager * encryptionProfilesManager);
+        CryptoppCryptoProvider(
+            EncryptionProfilesManager * encryptionProfilesManager,
+            INetProvider * netProvider
+            );
+        ~CryptoppCryptoProvider();
 
         virtual Status VerifyLicense(
             const std::string & rootCertificateBase64,
@@ -87,6 +97,12 @@ namespace lcp
             );
 
     private:
+        Status ProcessRevokation(ICertificate * providerCertificate);
+
+    private:
+        std::unique_ptr<ICertificateRevocationList> m_revocationList;
+        std::unique_ptr<ThreadTimer> m_threadTimer;
+        std::unique_ptr<CrlUpdater> m_crlUpdater;
         EncryptionProfilesManager * m_encryptionProfilesManager;
     };
 }

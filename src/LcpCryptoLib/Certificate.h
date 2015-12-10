@@ -1,6 +1,6 @@
 //
 //  Created by Artem Brazhnikov on 11/15.
-//  Copyright Â© 2015 Mantano. All rights reserved.
+//  Copyright © 2015 Mantano. All rights reserved.
 //
 //  This program is distributed in the hope that it will be useful, but WITHOUT ANY
 //  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
@@ -23,6 +23,8 @@
 #include <cryptopp/rsa.h>
 #include <cryptopp/secblock.h>
 #include "ICertificate.h"
+#include "CertificateExtension.h"
+#include "CrlDistributionPoints.h"
 
 using namespace CryptoPP;
 
@@ -53,6 +55,8 @@ namespace lcp
             size_t signatureLength
             );
 
+        ICrlDistributionPoints * DistributionPoints() const;
+
     private:
         std::string m_serialNumber;
         std::string m_notBeforeDate;
@@ -62,10 +66,11 @@ namespace lcp
         SecByteBlock m_rootSignature;
         OID m_signatureAlgorithmId;
 
+        std::vector<CertificateExtension> m_extensions;
+        std::unique_ptr<CrlDistributionPoints> m_distributionPoints;
+
         IEncryptionProfile * m_encryptionProfile;
         std::unique_ptr<ISignatureAlgorithm> m_signatureAlgorithm;
-
-        static const int Certificatev3 = 2;
     };
 }
 

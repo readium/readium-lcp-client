@@ -1,6 +1,6 @@
 //
 //  Created by Artem Brazhnikov on 11/15.
-//  Copyright Â© 2015 Mantano. All rights reserved.
+//  Copyright © 2015 Mantano. All rights reserved.
 //
 //  This program is distributed in the hope that it will be useful, but WITHOUT ANY
 //  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
@@ -67,10 +67,9 @@ using CryptoPP::lword;
 using CryptoPP::word32;
 
 #include "Certificate.h"
+#include "CertificateRevocationList.h"
+#include "EncryptionProfilesManager.h"
 #include "Public/lcp.h"
-
-#include <array>
-
 
 namespace lcptest
 {
@@ -80,6 +79,89 @@ namespace lcptest
 
     TEST(Certificate, VeryifySignature)
     {
+        std::string distributionPointCert = "MIIC8jCCAdqgAwIBAgIDEjRWMA0GCSqGSIb3DQEBCwUAMCExCzAJBgNVBAYTAlVB"
+            "MRIwEAYDVQQKEwlNeUNvbXBhbnkwHhcNMTUxMjA2MTg0NDAwWhcNMTYxMjA2MTg0"
+            "NDAwWjAhMQswCQYDVQQGEwJVQTESMBAGA1UEChMJTXlDb21wYW55MIIBIjANBgkq"
+            "hkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1lTzjJ/lgUPhpuhAz9Da2dRb5LrFDsl9"
+            "a11R5KOiw51LkVnbhhuBNFWHFVlwzbyxLQsg3FGAQuCP4q1U5FWip9b8Rv6RRSKJ"
+            "bpLeBfyRiPPswiSrLBViXd9bYZh0DjoUIudoFnAE11TjyNVgNEsC6wJDfYRFaj5H"
+            "AVEu9WrV3paaoEjAijB87JaUJXoiIO0/kig9PJC2j4fkBABrPZbnanFT90xVzcsw"
+            "AlTAMIhvYcNrQzzXFn3uWFdUQOWaJcY5V6NC9g7o6rl2yWIqFZzCuo4M9A1nQvmg"
+            "JYPA9B7muUYwbgGmCy1GkmVNKBp2rPaG9bFVHuiKMU2PxbX5JbbkqwIDAQABozMw"
+            "MTAvBgNVHR8EKDAmMCSgIqAghh5odHRwOi8vbG9jYWxob3N0OjgwODAvdGVzdC5j"
+            "cmwwDQYJKoZIhvcNAQELBQADggEBAKzW3Z9c89LbLyby4zRA5GdCbJdB0bNGwpEm"
+            "doqPB6DXck0lQnC7yMqTJOcl5GoAfZ4EVuKuxb+PUs7WU3gxq/8Mg5Ov6CVZ0Pqi"
+            "y3ajpq3Tgq9asyocK+xalwgFNfBp1SuRbVgXwxKCpSXyrM41Z7nncuQ3Vwm7GmrU"
+            "xR+qA5CMyTtLz88U2PxYHR/dAp7PTPhQzpbUV+KZhr1KbTkn4CZdHjDO7RjakRow"
+            "QqiNwdeywh1cWKLj4aCmXbBv4I+Ptm21Sff+Wy30MNmxZsCFPD0mICSubBl7SByT"
+            "dNHfZQ+wnGnvqTaNtVeDmJPi98lAwCNt7iNiBy0veVrMcwAsHB4=";
+
+        std::string testCrl = "MIIDFDCCAfwCAQEwDQYJKoZIhvcNAQEFBQAwXzEjMCEGA1UEChMaU2FtcGxlIFNp"
+            "Z25lciBPcmdhbml6YXRpb24xGzAZBgNVBAsTElNhbXBsZSBTaWduZXIgVW5pdDEb"
+            "MBkGA1UEAxMSU2FtcGxlIFNpZ25lciBDZXJ0Fw0xMzAyMTgxMDMyMDBaFw0xMzAy"
+            "MTgxMDQyMDBaMIIBNjA8AgMUeUcXDTEzMDIxODEwMjIxMlowJjAKBgNVHRUEAwoB"
+            "AzAYBgNVHRgEERgPMjAxMzAyMTgxMDIyMDBaMDwCAxR5SBcNMTMwMjE4MTAyMjIy"
+            "WjAmMAoGA1UdFQQDCgEGMBgGA1UdGAQRGA8yMDEzMDIxODEwMjIwMFowPAIDFHlJ"
+            "Fw0xMzAyMTgxMDIyMzJaMCYwCgYDVR0VBAMKAQQwGAYDVR0YBBEYDzIwMTMwMjE4"
+            "MTAyMjAwWjA8AgMUeUoXDTEzMDIxODEwMjI0MlowJjAKBgNVHRUEAwoBATAYBgNV"
+            "HRgEERgPMjAxMzAyMTgxMDIyMDBaMDwCAxR5SxcNMTMwMjE4MTAyMjUxWjAmMAoG"
+            "A1UdFQQDCgEFMBgGA1UdGAQRGA8yMDEzMDIxODEwMjIwMFqgLzAtMB8GA1UdIwQY"
+            "MBaAFL4SAcyq6hGA2i6tsurHtfuf+a00MAoGA1UdFAQDAgEDMA0GCSqGSIb3DQEB"
+            "BQUAA4IBAQBCIb6B8cN5dmZbziETimiotDy+FsOvS93LeDWSkNjXTG/+bGgnrm3a"
+            "QpgB7heT8L2o7s2QtjX2DaTOSYL3nZ/Ibn/R8S0g+EbNQxdk5/la6CERxiRp+E2T"
+            "UG8LDb14YVMhRGKvCguSIyUG0MwGW6waqVtd6K71u7vhIU/Tidf6ZSdsTMhpPPFu"
+            "PUid4j29U3q10SGFF6cCt1DzjvUcCwHGhHA02Men70EgZFADPLWmLg0HglKUh1iZ"
+            "WcBGtev/8VsUijyjsM072C6Ut5TwNyrrthb952+eKlmxLNgT0o5hVYxjXhtwLQsL"
+            "7QZhrypAM1DLYqQjkiDI7hlvt7QuDGTJ";
+
+
+        lcp::EncryptionProfilesManager profilesManager;
+        lcp::IEncryptionProfile * profile = profilesManager.GetProfile("http://readium.org/lcp/profile-1.0");
+        if (profile == nullptr)
+        {
+            throw std::runtime_error("error");
+        }
+
+        std::unique_ptr<lcp::Certificate> rootCertificate;
+        try
+        {
+            rootCertificate.reset(new lcp::Certificate(distributionPointCert, profile));
+        }
+        catch (CryptoPP::BERDecodeErr & ex)
+        {
+            throw std::runtime_error(ex.GetWhat());
+        }
+
+        std::unique_ptr<lcp::Certificate> providerCertificate;
+        try
+        {
+            providerCertificate.reset(new lcp::Certificate(distributionPointCert, profile));
+        }
+        catch (CryptoPP::BERDecodeErr & ex)
+        {
+            throw std::runtime_error(ex.GetWhat());
+        }
+
+        lcp::Buffer rawDecoded;
+        {
+            Base64Decoder decoder;
+            decoder.Put((byte *)testCrl.data(), testCrl.size());
+            decoder.MessageEnd();
+
+            lword size = decoder.MaxRetrievable();
+            if (size > 0 && size <= SIZE_MAX)
+            {
+                rawDecoded.resize(static_cast<size_t>(size));
+                decoder.Get((byte *)rawDecoded.data(), rawDecoded.size());
+            }
+        }
+
+
+        lcp::CertificateRevocationList revocation(rawDecoded);
+        std::string thisUpdate = revocation.ThisUpdateDate();
+        lcp::StringsSet serials = revocation.RevokedSerialNumbers();
+
+
         std::string canonicalJson = u8"{\"encryption\":{\"content_key\":{\"algorithm\":\"http://www.w3.org/2001/04/xmlenc#aes256-cbc\","
             "\"encrypted_value\":\"/k8RpXqf4E2WEunCp76E8PjhS051NXwAXeTD1ioazYxCRGvHLAck/KQ3cCh5JxDmCK0nRLyAxs1X0aA3z55boQ==\"},\"profile\""
             ":\"http://readium.org/lcp/profile-1.0\",\"user_key\":{\"algorithm\":\"http://www.w3.org/2001/04/xmlenc#sha256\",\"key_check\""

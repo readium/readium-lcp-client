@@ -1,6 +1,6 @@
 //
 //  Created by Artem Brazhnikov on 11/15.
-//  Copyright Â© 2015 Mantano. All rights reserved.
+//  Copyright © 2015 Mantano. All rights reserved.
 //
 //  This program is distributed in the hope that it will be useful, but WITHOUT ANY
 //  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
@@ -26,21 +26,20 @@ using namespace CryptoPP;
 
 namespace lcp
 {
-    word32 CryptoppUtils::Cert::Cert::ReadVersion(BERSequenceDecoder & toBeSignedCertificate)
+    word32 CryptoppUtils::Cert::Cert::ReadVersion(BERSequenceDecoder & toBeSignedCertificate, word32 defaultVersion)
     {
-        try
+        word32 version = defaultVersion;
+        byte versionTag = toBeSignedCertificate.PeekByte();
+        if (versionTag == ContextSpecificTagZero)
         {
-            BERGeneralDecoder context(toBeSignedCertificate, ContextSpecificTag);
-            word32 version = 0;
+            BERGeneralDecoder context(toBeSignedCertificate, ContextSpecificTagZero);
             BERDecodeUnsigned<word32>(toBeSignedCertificate, version);
-            return version;
         }
-        catch (const BERDecodeErr & ex)
+        else if (versionTag == INTEGER)
         {
-            ex;
-            // If the version field is absent - default is v1
-            return 0;
+            BERDecodeUnsigned<word32>(toBeSignedCertificate, version);
         }
+        return version;
     }
 
     void CryptoppUtils::Cert::SkipNextSequence(BERSequenceDecoder & parentSequence)
@@ -161,8 +160,9 @@ namespace lcp
 
         BERSequenceDecoder subjPublicInfoFrom(toBeSignedCertificate);
         DERSequenceEncoder subjPublicInfoOut(subjectPublicKey);
-        subjPublicInfoFrom.CopyTo(subjPublicInfoOut);
+        subjPublicInfoFrom.TransferTo(subjPublicInfoOut, subjPublicInfoFrom.RemainingLength());
         subjPublicInfoOut.MessageEnd();
+        subjPublicInfoFrom.MessageEnd();
 
         result.BERDecode(subjectPublicKey);
     }

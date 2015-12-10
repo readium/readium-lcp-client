@@ -1,6 +1,6 @@
 //
 //  Created by Artem Brazhnikov on 11/15.
-//  Copyright Â© 2015 Mantano. All rights reserved.
+//  Copyright © 2015 Mantano. All rights reserved.
 //
 //  This program is distributed in the hope that it will be useful, but WITHOUT ANY
 //  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
@@ -43,7 +43,7 @@ namespace lcp
             static void SkipNextSequence(BERSequenceDecoder & parentSequence);
 
             static std::string ReadIntegerAsString(BERSequenceDecoder & sequence);
-            static word32 ReadVersion(BERSequenceDecoder & toBeSignedCertificate);
+            static word32 ReadVersion(BERSequenceDecoder & toBeSignedCertificate, word32 defaultVersion);
             static void ReadOID(BERSequenceDecoder & certificate, OID & algorithmId);
             static void ReadSubjectPublicKey(BERSequenceDecoder & toBeSignedCertificate, RSA::PublicKey & result);
             static void ReadDateTimeSequence(
@@ -54,7 +54,9 @@ namespace lcp
 
             static void PullToBeSignedData(const SecByteBlock & rawCertificate, SecByteBlock & result);
 
-            static const byte ContextSpecificTag = 0xa0;
+            static const byte ContextSpecificTagZero  = 0xa0;
+            static const byte ContextSpecificTagThree = 0xa3;
+            static const byte ContextSpecificTagSixIA5String = 0x86;
         };
     };
 }

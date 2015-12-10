@@ -1,6 +1,6 @@
 //
 //  Created by Artem Brazhnikov on 11/15.
-//  Copyright Â© 2015 Mantano. All rights reserved.
+//  Copyright © 2015 Mantano. All rights reserved.
 //
 //  This program is distributed in the hope that it will be useful, but WITHOUT ANY
 //  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
@@ -21,10 +21,24 @@
 
 #include <string>
 #include <vector>
+#include <set>
+#include <list>
 #include "LcpUtils.h"
 
 namespace lcp
 {
+    typedef std::set<std::string> StringsSet;
+    typedef std::list<std::string> StringsList;
+    typedef std::vector<unsigned char> Buffer;
+
+    class ICrlDistributionPoints
+    {
+    public:
+        virtual bool HasCrlDistributionPoints() const = 0;
+        virtual const StringsList & CrlDistributionPointUrls() const = 0;
+        virtual ~ICrlDistributionPoints() {}
+    };
+
     class ICertificate
     {
     public:
@@ -34,7 +48,39 @@ namespace lcp
         virtual KeyType PublicKey() const = 0;
         virtual bool VerifyCertificate(ICertificate * rootCertificate) = 0;
         virtual bool VerifyMessage(const std::string & message, const std::string & hashBase64) = 0;
+        virtual ICrlDistributionPoints * DistributionPoints() const = 0;
         virtual ~ICertificate() {}
+    };
+
+    class ICertificateExtension
+    {
+    public:
+        virtual std::string Oid() const = 0;
+        virtual bool IsCritical() const = 0;
+        virtual const Buffer & Value() const = 0;
+        virtual ~ICertificateExtension() {}
+    };
+
+    class ICertificateRevocationList
+    {
+    public:
+        virtual void UpdateRevocationList(const Buffer & crlRaw) = 0;
+        virtual std::string ThisUpdateDate() const = 0;
+        virtual bool HasNextUpdateDate() const = 0;
+        virtual std::string NextUpdateDate() const = 0;
+        virtual bool SerialNumberRevoked(const std::string & serialNumber) const = 0;
+        virtual const StringsSet & RevokedSerialNumbers() const = 0;
+        virtual ~ICertificateRevocationList() {}
+    };
+
+    struct CertificateVersion
+    {
+        enum CertificateVersionEnum
+        {
+            Certificatev1 = 0,
+            Certificatev2 = 1,
+            Certificatev3 = 2
+        };
     };
 }
 

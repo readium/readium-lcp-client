@@ -20,7 +20,7 @@
 #define __DATE_TIME_H__
 
 #include <string>
-#include "time64.h"
+#include "time64/time64.h"
 
 namespace lcp
 {

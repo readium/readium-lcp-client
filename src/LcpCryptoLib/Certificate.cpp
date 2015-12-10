@@ -1,6 +1,6 @@
 //
 //  Created by Artem Brazhnikov on 11/15.
-//  Copyright Â© 2015 Mantano. All rights reserved.
+//  Copyright © 2015 Mantano. All rights reserved.
 //
 //  This program is distributed in the hope that it will be useful, but WITHOUT ANY
 //  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
@@ -34,13 +34,17 @@
 using namespace CryptoPP;
 
 // Signature Algorithm OIDs commonly used in certs that have RSA keys
-DEFINE_OID(CryptoPP::ASN1::pkcs_1() + 4, md5withRSAEncryption);
-DEFINE_OID(CryptoPP::ASN1::pkcs_1() + 5, sha1withRSAEncryption);
-DEFINE_OID(CryptoPP::ASN1::pkcs_1() + 11, sha256withRSAEncryption);
+DEFINE_OID(ASN1::pkcs_1() + 4, md5withRSAEncryption);
+DEFINE_OID(ASN1::pkcs_1() + 5, sha1withRSAEncryption);
+DEFINE_OID(ASN1::pkcs_1() + 11, sha256withRSAEncryption);
+
+DEFINE_OID(ASN1::joint_iso_ccitt() + 5, joint_iso_ccitt_ds);
+DEFINE_OID(joint_iso_ccitt_ds() + 29, id_ce);
+DEFINE_OID(id_ce() + 31, id_ce_CRLDistributionPoints);
+
 
 namespace lcp
 {
-
     Certificate::Certificate(
         const std::string & certificateBase64,
         IEncryptionProfile * encryptionProfile
@@ -58,8 +62,8 @@ namespace lcp
         {
             BERSequenceDecoder toBeSignedCert(cert);
             {
-                word32 version = CryptoppUtils::Cert::ReadVersion(toBeSignedCert);
-                if (version != Certificatev3)
+                word32 version = CryptoppUtils::Cert::ReadVersion(toBeSignedCert, CertificateVersion::Certificatev1);
+                if (version != CertificateVersion::Certificatev3)
                 {
                     throw BERDecodeErr("Wrong version of the certificate");
                 }
@@ -70,24 +74,51 @@ namespace lcp
                 CryptoppUtils::Cert::SkipNextSequence(toBeSignedCert);
                 // issuer
                 CryptoppUtils::Cert::SkipNextSequence(toBeSignedCert);
-
+                // validity
                 CryptoppUtils::Cert::ReadDateTimeSequence(toBeSignedCert, m_notBeforeDate, m_notAfterDate);
 
                 // subject
                 CryptoppUtils::Cert::SkipNextSequence(toBeSignedCert);
 
                 CryptoppUtils::Cert::ReadSubjectPublicKey(toBeSignedCert, m_publicKey);
+
+                
+                while (!toBeSignedCert.EndReached())
+                {
+                    byte extensionsContext = toBeSignedCert.PeekByte();
+                    if (extensionsContext != CryptoppUtils::Cert::ContextSpecificTagThree)
+                    {
+                        CryptoppUtils::Cert::SkipNextSequence(toBeSignedCert);//TODO: test
+                        continue;
+                    }
+
+                    BERGeneralDecoder(toBeSignedCert, CryptoppUtils::Cert::ContextSpecificTagThree);
+                    {
+                        // Extensions
+                        BERSequenceDecoder extensions(toBeSignedCert);
+                        {
+                            while (!extensions.EndReached())
+                            {
+                                CertificateExtension extension(extensions);
+                                if (extension.CryptoOid() == id_ce_CRLDistributionPoints())
+                                {
+                                    m_distributionPoints.reset(new CrlDistributionPoints(&extension));
+                                }
+                                m_extensions.push_back(std::move(extension));
+                            }
+                        }
+                        extensions.MessageEnd();
+                    }
+                }
             }
-            toBeSignedCert.SkipAll();
+            toBeSignedCert.MessageEnd();
 
             CryptoppUtils::Cert::ReadOID(cert, m_signatureAlgorithmId);
-
             unsigned int unused = 0;
             BERDecodeBitString(cert, m_rootSignature, unused);
         }
 
         CryptoppUtils::Cert::PullToBeSignedData(rawDecodedCert, m_toBeSignedData);
-
         m_signatureAlgorithm.reset(m_encryptionProfile->CreateSignatureAlgorithm(this->PublicKey()));
     }
 
@@ -175,5 +206,10 @@ namespace lcp
     std::string Certificate::NotAfterDate() const
     {
         return m_notAfterDate;
+    }
+
+    ICrlDistributionPoints * Certificate::DistributionPoints() const
+    {
+        return m_distributionPoints.get();
     }
 }

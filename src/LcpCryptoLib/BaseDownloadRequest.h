@@ -15,6 +15,7 @@
 //  the License, or (at your option) any later version. You should have received a copy of the GNU
 //  Affero General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
+
 #ifndef __BASE_DOWNLOAD_REQUEST_H__
 #define __BASE_DOWNLOAD_REQUEST_H__
 

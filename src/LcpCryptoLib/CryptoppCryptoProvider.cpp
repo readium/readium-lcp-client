@@ -1,6 +1,6 @@
 //
 //  Created by Artem Brazhnikov on 11/15.
-//  Copyright Â© 2015 Mantano. All rights reserved.
+//  Copyright © 2015 Mantano. All rights reserved.
 //
 //  This program is distributed in the hope that it will be useful, but WITHOUT ANY
 //  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
@@ -16,13 +16,17 @@
 //  Affero General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+#include <functional>
+#include <chrono>
 #include "CryptoppCryptoProvider.h"
 #include "CryptoAlgorithmInterfaces.h"
 #include "EncryptionProfilesManager.h"
 #include "Public/ILicense.h"
 #include "Public/ICrypto.h"
-#include "Public/IFileSystemProvider.h"
 #include "Certificate.h"
+#include "CertificateRevocationList.h"
+#include "CrlUpdater.h"
+#include "ThreadTimer.h"
 #include "DateTime.h"
 #include "IKeyProvider.h"
 #include "CryptoppUtils.h"
@@ -31,9 +35,24 @@
 
 namespace lcp
 {
-    CryptoppCryptoProvider::CryptoppCryptoProvider(EncryptionProfilesManager * encryptionProfilesManager)
+    CryptoppCryptoProvider::CryptoppCryptoProvider(
+        EncryptionProfilesManager * encryptionProfilesManager,
+        INetProvider * netProvider
+        )
         : m_encryptionProfilesManager(encryptionProfilesManager)
     {
+        m_revocationList.reset(new CertificateRevocationList());
+        m_threadTimer.reset(new ThreadTimer());
+        m_crlUpdater.reset(new CrlUpdater(netProvider, m_revocationList.get(), m_threadTimer.get()));
+
+        m_threadTimer->SetHandler(std::bind(&CrlUpdater::Update, m_crlUpdater.get()));
+        m_threadTimer->SetAutoReset(true);
+    }
+
+    CryptoppCryptoProvider::~CryptoppCryptoProvider()
+    {
+        m_crlUpdater->Cancel();
+        m_threadTimer->Stop();
     }
 
     Status CryptoppCryptoProvider::VerifyLicense(
@@ -78,6 +97,13 @@ namespace lcp
             {
                 return Status(StCodeCover::ErrorOpeningContentProviderCertificateNotVerified);
             }
+
+            Status res = this->ProcessRevokation(providerCertificate.get());
+            if (!Status::IsSuccess(res))
+            {
+                return res;
+            }
+
             if (!providerCertificate->VerifyMessage(license->CanonicalContent(), license->Crypto()->Signature()))
             {
                 return Status(StCodeCover::ErrorOpeningLicenseSignatureNotValid);
@@ -313,5 +339,28 @@ namespace lcp
         {
             return Status(StCodeCover::ErrorDecryptionPublicationEncrypted, ex.GetWhat());
         }
+    }
+
+    Status CryptoppCryptoProvider::ProcessRevokation(ICertificate * providerCertificate)
+    {
+        bool containedAnyUrlBefore = m_crlUpdater->ContainsAnyUrl();
+        m_crlUpdater->UpdateCrlDistributionPoints(providerCertificate->DistributionPoints());
+
+        // First time processing of the CRL
+        if (!containedAnyUrlBefore && m_crlUpdater->ContainsAnyUrl())
+        {
+            m_crlUpdater->Update();
+            // Start timer which checks CRL for updates periodically or by time point
+            m_threadTimer->Start();
+        }
+
+        // If exception occurred in the timer thread, re-throw it
+        m_threadTimer->RethrowExceptionIfAny();
+
+        if (m_revocationList->SerialNumberRevoked(providerCertificate->SerialNumber()))
+        {
+            return Status(StCodeCover::ErrorOpeningContentProviderCertificateRevoked);
+        }
+        return Status(StCodeCover::ErrorCommonSuccess);
     }
 }

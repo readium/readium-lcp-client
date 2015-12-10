@@ -1,6 +1,6 @@
 //
-//  Created by MickaÃ«l Menu, Artem Brazhnikov on 11/15.
-//  Copyright Â© 2015 Mantano. All rights reserved.
+//  Created by Mickaël Menu, Artem Brazhnikov on 11/15.
+//  Copyright © 2015 Mantano. All rights reserved.
 //
 //  This program is distributed in the hope that it will be useful, but WITHOUT ANY
 //  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
@@ -38,7 +38,12 @@ namespace lcp
     class IDownloadRequest : public INetRequest
     {
     public:
+        // INetProvider writes downloaded data in?? the stream,
+        // may not be used if INetProvider uses the DestinationPath
         virtual IWritableStream * DestinationStream() const = 0;
+        // Returns whether IDownloadRequest uses path or not
+        virtual bool HasDesinationPath() const = 0;
+        // Returns the download path, may be used instead of the DestinationStream
         virtual std::string DestinationPath() const = 0;
         virtual std::string SuggestedFileName() const = 0;
         virtual void SetSuggestedFileName(const std::string & fileName) = 0;
@@ -58,6 +63,10 @@ namespace lcp
     {
     public:
         virtual void StartDownloadRequest(
+            IDownloadRequest * request,
+            INetProviderCallback * callback
+            ) = 0;
+        virtual void StartDownloadRequestAsync(
             IDownloadRequest * request,
             INetProviderCallback * callback
             ) = 0;
