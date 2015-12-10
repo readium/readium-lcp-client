@@ -22,7 +22,7 @@
 
 using namespace lcp;
 
-@interface LCPiOSNetProvider : NSObject <NSURLSessionDownloadDelegate>
+@interface LCPiOSNetProvider : NSObject <NSURLSessionDataDelegate>
 @property (strong, nonatomic) NSURLSession *session;
 @property (strong, nonatomic) NSMutableDictionary *requests;
 @property (strong, nonatomic) NSMutableDictionary *callbacks;
@@ -49,7 +49,7 @@ using namespace lcp;
     NSString *urlString = [NSString stringWithUTF8String:request->Url().c_str()];
     NSURL *url = [NSURL URLWithString:urlString];
     if (url) {
-        NSURLSessionDownloadTask *task = [self.session downloadTaskWithURL:url];
+        NSURLSessionDataTask *task = [self.session dataTaskWithURL:url];
         id identifier = @(task.taskIdentifier);
         self.requests[identifier] = [NSValue valueWithPointer:request];
         self.callbacks[identifier] = [NSValue valueWithPointer:callback];
@@ -59,7 +59,22 @@ using namespace lcp;
     }
 }
 
-- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)task didWriteData:(int64_t)bytesWritten totalBytesWritten:(int64_t)received totalBytesExpectedToWrite:(int64_t)expected
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveResponse:(NSURLResponse *)response completionHandler:(void (^)(NSURLSessionResponseDisposition))completionHandler
+{
+    lcp::IDownloadRequest *request;
+    [self getRequest:&request callback:NULL forTask:dataTask];
+    if (!request)
+        return;
+    
+    NSString *filename = response.suggestedFilename;
+    if (filename.length > 0) {
+        request->SetSuggestedFileName([filename UTF8String]);
+    }
+    
+    completionHandler(NSURLSessionResponseAllow);
+}
+
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)task didReceiveData:(NSData *)data
 {
     IDownloadRequest *request;
     INetProviderCallback *callback;
@@ -73,35 +88,16 @@ using namespace lcp;
         callback->OnRequestCanceled(request);
         
     } else {
+        request->DestinationStream()->Write((const unsigned char *)data.bytes, data.length);
+        
         float progress = -1;
+        float received = task.countOfBytesReceived;
+        float expected = task.countOfBytesExpectedToReceive;
         if (expected > 0) {
-            progress = (float)received / (float)expected;
+            progress = received / expected;
         }
         
         callback->OnRequestProgressed(request, progress);
-    }
-}
-
-- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)task didFinishDownloadingToURL:(NSURL *)location
-{
-    IDownloadRequest *request;
-    INetProviderCallback *callback;
-    [self getRequest:&request callback:&callback forTask:task];
-    if (!request || !callback)
-        return;
-    
-    NSString *filename = task.response.suggestedFilename;
-    if (filename.length > 0) {
-        request->SetSuggestedFileName([filename UTF8String]);
-    }
-    
-    NSString *toPath = [NSString stringWithUTF8String:request->DestinationPath().c_str()];
-    
-    NSError *error;
-    [[NSFileManager defaultManager] removeItemAtPath:toPath error:NULL];
-    if (![[NSFileManager defaultManager] moveItemAtPath:[location path] toPath:toPath error:&error]) {
-        [self taskEnded:task];
-        callback->OnRequestEnded(request, Status(StatusCode::ErrorNetworkingRequestFailed, "Can't move the downloaded file to destination path"));
     }
 }
 
@@ -161,11 +157,6 @@ namespace lcp
     }
     
     void iOSNetProvider::StartDownloadRequest(IDownloadRequest *request, INetProviderCallback *callback)
-    {
-        StartDownloadRequestAsync(request, callback);
-    }
-    
-    void iOSNetProvider::StartDownloadRequestAsync(IDownloadRequest *request, INetProviderCallback *callback)
     {
         [m_provider startDownloadRequest:request callback:callback];
     }

@@ -108,7 +108,6 @@ namespace lcp {
             }
             
             uint8_t *buffer = context->GetAllocateTemporaryByteBuffer(bytesToRead);
-#warning FIXME: handle exception
             encryptedStream->Read(buffer, bytesToRead);
             *outputLen = bytesToRead;
             
@@ -165,7 +164,6 @@ namespace lcp {
         ILicense *license;
         Status res = lcpService->OpenLicense(licenseJSON, &license);
         if (Status::IsSuccess(res)) {
-            LOG("License parsed successfully <" << license->OriginalContent() << ">");
             return New(license);
         } else {
             LOG("Failed to parse license <" << res.ResultCode << ": " << res.Extension << ">");

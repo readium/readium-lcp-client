@@ -42,7 +42,6 @@
 		5A1B62431C198D3C00D45788 /* SymmetricAlgorithmEncryptedStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B62201C198D3C00D45788 /* SymmetricAlgorithmEncryptedStream.cpp */; };
 		5A1B62441C198D3C00D45788 /* ThreadTimer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B62221C198D3C00D45788 /* ThreadTimer.cpp */; };
 		5A1B62451C198D3C00D45788 /* UserLcpNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B62241C198D3C00D45788 /* UserLcpNode.cpp */; };
-		5A1B62461C198D3C00D45788 /* UUIDGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B62261C198D3C00D45788 /* UUIDGenerator.cpp */; };
 		5A2D65501C170EAB00ED4673 /* time64.c in Sources */ = {isa = PBXBuildFile; fileRef = 5A2D654C1C170EAB00ED4673 /* time64.c */; };
 		5A517DCA1C0751E60005877F /* LcpContentFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A517DC71C0751E60005877F /* LcpContentFilter.cpp */; };
 		5A5C61531C04C01800185159 /* libcryptopp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A5C61521C04BFF500185159 /* libcryptopp.a */; };
@@ -173,8 +172,6 @@
 		5A1B62231C198D3C00D45788 /* ThreadTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThreadTimer.h; sourceTree = "<group>"; };
 		5A1B62241C198D3C00D45788 /* UserLcpNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UserLcpNode.cpp; sourceTree = "<group>"; };
 		5A1B62251C198D3C00D45788 /* UserLcpNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserLcpNode.h; sourceTree = "<group>"; };
-		5A1B62261C198D3C00D45788 /* UUIDGenerator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UUIDGenerator.cpp; sourceTree = "<group>"; };
-		5A1B62271C198D3C00D45788 /* UUIDGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UUIDGenerator.h; sourceTree = "<group>"; };
 		5A2D654C1C170EAB00ED4673 /* time64.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = time64.c; sourceTree = "<group>"; };
 		5A2D654D1C170EAB00ED4673 /* time64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = time64.h; sourceTree = "<group>"; };
 		5A2D654E1C170EAB00ED4673 /* time64_config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = time64_config.h; sourceTree = "<group>"; };
@@ -362,8 +359,6 @@
 				5A1B62231C198D3C00D45788 /* ThreadTimer.h */,
 				5A1B62241C198D3C00D45788 /* UserLcpNode.cpp */,
 				5A1B62251C198D3C00D45788 /* UserLcpNode.h */,
-				5A1B62261C198D3C00D45788 /* UUIDGenerator.cpp */,
-				5A1B62271C198D3C00D45788 /* UUIDGenerator.h */,
 			);
 			path = LcpCryptoLib;
 			sourceTree = "<group>";
@@ -641,7 +636,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5A1B62461C198D3C00D45788 /* UUIDGenerator.cpp in Sources */,
 				5A1B62321C198D3C00D45788 /* CryptoppUtils.cpp in Sources */,
 				5A1B62291C198D3C00D45788 /* AesCbcSymmetricAlgorithm.cpp in Sources */,
 				5A01168E1C088BA4006F1A6F /* LCPAcquisition.mm in Sources */,

@@ -72,7 +72,7 @@ namespace lcp
         mutable std::mutex m_downloadSync;
         std::condition_variable m_conditionDownload;
 
-        static const int TenMinutesPeriod = 1000 * 60 * 10;
+        static const int TenMinutesPeriod;
     };
 }
 

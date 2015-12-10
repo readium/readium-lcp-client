@@ -29,7 +29,6 @@ namespace lcp
         iOSNetProvider();
         
         virtual void StartDownloadRequest(IDownloadRequest *request, INetProviderCallback *callback);
-        virtual void StartDownloadRequestAsync(IDownloadRequest * request,INetProviderCallback * callback);
         
     protected:
         LCPiOSNetProvider *m_provider;

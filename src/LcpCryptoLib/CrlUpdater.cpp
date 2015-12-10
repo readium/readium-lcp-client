@@ -27,6 +27,8 @@
 
 namespace lcp
 {
+    const int CrlUpdater::TenMinutesPeriod = 1000 * 60 * 10;
+    
     CrlUpdater::CrlUpdater(
         INetProvider * netProvider,
         ICertificateRevocationList * revocationList,
