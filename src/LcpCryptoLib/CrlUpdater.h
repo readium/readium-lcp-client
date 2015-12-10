@@ -38,13 +38,14 @@ namespace lcp
         CrlUpdater(
             INetProvider * netProvider,
             ICertificateRevocationList * revocationList,
-            ThreadTimer * threadTimer
+            ThreadTimer * threadTimer,
+            const std::string & defaultCrlUrl
             );
 
         void Update();
         void Cancel();
 
-        void UpdateCrlDistributionPoints(ICrlDistributionPoints * distributionPoints);
+        void UpdateCrlUrls(ICrlDistributionPoints * distributionPoints);
         bool ContainsUrl(const std::string & url);
         bool ContainsAnyUrl() const;
 

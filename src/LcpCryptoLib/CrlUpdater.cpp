@@ -32,7 +32,8 @@ namespace lcp
     CrlUpdater::CrlUpdater(
         INetProvider * netProvider,
         ICertificateRevocationList * revocationList,
-        ThreadTimer * threadTimer
+        ThreadTimer * threadTimer,
+        const std::string & defaultCrlUrl
         )
         : m_requestRunning(false)
         , m_netProvider(netProvider)
@@ -40,9 +41,13 @@ namespace lcp
         , m_threadTimer(threadTimer)
         , m_currentRequestStatus(Status(StatusCode::ErrorCommonSuccess))
     {
+        if (!defaultCrlUrl.empty())
+        {
+            m_crlUrls.push_back(defaultCrlUrl);
+        }
     }
 
-    void CrlUpdater::UpdateCrlDistributionPoints(ICrlDistributionPoints * distributionPoints)
+    void CrlUpdater::UpdateCrlUrls(ICrlDistributionPoints * distributionPoints)
     {
         std::unique_lock<std::mutex> locker(m_downloadSync);
 

@@ -36,7 +36,8 @@ namespace lcp
             INetProvider * netProvider,
             IStorageProvider * storageProvider,
             IFileSystemProvider * fileSystemProvider,
-            ILcpService ** lcpService
+            ILcpService ** lcpService,
+            const std::string & defaultCrlUrl = std::string()
             );
     };
 }

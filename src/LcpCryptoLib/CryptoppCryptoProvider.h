@@ -36,7 +36,8 @@ namespace lcp
     public:
         CryptoppCryptoProvider(
             EncryptionProfilesManager * encryptionProfilesManager,
-            INetProvider * netProvider
+            INetProvider * netProvider,
+            const std::string & defaultCrlUrl
             );
         ~CryptoppCryptoProvider();
 

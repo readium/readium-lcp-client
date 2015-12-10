@@ -38,7 +38,8 @@ namespace lcp
             const std::string & rootCertificate,
             INetProvider * netProvider,
             IStorageProvider * storageProvider,
-            IFileSystemProvider * fileSystemProvider
+            IFileSystemProvider * fileSystemProvider,
+            const std::string & defaultCrlUrl
             );
 
         // ILcpService

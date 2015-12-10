@@ -41,7 +41,8 @@ namespace lcp
         const std::string & rootCertificate,
         INetProvider * netProvider,
         IStorageProvider * storageProvider,
-        IFileSystemProvider * fileSystemProvider
+        IFileSystemProvider * fileSystemProvider,
+        const std::string & defaultCrlUrl
         )
         : m_rootCertificate(rootCertificate)
         , m_netProvider(netProvider)
@@ -50,7 +51,7 @@ namespace lcp
         , m_rightsService(new RightsService(m_storageProvider, UnknownUserId))
         , m_jsonReader(new JsonValueReader())
         , m_encryptionProfilesManager(new EncryptionProfilesManager())
-        , m_cryptoProvider(new CryptoppCryptoProvider(m_encryptionProfilesManager.get(), m_netProvider))
+        , m_cryptoProvider(new CryptoppCryptoProvider(m_encryptionProfilesManager.get(), m_netProvider, defaultCrlUrl))
     {
     }
 

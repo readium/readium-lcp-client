@@ -37,16 +37,24 @@ namespace lcp
 {
     CryptoppCryptoProvider::CryptoppCryptoProvider(
         EncryptionProfilesManager * encryptionProfilesManager,
-        INetProvider * netProvider
+        INetProvider * netProvider,
+        const std::string & defaultCrlUrl
         )
         : m_encryptionProfilesManager(encryptionProfilesManager)
     {
         m_revocationList.reset(new CertificateRevocationList());
         m_threadTimer.reset(new ThreadTimer());
-        m_crlUpdater.reset(new CrlUpdater(netProvider, m_revocationList.get(), m_threadTimer.get()));
+        m_crlUpdater.reset(new CrlUpdater(netProvider, m_revocationList.get(), m_threadTimer.get(), defaultCrlUrl));
 
         m_threadTimer->SetHandler(std::bind(&CrlUpdater::Update, m_crlUpdater.get()));
         m_threadTimer->SetAutoReset(true);
+
+        if (m_crlUpdater->ContainsAnyUrl())
+        {
+            m_threadTimer->SetUsage(ThreadTimer::DurationUsage);
+            m_threadTimer->SetDuration(ThreadTimer::DurationType(ThreadTimer::DurationType::zero()));
+            m_threadTimer->Start();
+        }
     }
 
     CryptoppCryptoProvider::~CryptoppCryptoProvider()
@@ -360,7 +368,7 @@ namespace lcp
 
         if (providerCertificate->DistributionPoints() != nullptr)
         {
-            m_crlUpdater->UpdateCrlDistributionPoints(providerCertificate->DistributionPoints());
+            m_crlUpdater->UpdateCrlUrls(providerCertificate->DistributionPoints());
         }
 
         // First time processing of the CRL

@@ -27,7 +27,8 @@ namespace lcp
         INetProvider * netProvider,
         IStorageProvider * storageProvider,
         IFileSystemProvider * fileSystemProvider,
-        ILcpService ** lcpService
+        ILcpService ** lcpService,
+        const std::string & defaultCrlUrl
         )
     {
         if (lcpService == nullptr)
@@ -35,7 +36,7 @@ namespace lcp
             throw std::invalid_argument("lcpService is nullptr");
         }
         auto status = Status(StatusCode::ErrorCommonSuccess);
-        *lcpService = new LcpService(rootCertificate, netProvider, storageProvider, fileSystemProvider);
+        *lcpService = new LcpService(rootCertificate, netProvider, storageProvider, fileSystemProvider, defaultCrlUrl);
         return status;
     }
 }
