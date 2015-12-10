@@ -22,11 +22,11 @@
 #include <memory>
 #include <string>
 #include <sstream>
+#include <thread>
 #include <curl/curl.h>
 #include "Public/lcp.h"
 
 /*#include "ICertificate.h"
-#include <thread>
 #include <cryptopp/base64.h>
 using namespace CryptoPP;
 

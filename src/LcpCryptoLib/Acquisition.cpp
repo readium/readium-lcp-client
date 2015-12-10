@@ -70,7 +70,7 @@ namespace lcp
             }
 
             m_request.reset(new DownloadInFileRequest(m_publicationLink.href, m_file.get()));
-            m_netProvider->StartDownloadRequest(m_request.get(), this);
+            m_netProvider->StartDownloadRequestAsync(m_request.get(), this);
 
             return Status(StatusCode::ErrorCommonSuccess);
         }

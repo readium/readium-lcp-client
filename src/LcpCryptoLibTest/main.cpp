@@ -261,12 +261,12 @@ int main(int argc, char ** argv)
         }
 
         lcp::IRightsService * service = lcpService->GetRightsService();
-        bool boolRes = service->HasRight(rawLicPtr, lcp::PrintRight);
-        boolRes = service->HasRight(rawLicPtr, lcp::CopyRight);
-        boolRes = service->HasRight(rawLicPtr, lcp::TtsRight);
+        bool boolRes = service->CanUseRight(rawLicPtr, lcp::PrintRight);
+        boolRes = service->CanUseRight(rawLicPtr, lcp::CopyRight);
+        boolRes = service->CanUseRight(rawLicPtr, lcp::TtsRight);
 
-        boolRes = service->Consume(rawLicPtr, lcp::PrintRight, 200);
-        boolRes = service->Consume(rawLicPtr, lcp::CopyRight, 500);
+        boolRes = service->UseRight(rawLicPtr, lcp::PrintRight, 200);
+        boolRes = service->UseRight(rawLicPtr, lcp::CopyRight, 500);
         std::string newCopyVal = service->GetValue(rawLicPtr, lcp::CopyRight);
 
         service->SetValue(rawLicPtr, lcp::PrintRight, "200000");
