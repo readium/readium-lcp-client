@@ -82,20 +82,20 @@ namespace lcp
         m_encryptionProfile = m_encryptionProfilesManager->GetProfile(m_cryptoInfo.encryptionProfile);
         if (m_encryptionProfile == nullptr)
         {
-            return Status(StCodeCover::ErrorCommonEncryptionProfileNotFound);
+            return Status(StatusCode::ErrorCommonEncryptionProfileNotFound);
         }
 
         if (m_encryptionProfile->ContentKeyAlgorithm() != m_cryptoInfo.contentKeyAlgorithm)
         {
-            return Status(StCodeCover::ErrorCommonAlgorithmMismatch, "content key algorithm mismatch");
+            return Status(StatusCode::ErrorCommonAlgorithmMismatch, "content key algorithm mismatch");
         }
         if (m_encryptionProfile->UserKeyAlgorithm() != m_cryptoInfo.userKeyAlgorithm)
         {
-            return Status(StCodeCover::ErrorCommonAlgorithmMismatch, "user key algorithm mismatch");
+            return Status(StatusCode::ErrorCommonAlgorithmMismatch, "user key algorithm mismatch");
         }
         if (m_encryptionProfile->SignatureAlgorithm() != m_cryptoInfo.signatureAlgorithm)
         {
-            return Status(StCodeCover::ErrorCommonAlgorithmMismatch, "signature algorithm mismatch");
+            return Status(StatusCode::ErrorCommonAlgorithmMismatch, "signature algorithm mismatch");
         }
         return BaseLcpNode::VerifyNode(license, clientProvider, cryptoProvider);
     }

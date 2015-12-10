@@ -65,12 +65,12 @@ namespace lcp
             IEncryptionProfile * profile = m_encryptionProfilesManager->GetProfile(license->Crypto()->EncryptionProfile());
             if (profile == nullptr)
             {
-                return Status(StCodeCover::ErrorCommonEncryptionProfileNotFound);
+                return Status(StatusCode::ErrorCommonEncryptionProfileNotFound);
             }
 
             if (rootCertificateBase64.empty())
             {
-                return Status(StCodeCover::ErrorOpeningNoRootCertificate);
+                return Status(StatusCode::ErrorOpeningNoRootCertificate);
             }
 
             std::unique_ptr<Certificate> rootCertificate;
@@ -80,7 +80,7 @@ namespace lcp
             }
             catch (CryptoPP::BERDecodeErr & ex)
             {
-                return Status(StCodeCover::ErrorOpeningRootCertificateNotValid, ex.GetWhat());
+                return Status(StatusCode::ErrorOpeningRootCertificateNotValid, ex.GetWhat());
             }
 
             std::unique_ptr<Certificate> providerCertificate;
@@ -90,12 +90,12 @@ namespace lcp
             }
             catch (CryptoPP::BERDecodeErr & ex)
             {
-                return Status(StCodeCover::ErrorOpeningContentProviderCertificateNotValid, ex.GetWhat());
+                return Status(StatusCode::ErrorOpeningContentProviderCertificateNotValid, ex.GetWhat());
             }
 
             if (!providerCertificate->VerifyCertificate(rootCertificate.get()))
             {
-                return Status(StCodeCover::ErrorOpeningContentProviderCertificateNotVerified);
+                return Status(StatusCode::ErrorOpeningContentProviderCertificateNotVerified);
             }
 
             Status res = this->ProcessRevokation(providerCertificate.get());
@@ -106,7 +106,7 @@ namespace lcp
 
             if (!providerCertificate->VerifyMessage(license->CanonicalContent(), license->Crypto()->Signature()))
             {
-                return Status(StCodeCover::ErrorOpeningLicenseSignatureNotValid);
+                return Status(StatusCode::ErrorOpeningLicenseSignatureNotValid);
             }
 
             DateTime notBefore(providerCertificate->NotBeforeDate());
@@ -124,17 +124,17 @@ namespace lcp
 
             if (lastUpdated < notBefore)
             {
-                return Status(StCodeCover::ErrorOpeningContentProviderCertificateNotStarted);
+                return Status(StatusCode::ErrorOpeningContentProviderCertificateNotStarted);
             }
             else if (lastUpdated > notAfter)
             {
-                return Status(StCodeCover::ErrorOpeningContentProviderCertificateExpired);
+                return Status(StatusCode::ErrorOpeningContentProviderCertificateExpired);
             }
-            return Status(StCodeCover::ErrorCommonSuccess);
+            return Status(StatusCode::ErrorCommonSuccess);
         }
         catch (const CryptoPP::Exception & ex)
         {
-            return Status(StCodeCover::ErrorOpeningContentProviderCertificateNotVerified, ex.GetWhat());
+            return Status(StatusCode::ErrorOpeningContentProviderCertificateNotVerified, ex.GetWhat());
         }
     }
 
@@ -149,7 +149,7 @@ namespace lcp
             IEncryptionProfile * profile = m_encryptionProfilesManager->GetProfile(license->Crypto()->EncryptionProfile());
             if (profile == nullptr)
             {
-                return Status(StCodeCover::ErrorCommonEncryptionProfileNotFound);
+                return Status(StatusCode::ErrorCommonEncryptionProfileNotFound);
             }
 
             std::unique_ptr<IHashAlgorithm> hashAlgorithm(profile->CreateUserKeyAlgorithm());
@@ -160,13 +160,13 @@ namespace lcp
             std::string id = contentKeyAlgorithm->Decrypt(license->Crypto()->UserKeyCheck());
             if (!EqualsUtf8(id, license->Id()))
             {
-                return Status(StCodeCover::ErrorDecryptionUserPassphraseNotValid);
+                return Status(StatusCode::ErrorDecryptionUserPassphraseNotValid);
             }
-            return Status(StCodeCover::ErrorCommonSuccess);
+            return Status(StatusCode::ErrorCommonSuccess);
         }
         catch (const CryptoPP::Exception & ex)
         {
-            return Status(StCodeCover::ErrorDecryptionUserPassphraseNotValid, ex.GetWhat());
+            return Status(StatusCode::ErrorDecryptionUserPassphraseNotValid, ex.GetWhat());
         }
     }
 
@@ -181,18 +181,18 @@ namespace lcp
             IEncryptionProfile * profile = m_encryptionProfilesManager->GetProfile(license->Crypto()->EncryptionProfile());
             if (profile == nullptr)
             {
-                return Status(StCodeCover::ErrorCommonEncryptionProfileNotFound);
+                return Status(StatusCode::ErrorCommonEncryptionProfileNotFound);
             }
 
             std::unique_ptr<ISymmetricAlgorithm> contentKeyAlgorithm(profile->CreateContentKeyAlgorithm(userKey));
             std::string decryptedContentKey = contentKeyAlgorithm->Decrypt(license->Crypto()->ContentKey());
 
             contentKey.assign(decryptedContentKey.begin(), decryptedContentKey.end());
-            return Status(StCodeCover::ErrorCommonSuccess);
+            return Status(StatusCode::ErrorCommonSuccess);
         }
         catch (const CryptoPP::Exception & ex)
         {
-            return Status(StCodeCover::ErrorDecryptionLicenseEncrypted, ex.GetWhat());
+            return Status(StatusCode::ErrorDecryptionLicenseEncrypted, ex.GetWhat());
         }
     }
 
@@ -219,11 +219,11 @@ namespace lcp
             }
             rawHash = algorithm.Hash();
 
-            return Status(StCodeCover::ErrorCommonSuccess);
+            return Status(StatusCode::ErrorCommonSuccess);
         }
         catch (const CryptoPP::Exception & ex)
         {
-            return Status(StCodeCover::ErrorDecryptionCommonError, ex.GetWhat());
+            return Status(StatusCode::ErrorDecryptionCommonError, ex.GetWhat());
         }
     }
 
@@ -235,11 +235,11 @@ namespace lcp
         try
         {
             hex = CryptoppUtils::RawToHex(data);
-            return Status(StCodeCover::ErrorCommonSuccess);
+            return Status(StatusCode::ErrorCommonSuccess);
         }
         catch (const CryptoPP::Exception & ex)
         {
-            return Status(StCodeCover::ErrorDecryptionCommonError, ex.GetWhat());
+            return Status(StatusCode::ErrorDecryptionCommonError, ex.GetWhat());
         }
     }
 
@@ -251,11 +251,11 @@ namespace lcp
         try
         {
             data = CryptoppUtils::HexToRaw(hex);
-            return Status(StCodeCover::ErrorCommonSuccess);
+            return Status(StatusCode::ErrorCommonSuccess);
         }
         catch (const CryptoPP::Exception & ex)
         {
-            return Status(StCodeCover::ErrorDecryptionCommonError, ex.GetWhat());
+            return Status(StatusCode::ErrorDecryptionCommonError, ex.GetWhat());
         }
     }
 
@@ -271,16 +271,16 @@ namespace lcp
             IEncryptionProfile * profile = m_encryptionProfilesManager->GetProfile(license->Crypto()->EncryptionProfile());
             if (profile == nullptr)
             {
-                return Status(StCodeCover::ErrorCommonEncryptionProfileNotFound);
+                return Status(StatusCode::ErrorCommonEncryptionProfileNotFound);
             }
 
             std::unique_ptr<ISymmetricAlgorithm> contentKeyAlgorithm(profile->CreateContentKeyAlgorithm(keyProvider->UserKey()));
             decrypted = contentKeyAlgorithm->Decrypt(dataBase64);
-            return Status(StCodeCover::ErrorCommonSuccess);
+            return Status(StatusCode::ErrorCommonSuccess);
         }
         catch (const CryptoPP::Exception & ex)
         {
-            return Status(StCodeCover::ErrorDecryptionLicenseEncrypted, ex.GetWhat());
+            return Status(StatusCode::ErrorDecryptionLicenseEncrypted, ex.GetWhat());
         }
     }
 
@@ -299,7 +299,7 @@ namespace lcp
             IEncryptionProfile * profile = m_encryptionProfilesManager->GetProfile(license->Crypto()->EncryptionProfile());
             if (profile == nullptr)
             {
-                return Status(StCodeCover::ErrorCommonEncryptionProfileNotFound);
+                return Status(StatusCode::ErrorCommonEncryptionProfileNotFound);
             }
 
             std::unique_ptr<ISymmetricAlgorithm> algorithm(profile->CreatePublicationAlgorithm(keyProvider->ContentKey()));
@@ -307,11 +307,11 @@ namespace lcp
                 data, dataLength, decryptedData, inDecryptedDataLength
                 );
 
-            return Status(StCodeCover::ErrorCommonSuccess);
+            return Status(StatusCode::ErrorCommonSuccess);
         }
         catch (const CryptoPP::Exception & ex)
         {
-            return Status(StCodeCover::ErrorDecryptionPublicationEncrypted, ex.GetWhat());
+            return Status(StatusCode::ErrorDecryptionPublicationEncrypted, ex.GetWhat());
         }
     }
 
@@ -327,17 +327,17 @@ namespace lcp
             IEncryptionProfile * profile = m_encryptionProfilesManager->GetProfile(license->Crypto()->EncryptionProfile());
             if (profile == nullptr)
             {
-                return Status(StCodeCover::ErrorCommonEncryptionProfileNotFound);
+                return Status(StatusCode::ErrorCommonEncryptionProfileNotFound);
             }
 
-            Status res(StCodeCover::ErrorCommonSuccess);
+            Status res(StatusCode::ErrorCommonSuccess);
             std::unique_ptr<ISymmetricAlgorithm> algorithm(profile->CreatePublicationAlgorithm(keyProvider->ContentKey()));
             *encStream = new SymmetricAlgorithmEncryptedStream(stream, std::move(algorithm));
             return res;
         }
         catch (const CryptoPP::Exception & ex)
         {
-            return Status(StCodeCover::ErrorDecryptionPublicationEncrypted, ex.GetWhat());
+            return Status(StatusCode::ErrorDecryptionPublicationEncrypted, ex.GetWhat());
         }
     }
 
@@ -359,8 +359,8 @@ namespace lcp
 
         if (m_revocationList->SerialNumberRevoked(providerCertificate->SerialNumber()))
         {
-            return Status(StCodeCover::ErrorOpeningContentProviderCertificateRevoked);
+            return Status(StatusCode::ErrorOpeningContentProviderCertificateRevoked);
         }
-        return Status(StCodeCover::ErrorCommonSuccess);
+        return Status(StatusCode::ErrorCommonSuccess);
     }
 }

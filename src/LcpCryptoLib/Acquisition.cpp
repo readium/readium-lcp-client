@@ -54,25 +54,25 @@ namespace lcp
             ILinks * links = m_license->Links();
             if (!links->Has(Publication))
             {
-                return Status(StCodeCover::ErrorAcquisitionNoAcquisitionLink);
+                return Status(StatusCode::ErrorAcquisitionNoAcquisitionLink);
             }
             
             links->GetLink(Publication, m_publicationLink);
             if (m_publicationLink.type != PublicationType)
             {
-                return Status(StCodeCover::ErrorAcquisitionPublicationWrongType);
+                return Status(StatusCode::ErrorAcquisitionPublicationWrongType);
             }
 
             m_file.reset(m_fileSystemProvider->GetFile(m_publicationPath));
             if (m_file.get() == nullptr)
             {
-                return Status(StCodeCover::ErrorAcquisitionInvalidFilePath);
+                return Status(StatusCode::ErrorAcquisitionInvalidFilePath);
             }
 
             m_request.reset(new DownloadInFileRequest(m_publicationLink.href, m_file.get()));
             m_netProvider->StartDownloadRequest(m_request.get(), this);
 
-            return Status(StCodeCover::ErrorCommonSuccess);
+            return Status(StatusCode::ErrorCommonSuccess);
         }
         catch (const StatusException & ex)
         {
@@ -80,7 +80,7 @@ namespace lcp
         }
         catch (const std::exception & ex)
         {
-            return Status(StCodeCover::ErrorCommonFail, ex.what());
+            return Status(StatusCode::ErrorCommonFail, ex.what());
         }
     }
 
@@ -100,10 +100,10 @@ namespace lcp
 
             if (hexHash != link.hash)
             {
-                return Status(StCodeCover::ErrorAcquisitionPublicationCorrupted);
+                return Status(StatusCode::ErrorAcquisitionPublicationCorrupted);
             }
         }
-        return Status(StCodeCover::ErrorCommonSuccess);
+        return Status(StatusCode::ErrorCommonSuccess);
     }
 
     void Acquisition::Cancel()
@@ -175,14 +175,14 @@ namespace lcp
 
             if (m_callback != nullptr)
             {
-                m_callback->OnAcquisitionEnded(this, Status(StCodeCover::ErrorCommonSuccess));
+                m_callback->OnAcquisitionEnded(this, Status(StatusCode::ErrorCommonSuccess));
             }
         }
         catch (const std::exception & ex)
         {
             if (m_callback != nullptr)
             {
-                m_callback->OnAcquisitionEnded(this, Status(StCodeCover::ErrorCommonFail, ex.what()));
+                m_callback->OnAcquisitionEnded(this, Status(StatusCode::ErrorCommonFail, ex.what()));
             }
         }
     }

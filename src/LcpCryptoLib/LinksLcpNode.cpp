@@ -31,7 +31,7 @@ namespace lcp
         
         if (!linksObject.HasMember(Hint))
         {
-            throw StatusException(Status(StCodeCover::ErrorOpeningLicenseNotValid, "links object is not valid"));
+            throw StatusException(Status(StatusCode::ErrorOpeningLicenseNotValid, "links object is not valid"));
         }
 
         for (auto it = linksObject.MemberBegin(); it != linksObject.MemberEnd(); ++it)
@@ -57,7 +57,7 @@ namespace lcp
             }
             else
             {
-                throw StatusException(Status(StCodeCover::ErrorOpeningLicenseNotValid, "links object is not valid"));
+                throw StatusException(Status(StatusCode::ErrorOpeningLicenseNotValid, "links object is not valid"));
             }
         }
 

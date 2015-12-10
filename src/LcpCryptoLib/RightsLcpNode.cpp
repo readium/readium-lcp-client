@@ -24,8 +24,6 @@
 
 namespace lcp
 {
-    /*static*/ int RightsInfo::UNLIMITED = -1;
-
     void RightsLcpNode::ParseNode(const rapidjson::Value & parentObject, JsonValueReader * reader)
     {
         const rapidjson::Value & rightsObject = reader->ReadObject("rights", parentObject);
@@ -54,11 +52,11 @@ namespace lcp
     {
         if (!this->DoesLicenseStart())
         {
-            return Status(StCodeCover::ErrorOpeningLicenseNotStarted);
+            return Status(StatusCode::ErrorOpeningLicenseNotStarted);
         }
         if (this->DoesLicenseExpired())
         {
-            return Status(StCodeCover::ErrorOpeningLicenseExpired);
+            return Status(StatusCode::ErrorOpeningLicenseExpired);
         }
 
         return BaseLcpNode::VerifyNode(license, clientProvider, cryptoProvider);
@@ -103,12 +101,12 @@ namespace lcp
         this->SetRightValueInMap(name, value);
     }
 
-    bool RightsLcpNode::Consume(const std::string & name)
+    bool RightsLcpNode::UseRight(const std::string & name)
     {
-        return this->Consume(name, 1);
+        return this->UseRight(name, 1);
     }
 
-    bool RightsLcpNode::Consume(const std::string & name, int amount)
+    bool RightsLcpNode::UseRight(const std::string & name, int amount)
     {
         bool result = false;
         if (name == PrintRight)
@@ -119,7 +117,7 @@ namespace lcp
                 this->SetRightValueInMap(name, std::to_string(m_rights.print));
                 result = true;
             }
-            else if (m_rights.print == RightsInfo::UNLIMITED)
+            else if (m_rights.print == IRightsService::UNLIMITED)
             {
                 result = true;
             }
@@ -132,7 +130,7 @@ namespace lcp
                 this->SetRightValueInMap(name, std::to_string(m_rights.copy));
                 result = true;
             }
-            else if (m_rights.copy == RightsInfo::UNLIMITED)
+            else if (m_rights.copy == IRightsService::UNLIMITED)
             {
                 result = true;
             }
@@ -140,15 +138,15 @@ namespace lcp
         return result;
     }
 
-    bool RightsLcpNode::HasRight(const std::string & name) const
+    bool RightsLcpNode::CanUseRight(const std::string & name) const
     {
         if (name == PrintRight)
         {
-            return m_rights.print == RightsInfo::UNLIMITED || m_rights.print > 0;
+            return m_rights.print == IRightsService::UNLIMITED || m_rights.print > 0;
         }
         else if (name == CopyRight)
         {
-            return m_rights.copy == RightsInfo::UNLIMITED || m_rights.copy > 0;
+            return m_rights.copy == IRightsService::UNLIMITED || m_rights.copy > 0;
         }
         else if (name == TtsRight)
         {
@@ -162,7 +160,10 @@ namespace lcp
         {
             return !this->DoesLicenseExpired();
         }
-        return true;
+        else
+        {
+            throw std::invalid_argument("only rights part of the specification are recognized");
+        }
     }
 
     void RightsLcpNode::SetDefaultRightValuesInMap()

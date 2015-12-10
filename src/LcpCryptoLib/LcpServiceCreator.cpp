@@ -34,7 +34,7 @@ namespace lcp
         {
             throw std::invalid_argument("lcpService is nullptr");
         }
-        auto status = Status(StCodeCover::ErrorCommonSuccess);
+        auto status = Status(StatusCode::ErrorCommonSuccess);
         *lcpService = new LcpService(rootCertificate, netProvider, storageProvider, fileSystemProvider);
         return status;
     }

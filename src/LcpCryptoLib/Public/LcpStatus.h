@@ -27,9 +27,9 @@
 
 namespace lcp
 {
-    struct StCodeCover
+    struct StatusCode
     {
-        enum StatusCode
+        enum StatusCodeEnum
         {
             // Error Common
 
@@ -111,18 +111,18 @@ namespace lcp
 
     struct Status
     {
-        Status(StCodeCover::StatusCode resultCode, const std::string & extension = "")
+        Status(StatusCode::StatusCodeEnum resultCode, const std::string & extension = "")
             : ResultCode(resultCode)
             , Extension(extension)
         {
         }
 
-        StCodeCover::StatusCode ResultCode;
+        StatusCode::StatusCodeEnum ResultCode;
         std::string Extension;
 
         static bool IsSuccess(const Status & status)
         {
-            return status.ResultCode == StCodeCover::ErrorCommonSuccess;
+            return status.ResultCode == StatusCode::ErrorCommonSuccess;
         }
     };
 }

@@ -36,7 +36,7 @@ namespace lcp
         , m_netProvider(netProvider)
         , m_revocationList(revocationList)
         , m_threadTimer(threadTimer)
-        , m_currentRequestStatus(Status(StCodeCover::ErrorCommonSuccess))
+        , m_currentRequestStatus(Status(StatusCode::ErrorCommonSuccess))
     {
     }
 
@@ -71,7 +71,7 @@ namespace lcp
     {
         std::unique_lock<std::mutex> locker(m_downloadSync);
 
-        m_currentRequestStatus = Status(StCodeCover::ErrorCommonFail);
+        m_currentRequestStatus = Status(StatusCode::ErrorCommonFail);
         for (auto const & url : m_crlUrls)
         {
             this->Download(url);

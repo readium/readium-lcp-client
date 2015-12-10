@@ -126,7 +126,7 @@ public:
         curl = curl_easy_init();
         if (!curl)
         {
-            callback->OnRequestEnded(request, lcp::Status(lcp::StCodeCover::ErrorNetworkingRequestFailed, "Can not init library"));
+            callback->OnRequestEnded(request, lcp::Status(lcp::StatusCode::ErrorNetworkingRequestFailed, "Can not init library"));
             return;
         }
 
@@ -145,13 +145,13 @@ public:
         res = curl_easy_perform(curl);
         if (res == CURLE_OK)
         {
-            callback->OnRequestEnded(request, lcp::Status(lcp::StCodeCover::ErrorCommonSuccess));
+            callback->OnRequestEnded(request, lcp::Status(lcp::StatusCode::ErrorCommonSuccess));
         }
         else
         {
             std::stringstream strm;
             strm << "Curl Error status: " << res;
-            callback->OnRequestEnded(request, lcp::Status(lcp::StCodeCover::ErrorNetworkingRequestFailed, strm.str().c_str()));
+            callback->OnRequestEnded(request, lcp::Status(lcp::StatusCode::ErrorNetworkingRequestFailed, strm.str().c_str()));
         }
 
         curl_easy_cleanup(curl);

@@ -63,7 +63,7 @@ namespace lcp
                         return res;
                 }
             }
-            return Status(StCodeCover::ErrorCommonSuccess);
+            return Status(StatusCode::ErrorCommonSuccess);
         }
 
         virtual Status VerifyNode(ILicense * license, IClientProvider * clientProvider, ICryptoProvider * cryptoProvider)
@@ -77,7 +77,7 @@ namespace lcp
                         return res;
                 }
             }
-            return Status(StCodeCover::ErrorCommonSuccess);
+            return Status(StatusCode::ErrorCommonSuccess);
         }
 
     protected:

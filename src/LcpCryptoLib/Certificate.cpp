@@ -177,12 +177,12 @@ namespace lcp
         }
         else
         {
-            throw StatusException(Status(StCodeCover::ErrorOpeningRootCertificateSignatureAlgorithmNotFound));
+            throw StatusException(Status(StatusCode::ErrorOpeningRootCertificateSignatureAlgorithmNotFound));
         }
 
         if (m_rootSignature.size() != rootVerifierPtr->SignatureLength())
         {
-            throw StatusException(Status(StCodeCover::ErrorOpeningContentProviderCertificateNotValid));
+            throw StatusException(Status(StatusCode::ErrorOpeningContentProviderCertificateNotValid));
         }
 
         return rootVerifierPtr->VerifyMessage(
