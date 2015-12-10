@@ -100,7 +100,7 @@ namespace lcp
             );
 
     private:
-        Status ProcessRevokation(ICertificate * providerCertificate);
+        Status ProcessRevokation(ICertificate * rootCertificate, ICertificate * providerCertificate);
 
     private:
         std::unique_ptr<ICertificateRevocationList> m_revocationList;

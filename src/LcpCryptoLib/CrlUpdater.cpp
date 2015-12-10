@@ -51,7 +51,7 @@ namespace lcp
     {
         std::unique_lock<std::mutex> locker(m_downloadSync);
 
-        if (distributionPoints->HasCrlDistributionPoints())
+        if (distributionPoints != nullptr && distributionPoints->HasCrlDistributionPoints())
         {
             const StringsList & newUrls = distributionPoints->CrlDistributionPointUrls();
             std::copy_if(

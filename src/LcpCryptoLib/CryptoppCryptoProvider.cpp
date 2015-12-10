@@ -106,7 +106,7 @@ namespace lcp
                 return Status(StatusCode::ErrorOpeningContentProviderCertificateNotVerified);
             }
 
-            Status res = this->ProcessRevokation(providerCertificate.get());
+            Status res = this->ProcessRevokation(rootCertificate.get(), providerCertificate.get());
             if (!Status::IsSuccess(res))
             {
                 return res;
@@ -362,14 +362,12 @@ namespace lcp
         }
     }
 
-    Status CryptoppCryptoProvider::ProcessRevokation(ICertificate * providerCertificate)
+    Status CryptoppCryptoProvider::ProcessRevokation(ICertificate * rootCertificate, ICertificate * providerCertificate)
     {
         bool containedAnyUrlBefore = m_crlUpdater->ContainsAnyUrl();
 
-        if (providerCertificate->DistributionPoints() != nullptr)
-        {
-            m_crlUpdater->UpdateCrlUrls(providerCertificate->DistributionPoints());
-        }
+        m_crlUpdater->UpdateCrlUrls(rootCertificate->DistributionPoints());
+        m_crlUpdater->UpdateCrlUrls(providerCertificate->DistributionPoints());
 
         // First time processing of the CRL
         if (!containedAnyUrlBefore && m_crlUpdater->ContainsAnyUrl())
