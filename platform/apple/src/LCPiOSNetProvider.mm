@@ -20,6 +20,7 @@
 
 #import "../../../include/lcp/lcp.h"
 
+using namespace lcp;
 
 @interface LCPiOSNetProvider : NSObject <NSURLSessionDownloadDelegate>
 @property (strong, nonatomic) NSURLSession *session;
@@ -43,7 +44,7 @@
     return self;
 }
 
-- (void)startDownloadRequest:(lcp::IDownloadRequest *)request callback:(lcp::INetProviderCallback *)callback
+- (void)startDownloadRequest:(IDownloadRequest *)request callback:(INetProviderCallback *)callback
 {
     NSString *urlString = [NSString stringWithUTF8String:request->Url().c_str()];
     NSURL *url = [NSURL URLWithString:urlString];
@@ -60,8 +61,8 @@
 
 - (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)task didWriteData:(int64_t)bytesWritten totalBytesWritten:(int64_t)received totalBytesExpectedToWrite:(int64_t)expected
 {
-    lcp::IDownloadRequest *request;
-    lcp::INetProviderCallback *callback;
+    IDownloadRequest *request;
+    INetProviderCallback *callback;
     [self getRequest:&request callback:&callback forTask:task];
     if (!request || !callback)
         return;
@@ -83,8 +84,8 @@
 
 - (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)task didFinishDownloadingToURL:(NSURL *)location
 {
-    lcp::IDownloadRequest *request;
-    lcp::INetProviderCallback *callback;
+    IDownloadRequest *request;
+    INetProviderCallback *callback;
     [self getRequest:&request callback:&callback forTask:task];
     if (!request || !callback)
         return;
@@ -100,15 +101,15 @@
     [[NSFileManager defaultManager] removeItemAtPath:toPath error:NULL];
     if (![[NSFileManager defaultManager] moveItemAtPath:[location path] toPath:toPath error:&error]) {
         [self taskEnded:task];
-        callback->OnRequestEnded(request, lcp::Status(lcp::StCodeCover::ErrorNetworkingRequestFailed, "Can't move the downloaded file to destination path"));
+        callback->OnRequestEnded(request, Status(StatusCode::ErrorNetworkingRequestFailed, "Can't move the downloaded file to destination path"));
     }
 }
 
 - (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error
 
 {
-    lcp::IDownloadRequest *request;
-    lcp::INetProviderCallback *callback;
+    IDownloadRequest *request;
+    INetProviderCallback *callback;
     [self getRequest:&request callback:&callback forTask:task];
     if (!request || !callback)
         return;
@@ -117,11 +118,11 @@
         callback->OnRequestCanceled(request);
         
     } else {
-        lcp::Status status = lcp::Status(lcp::StCodeCover::ErrorCommonSuccess);
+        Status status = Status(StatusCode::ErrorCommonSuccess);
         if ([(NSHTTPURLResponse *)task.response statusCode] == 404) {
-            status = lcp::Status(lcp::StCodeCover::ErrorNetworkingRequestFailed);
+            status = Status(StatusCode::ErrorNetworkingRequestFailed);
         } else if (error) {
-            status = lcp::Status(lcp::StCodeCover::ErrorNetworkingRequestFailed);
+            status = Status(StatusCode::ErrorNetworkingRequestFailed);
         }
         
         callback->OnRequestEnded(request, status);
@@ -130,16 +131,16 @@
     [self taskEnded:task];
 }
 
-- (void)getRequest:(lcp::IDownloadRequest **)request callback:(lcp::INetProviderCallback **)callback forTask:(NSURLSessionTask *)task
+- (void)getRequest:(IDownloadRequest **)request callback:(INetProviderCallback **)callback forTask:(NSURLSessionTask *)task
 {
     id identifier = @(task.taskIdentifier);
     
     if (request != NULL) {
-        *request = (lcp::IDownloadRequest *)[self.requests[identifier] pointerValue];
+        *request = (IDownloadRequest *)[self.requests[identifier] pointerValue];
     }
     
     if (callback != NULL) {
-        *callback = (lcp::INetProviderCallback *)[self.callbacks[identifier] pointerValue];
+        *callback = (INetProviderCallback *)[self.callbacks[identifier] pointerValue];
     }
 }
 
@@ -160,6 +161,11 @@ namespace lcp
     }
     
     void iOSNetProvider::StartDownloadRequest(IDownloadRequest *request, INetProviderCallback *callback)
+    {
+        StartDownloadRequestAsync(request, callback);
+    }
+    
+    void iOSNetProvider::StartDownloadRequestAsync(IDownloadRequest *request, INetProviderCallback *callback)
     {
         [m_provider startDownloadRequest:request callback:callback];
     }
