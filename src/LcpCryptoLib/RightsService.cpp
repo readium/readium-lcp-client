@@ -1,3 +1,21 @@
+//
+//  Created by Artem Brazhnikov on 11/15.
+//  Copyright © 2015 Mantano. All rights reserved.
+//
+//  This program is distributed in the hope that it will be useful, but WITHOUT ANY
+//  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+//
+//  Licensed under Gnu Affero General Public License Version 3 (provided, notwithstanding this notice,
+//  Readium Foundation reserves the right to license this material under a different separate license,
+//  and if you have done so, the terms of that separate license control and the following references
+//  to GPL do not apply).
+//
+//  This program is free software: you can redistribute it and/or modify it under the terms of the GNU
+//  Affero General Public License as published by the Free Software Foundation, either version 3 of
+//  the License, or (at your option) any later version. You should have received a copy of the GNU
+//  Affero General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
+
 #include <memory>
 #include <sstream>
 #include "RightsService.h"
@@ -9,6 +27,8 @@
 
 namespace lcp
 {
+    /* static */ int IRightsService::UNLIMITED = -1;
+    
     RightsService::RightsService(IStorageProvider * storageProvider, const std::string & unknownUserId)
         : m_storageProvider(storageProvider)
         , m_unknownUserId(unknownUserId)
@@ -32,21 +52,21 @@ namespace lcp
         }
     }
 
-    bool RightsService::HasRight(ILicense * license, const std::string & rightId) const
+    bool RightsService::CanUseRight(ILicense * license, const std::string & rightId) const
     {
         IRightsManager * rightsManager = this->PerformChecks(license);
-        return rightsManager->HasRight(rightId);
+        return rightsManager->CanUseRight(rightId);
     }
 
-    bool RightsService::Consume(ILicense * license, const std::string & rightId)
+    bool RightsService::UseRight(ILicense * license, const std::string & rightId)
     {
-        return this->Consume(license, rightId, 1);
+        return this->UseRight(license, rightId, 1);
     }
 
-    bool RightsService::Consume(ILicense * license, const std::string & rightId, int amount)
+    bool RightsService::UseRight(ILicense * license, const std::string & rightId, int amount)
     {
         IRightsManager * rightsManager = this->PerformChecks(license);
-        if (rightsManager->Consume(rightId, amount))
+        if (rightsManager->UseRight(rightId, amount))
         {
             std::string currentValue;
             license->Rights()->GetRightValue(rightId, currentValue);
