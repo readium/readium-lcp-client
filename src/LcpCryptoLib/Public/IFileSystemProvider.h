@@ -12,13 +12,14 @@
 
 namespace lcp
 {
-    class IFile : public IReadableStream, public IWritableStream
-    {
-    public:
-        virtual std::string GetPath() const = 0;
-        virtual ~IFile() {}
-    };
-
+    class IFile;
+    
+    //
+    // Provider used to read and write on the file system.
+    // You can implement this interface to change the way files are accessed.
+    // A default cross-platform C++ implementation is available with
+    // DefaultFileSystemProvider.
+    //
     class IFileSystemProvider
     {
     public:
@@ -29,8 +30,26 @@ namespace lcp
         };
 
     public:
+        //
+        // Opens a new IO stream to the given absolute path.
+        //
         virtual IFile * GetFile(const std::string & path, OpenMode openMode = CreateNew) = 0;
+        
         virtual ~IFileSystemProvider() {}
+    };
+    
+    //
+    // IO stream for a single fil on the file system.
+    //
+    class IFile : public IReadableStream, public IWritableStream
+    {
+    public:
+        //
+        // Returns the absolute path to the file.
+        //
+        virtual std::string GetPath() const = 0;
+        
+        virtual ~IFile() {}
     };
 }
 

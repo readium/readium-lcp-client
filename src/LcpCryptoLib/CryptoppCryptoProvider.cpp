@@ -1,6 +1,6 @@
 //
 //  Created by Artem Brazhnikov on 11/15.
-//  Copyright © 2015 Mantano. All rights reserved.
+//  Copyright ï¿½ 2015 Mantano. All rights reserved.
 //  Any commercial use is strictly prohibited.
 //
 
@@ -35,7 +35,7 @@ namespace lcp
         m_crlUpdater.reset(new CrlUpdater(netProvider, m_revocationList.get(), m_threadTimer.get(), defaultCrlUrl));
 
         m_threadTimer->SetHandler(std::bind(&CrlUpdater::Update, m_crlUpdater.get()));
-        m_threadTimer->SetAutoReset(true);
+        m_threadTimer->SetAutoReset(false);
 
         if (m_crlUpdater->ContainsAnyUrl())
         {
@@ -299,8 +299,7 @@ namespace lcp
         const unsigned char * data,
         const size_t dataLength,
         unsigned char * decryptedData,
-        size_t inDecryptedDataLength,
-        size_t * outDecryptedDataLength
+        size_t * decryptedDataLength
         )
     {
         try
@@ -312,8 +311,8 @@ namespace lcp
             }
 
             std::unique_ptr<ISymmetricAlgorithm> algorithm(profile->CreatePublicationAlgorithm(keyProvider->ContentKey()));
-            *outDecryptedDataLength = algorithm->Decrypt(
-                data, dataLength, decryptedData, inDecryptedDataLength
+            *decryptedDataLength = algorithm->Decrypt(
+                data, dataLength, decryptedData, *decryptedDataLength
                 );
 
             return Status(StatusCode::ErrorCommonSuccess);
@@ -352,16 +351,28 @@ namespace lcp
 
     Status CryptoppCryptoProvider::ProcessRevokation(ICertificate * rootCertificate, ICertificate * providerCertificate)
     {
-        bool containedAnyUrlBefore = m_crlUpdater->ContainsAnyUrl();
-
         m_crlUpdater->UpdateCrlUrls(rootCertificate->DistributionPoints());
         m_crlUpdater->UpdateCrlUrls(providerCertificate->DistributionPoints());
 
         // First time processing of the CRL
-        if (!containedAnyUrlBefore && m_crlUpdater->ContainsAnyUrl())
+        if (m_crlUpdater->ContainsAnyUrl() && !m_revocationList->HasThisUpdateDate())
         {
-            m_crlUpdater->Update();
-            // Start timer which checks CRL for updates periodically or by time point
+            if (m_threadTimer->IsRunning())
+            {
+                m_threadTimer->Stop();
+            }
+
+            // If CRL is absent, update it right before certificate verification
+            // Check once more, the CRL state could've been changed during the stop process
+            if (!m_revocationList->HasThisUpdateDate())
+            {
+                m_crlUpdater->Update();
+            }
+
+            // Start timer which will check CRL for updates periodically or by time point
+            m_threadTimer->SetAutoReset(true);
+            m_threadTimer->SetUsage(ThreadTimer::DurationUsage);
+            m_threadTimer->SetDuration(ThreadTimer::DurationType(CrlUpdater::TenMinutesPeriod));
             m_threadTimer->Start();
         }
 

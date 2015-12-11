@@ -43,6 +43,9 @@ namespace lcp
         virtual void OnRequestCanceled(INetRequest * request);
         virtual void OnRequestEnded(INetRequest * request, Status result);
 
+    public:
+        static const int TenMinutesPeriod;
+
     private:
         void Download(const std::string & url);
         void ResetNextUpdate();
@@ -60,8 +63,6 @@ namespace lcp
         bool m_requestRunning;
         mutable std::mutex m_downloadSync;
         std::condition_variable m_conditionDownload;
-
-        static const int TenMinutesPeriod;
     };
 }
 

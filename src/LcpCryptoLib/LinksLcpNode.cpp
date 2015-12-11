@@ -1,6 +1,6 @@
 //
 //  Created by Artem Brazhnikov on 11/15.
-//  Copyright © 2015 Mantano. All rights reserved.
+//  Copyright ï¿½ 2015 Mantano. All rights reserved.
 //  Any commercial use is strictly prohibited.
 //
 
@@ -9,7 +9,7 @@
 #include "LinksLcpNode.h"
 #include "JsonValueReader.h"
 #include "LcpUtils.h"
-#include "Public/ContainerIterator.h"
+#include "ContainerIterator.h"
 
 namespace lcp
 {

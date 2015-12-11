@@ -29,8 +29,8 @@ namespace lcp
         std::unique_lock<std::mutex> locker(m_sync);
         if (!m_isRunning)
         {
-            m_worker = std::thread(&ThreadTimer::TimerThread, this);
             m_isRunning = true;
+            m_worker = std::thread(&ThreadTimer::TimerThread, this);
         }
     }
 
@@ -137,7 +137,7 @@ namespace lcp
                 }
                 locker.lock();
             }
-            while (m_isAutoReset);
+            while (m_isAutoReset && m_isRunning);
 
             // One-time shot, thread exits after first loop cycle
             if (m_isRunning)

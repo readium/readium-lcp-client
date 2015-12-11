@@ -52,13 +52,15 @@ namespace lcp {
             // on top of the bytes that were passed in the data parameter. What
             // that means is that, in this circumstance, this filter is one
             // filter in a chain of filters.
-            uint8_t *buffer = new unsigned char[len];
-            Status res = lcpService->DecryptData(m_license, (const unsigned char *)data, len, buffer, len, outputLen, context->Algorithm());
+            size_t bufferLen = len;
+            uint8_t *buffer = new unsigned char[bufferLen];
+            Status res = lcpService->DecryptData(m_license, (const unsigned char *)data, len, buffer, &bufferLen, context->Algorithm());
             if (!Status::IsSuccess(res)) {
                 delete [] buffer;
                 return nullptr;
             }
             
+            *outputLen = bufferLen;
             return buffer;
             
         } else {

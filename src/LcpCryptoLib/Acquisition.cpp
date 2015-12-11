@@ -94,9 +94,17 @@ namespace lcp
         return Status(StatusCode::ErrorCommonSuccess);
     }
 
-    void Acquisition::Cancel()
+    Status Acquisition::Cancel()
     {
-        m_request->SetCanceled(true);
+        try
+        {
+            m_request->SetCanceled(true);
+            return Status(StatusCode::ErrorCommonSuccess);
+        }
+        catch (const std::exception & ex)
+        {
+            return Status(StatusCode::ErrorCommonFail, ex.what());
+        }
     }
 
     std::string Acquisition::PublicationPath() const

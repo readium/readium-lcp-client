@@ -5,7 +5,7 @@
 //
 
 #ifndef __THREAD_TIMER_H__
-#define  __THREAD_TIMER_H__
+#define __THREAD_TIMER_H__
 
 #include <chrono>
 #include <thread>

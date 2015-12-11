@@ -19,6 +19,7 @@ namespace lcp
         
         // ICertificateRevocationList
         virtual void UpdateRevocationList(const Buffer & crlRaw);
+        virtual bool HasThisUpdateDate() const;
         virtual std::string ThisUpdateDate() const;
         virtual bool HasNextUpdateDate() const;
         virtual std::string NextUpdateDate() const;

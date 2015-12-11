@@ -5,9 +5,9 @@
 //
 
 #include "UserLcpNode.h"
+#include "ContainerIterator.h"
 #include "JsonValueReader.h"
 #include "ICryptoProvider.h"
-#include "Public/ContainerIterator.h"
 
 namespace lcp
 {

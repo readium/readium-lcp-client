@@ -89,60 +89,67 @@ public:
         lcp::INetProviderCallback * callback
         )
     {
-        /* imitate CRL downloading
-        lcp::Buffer rawDecoded;
+        try
         {
-            Base64Decoder decoder;
-            decoder.Put((byte *)testCrl.data(), testCrl.size());
-            decoder.MessageEnd();
-
-            lword size = decoder.MaxRetrievable();
-            if (size > 0 && size <= SIZE_MAX)
+            /* imitate CRL downloading
+            lcp::Buffer rawDecoded;
             {
-                rawDecoded.resize(static_cast<size_t>(size));
-                decoder.Get((byte *)rawDecoded.data(), rawDecoded.size());
+                Base64Decoder decoder;
+                decoder.Put((byte *)testCrl.data(), testCrl.size());
+                decoder.MessageEnd();
+
+                lword size = decoder.MaxRetrievable();
+                if (size > 0 && size <= SIZE_MAX)
+                {
+                    rawDecoded.resize(static_cast<size_t>(size));
+                    decoder.Get((byte *)rawDecoded.data(), rawDecoded.size());
+                }
             }
+
+            request->DestinationStream()->SetWritePosition(0);
+            request->DestinationStream()->Write(&rawDecoded.at(0), rawDecoded.size());
+            callback->OnRequestEnded(request, lcp::Status(lcp::StCodeCover::ErrorCommonSuccess));
+            return;*/
+
+            CURL * curl;
+            CURLcode res;
+            curl = curl_easy_init();
+            if (!curl)
+            {
+                callback->OnRequestEnded(request, lcp::Status(lcp::StatusCode::ErrorNetworkingRequestFailed, "Can not init library"));
+                return;
+            }
+
+            curl_easy_setopt(curl, CURLOPT_URL, request->Url().c_str());
+            curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, CallbackWriteFile);
+            curl_easy_setopt(curl, CURLOPT_WRITEDATA, request->DestinationStream());
+            curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 0);
+            curl_easy_setopt(curl, CURLOPT_PROGRESSFUNCTION, CallbackProgress);
+
+            std::unique_ptr<NetworkInfo> networkInfo(new NetworkInfo());
+            networkInfo->request = request;
+            networkInfo->callback = callback;
+            curl_easy_setopt(curl, CURLOPT_PROGRESSDATA, networkInfo.get());
+
+            callback->OnRequestStarted(request);
+            res = curl_easy_perform(curl);
+            if (res == CURLE_OK)
+            {
+                callback->OnRequestEnded(request, lcp::Status(lcp::StatusCode::ErrorCommonSuccess));
+            }
+            else
+            {
+                std::stringstream strm;
+                strm << "Curl Error status: " << res;
+                callback->OnRequestEnded(request, lcp::Status(lcp::StatusCode::ErrorNetworkingRequestFailed, strm.str().c_str()));
+            }
+
+            curl_easy_cleanup(curl);
         }
-
-        request->DestinationStream()->SetWritePosition(0);
-        request->DestinationStream()->Write(&rawDecoded.at(0), rawDecoded.size());
-        callback->OnRequestEnded(request, lcp::Status(lcp::StCodeCover::ErrorCommonSuccess));
-        return;*/
-
-        CURL * curl;
-        CURLcode res;
-        curl = curl_easy_init();
-        if (!curl)
+        catch (const std::exception & ex)
         {
-            callback->OnRequestEnded(request, lcp::Status(lcp::StatusCode::ErrorNetworkingRequestFailed, "Can not init library"));
-            return;
+            callback->OnRequestEnded(request, lcp::Status(lcp::StatusCode::ErrorCommonFail, ex.what()));
         }
-
-        curl_easy_setopt(curl, CURLOPT_URL, request->Url().c_str());
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, CallbackWriteFile);
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, request->DestinationStream());
-        curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 0);
-        curl_easy_setopt(curl, CURLOPT_PROGRESSFUNCTION, CallbackProgress);
-
-        std::unique_ptr<NetworkInfo> networkInfo(new NetworkInfo());
-        networkInfo->request = request;
-        networkInfo->callback = callback;
-        curl_easy_setopt(curl, CURLOPT_PROGRESSDATA, networkInfo.get());
-
-        callback->OnRequestStarted(request);
-        res = curl_easy_perform(curl);
-        if (res == CURLE_OK)
-        {
-            callback->OnRequestEnded(request, lcp::Status(lcp::StatusCode::ErrorCommonSuccess));
-        }
-        else
-        {
-            std::stringstream strm;
-            strm << "Curl Error status: " << res;
-            callback->OnRequestEnded(request, lcp::Status(lcp::StatusCode::ErrorNetworkingRequestFailed, strm.str().c_str()));
-        }
-
-        curl_easy_cleanup(curl);
     }
 
     virtual void StartDownloadRequest(

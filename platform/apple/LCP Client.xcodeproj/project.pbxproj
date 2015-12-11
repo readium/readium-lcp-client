@@ -135,7 +135,6 @@
 		5A1B61FB1C198D3C00D45788 /* LcpUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LcpUtils.h; sourceTree = "<group>"; };
 		5A1B61FC1C198D3C00D45788 /* LinksLcpNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LinksLcpNode.cpp; sourceTree = "<group>"; };
 		5A1B61FD1C198D3C00D45788 /* LinksLcpNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LinksLcpNode.h; sourceTree = "<group>"; };
-		5A1B61FF1C198D3C00D45788 /* ContainerIterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContainerIterator.h; sourceTree = "<group>"; };
 		5A1B62001C198D3C00D45788 /* DefaultFileSystemProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DefaultFileSystemProvider.h; sourceTree = "<group>"; };
 		5A1B62011C198D3C00D45788 /* IAcquistion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAcquistion.h; sourceTree = "<group>"; };
 		5A1B62021C198D3C00D45788 /* IAcquistionCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAcquistionCallback.h; sourceTree = "<group>"; };
@@ -219,6 +218,7 @@
 		5ABE4AB31C0F4ACE00FA5A55 /* LcpSeekableByteStreamAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LcpSeekableByteStreamAdapter.h; sourceTree = "<group>"; };
 		5ACE2E1B1BF21D8C00AC0585 /* libLCP-client-iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libLCP-client-iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5ACE2E7D1BF21EBE00AC0585 /* LCP Client.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "LCP Client.xcconfig"; sourceTree = "<group>"; };
+		CAF172651C1B0F5D00D12C19 /* ContainerIterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContainerIterator.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -299,6 +299,7 @@
 				5A1B61D21C198D3C00D45788 /* CertificateExtension.h */,
 				5A1B61D31C198D3C00D45788 /* CertificateRevocationList.cpp */,
 				5A1B61D41C198D3C00D45788 /* CertificateRevocationList.h */,
+				CAF172651C1B0F5D00D12C19 /* ContainerIterator.h */,
 				5A1B61D51C198D3C00D45788 /* CrlDistributionPoints.cpp */,
 				5A1B61D61C198D3C00D45788 /* CrlDistributionPoints.h */,
 				5A1B61D71C198D3C00D45788 /* CrlUpdater.cpp */,
@@ -366,7 +367,6 @@
 		5A1B61FE1C198D3C00D45788 /* Public */ = {
 			isa = PBXGroup;
 			children = (
-				5A1B61FF1C198D3C00D45788 /* ContainerIterator.h */,
 				5A1B62001C198D3C00D45788 /* DefaultFileSystemProvider.h */,
 				5A1B62011C198D3C00D45788 /* IAcquistion.h */,
 				5A1B62021C198D3C00D45788 /* IAcquistionCallback.h */,
