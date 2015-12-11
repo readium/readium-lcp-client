@@ -9,7 +9,6 @@
 #include <cryptopp/hex.h>
 #include <cryptopp/osrng.h>
 #include "CryptoppUtils.h"
-#include "LcpUtils.h"
 
 using namespace CryptoPP;
 

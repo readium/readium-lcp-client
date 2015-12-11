@@ -11,7 +11,6 @@
 #include <memory>
 #include <mutex>
 #include "ILcpNode.h"
-#include "LcpUtils.h"
 #include "NonCopyable.h"
 
 namespace lcp

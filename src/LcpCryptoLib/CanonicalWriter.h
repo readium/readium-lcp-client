@@ -8,7 +8,6 @@
 #define __CANONICAL_WRITER_H__
 
 #include "rapidjson/writer.h"
-#include "LcpUtils.h"
 
 using namespace rapidjson;
 

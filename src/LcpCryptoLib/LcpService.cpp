@@ -10,6 +10,7 @@
 #include "UserLcpNode.h"
 #include "RightsLcpNode.h"
 #include "RootLcpNode.h"
+#include "LcpUtils.h"
 #include "JsonValueReader.h"
 #include "JsonCanonicalizer.h"
 #include "EncryptionProfilesManager.h"

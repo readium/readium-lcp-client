@@ -10,9 +10,9 @@
 #include <map>
 #include <memory>
 #include <mutex>
-#include "Public/ILcpService.h"
-#include "LcpUtils.h"
+#include "LcpTypedefs.h"
 #include "NonCopyable.h"
+#include "Public/ILcpService.h"
 
 namespace lcp
 {

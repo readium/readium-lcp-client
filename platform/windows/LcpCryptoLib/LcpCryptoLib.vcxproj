@@ -82,6 +82,7 @@
     <ClInclude Include="..\..\..\src\LcpCryptoLib\SimpleKeyProvider.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\SymmetricAlgorithmEncryptedStream.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\ThreadTimer.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\LcpTypedefs.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\UserLcpNode.h" />
     <ClInclude Include="..\..\..\src\third-parties\time64\time64.h" />
     <ClInclude Include="..\..\..\src\third-parties\time64\time64_config.h" />

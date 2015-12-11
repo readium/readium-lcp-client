@@ -9,7 +9,7 @@
 
 #include <string>
 #include <vector>
-#include "LcpUtils.h"
+#include "LcpTypedefs.h"
 
 namespace lcp
 {

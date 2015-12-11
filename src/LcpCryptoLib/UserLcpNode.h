@@ -7,7 +7,7 @@
 #ifndef __USER_LCP_NODE_H__
 #define __USER_LCP_NODE_H__
 
-#include "LcpUtils.h"
+#include "LcpTypedefs.h"
 #include "BaseLcpNode.h"
 #include "Public/IUser.h"
 

@@ -7,7 +7,6 @@
 #include "rapidjson/document.h"
 #include "CryptoLcpNode.h"
 #include "JsonValueReader.h"
-#include "LcpUtils.h"
 #include "IEncryptionProfile.h"
 #include "CryptoAlgorithmInterfaces.h"
 #include "EncryptionProfilesManager.h"

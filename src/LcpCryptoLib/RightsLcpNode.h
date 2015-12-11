@@ -8,7 +8,7 @@
 #define __RIGHTS_LCP_NODE_H__
 
 #include <mutex>
-#include "LcpUtils.h"
+#include "LcpTypedefs.h"
 #include "BaseLcpNode.h"
 #include "Public/IRights.h"
 #include "Public/IRightsService.h"

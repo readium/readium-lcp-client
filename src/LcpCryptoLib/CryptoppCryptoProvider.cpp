@@ -16,6 +16,7 @@
 #include "CrlUpdater.h"
 #include "ThreadTimer.h"
 #include "DateTime.h"
+#include "LcpUtils.h"
 #include "IKeyProvider.h"
 #include "CryptoppUtils.h"
 #include "Sha256HashAlgorithm.h"
@@ -47,8 +48,14 @@ namespace lcp
 
     CryptoppCryptoProvider::~CryptoppCryptoProvider()
     {
-        m_crlUpdater->Cancel();
-        m_threadTimer->Stop();
+        try
+        {
+            m_crlUpdater->Cancel();
+            m_threadTimer->Stop();
+        }
+        catch (...)
+        {
+        }
     }
 
     Status CryptoppCryptoProvider::VerifyLicense(

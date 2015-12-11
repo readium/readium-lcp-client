@@ -14,6 +14,7 @@
 #include "CertificateExtension.h"
 #include "CrlDistributionPoints.h"
 #include "NonCopyable.h"
+#include "LcpTypedefs.h"
 
 using namespace CryptoPP;
 

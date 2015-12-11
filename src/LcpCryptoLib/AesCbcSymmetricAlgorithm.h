@@ -12,6 +12,7 @@
 #include <cryptopp/filters.h>
 #include "CryptoAlgorithmInterfaces.h"
 #include "NonCopyable.h"
+#include "LcpTypedefs.h"
 
 namespace lcp
 {
