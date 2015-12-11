@@ -1,6 +1,6 @@
 //
 //  Created by Artem Brazhnikov on 11/15.
-//  Copyright © 2015 Mantano. All rights reserved.
+//  Copyright ï¿½ 2015 Mantano. All rights reserved.
 //  Any commercial use is strictly prohibited.
 //
 
@@ -225,8 +225,7 @@ namespace lcp
         const unsigned char * data,
         const size_t dataLength,
         unsigned char * decryptedData,
-        size_t inDecryptedDataLength,
-        size_t * outDecryptedDataLength,
+        size_t * decryptedDataLength,
         const std::string & algorithm
         )
     {
@@ -264,8 +263,7 @@ namespace lcp
                 data,
                 dataLength,
                 decryptedData,
-                inDecryptedDataLength,
-                outDecryptedDataLength
+                decryptedDataLength
                 );
         }
         catch (const StatusException & ex)

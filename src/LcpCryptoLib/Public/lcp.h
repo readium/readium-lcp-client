@@ -9,7 +9,6 @@
 
 #include "LcpStatus.h"
 #include "IValueIterator.h"
-#include "ContainerIterator.h"
 #include "INetProvider.h"
 #include "IStorageProvider.h"
 #include "StreamInterfaces.h"

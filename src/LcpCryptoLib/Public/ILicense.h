@@ -16,41 +16,70 @@ namespace lcp
     class IUser;
     class IRights;
 
+    //
+    // Represents a single License Document, and provides access to its
+    // metadata.
+    //
     class ILicense
     {
     public:
+        //
         // Unique identifier for this license
+        //
         virtual std::string Id() const = 0;
 
-        // Canonical form of the license. Used when validating the signature.
+        //
+        // Canonical JSON form of the license. Used when validating the signature.
+        //
         virtual std::string CanonicalContent() const = 0;
 
-        // Original form of the license.
+        //
+        // Original JSON form of the license, given to the LcpService when
+        // opening the License.
+        //
         virtual std::string OriginalContent() const = 0;
 
+        //
         // Date when the license was first issued (ISO 8601).
+        //
         virtual std::string Issued() const = 0;
 
+        //
         // Date when the license was last updated (ISO 8601).
+        //
         virtual std::string Updated() const = 0;
 
+        //
         // Unique identifier for the Content Provider, as an URI.
+        //
         virtual std::string Provider() const = 0;
 
+        //
+        // Encryption Profile metadata for this License.
+        //
         virtual ICrypto * Crypto() const = 0;
 
-        // ILinks maps link relation to a Link object, or a list 
-        // of Link objects.
-        // A link relation is a string such as "publication".
+        //
+        // List of links available in the License.
+        //
         virtual ILinks * Links() const = 0;
 
-        // Information about the user.
+        //
+        // Information about the User.
+        //
         virtual IUser * User() const = 0;
 
-        // IRights maps a Right identifier to its JSON value, if any.
+        //
+        // License rights attributed to the User.
+        // They are automatically synced with the consumption
+        // stored on the device.
+        //
         virtual IRights * Rights() const = 0;
 
-        // Returns true if the License is decrypted
+        //
+        // Returns true if the License is decrypted (ie. the passphrase
+        // was given to the LcpService.
+        //
         virtual bool Decrypted() const = 0;
 
         virtual ~ILicense() {};
