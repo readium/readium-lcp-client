@@ -9,11 +9,13 @@
 
 #include <map>
 #include <memory>
+#include <mutex>
 #include "IEncryptionProfile.h"
+#include "NonCopyable.h"
 
 namespace lcp
 {
-    class EncryptionProfilesManager
+    class EncryptionProfilesManager : public NonCopyable
     {
     public:
         EncryptionProfilesManager();
@@ -23,6 +25,7 @@ namespace lcp
     private:
         typedef std::map<std::string, std::unique_ptr<IEncryptionProfile> > ProfilesMap;
         ProfilesMap m_profilesMap;
+        mutable std::mutex m_profilesSync;
     };
 }
 

@@ -9,10 +9,11 @@
 
 #include <cryptopp/sha.h>
 #include "CryptoAlgorithmInterfaces.h"
+#include "NonCopyable.h"
 
 namespace lcp
 {
-    class Sha256HashAlgorithm : public IHashAlgorithm
+    class Sha256HashAlgorithm : public IHashAlgorithm, public NonCopyable
     {
     public:
         virtual std::string Name() const;

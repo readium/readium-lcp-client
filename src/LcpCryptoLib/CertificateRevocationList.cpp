@@ -19,6 +19,8 @@ namespace lcp
 
     void CertificateRevocationList::UpdateRevocationList(const Buffer & crlRaw)
     {
+        std::unique_lock<std::mutex> locker(m_sync);
+
         ByteQueue crlData;
         crlData.Put(crlRaw.data(), crlRaw.size());
         crlData.MessageEnd();
@@ -71,31 +73,37 @@ namespace lcp
 
     std::string CertificateRevocationList::ThisUpdateDate() const
     {
+        std::unique_lock<std::mutex> locker(m_sync);
         return m_thisUpdate;
     }
 
     bool CertificateRevocationList::HasThisUpdateDate() const
     {
+        std::unique_lock<std::mutex> locker(m_sync);
         return !m_thisUpdate.empty();
     }
 
     std::string CertificateRevocationList::NextUpdateDate() const
     {
+        std::unique_lock<std::mutex> locker(m_sync);
         return m_nextUpdate;
     }
 
     bool CertificateRevocationList::HasNextUpdateDate() const
     {
+        std::unique_lock<std::mutex> locker(m_sync);
         return !m_nextUpdate.empty();
     }
 
     bool CertificateRevocationList::SerialNumberRevoked(const std::string & serialNumber) const
     {
+        std::unique_lock<std::mutex> locker(m_sync);
         return (m_revokedSerialNumbers.find(serialNumber) != m_revokedSerialNumbers.end());
     }
 
     const StringsSet & CertificateRevocationList::RevokedSerialNumbers() const
     {
+        std::unique_lock<std::mutex> locker(m_sync);
         return m_revokedSerialNumbers;
     }
 }

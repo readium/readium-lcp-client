@@ -15,7 +15,7 @@ namespace lcp
     class IFile : public IReadableStream, public IWritableStream
     {
     public:
-        virtual std::string GetPath() const = 0;
+        virtual std::string Path() const = 0;
         virtual ~IFile() {}
     };
 

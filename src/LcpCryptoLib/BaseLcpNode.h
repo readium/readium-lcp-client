@@ -9,23 +9,27 @@
 
 #include <vector>
 #include <memory>
+#include <mutex>
 #include "ILcpNode.h"
 #include "LcpUtils.h"
+#include "NonCopyable.h"
 
 namespace lcp
 {
     class ICryptoProvider;
 
-    class BaseLcpNode : public ILcpNode
+    class BaseLcpNode : public ILcpNode, public NonCopyable
     {
     public:
         virtual void AddChildNode(std::unique_ptr<ILcpNode> child)
         {
+            std::unique_lock<std::mutex> locker(m_childsSync);
             m_childs.push_back(std::move(child));
         }
 
         virtual bool IsLeaf() const
         {
+            std::unique_lock<std::mutex> locker(m_childsSync);
             return m_childs.size() == 0;
         }
 
@@ -33,6 +37,8 @@ namespace lcp
         {
             if (!IsLeaf())
             {
+                std::unique_lock<std::mutex> locker(m_childsSync);
+
                 for (auto it = m_childs.begin(); it != m_childs.end(); ++it)
                 {
                     (*it)->ParseNode(parentObject, reader);
@@ -44,6 +50,8 @@ namespace lcp
         {
             if (!IsLeaf())
             {
+                std::unique_lock<std::mutex> locker(m_childsSync);
+
                 for (auto it = m_childs.begin(); it != m_childs.end(); ++it)
                 {
                     Status res = (*it)->DecryptNode(license, keyProvider, cryptoProvider);
@@ -58,6 +66,8 @@ namespace lcp
         {
             if (!IsLeaf())
             {
+                std::unique_lock<std::mutex> locker(m_childsSync);
+
                 for (auto it = m_childs.begin(); it != m_childs.end(); ++it)
                 {
                     Status res = (*it)->VerifyNode(license, clientProvider, cryptoProvider);
@@ -70,6 +80,7 @@ namespace lcp
 
     protected:
         std::vector<std::unique_ptr<ILcpNode> > m_childs;
+        mutable std::mutex m_childsSync;
     };
 }
 

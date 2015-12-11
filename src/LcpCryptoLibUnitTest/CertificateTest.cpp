@@ -61,7 +61,6 @@ using CryptoPP::word32;
 
 namespace lcptest
 {
-
     typedef RSASS<PKCS1v15, SHA256>::Signer RSASS_PKCS_SHA256_Signer;
     typedef RSASS<PKCS1v15, SHA256>::Verifier RSASS_PKCS_SHA256_Verifier;
 

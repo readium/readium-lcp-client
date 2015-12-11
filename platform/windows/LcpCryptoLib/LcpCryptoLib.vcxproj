@@ -53,6 +53,7 @@
     <ClInclude Include="..\..\..\src\LcpCryptoLib\LcpService.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\LcpUtils.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\LinksLcpNode.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\NonCopyable.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\SimpleMemoryWritableStream.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\ContainerIterator.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\DefaultFileSystemProvider.h" />

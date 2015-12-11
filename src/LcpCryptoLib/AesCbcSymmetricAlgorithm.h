@@ -11,10 +11,11 @@
 #include <cryptopp/modes.h>
 #include <cryptopp/filters.h>
 #include "CryptoAlgorithmInterfaces.h"
+#include "NonCopyable.h"
 
 namespace lcp
 {
-    class AesCbcSymmetricAlgorithm : public ISymmetricAlgorithm
+    class AesCbcSymmetricAlgorithm : public ISymmetricAlgorithm, public NonCopyable
     {
     public:
         enum KeySize

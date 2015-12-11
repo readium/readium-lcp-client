@@ -9,12 +9,13 @@
 
 #include <string>
 #include "rapidjson/document.h"
+#include "NonCopyable.h"
 
 namespace lcp
 {
     class JsonValueReader;
 
-    class JsonCanonicalizer
+    class JsonCanonicalizer : public NonCopyable
     {
     public:
         JsonCanonicalizer(const std::string & rawLicense, JsonValueReader * reader);

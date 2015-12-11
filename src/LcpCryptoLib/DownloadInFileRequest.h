@@ -34,7 +34,7 @@ namespace lcp
 
         virtual std::string DestinationPath() const
         {
-            return m_file->GetPath();
+            return m_file->Path();
         }
 
     private:

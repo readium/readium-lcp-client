@@ -8,18 +8,20 @@
 #define __LCP_ACQUISITION_H__
 
 #include <string>
+#include <mutex>
 #include "Public/IAcquistion.h"
 #include "Public/IAcquistionCallback.h"
 #include "Public/INetProvider.h"
 #include "Public/IFileSystemProvider.h"
 #include "Public/ILinks.h"
+#include "NonCopyable.h"
 
 namespace lcp
 {
     class ILicense;
     class ICryptoProvider;
 
-    class Acquisition : public IAcquisition, public INetProviderCallback
+    class Acquisition : public IAcquisition, public INetProviderCallback, public NonCopyable
     {
     public:
         Acquisition(
@@ -55,6 +57,7 @@ namespace lcp
         ICryptoProvider * m_cryptoProvider;
         std::string m_publicationPath;
 
+        mutable std::mutex m_sync;
         Link m_publicationLink;
         IAcquisitionCallback * m_callback;
         std::unique_ptr<IFile> m_file;

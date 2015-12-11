@@ -356,6 +356,7 @@ namespace lcp
         m_crlUpdater->UpdateCrlUrls(providerCertificate->DistributionPoints());
 
         // First time processing of the CRL
+        std::unique_lock<std::mutex> locker(m_processRevocationSync);
         if (m_crlUpdater->ContainsAnyUrl() && !m_revocationList->HasThisUpdateDate())
         {
             if (m_threadTimer->IsRunning())
@@ -363,10 +364,10 @@ namespace lcp
                 m_threadTimer->Stop();
             }
 
-            // If CRL is absent, update it right before certificate verification
             // Check once more, the CRL state could've been changed during the stop process
             if (!m_revocationList->HasThisUpdateDate())
             {
+                // If CRL is absent, update it right before certificate verification
                 m_crlUpdater->Update();
             }
 
@@ -376,6 +377,7 @@ namespace lcp
             m_threadTimer->SetDuration(ThreadTimer::DurationType(CrlUpdater::TenMinutesPeriod));
             m_threadTimer->Start();
         }
+        locker.unlock();
 
         // If exception occurred in the timer thread, re-throw it
         m_threadTimer->RethrowExceptionIfAny();

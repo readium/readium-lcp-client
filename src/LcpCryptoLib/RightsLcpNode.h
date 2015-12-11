@@ -7,6 +7,7 @@
 #ifndef __RIGHTS_LCP_NODE_H__
 #define __RIGHTS_LCP_NODE_H__
 
+#include <mutex>
 #include "LcpUtils.h"
 #include "BaseLcpNode.h"
 #include "Public/IRights.h"
@@ -61,6 +62,8 @@ namespace lcp
 
     private:
         RightsInfo m_rights;
+        mutable std::mutex m_rightsSync;
+
     };
 }
 

@@ -8,7 +8,9 @@
 #define __CRYPTOPP_CRYPTO_PROVIDER_H__
 
 #include <memory>
+#include <mutex>
 #include "ICryptoProvider.h"
+#include "NonCopyable.h"
 
 namespace lcp
 {
@@ -19,7 +21,7 @@ namespace lcp
     class CrlUpdater;
     class ThreadTimer;
 
-    class CryptoppCryptoProvider : public ICryptoProvider
+    class CryptoppCryptoProvider : public ICryptoProvider, public NonCopyable
     {
     public:
         CryptoppCryptoProvider(
@@ -94,6 +96,7 @@ namespace lcp
         std::unique_ptr<ICertificateRevocationList> m_revocationList;
         std::unique_ptr<ThreadTimer> m_threadTimer;
         std::unique_ptr<CrlUpdater> m_crlUpdater;
+        std::mutex m_processRevocationSync;
         EncryptionProfilesManager * m_encryptionProfilesManager;
     };
 }

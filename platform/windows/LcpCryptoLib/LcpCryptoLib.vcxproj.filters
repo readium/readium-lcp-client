@@ -248,6 +248,9 @@
     <ClInclude Include="..\..\..\src\LcpCryptoLib\SimpleMemoryWritableStream.h">
       <Filter>Header Files\Crypto</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\NonCopyable.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\LcpCryptoLib\LcpService.cpp">

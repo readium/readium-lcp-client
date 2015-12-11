@@ -17,12 +17,14 @@ namespace lcp
 
     bool EncryptionProfilesManager::RegisterProfile(std::unique_ptr<IEncryptionProfile> profile)
     {
+        std::unique_lock<std::mutex> locker(m_profilesSync);
         auto res = m_profilesMap.insert(std::make_pair(profile->Name(), std::move(profile)));
         return res.second;
     }
 
     IEncryptionProfile * EncryptionProfilesManager::GetProfile(const std::string & name) const
     {
+        std::unique_lock<std::mutex> locker(m_profilesSync);
         auto profileIt = m_profilesMap.find(name);
         if (profileIt != m_profilesMap.end())
         {

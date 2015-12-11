@@ -9,10 +9,11 @@
 
 #include <cryptopp/rsa.h>
 #include "CryptoAlgorithmInterfaces.h"
+#include "NonCopyable.h"
 
 namespace lcp
 {
-    class RsaSha256SignatureAlgorithm : public ISignatureAlgorithm
+    class RsaSha256SignatureAlgorithm : public ISignatureAlgorithm, public NonCopyable
     {
     public:
         explicit RsaSha256SignatureAlgorithm(const KeyType & publicKey);

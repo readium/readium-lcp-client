@@ -7,11 +7,13 @@
 #ifndef __CERTIFICATE_REVOCATION_LIST_H__
 #define __CERTIFICATE_REVOCATION_LIST_H__
 
+#include <mutex>
 #include "ICertificate.h"
+#include "NonCopyable.h"
 
 namespace lcp
 {
-    class CertificateRevocationList : public ICertificateRevocationList
+    class CertificateRevocationList : public ICertificateRevocationList, public NonCopyable
     {
     public:
         CertificateRevocationList() = default;
@@ -27,6 +29,7 @@ namespace lcp
         virtual const StringsSet & RevokedSerialNumbers() const;
 
     private:
+        mutable std::mutex m_sync;
         std::string m_thisUpdate;
         std::string m_nextUpdate;
         StringsSet m_revokedSerialNumbers;

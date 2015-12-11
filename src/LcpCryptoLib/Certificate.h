@@ -13,6 +13,7 @@
 #include "ICertificate.h"
 #include "CertificateExtension.h"
 #include "CrlDistributionPoints.h"
+#include "NonCopyable.h"
 
 using namespace CryptoPP;
 
@@ -21,7 +22,7 @@ namespace lcp
     class IEncryptionProfile;
     class ISignatureAlgorithm;
 
-    class Certificate : public ICertificate
+    class Certificate : public ICertificate, public NonCopyable
     {
     public:
         explicit Certificate(
