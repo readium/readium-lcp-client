@@ -1,14 +1,14 @@
 //
 //  Created by Artem Brazhnikov on 11/15.
-//  Copyright © 2015 Mantano. All rights reserved.
+//  Copyright ï¿½ 2015 Mantano. All rights reserved.
 //  Any commercial use is strictly prohibited.
 //
 
 #include "RightsLcpNode.h"
 #include "JsonValueReader.h"
 #include "LcpUtils.h"
+#include "ContainerIterator.h"
 #include "DateTime.h"
-#include "Public/ContainerIterator.h"
 
 namespace lcp
 {

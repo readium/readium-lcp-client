@@ -67,8 +67,7 @@ namespace lcp
             const unsigned char * data,
             const size_t dataLength,
             unsigned char * decryptedData,
-            size_t inDecryptedDataLength,
-            size_t * outDecryptedDataLength
+            size_t * decryptedDataLength
             ) = 0;
 
         virtual Status CreateEncryptedPublicationStream(

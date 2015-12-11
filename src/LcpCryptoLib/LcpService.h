@@ -40,8 +40,7 @@ namespace lcp
             const unsigned char * data,
             const size_t dataLength,
             unsigned char * decryptedData,
-            size_t inDecryptedDataLength,
-            size_t * outDecryptedDataLength,
+            size_t * decryptedDataLength,
             const std::string & algorithm
             );
 
