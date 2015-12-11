@@ -28,6 +28,7 @@
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Certificate.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\CertificateExtension.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\CertificateRevocationList.h" />
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\ContainerIterator.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\CrlDistributionPoints.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\CrlUpdater.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\CryptoppUtils.h" />
@@ -55,7 +56,6 @@
     <ClInclude Include="..\..\..\src\LcpCryptoLib\LinksLcpNode.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\NonCopyable.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\SimpleMemoryWritableStream.h" />
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\ContainerIterator.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\DefaultFileSystemProvider.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\IAcquistion.h" />
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\IAcquistionCallback.h" />

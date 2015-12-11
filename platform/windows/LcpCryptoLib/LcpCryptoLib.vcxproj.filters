@@ -176,9 +176,6 @@
     <ClInclude Include="..\..\..\src\LcpCryptoLib\IRightsManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\ContainerIterator.h">
-      <Filter>Header Files\PublicInterfaces</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\LcpCryptoLib\Public\StreamInterfaces.h">
       <Filter>Header Files\PublicInterfaces</Filter>
     </ClInclude>
@@ -245,10 +242,13 @@
     <ClInclude Include="..\..\..\src\LcpCryptoLib\DownloadInFileRequest.h">
       <Filter>Header Files\Acquisition</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\LcpCryptoLib\SimpleMemoryWritableStream.h">
-      <Filter>Header Files\Crypto</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\LcpCryptoLib\NonCopyable.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\ContainerIterator.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\LcpCryptoLib\SimpleMemoryWritableStream.h">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
   </ItemGroup>

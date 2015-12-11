@@ -172,14 +172,13 @@ int main(int argc, char ** argv)
             std::istreambuf_iterator<char>()
             );
 
-        size_t outSize = 0;
         std::vector<unsigned char> decrypted(encryptedFileStr.size());
+        size_t outSize = decrypted.size();
         res = lcpService->DecryptData(
             rawLicPtr,
             reinterpret_cast<const unsigned char *>(encryptedFileStr.data()),
             encryptedFileStr.size(),
             decrypted.data(),
-            decrypted.size(),
             &outSize,
             "http://www.w3.org/2001/04/xmlenc#aes256-cbc"
             );

@@ -15,6 +15,7 @@
 #include "rapidjson/filereadstream.h"
 #include "rapidjson/filewritestream.h"
 #include "Public/lcp.h"
+#include "ContainerIterator.h"
 
 class TestStorageProvider : public lcp::IStorageProvider
 {
