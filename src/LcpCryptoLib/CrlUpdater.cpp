@@ -77,9 +77,12 @@ namespace lcp
     void CrlUpdater::Update()
     {
         std::unique_lock<std::mutex> locker(m_downloadSync);
-
+        
+        // If the list will be changed, it won't affect current update
+        StringsList curUrls = m_crlUrls;
         m_currentRequestStatus = Status(StatusCode::ErrorCommonFail);
-        for (auto const & url : m_crlUrls)
+
+        for (auto const & url : curUrls)
         {
             this->Download(url);
             m_conditionDownload.wait(locker, [&]() { return !m_requestRunning; });
@@ -157,5 +160,6 @@ namespace lcp
             m_threadTimer->SetUsage(ThreadTimer::DurationUsage);
             m_threadTimer->SetDuration(ThreadTimer::DurationType(TenMinutesPeriod));
         }
+        m_threadTimer->SetAutoReset(true);
     }
 }

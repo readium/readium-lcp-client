@@ -47,7 +47,7 @@ namespace lcp
         m_crlUpdater.reset(new CrlUpdater(netProvider, m_revocationList.get(), m_threadTimer.get(), defaultCrlUrl));
 
         m_threadTimer->SetHandler(std::bind(&CrlUpdater::Update, m_crlUpdater.get()));
-        m_threadTimer->SetAutoReset(true);
+        m_threadTimer->SetAutoReset(false);
 
         if (m_crlUpdater->ContainsAnyUrl())
         {
@@ -364,16 +364,28 @@ namespace lcp
 
     Status CryptoppCryptoProvider::ProcessRevokation(ICertificate * rootCertificate, ICertificate * providerCertificate)
     {
-        bool containedAnyUrlBefore = m_crlUpdater->ContainsAnyUrl();
-
         m_crlUpdater->UpdateCrlUrls(rootCertificate->DistributionPoints());
         m_crlUpdater->UpdateCrlUrls(providerCertificate->DistributionPoints());
 
         // First time processing of the CRL
-        if (!containedAnyUrlBefore && m_crlUpdater->ContainsAnyUrl())
+        if (m_crlUpdater->ContainsAnyUrl() && !m_revocationList->HasThisUpdateDate())
         {
-            m_crlUpdater->Update();
-            // Start timer which checks CRL for updates periodically or by time point
+            if (m_threadTimer->IsRunning())
+            {
+                m_threadTimer->Stop();
+            }
+
+            // If CRL is absent, update it right before certificate verification
+            // Check once more, the CRL state could've been changed during the stop process
+            if (!m_revocationList->HasThisUpdateDate())
+            {
+                m_crlUpdater->Update();
+            }
+
+            // Start timer which will check CRL for updates periodically or by time point
+            m_threadTimer->SetAutoReset(true);
+            m_threadTimer->SetUsage(ThreadTimer::DurationUsage);
+            m_threadTimer->SetDuration(ThreadTimer::DurationType(CrlUpdater::TenMinutesPeriod));
             m_threadTimer->Start();
         }
 

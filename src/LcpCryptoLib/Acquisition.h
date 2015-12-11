@@ -43,7 +43,7 @@ namespace lcp
             );
 
         virtual Status Start(IAcquisitionCallback * callback);
-        virtual void Cancel();
+        virtual Status Cancel();
         virtual std::string PublicationPath() const;
         virtual std::string SuggestedFileName() const;
 

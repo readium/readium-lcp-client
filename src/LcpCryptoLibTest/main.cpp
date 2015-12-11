@@ -272,13 +272,14 @@ int main(int argc, char ** argv)
         service->SetValue(rawLicPtr, lcp::PrintRight, "200000");
         service->SetValue(rawLicPtr, "http://www.righttorewrite/com", "true");
 
+        std::cin.get();
+
         storageProvider.Flush();
     }
     catch (const std::exception & ex)
     {
         std::cerr << ex.what() << std::endl;
     }
-
-    std::cin.get();
+    
     return 0;
 }

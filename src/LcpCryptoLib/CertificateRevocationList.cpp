@@ -86,6 +86,11 @@ namespace lcp
         return m_thisUpdate;
     }
 
+    bool CertificateRevocationList::HasThisUpdateDate() const
+    {
+        return !m_thisUpdate.empty();
+    }
+
     std::string CertificateRevocationList::NextUpdateDate() const
     {
         return m_nextUpdate;

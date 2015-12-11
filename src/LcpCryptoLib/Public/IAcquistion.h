@@ -30,7 +30,7 @@ namespace lcp
     {
     public:
         virtual Status Start(IAcquisitionCallback * callback) = 0;
-        virtual void Cancel() = 0;
+        virtual Status Cancel() = 0;
         virtual std::string PublicationPath() const = 0;
         virtual std::string SuggestedFileName() const = 0;
         virtual ~IAcquisition() {}

@@ -65,6 +65,7 @@ namespace lcp
     {
     public:
         virtual void UpdateRevocationList(const Buffer & crlRaw) = 0;
+        virtual bool HasThisUpdateDate() const = 0;
         virtual std::string ThisUpdateDate() const = 0;
         virtual bool HasNextUpdateDate() const = 0;
         virtual std::string NextUpdateDate() const = 0;

@@ -127,14 +127,16 @@ namespace lcp
             m_fstream.seekg(pos, std::ios::beg);
             if (m_fstream.bad() || m_fstream.fail() || m_fstream.eof())
             {
-                this->ThrowError("Can not seek to position: ");
+                std::stringstream strm;
+                strm << "Can not seek to position: " << pos << " " << m_path << "; " << std::strerror(errno);
+                throw std::runtime_error(strm.str());
             }
         }
 
         void ThrowError(const std::string & error)
         {
             std::stringstream strm;
-            strm << "Can not open file: " << m_path << "; " << std::strerror(errno);
+            strm << error << m_path << "; " << std::strerror(errno);
             throw std::runtime_error(strm.str());
         }
 
