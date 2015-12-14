@@ -7,6 +7,8 @@
 #ifndef __LCP_BYTE_STREAM_ADAPTER_H__
 #define __LCP_BYTE_STREAM_ADAPTER_H__
 
+#if FEATURES_READIUM
+
 #include "StreamInterfaces.h"
 #include <ePub3/utilities/byte_stream.h>
 
@@ -41,5 +43,7 @@ namespace lcp
         ePub3::SeekableByteStream *m_byteStream;
     };
 }
+
+#endif // FEATURES_READIUM
 
 #endif // __LCP_BYTE_STREAM_ADAPTER_H__

@@ -4,6 +4,8 @@
 //  Any commercial use is strictly prohibited.
 //
 
+#if FEATURES_READIUM
+
 #include "Public/LcpContentFilter.h"
 
 #include "IDecryptionContext.h"
@@ -170,3 +172,6 @@ namespace lcp {
         FilterManager::Instance()->RegisterFilter("LcpFilter", MustAccessRawBytes, LcpContentFilter::Factory);
     }
 }
+
+#endif // FEATURES_READIUM
+

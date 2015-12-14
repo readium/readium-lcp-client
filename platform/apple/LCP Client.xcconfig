@@ -1,5 +1,23 @@
+//
+//  Created by Mickaël Menu on 02/12/15.
+//  Copyright © 2015 Mantano. All rights reserved.
+//  Any commercial use is strictly prohibited.
+//
 
+//
+// Readium SDK
+//
+// If you don't want to support the Readium SDK, set FEATURES_READIUM to 0.
+// Otherwise, set READIUM_PATH to readium-sdk's root folder.
+//
+FEATURES_READIUM = 1
 READIUM_PATH = ../../../readium-sdk
-READIUM_INCLUDE_PATHS = ${READIUM_PATH}/Platform/Apple/include ${SDKROOT}/usr/include/libxml2
 
-HEADER_SEARCH_PATHS = ../../src/third-parties ${READIUM_INCLUDE_PATHS}
+
+//
+// Do not modify below
+//
+
+READIUM_INCLUDE_PATHS = $(READIUM_PATH)/Platform/Apple/include $(SDKROOT)/usr/include/libxml2
+HEADER_SEARCH_PATHS = ../../src/third-parties $(READIUM_INCLUDE_PATHS)
+GCC_PREPROCESSOR_DEFINITIONS = FEATURES_READIUM=$(FEATURES_READIUM)
