@@ -9,7 +9,7 @@
 
 #include "LcpTypedefs.h"
 #include "BaseLcpNode.h"
-#include "Public/IUser.h"
+#include "public/IUser.h"
 
 namespace lcp
 {

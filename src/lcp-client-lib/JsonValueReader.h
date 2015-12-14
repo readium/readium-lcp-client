@@ -9,7 +9,7 @@
 
 #include <sstream>
 #include "rapidjson/document.h"
-#include "Public/LcpStatus.h"
+#include "public/LcpStatus.h"
 
 namespace lcp
 {

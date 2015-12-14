@@ -8,7 +8,7 @@
 #define __LCP_UTILS_H__
 
 #include <string>
-#include "Public/LcpStatus.h"
+#include "public/LcpStatus.h"
 
 namespace lcp
 {

@@ -8,7 +8,7 @@
 #define __ROOT_LCP_NODE_H__
 
 #include "BaseLcpNode.h"
-#include "Public/ILicense.h"
+#include "public/ILicense.h"
 #include "IKeyProvider.h"
 
 namespace lcp

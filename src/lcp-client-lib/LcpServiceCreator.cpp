@@ -5,7 +5,7 @@
 //
 
 #include <exception>
-#include "Public/LcpServiceCreator.h"
+#include "public/LcpServiceCreator.h"
 #include "LcpService.h"
 
 namespace lcp

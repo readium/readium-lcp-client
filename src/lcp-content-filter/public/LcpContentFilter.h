@@ -7,8 +7,6 @@
 #ifndef __LCP_CONTENT_FILTER_H__
 #define __LCP_CONTENT_FILTER_H__
 
-#if FEATURES_READIUM
-
 #include "ILicense.h"
 #include "ILcpService.h"
 #include <ePub3/utilities/pointer_type.h>
@@ -42,7 +40,5 @@ namespace lcp {
         static ContentFilterPtr Factory(ConstPackagePtr package);
     };
 }
-
-#endif // FEATURES_READIUM
 
 #endif // __LCP_CONTENT_FILTER_H__

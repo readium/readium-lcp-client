@@ -5,7 +5,7 @@
 //
 
 #include <gtest/gtest.h>
-#include "Public/lcp.h"
+#include "public/lcp.h"
 #include "AesCbcSymmetricAlgorithm.h"
 #include "DecryptionContextImpl.h"
 

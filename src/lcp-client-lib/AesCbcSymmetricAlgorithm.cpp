@@ -8,7 +8,7 @@
 #include "AlgorithmNames.h"
 #include "CryptoppUtils.h"
 #include "IDecryptionContext.h"
-#include "Public/StreamInterfaces.h"
+#include "public/StreamInterfaces.h"
 
 namespace lcp
 {

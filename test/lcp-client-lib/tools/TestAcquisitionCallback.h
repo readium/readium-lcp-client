@@ -8,7 +8,7 @@
 #define __TEST_ACQUISITION_CALLBACK_H__
 
 #include <iostream>
-#include "Public/lcp.h"
+#include "public/lcp.h"
 
 class TestAcquisitionCallback : public lcp::IAcquisitionCallback
 {

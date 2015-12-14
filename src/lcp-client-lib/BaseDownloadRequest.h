@@ -9,7 +9,7 @@
 
 #include <atomic>
 #include <mutex>
-#include "Public/INetProvider.h"
+#include "public/INetProvider.h"
 
 namespace lcp
 {

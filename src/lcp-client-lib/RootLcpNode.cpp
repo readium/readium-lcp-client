@@ -11,7 +11,7 @@
 #include "LcpUtils.h"
 #include "JsonCanonicalizer.h"
 #include "ICryptoProvider.h"
-#include "Public/ILcpService.h"
+#include "public/ILcpService.h"
 
 namespace lcp
 {

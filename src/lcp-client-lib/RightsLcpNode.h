@@ -10,8 +10,8 @@
 #include <mutex>
 #include "LcpTypedefs.h"
 #include "BaseLcpNode.h"
-#include "Public/IRights.h"
-#include "Public/IRightsService.h"
+#include "public/IRights.h"
+#include "public/IRightsService.h"
 #include "IRightsManager.h"
 
 namespace lcp

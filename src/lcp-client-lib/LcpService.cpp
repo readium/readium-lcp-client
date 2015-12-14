@@ -16,8 +16,8 @@
 #include "EncryptionProfilesManager.h"
 #include "CryptoppCryptoProvider.h"
 #include "SimpleKeyProvider.h"
-#include "Public/IStorageProvider.h"
-#include "Public/INetProvider.h"
+#include "public/IStorageProvider.h"
+#include "public/INetProvider.h"
 #include "Acquisition.h"
 #include "RightsService.h"
 

@@ -7,7 +7,7 @@
 #include <iostream>
 #include <memory>
 #include <fstream>
-#include "Public/lcp.h"
+#include "public/lcp.h"
 #include "TestStorageProvider.h"
 #include "TestNetProvider.h"
 #include "TestAcquisitionCallback.h"

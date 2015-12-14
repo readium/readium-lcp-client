@@ -57,7 +57,7 @@ using CryptoPP::word32;
 #include "Certificate.h"
 #include "CertificateRevocationList.h"
 #include "EncryptionProfilesManager.h"
-#include "Public/lcp.h"
+#include "public/lcp.h"
 
 namespace lcptest
 {

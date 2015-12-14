@@ -8,7 +8,7 @@
 #define __SYMMETRIC_ALGORITHM_ENCRYPTED_STREAM_H__
 
 #include <memory>
-#include "Public/StreamInterfaces.h"
+#include "public/StreamInterfaces.h"
 #include "CryptoAlgorithmInterfaces.h"
 #include "NonCopyable.h"
 

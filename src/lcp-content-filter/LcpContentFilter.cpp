@@ -6,7 +6,7 @@
 
 #if FEATURES_READIUM
 
-#include "Public/LcpContentFilter.h"
+#include "public/LcpContentFilter.h"
 
 #include "IDecryptionContext.h"
 #include "LcpFilterContext.h"

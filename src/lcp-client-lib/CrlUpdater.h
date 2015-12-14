@@ -12,7 +12,7 @@
 #include <condition_variable>
 #include "ICertificate.h"
 #include "SimpleMemoryWritableStream.h"
-#include "Public/INetProvider.h"
+#include "public/INetProvider.h"
 #include "NonCopyable.h"
 
 namespace lcp

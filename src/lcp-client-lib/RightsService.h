@@ -7,7 +7,7 @@
 #ifndef __RIGHTS_SERVICE_H__
 #define __RIGHTS_SERVICE_H__
 
-#include "Public/IRightsService.h"
+#include "public/IRightsService.h"
 
 namespace lcp
 {

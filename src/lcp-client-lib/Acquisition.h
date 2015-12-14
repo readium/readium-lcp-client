@@ -9,11 +9,11 @@
 
 #include <string>
 #include <mutex>
-#include "Public/IAcquistion.h"
-#include "Public/IAcquistionCallback.h"
-#include "Public/INetProvider.h"
-#include "Public/IFileSystemProvider.h"
-#include "Public/ILinks.h"
+#include "public/IAcquistion.h"
+#include "public/IAcquistionCallback.h"
+#include "public/INetProvider.h"
+#include "public/IFileSystemProvider.h"
+#include "public/ILinks.h"
 #include "NonCopyable.h"
 
 namespace lcp

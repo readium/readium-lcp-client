@@ -10,7 +10,7 @@
 #include "Acquisition.h"
 #include "DownloadInFileRequest.h"
 #include "LcpUtils.h"
-#include "Public/ILicense.h"
+#include "public/ILicense.h"
 #include "ICryptoProvider.h"
 
 namespace lcp

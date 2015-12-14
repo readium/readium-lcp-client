@@ -8,7 +8,7 @@
 #define __SIMPLE_MEMORY_WRITABLE_STREAM_H__
 
 #include <vector>
-#include "Public/StreamInterfaces.h"
+#include "public/StreamInterfaces.h"
 
 namespace lcp
 {

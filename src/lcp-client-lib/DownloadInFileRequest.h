@@ -9,7 +9,7 @@
 
 #include <string>
 #include "BaseDownloadRequest.h"
-#include "Public/IFileSystemProvider.h"
+#include "public/IFileSystemProvider.h"
 
 namespace lcp
 {

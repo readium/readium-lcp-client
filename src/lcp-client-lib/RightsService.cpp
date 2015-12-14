@@ -7,10 +7,10 @@
 #include <memory>
 #include <sstream>
 #include "RightsService.h"
-#include "Public/ILicense.h"
-#include "Public/IRights.h"
-#include "Public/IUser.h"
-#include "Public/IStorageProvider.h"
+#include "public/ILicense.h"
+#include "public/IRights.h"
+#include "public/IUser.h"
+#include "public/IStorageProvider.h"
 #include "IRightsManager.h"
 
 namespace lcp

@@ -1,7 +1,7 @@
 #ifndef __I_DOWNLOAD_REQUEST_CREATOR_H__
 #define __I_DOWNLOAD_REQUEST_CREATOR_H__
 
-#include "Public/LcpStatus.h"
+#include "public/LcpStatus.h"
 
 namespace lcp
 {

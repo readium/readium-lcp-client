@@ -12,7 +12,7 @@
 #include <mutex>
 #include "LcpTypedefs.h"
 #include "NonCopyable.h"
-#include "Public/ILcpService.h"
+#include "public/ILcpService.h"
 
 namespace lcp
 {

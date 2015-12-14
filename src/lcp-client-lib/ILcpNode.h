@@ -8,7 +8,7 @@
 #define __I_LCP_NODE_H__
 
 #include <memory>
-#include "Public/LcpStatus.h"
+#include "public/LcpStatus.h"
 #include "rapidjson/document.h"
 
 namespace lcp

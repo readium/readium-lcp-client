@@ -12,7 +12,7 @@
 #include <sstream>
 #include <thread>
 #include <curl/curl.h>
-#include "Public/lcp.h"
+#include "public/lcp.h"
 
 /*#include "ICertificate.h"
 #include <cryptopp/base64.h>
