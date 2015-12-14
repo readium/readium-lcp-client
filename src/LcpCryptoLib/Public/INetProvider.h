@@ -12,31 +12,39 @@
 
 namespace lcp
 {
+    class INetProviderCallback;
+    class IDownloadRequest;
+    class INetRequest;
     class IWritableStream;
 
-    class INetRequest
+    //
+    // Interface to be implemented by the client to handle any HTTP call
+    // for the library.
+    // It is used, for example, to download protected publications or get the
+    // certificate revocation list.
+    //
+    class INetProvider
     {
     public:
-        virtual std::string Url() const = 0;
-        virtual bool Canceled() const = 0;
-        virtual void SetCanceled(bool value) = 0;
-        virtual ~INetRequest() {}
+        //
+        // Starts the given download request.
+        // The implementer must start an HTTP request to the given request's
+        // URL. The given callback will be used to notify the caller when
+        // the request progresses.
+        // The implementation should be asynchronous.
+        //
+        virtual void StartDownloadRequest(
+            IDownloadRequest * request,
+            INetProviderCallback * callback
+            ) = 0;
+
+        virtual ~INetProvider() {}
     };
 
-    class IDownloadRequest : public INetRequest
-    {
-    public:
-        // INetProvider writes downloaded data into the stream,
-        // may not be used if INetProvider uses the DestinationPath
-        virtual IWritableStream * DestinationStream() const = 0;
-        // Returns whether IDownloadRequest uses path or not
-        virtual bool HasDesinationPath() const = 0;
-        // Returns the download path, may be used instead of the DestinationStream
-        virtual std::string DestinationPath() const = 0;
-        virtual std::string SuggestedFileName() const = 0;
-        virtual void SetSuggestedFileName(const std::string & fileName) = 0;
-    };
-
+    // 
+    // Callback interface used by the net provider to notify the progress and
+    // status of a net request.
+    //
     class INetProviderCallback
     {
     public:
@@ -47,15 +55,49 @@ namespace lcp
         virtual ~INetProviderCallback() {}
     };
 
-    class INetProvider
+    //
+    // Abstract class representing a single HTTP request.
+    //
+    class INetRequest
     {
     public:
-        // Asynchronous network request
-        virtual void StartDownloadRequest(
-            IDownloadRequest * request,
-            INetProviderCallback * callback
-            ) = 0;
-        virtual ~INetProvider() {}
+        virtual std::string Url() const = 0;
+        virtual bool Canceled() const = 0;
+        virtual void SetCanceled(bool value) = 0;
+        virtual ~INetRequest() {}
+    };
+
+    //
+    // A special kind of net request used to download a file through HTTP.
+    //
+    class IDownloadRequest : public INetRequest
+    {
+    public:
+        //
+        // By default, you should use this stream to write the downloaded data.
+        // As an alternative, you can use the DestinationPath to write the file
+        // directly, if available.
+        //
+        virtual IWritableStream * DestinationStream() const = 0;
+
+        //
+        // Returns whether this IDownloadRequest uses a local file for
+        // destination. If true, you can use the destination path to write
+        // the downloaded data directly instead of using the DestinationStream.
+        virtual bool HasDestinationPath() const = 0;
+
+        //
+        // Returns the absolute path to the file to download, if any.
+        // This might be null.
+        // 
+        virtual std::string DestinationPath() const = 0;
+
+        //
+        // Suggested filename returned by the HTTP server for this downloaded
+        // file. The INetProvider implementor should set this when available.
+        //
+        virtual std::string SuggestedFileName() const = 0;
+        virtual void SetSuggestedFileName(const std::string & fileName) = 0;
     };
 }
 

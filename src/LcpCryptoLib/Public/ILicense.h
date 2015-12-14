@@ -70,9 +70,9 @@ namespace lcp
         virtual IUser * User() const = 0;
 
         //
-        // License rights attributed to the User.
-        // They are automatically synced with the consumption
-        // stored on the device.
+        // Current values (static or stored) for the License rights attributed
+        // to the User. The values will be automatically synchronized with the
+        // IStorageProvider to match the consumption, if relevant (eg. copy count).
         //
         virtual IRights * Rights() const = 0;
 

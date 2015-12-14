@@ -27,7 +27,7 @@ namespace lcp
             return m_file;
         }
 
-        virtual bool HasDesinationPath() const
+        virtual bool HasDestinationPath() const
         {
             return true;
         }

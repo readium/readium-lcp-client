@@ -156,7 +156,7 @@ namespace lcp {
         if (Status::IsSuccess(res)) {
             return New(license);
         } else {
-            LOG("Failed to parse license <" << res.ResultCode << ": " << res.Extension << ">");
+            LOG("Failed to parse license <" << res.Code << ": " << res.Extension << ">");
         }
         
         return nullptr;

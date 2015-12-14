@@ -25,7 +25,7 @@ namespace lcp
             return m_stream;
         }
 
-        virtual bool HasDesinationPath() const
+        virtual bool HasDestinationPath() const
         {
             return false;
         }

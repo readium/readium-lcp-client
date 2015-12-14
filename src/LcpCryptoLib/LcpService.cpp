@@ -172,7 +172,7 @@ namespace lcp
         {
             m_rightsService->SyncRightsFromStorage(license);
         }
-        if (Status::IsSuccess(res) || res.ResultCode == StatusCode::ErrorDecryptionLicenseEncrypted)
+        if (Status::IsSuccess(res) || res.Code == StatusCode::ErrorDecryptionLicenseEncrypted)
             return Status(StatusCode::ErrorCommonSuccess);
         return res;
     }

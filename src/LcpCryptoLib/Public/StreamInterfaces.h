@@ -11,6 +11,9 @@
 
 namespace lcp
 {
+    //
+    // Interface to read a stream of data.
+    //
     class IReadableStream
     {
     public:
@@ -21,6 +24,9 @@ namespace lcp
         virtual ~IReadableStream() {}
     };
 
+    //
+    // Interface to write data to a stream.
+    //
     class IWritableStream
     {
     public:
@@ -30,6 +36,10 @@ namespace lcp
         virtual ~IWritableStream() {}
     };
 
+    //
+    // A read-only stream that will decrypt its data on-the-fly when reading it.
+    // You must not read more than DecryptedSize data from this stream.
+    //
     class IEncryptedStream : public IReadableStream
     {
     public:

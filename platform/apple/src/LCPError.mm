@@ -28,5 +28,5 @@ NSError *LCPErrorFromStatus(Status status)
         };
     }
     
-    return [[NSError alloc] initWithDomain:LCPErrorDomain code:status.ResultCode userInfo:userInfo];
+    return [[NSError alloc] initWithDomain:LCPErrorDomain code:status.Code userInfo:userInfo];
 }

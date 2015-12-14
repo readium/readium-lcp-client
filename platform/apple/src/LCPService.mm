@@ -99,7 +99,7 @@ NSString *const LCPRightEnd = @(EndRight);
         license = [[LCPLicense alloc] initWithLicense:nativeLicense];
         LOG("Open license " << (nativeLicense->Decrypted() ? "(decrypted)" : "(still encrypted)"));
     } else {
-        LOG("Failed to open license <" << status.ResultCode << ": " << status.Extension << ">");
+        LOG("Failed to open license <" << status.Code << ": " << status.Extension << ">");
     }
     
     return license;
