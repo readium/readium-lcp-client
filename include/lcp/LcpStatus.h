@@ -19,11 +19,12 @@ namespace lcp
     {
         enum StatusCodeEnum
         {
-            // Error Common
-
+            //
+            // Common errors
+            //
             // No Error
             ErrorCommonSuccess,
-            // Common Error
+            // Unknown error
             ErrorCommonFail,
             // No NetProvider implementation has been given.
             ErrorCommonNoNetProvider,
@@ -36,8 +37,9 @@ namespace lcp
             // from license file or encryption.xml
             ErrorCommonAlgorithmMismatch,
             
-            // ErrorOpening
-
+            //
+            // Errors when opening a License Document.
+            //
             // The given LCPL is not a valid License Document.
             ErrorOpeningLicenseNotValid,
             // The license hasn't begun yet (right 'start'),
@@ -66,8 +68,9 @@ namespace lcp
             // The Content Provider Certificate is expired
             ErrorOpeningContentProviderCertificateExpired,
 
-            // ErrorAcquisition
-
+            //
+            // Errors when acquiring a protected publication from a License.
+            //
             // No acquisition link found in the license.
             ErrorAcquisitionNoAcquisitionLink,
             // The downloaded publication doesn't match the license hash.
@@ -77,8 +80,9 @@ namespace lcp
             // Cannot open file to write
             ErrorAcquisitionInvalidFilePath,
 
-            // ErrorDecryption
-
+            //
+            // Errors when decrypting a License or data.
+            //
             // The given User Pass phrase is not valid for this License
             ErrorDecryptionUserPassphraseNotValid,
             // The License is still encrypted and can't be used to decrypt data.
@@ -88,8 +92,9 @@ namespace lcp
             // Error of crypto library
             ErrorDecryptionCommonError,
 
-            // ErrorNetworking
-
+            //
+            // Errors when doing HTTP network calls.
+            //
             // 404 Not found
             ErrorNetworkingRequestNotFound,
             // Any other network error
@@ -99,18 +104,18 @@ namespace lcp
 
     struct Status
     {
-        Status(StatusCode::StatusCodeEnum resultCode, const std::string & extension = "")
-            : ResultCode(resultCode)
+        Status(StatusCode::StatusCodeEnum code, const std::string & extension = "")
+            : Code(code)
             , Extension(extension)
         {
         }
 
-        StatusCode::StatusCodeEnum ResultCode;
+        StatusCode::StatusCodeEnum Code;
         std::string Extension;
 
         static bool IsSuccess(const Status & status)
         {
-            return status.ResultCode == StatusCode::ErrorCommonSuccess;
+            return status.Code == StatusCode::ErrorCommonSuccess;
         }
     };
 }

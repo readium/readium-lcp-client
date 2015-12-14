@@ -8,7 +8,7 @@
 #define __I_CRYPTO_PROVIDER_H__
 
 #include "Public/LcpStatus.h"
-#include "LcpUtils.h"
+#include "LcpTypedefs.h"
 
 namespace lcp
 {

@@ -7,7 +7,6 @@
 #include "rapidjson/document.h"
 #include "CryptoLcpNode.h"
 #include "JsonValueReader.h"
-#include "LcpUtils.h"
 #include "IEncryptionProfile.h"
 #include "CryptoAlgorithmInterfaces.h"
 #include "EncryptionProfilesManager.h"
@@ -105,7 +104,8 @@ namespace lcp
         m_cryptoInfo.userKeyAlgorithm = reader->ReadStringCheck("algorithm", userKeyObject);
         m_cryptoInfo.userKeyCheck = reader->ReadStringCheck("key_check", userKeyObject);
 
-        const rapidjson::Value & signatureObject = reader->ReadObjectCheck("signature", parentObject);//TODO: separate node
+        // Child node
+        const rapidjson::Value & signatureObject = reader->ReadObjectCheck("signature", parentObject);
 
         m_cryptoInfo.signatureAlgorithm = reader->ReadStringCheck("algorithm", signatureObject);
         m_cryptoInfo.signatureCertificate = reader->ReadStringCheck("certificate", signatureObject);

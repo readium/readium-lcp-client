@@ -12,10 +12,11 @@
 #include <mutex>
 #include <condition_variable>
 #include <functional>
+#include "NonCopyable.h"
 
 namespace lcp
 {
-    class ThreadTimer
+    class ThreadTimer : public NonCopyable
     {
     public:
         typedef std::chrono::system_clock ClockType;

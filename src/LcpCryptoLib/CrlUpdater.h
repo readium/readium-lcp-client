@@ -13,6 +13,7 @@
 #include "ICertificate.h"
 #include "SimpleMemoryWritableStream.h"
 #include "Public/INetProvider.h"
+#include "NonCopyable.h"
 
 namespace lcp
 {
@@ -20,7 +21,7 @@ namespace lcp
     class CrlDownloader;
     class IDownloadRequest;
 
-    class CrlUpdater : public INetProviderCallback
+    class CrlUpdater : public INetProviderCallback, public NonCopyable
     {
     public:
         CrlUpdater(

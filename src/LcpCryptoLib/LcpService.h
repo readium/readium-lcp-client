@@ -9,8 +9,10 @@
 
 #include <map>
 #include <memory>
+#include <mutex>
+#include "LcpTypedefs.h"
+#include "NonCopyable.h"
 #include "Public/ILcpService.h"
-#include "LcpUtils.h"
 
 namespace lcp
 {
@@ -19,7 +21,7 @@ namespace lcp
     class EncryptionProfilesManager;
     class ICryptoProvider;
 
-    class LcpService : public ILcpService
+    class LcpService : public ILcpService, public NonCopyable
     {
     public:
         LcpService(
@@ -79,7 +81,8 @@ namespace lcp
         
     private:
         bool FindLicense(const std::string & canonicalJson, ILicense ** license);
-
+        
+        Status DecryptLicenseOnOpening(ILicense * license);
         Status DecryptLicenseByUserKey(ILicense * license, const KeyType & userKey);
         Status DecryptLicenseByHexUserKey(ILicense * license, const std::string & hexUserKey);
         Status DecryptLicenseByStorage(ILicense * license);
@@ -104,6 +107,7 @@ namespace lcp
         std::unique_ptr<EncryptionProfilesManager> m_encryptionProfilesManager;
         std::unique_ptr<ICryptoProvider> m_cryptoProvider;
         std::map<std::string, std::unique_ptr<ILicense> > m_licenses;
+        std::mutex m_licensesSync;
 
     private:
         static std::string UnknownProvider;

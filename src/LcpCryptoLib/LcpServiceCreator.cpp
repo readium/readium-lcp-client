@@ -10,6 +10,9 @@
 
 namespace lcp
 {
+    //
+    // Factory for creating LCP service instances.
+    //
     Status LcpServiceCreator::CreateLcpService(
         const std::string & rootCertificate,
         INetProvider * netProvider,

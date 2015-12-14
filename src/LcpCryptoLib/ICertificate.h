@@ -7,18 +7,10 @@
 #ifndef __I_CERTIFICATE_H__
 #define __I_CERTIFICATE_H__
 
-#include <string>
-#include <vector>
-#include <set>
-#include <list>
-#include "LcpUtils.h"
+#include "LcpTypedefs.h"
 
 namespace lcp
 {
-    typedef std::set<std::string> StringsSet;
-    typedef std::list<std::string> StringsList;
-    typedef std::vector<unsigned char> Buffer;
-
     class ICrlDistributionPoints
     {
     public:

@@ -23,25 +23,24 @@ It is composed of several sub-projects:
 
 * **LcpCryptoLib**, which is the standalone LCP C++ decryption library
 * **LcpContentFilter**, an implementation of Readium SDK's Content Filter for LCP protected EPUB.
-* **Apple bridge**, an Objective-C bridge for the public API of LcpCryptoLib, to use on iOS and OS X.
+* **Obj-C bridge**, for the public API of LcpCryptoLib, to use on iOS and OS X.
 
 
 ## Getting Started
 
-IDE projects are available for major supported platforms under `platform/`.
-Once built, you can link the library to your projects. Public headers to use in your application are put in `include/`.
+IDE projects are available for major supported platforms under `platform/`. Public headers to use in your application are put in `include/`.
 
 
 ### Building for iOS
 
-The Xcode project for Apple platforms is located in `platform/apple/LCP Client.xcodeproj`. An iOS target is part of this project.
+The Xcode project for Apple platforms is located in `platform/apple/`. An iOS target is part of this project.
 
-The target will build the library, the Objective-C bridge and Readium's Content Filter. You have to specify a location for the Readium SDK in `LCP Client.xcconfig` > `READIUM_PATH`.
+By default the target will build the library with Readium's Content Filter. You have to set the path to the SDK in `LCP Client.xcconfig` > `READIUM_PATH`. Or set `FEATURES_READIUM` to `0` to remove any dependency to Readium.
 
 
 ## Library API
 
-This section summarizes the concept and main classes of the library. Please refer to the public headers in `include/` for the documentation of specific API.
+This section summarizes the concept and main classes of the library. Please refer to the public headers in `include/` for the documentation of individual API.
 
 ### LCP Service
 
@@ -49,19 +48,19 @@ This section summarizes the concept and main classes of the library. Please refe
 
 The LCP Service is the main gateway to the public API of the library. You must create an instance and initialize it with a LCP Root Certificate. Multiple instances with different configurations can live side-by-side.
 
-The service is used to open a License from its JSON, acquire a new publication, decrypt content, add user keys and handle License rights.
+The service is used to open a License from its JSON, acquire a new publication, decrypt content, add user keys and handle License rights consumption.
 
 
 #### Providers
 
-The LCP Service expect a number of Provider interface implementations at the initialization. These interfaces are here to make profit of specific platforms tools. For example, on the iOS target, the implementation of `IStorageProvider` will use the iOS KeyChain to securely store rights consumption and User Keys. Also, the implementation of `INetProvider` will use `NSURLSession` to avoid the dependency to cURL.
+The LCP Service expects a number of Provider interface implementations at the initialization. These interfaces are here to make profit of specific platform tools, or remove dependency to third-party libraries (eg. cURL). For example, on iOS the implementation of `IStorageProvider` will use the iOS KeyChain to securely store rights consumption and User Keys. Also, the implementation of `INetProvider` will use `NSURLSession` instead of cURL.
 
-The library offers a C++ implementation of all providers, except for the IStorageProvider. If you are not on iOS, you must implement it and make sure that data is secured.
+The library offers a C++ cross-platform implementation of all providers, except for the `IStorageProvider`. If need to implement it your platform, make sure that data is securely stored.
 
-* `IFileSystemProvider` handles IO operations on the file system.
-* `INetProvider` handles network requests (downloads).
-* `IStorageProvider` handles the *secure* persistence of library's data.
-* `ICryptoProvider` handles the decryption of data.
+* `IFileSystemProvider` for IO operations on the file system.
+* `INetProvider` for HTTP network requests.
+* `IStorageProvider` for *secure* persistence of library's data.
+* `ICryptoProvider` for data decryption.
 
 
 ### License
@@ -70,7 +69,7 @@ The library offers a C++ implementation of all providers, except for the IStorag
 
 The License object represents a single License Document (LCPL file). It is passed around to almost every other API.
 
-All the metadata contained in the License Document will be available through the License object, thanks to accessors.
+All the metadata contained in the License Document will be available through the License object, thanks to its accessors.
 
 #### Encryption
 
@@ -80,9 +79,7 @@ A License instance can be in two states: *encrypted* or *decrypted*. If its User
 
 The owner of the License instance is the LCP Service that created it. And the same License object will be returned for subsequent calls using the same canonical JSON.
 
-You can take profit of that to have different components of your application using the same License object. For example, the Readium Content Filter will open a License using the shared LCP Service, but will not try to decrypt it using the User Key (which it doesn't know). It is the host app that will promt the user for his Passphrase, if needed, and decrypt the shared License instance.
- 
-
+You can take profit of that to have different components of your application using the same License object. For example, the Readium Content Filter will open a License using the shared LCP Service, but will not try to decrypt it since it doesn't have any way to prompt the User for the passphrase. It is the host app that should ask the user for his passphrase, if needed, and decrypt the shared License instance.
  
 
 ## Attributions

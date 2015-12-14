@@ -18,6 +18,7 @@
 #include "CryptoAlgorithmInterfaces.h"
 #include "Certificate.h"
 #include "CryptoppUtils.h"
+#include "LcpUtils.h"
 
 using namespace CryptoPP;
 

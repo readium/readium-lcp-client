@@ -10,6 +10,7 @@
 #include "UserLcpNode.h"
 #include "RightsLcpNode.h"
 #include "RootLcpNode.h"
+#include "LcpUtils.h"
 #include "JsonValueReader.h"
 #include "JsonCanonicalizer.h"
 #include "EncryptionProfilesManager.h"
@@ -83,23 +84,18 @@ namespace lcp
             if (!Status::IsSuccess(res))
                 return res;
 
+            std::unique_lock<std::mutex> locker(m_licensesSync);
             auto insertRes = m_licenses.insert(std::make_pair(std::move(canonicalJson), std::move(rootNode)));
             if (!insertRes.second)
             {
                 return Status(StatusCode::ErrorCommonFail, "Two License instances with the same canonical form");
             }
             *license = insertRes.first->second.get();
+            locker.unlock();
 
             if (!(*license)->Decrypted())
             {
-                res = this->DecryptLicenseByStorage(*license);
-                if (Status::IsSuccess(res))
-                {
-                    m_rightsService->SyncRightsFromStorage(*license);
-                }
-                if (Status::IsSuccess(res) || res.ResultCode == StatusCode::ErrorDecryptionLicenseEncrypted)
-                    return Status(StatusCode::ErrorCommonSuccess);
-                return res;
+                return this->DecryptLicenseOnOpening(*license);
             }
             return Status(StatusCode::ErrorCommonSuccess);
         }
@@ -167,6 +163,18 @@ namespace lcp
         if (!Status::IsSuccess(res))
             return res;
         return this->DecryptLicenseByUserKey(license, userKey);
+    }
+
+    Status LcpService::DecryptLicenseOnOpening(ILicense * license)
+    {
+        Status res = this->DecryptLicenseByStorage(license);
+        if (Status::IsSuccess(res))
+        {
+            m_rightsService->SyncRightsFromStorage(license);
+        }
+        if (Status::IsSuccess(res) || res.Code == StatusCode::ErrorDecryptionLicenseEncrypted)
+            return Status(StatusCode::ErrorCommonSuccess);
+        return res;
     }
 
     Status LcpService::AddDecryptedUserKey(ILicense * license, const KeyType & userKey)
@@ -457,6 +465,8 @@ namespace lcp
 
     bool LcpService::FindLicense(const std::string & canonicalJson, ILicense ** license)
     {
+        std::unique_lock<std::mutex> locker(m_licensesSync);
+
         auto licIt = m_licenses.find(canonicalJson);
         if (licIt != m_licenses.end())
         {

@@ -16,6 +16,9 @@ namespace lcp
     class IStorageProvider;
     class IFileSystemProvider;
 
+    //
+    // Factory used to create LCP service instances.
+    //
     class LcpServiceCreator
     {
     public:

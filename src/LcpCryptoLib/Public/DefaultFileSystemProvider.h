@@ -35,7 +35,10 @@ namespace lcp
             }
         }
 
-        virtual std::string GetPath() const
+        DefaultFile(const DefaultFile &) = delete;
+        DefaultFile & operator=(const DefaultFile &) = delete;
+
+        virtual std::string Path() const
         {
             return m_path;
         }

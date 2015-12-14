@@ -4,6 +4,8 @@
 //  Any commercial use is strictly prohibited.
 //
 
+#if FEATURES_READIUM
+
 #include "Public/LcpContentFilter.h"
 
 #include "IDecryptionContext.h"
@@ -156,7 +158,7 @@ namespace lcp {
         if (Status::IsSuccess(res)) {
             return New(license);
         } else {
-            LOG("Failed to parse license <" << res.ResultCode << ": " << res.Extension << ">");
+            LOG("Failed to parse license <" << res.Code << ": " << res.Extension << ">");
         }
         
         return nullptr;
@@ -170,3 +172,6 @@ namespace lcp {
         FilterManager::Instance()->RegisterFilter("LcpFilter", MustAccessRawBytes, LcpContentFilter::Factory);
     }
 }
+
+#endif // FEATURES_READIUM
+

@@ -7,7 +7,7 @@
 #ifndef __I_KEY_PROVIDER_H__
 #define __I_KEY_PROVIDER_H__
 
-#include "LcpUtils.h"
+#include "LcpTypedefs.h"
 
 namespace lcp
 {

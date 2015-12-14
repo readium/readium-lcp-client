@@ -37,6 +37,8 @@ namespace lcp
     {
         try
         {
+            std::unique_lock<std::mutex> locker(m_sync);
+
             m_callback = callback;
 
             ILinks * links = m_license->Links();
@@ -56,8 +58,10 @@ namespace lcp
             {
                 return Status(StatusCode::ErrorAcquisitionInvalidFilePath);
             }
-
             m_request.reset(new DownloadInFileRequest(m_publicationLink.href, m_file.get()));
+
+            locker.unlock();
+            
             m_netProvider->StartDownloadRequest(m_request.get(), this);
 
             return Status(StatusCode::ErrorCommonSuccess);
@@ -98,6 +102,7 @@ namespace lcp
     {
         try
         {
+            std::unique_lock<std::mutex> locker(m_sync);
             m_request->SetCanceled(true);
             return Status(StatusCode::ErrorCommonSuccess);
         }
@@ -114,11 +119,13 @@ namespace lcp
 
     std::string Acquisition::SuggestedFileName() const
     {
+        std::unique_lock<std::mutex> locker(m_sync);
         return m_request->SuggestedFileName();
     }
 
     void Acquisition::OnRequestStarted(INetRequest * request)
     {
+        std::unique_lock<std::mutex> locker(m_sync);
         if (m_callback != nullptr)
         {
             m_callback->OnAcquisitionStarted(this);
@@ -135,6 +142,7 @@ namespace lcp
 
     void Acquisition::OnRequestCanceled(INetRequest * request)
     {
+        std::unique_lock<std::mutex> locker(m_sync);
         if (m_callback != nullptr)
         {
             m_callback->OnAcquisitionCanceled(this);
@@ -143,6 +151,7 @@ namespace lcp
 
     void Acquisition::OnRequestEnded(INetRequest * request, Status result)
     {
+        std::unique_lock<std::mutex> locker(m_sync);
         try
         {
             if (!Status::IsSuccess(result))

@@ -39,7 +39,7 @@ namespace lcp
     };
     
     //
-    // IO stream for a single fil on the file system.
+    // IO stream for a single file on the file system.
     //
     class IFile : public IReadableStream, public IWritableStream
     {
@@ -47,7 +47,7 @@ namespace lcp
         //
         // Returns the absolute path to the file.
         //
-        virtual std::string GetPath() const = 0;
+        virtual std::string Path() const = 0;
         
         virtual ~IFile() {}
     };

@@ -8,7 +8,6 @@
 #define __SIMPLE_KEY_PROVIDER_H__
 
 #include "IKeyProvider.h"
-#include "LcpUtils.h"
 
 namespace lcp
 {

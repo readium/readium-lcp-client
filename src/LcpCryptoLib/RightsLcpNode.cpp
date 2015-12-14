@@ -14,6 +14,8 @@ namespace lcp
 {
     void RightsLcpNode::ParseNode(const rapidjson::Value & parentObject, JsonValueReader * reader)
     {
+        std::unique_lock<std::mutex> locker(m_rightsSync);
+
         const rapidjson::Value & rightsObject = reader->ReadObject("rights", parentObject);
         if (!rightsObject.IsNull())
         {
@@ -32,12 +34,16 @@ namespace lcp
             }
         }
         this->SetDefaultRightValuesInMap();
+        
+        locker.unlock();
 
         BaseLcpNode::ParseNode(rightsObject, reader);
     }
 
     Status RightsLcpNode::VerifyNode(ILicense * license, IClientProvider * clientProvider, ICryptoProvider * cryptoProvider)
     {
+        std::unique_lock<std::mutex> locker(m_rightsSync);
+
         if (!this->DoesLicenseStart())
         {
             return Status(StatusCode::ErrorOpeningLicenseNotStarted);
@@ -47,21 +53,27 @@ namespace lcp
             return Status(StatusCode::ErrorOpeningLicenseExpired);
         }
 
+        locker.unlock();
+
         return BaseLcpNode::VerifyNode(license, clientProvider, cryptoProvider);
     }
 
     KvStringsIterator * RightsLcpNode::Enumerate() const
     {
+        std::unique_lock<std::mutex> locker(m_rightsSync);
         return new MapIterator<std::string>(m_rights.valuesMap);
     }
 
     bool RightsLcpNode::HasRightValue(const std::string & name) const
     {
+        std::unique_lock<std::mutex> locker(m_rightsSync);
         return (m_rights.valuesMap.find(name) != m_rights.valuesMap.end());
     }
 
     bool RightsLcpNode::GetRightValue(const std::string & name, std::string & value) const
     {
+        std::unique_lock<std::mutex> locker(m_rightsSync);
+
         auto it = m_rights.valuesMap.find(name);
         if (it != m_rights.valuesMap.end())
         {
@@ -73,6 +85,8 @@ namespace lcp
 
     void RightsLcpNode::SetRightValue(const std::string & name, const std::string & value)
     {
+        std::unique_lock<std::mutex> locker(m_rightsSync);
+
         if (name == PrintRight)
         {
             m_rights.print = std::stoi(value);
@@ -96,6 +110,8 @@ namespace lcp
 
     bool RightsLcpNode::UseRight(const std::string & name, int amount)
     {
+        std::unique_lock<std::mutex> locker(m_rightsSync);
+
         bool result = false;
         if (name == PrintRight)
         {
@@ -128,6 +144,8 @@ namespace lcp
 
     bool RightsLcpNode::CanUseRight(const std::string & name) const
     {
+        std::unique_lock<std::mutex> locker(m_rightsSync);
+
         if (name == PrintRight)
         {
             return m_rights.print == IRightsService::UNLIMITED || m_rights.print > 0;

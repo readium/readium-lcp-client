@@ -10,10 +10,11 @@
 #include <memory>
 #include "Public/StreamInterfaces.h"
 #include "CryptoAlgorithmInterfaces.h"
+#include "NonCopyable.h"
 
 namespace lcp
 {
-    class SymmetricAlgorithmEncryptedStream : public IEncryptedStream
+    class SymmetricAlgorithmEncryptedStream : public IEncryptedStream, public NonCopyable
     {
     public:
         SymmetricAlgorithmEncryptedStream(

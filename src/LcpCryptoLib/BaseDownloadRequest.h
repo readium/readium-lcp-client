@@ -7,6 +7,8 @@
 #ifndef __BASE_DOWNLOAD_REQUEST_H__
 #define __BASE_DOWNLOAD_REQUEST_H__
 
+#include <atomic>
+#include <mutex>
 #include "Public/INetProvider.h"
 
 namespace lcp
@@ -37,18 +39,23 @@ namespace lcp
 
         virtual void SetSuggestedFileName(const std::string & fileName)
         {
+            std::unique_lock<std::mutex> locker(m_suggestedNameSync);
             m_suggestedFileName = fileName;
         }
 
         virtual std::string SuggestedFileName() const
         {
+            std::unique_lock<std::mutex> locker(m_suggestedNameSync);
             return m_suggestedFileName;
         }
 
     protected:
-        bool m_canceled;
+        std::atomic<bool> m_canceled;
         std::string m_url;
         std::string m_suggestedFileName;
+
+    private:
+        mutable std::mutex m_suggestedNameSync;
     };
 }
 

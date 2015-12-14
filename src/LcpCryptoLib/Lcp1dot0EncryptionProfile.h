@@ -9,7 +9,6 @@
 
 #include <memory>
 #include "IEncryptionProfile.h"
-#include "LcpUtils.h"
 
 namespace lcp
 {

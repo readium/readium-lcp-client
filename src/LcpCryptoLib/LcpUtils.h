@@ -8,8 +8,6 @@
 #define __LCP_UTILS_H__
 
 #include <string>
-#include <map>
-#include <vector>
 #include "Public/LcpStatus.h"
 
 namespace lcp
@@ -39,9 +37,6 @@ namespace lcp
     void ValidateUtf8(const std::string & utf8Str);
     bool EqualsUtf8(const std::string & left, const std::string & right);
     bool LexicographicalCompareUtf8(const std::string & left, const std::string & right);
-
-    typedef std::map<std::string, std::string> StringsMap;
-    typedef std::vector<unsigned char> KeyType;
 }
 
 #endif //__LCP_UTILS_H__

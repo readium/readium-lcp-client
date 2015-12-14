@@ -27,14 +27,14 @@ namespace lcp
             return m_file;
         }
 
-        virtual bool HasDesinationPath() const
+        virtual bool HasDestinationPath() const
         {
             return true;
         }
 
         virtual std::string DestinationPath() const
         {
-            return m_file->GetPath();
+            return m_file->Path();
         }
 
     private:

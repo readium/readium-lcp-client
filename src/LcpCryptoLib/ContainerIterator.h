@@ -10,7 +10,7 @@
 #include <map>
 #include <string>
 #include <stdexcept>
-#include "IValueIterator.h"
+#include "Public/IValueIterator.h"
 
 namespace lcp
 {
