@@ -50,7 +50,7 @@ namespace lcp
         {
             if (license == nullptr)
             {
-                return Status(StatusCode::ErrorCommonFail, "license is nullptr");
+                throw std::invalid_argument("license is nullptr");
             }
 
             std::string canonicalJson = this->CalculateCanonicalForm(licenseJson);
@@ -88,7 +88,7 @@ namespace lcp
             auto insertRes = m_licenses.insert(std::make_pair(std::move(canonicalJson), std::move(rootNode)));
             if (!insertRes.second)
             {
-                return Status(StatusCode::ErrorCommonFail, "Two License instances with the same canonical form");
+                return Status(StatusCode::ErrorOpeningDuplicateLicenseInstance, "Two License instances with the same canonical form");
             }
             *license = insertRes.first->second.get();
             locker.unlock();
@@ -103,10 +103,6 @@ namespace lcp
         {
             return ex.ResultStatus();
         }
-        catch (const std::exception & ex)
-        {
-            return Status(StatusCode::ErrorCommonFail, ex.what());
-        }
     }
 
     Status LcpService::DecryptLicense(ILicense * license, const std::string & userPassphrase)
@@ -115,7 +111,7 @@ namespace lcp
         {
             if (license == nullptr)
             {
-                return Status(StatusCode::ErrorCommonFail, "license is nullptr");
+                throw std::invalid_argument("license is nullptr");
             }
 
             KeyType userKey;
@@ -133,10 +129,6 @@ namespace lcp
         {
             return ex.ResultStatus();
         }
-        catch (const std::exception & ex)
-        {
-            return Status(StatusCode::ErrorCommonFail, ex.what());
-        }
     }
 
     Status LcpService::DecryptLicenseByUserKey(ILicense * license, const KeyType & userKey)
@@ -149,7 +141,7 @@ namespace lcp
         RootLcpNode * rootNode = dynamic_cast<RootLcpNode *>(license);
         if (rootNode == nullptr)
         {
-            return Status(StatusCode::ErrorCommonFail, "Can not cast ILicense to ILcpNode");
+            throw std::logic_error("Can not cast ILicense to ILcpNode");
         }
 
         rootNode->SetKeyProvider(std::unique_ptr<IKeyProvider>(new SimpleKeyProvider(userKey, contentKey)));
@@ -234,7 +226,7 @@ namespace lcp
         {
             if (license == nullptr)
             {
-                return Status(StatusCode::ErrorCommonFail, "license is nullptr");
+                throw std::invalid_argument("license is nullptr");
             }
 
             if (!license->Decrypted())
@@ -255,7 +247,7 @@ namespace lcp
             IKeyProvider * keyProvider = dynamic_cast<IKeyProvider *>(license);
             if (keyProvider == nullptr)
             {
-                return Status(StatusCode::ErrorCommonFail, "Can not cast ILicense to IKeyProvider");
+                throw std::logic_error("Can not cast ILicense to IKeyProvider");
             }
 
             return m_cryptoProvider->DecryptPublicationData(
@@ -271,10 +263,6 @@ namespace lcp
         {
             return ex.ResultStatus();
         }
-        catch (const std::exception & ex)
-        {
-            return Status(StatusCode::ErrorCommonFail, ex.what());
-        }
     }
 
     Status LcpService::CreateEncryptedDataStream(
@@ -288,7 +276,7 @@ namespace lcp
         {
             if (license == nullptr || encStream == nullptr)
             {
-                return Status(StatusCode::ErrorCommonFail, "wrong input params");
+                throw std::invalid_argument("wrong input params");
             }
 
             if (!license->Decrypted())
@@ -309,7 +297,7 @@ namespace lcp
             IKeyProvider * keyProvider = dynamic_cast<IKeyProvider *>(license);
             if (keyProvider == nullptr)
             {
-                return Status(StatusCode::ErrorCommonFail, "Can not cast ILicense to IKeyProvider");
+                throw std::logic_error("Can not cast ILicense to IKeyProvider");
             }
 
             return m_cryptoProvider->CreateEncryptedPublicationStream(
@@ -323,10 +311,6 @@ namespace lcp
         {
             return ex.ResultStatus();
         }
-        catch (const std::exception & ex)
-        {
-            return Status(StatusCode::ErrorCommonFail, ex.what());
-        }
     }
 
     Status LcpService::AddUserKey(const std::string & userKey)
@@ -338,10 +322,6 @@ namespace lcp
         catch (const StatusException & ex)
         {
             return ex.ResultStatus();
-        }
-        catch (const std::exception & ex)
-        {
-            return Status(StatusCode::ErrorCommonFail, ex.what());
         }
     }
 
@@ -364,10 +344,6 @@ namespace lcp
         catch (const StatusException & ex)
         {
             return ex.ResultStatus();
-        }
-        catch (const std::exception & ex)
-        {
-            return Status(StatusCode::ErrorCommonFail, ex.what());
         }
     }
 
@@ -397,10 +373,6 @@ namespace lcp
         {
             return ex.ResultStatus();
         }
-        catch (const std::exception & ex)
-        {
-            return Status(StatusCode::ErrorCommonFail, ex.what());
-        }
     }
 
     Status LcpService::CreatePublicationAcquisition(
@@ -413,7 +385,7 @@ namespace lcp
         {
             if (acquisition == nullptr)
             {
-                return Status(StatusCode::ErrorCommonFail, "acquisition is nullptr");
+                throw std::invalid_argument("acquisition is nullptr");
             }
             if (m_netProvider == nullptr)
             {
@@ -431,10 +403,6 @@ namespace lcp
         catch (const StatusException & ex)
         {
             return ex.ResultStatus();
-        }
-        catch (const std::exception & ex)
-        {
-            return Status(StatusCode::ErrorCommonFail, ex.what());
         }
     }
 

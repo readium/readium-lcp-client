@@ -179,9 +179,6 @@
     <ClInclude Include="..\..\..\src\lcp-client-lib\public\StreamInterfaces.h">
       <Filter>Header Files\PublicInterfaces</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\lcp-client-lib\SymmetricAlgorithmEncryptedStream.h">
-      <Filter>Header Files\Crypto</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\lcp-client-lib\DecryptionContextImpl.h">
       <Filter>Header Files\Crypto</Filter>
     </ClInclude>
@@ -253,6 +250,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\lcp-client-lib\LcpTypedefs.h">
       <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\lcp-client-lib\SymmetricAlgorithmEncryptedStream.h">
+      <Filter>Header Files\Crypto\Cryptopp</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

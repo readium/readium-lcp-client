@@ -70,10 +70,6 @@ namespace lcp
         {
             return ex.ResultStatus();
         }
-        catch (const std::exception & ex)
-        {
-            return Status(StatusCode::ErrorCommonFail, ex.what());
-        }
     }
 
     Status Acquisition::CheckPublicationHash(const Link & link)
@@ -100,16 +96,9 @@ namespace lcp
 
     Status Acquisition::Cancel()
     {
-        try
-        {
-            std::unique_lock<std::mutex> locker(m_sync);
-            m_request->SetCanceled(true);
-            return Status(StatusCode::ErrorCommonSuccess);
-        }
-        catch (const std::exception & ex)
-        {
-            return Status(StatusCode::ErrorCommonFail, ex.what());
-        }
+        std::unique_lock<std::mutex> locker(m_sync);
+        m_request->SetCanceled(true);
+        return Status(StatusCode::ErrorCommonSuccess);
     }
 
     std::string Acquisition::PublicationPath() const
@@ -187,7 +176,7 @@ namespace lcp
         {
             if (m_callback != nullptr)
             {
-                m_callback->OnAcquisitionEnded(this, Status(StatusCode::ErrorCommonFail, ex.what()));
+                m_callback->OnAcquisitionEnded(this, Status(StatusCode::ErrorNetworkingRequestFailed, ex.what()));
             }
         }
     }

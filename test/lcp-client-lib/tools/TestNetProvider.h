@@ -148,7 +148,7 @@ public:
         }
         catch (const std::exception & ex)
         {
-            callback->OnRequestEnded(request, lcp::Status(lcp::StatusCode::ErrorCommonFail, ex.what()));
+            callback->OnRequestEnded(request, lcp::Status(lcp::StatusCode::ErrorNetworkingRequestFailed, ex.what()));
         }
     }
 

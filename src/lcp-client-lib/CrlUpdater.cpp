@@ -68,7 +68,7 @@ namespace lcp
         
         // If the list will be changed, it won't affect current update
         StringsList curUrls = m_crlUrls;
-        m_currentRequestStatus = Status(StatusCode::ErrorCommonFail);
+        m_currentRequestStatus = Status(StatusCode::ErrorNetworkingRequestFailed);
 
         for (auto const & url : curUrls)
         {
@@ -116,15 +116,22 @@ namespace lcp
 
     void CrlUpdater::OnRequestEnded(INetRequest * request, Status result)
     {
-        std::unique_lock<std::mutex> locker(m_downloadSync);
-        if (Status::IsSuccess(result))
+        try
         {
-            m_revocationList->UpdateRevocationList(m_crlStream->Buffer());
-            this->ResetNextUpdate();
+            std::unique_lock<std::mutex> locker(m_downloadSync);
+            if (Status::IsSuccess(result))
+            {
+                m_revocationList->UpdateRevocationList(m_crlStream->Buffer());
+                this->ResetNextUpdate();
+            }
+            m_currentRequestStatus = result;
+            m_requestRunning = false;
+            m_conditionDownload.notify_one();
         }
-        m_currentRequestStatus = result;
-        m_requestRunning = false;
-        m_conditionDownload.notify_one();
+        catch (const std::exception & ex)
+        {
+            m_currentRequestStatus = Status(StatusCode::ErrorNetworkingRequestFailed, ex.what());
+        }
     }
 
     void CrlUpdater::ResetNextUpdate()
