@@ -27,7 +27,7 @@ public:
     }
     virtual void OnAcquisitionEnded(lcp::IAcquisition * acquisition, lcp::Status result)
     {
-        std::cout << std::endl << "Acquisition ended! Status: " << result.ResultCode << " Ext: " << result.Extension << std::endl;
+        std::cout << std::endl << "Acquisition ended! Status: " << result.Code << " Ext: " << result.Extension << std::endl;
     }
 };
 

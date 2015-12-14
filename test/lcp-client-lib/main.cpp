@@ -125,7 +125,7 @@ int main(int argc, char ** argv)
         std::unique_ptr<lcp::ILcpService> lcpService(rawSvcPtr);
         if (!lcp::Status::IsSuccess(res))
         {
-            std::cout << "Status: " << res.ResultCode << "; Extension: " << res.Extension << std::endl;
+            std::cout << "Status: " << res.Code << "; Extension: " << res.Extension << std::endl;
             std::cin.get();
             return 0;
         }
@@ -141,7 +141,7 @@ int main(int argc, char ** argv)
         //res = lcpService->OpenLicense(jsonLicenseSpec, &rawLicPtr);
         if (!lcp::Status::IsSuccess(res))
         {
-            std::cout << "Status: " << res.ResultCode << "; Extension: " << res.Extension << std::endl;
+            std::cout << "Status: " << res.Code << "; Extension: " << res.Extension << std::endl;
             std::cin.get();
             return 0;
         }
@@ -154,7 +154,7 @@ int main(int argc, char ** argv)
             res = lcpService->DecryptLicense(rawLicPtr, "White whales are huge!");
             if (!lcp::Status::IsSuccess(res))
             {
-                std::cout << "Status: " << res.ResultCode << "; Extension: " << res.Extension << std::endl;
+                std::cout << "Status: " << res.Code << "; Extension: " << res.Extension << std::endl;
                 std::cin.get();
                 return 0;
             }
@@ -184,7 +184,7 @@ int main(int argc, char ** argv)
             );
         if (!lcp::Status::IsSuccess(res))
         {
-            std::cout << "Status: " << res.ResultCode << "; Extension: " << res.Extension << std::endl;
+            std::cout << "Status: " << res.Code << "; Extension: " << res.Extension << std::endl;
             std::cin.get();
             return 0;
         }
@@ -207,7 +207,7 @@ int main(int argc, char ** argv)
         std::unique_ptr<lcp::IEncryptedStream> encryptedStream(rawEncryptedStream);
         if (!lcp::Status::IsSuccess(res))
         {
-            std::cout << "Status: " << res.ResultCode << "; Extension: " << res.Extension << std::endl;
+            std::cout << "Status: " << res.Code << "; Extension: " << res.Extension << std::endl;
             std::cin.get();
             return 0;
         }
@@ -234,7 +234,7 @@ int main(int argc, char ** argv)
         std::unique_ptr<lcp::IAcquisition> acquisition(rawAcqPtr);
         if (!lcp::Status::IsSuccess(res))
         {
-            std::cout << "Status: " << res.ResultCode << "; Extension: " << res.Extension << std::endl;
+            std::cout << "Status: " << res.Code << "; Extension: " << res.Extension << std::endl;
             std::cin.get();
             return 0;
         }
@@ -242,7 +242,7 @@ int main(int argc, char ** argv)
         res = acquisition->Start(&callback);
         if (!lcp::Status::IsSuccess(res))
         {
-            std::cout << "Status: " << res.ResultCode << "; Extension: " << res.Extension << std::endl;
+            std::cout << "Status: " << res.Code << "; Extension: " << res.Extension << std::endl;
             std::cin.get();
             return 0;
         }

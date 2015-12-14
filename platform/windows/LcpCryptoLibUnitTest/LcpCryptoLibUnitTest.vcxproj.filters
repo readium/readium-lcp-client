@@ -15,21 +15,21 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\LcpCryptoLibUnitTest\CertificateTest.cpp">
+    <ClCompile Include="..\..\..\test\lcp-client-lib\tests\AesCbcSymmetricAlgorithmTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\LcpCryptoLibUnitTest\main.cpp">
+    <ClCompile Include="..\..\..\test\lcp-client-lib\tests\CertificateTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\LcpCryptoLibUnitTest\DateTimeTest.cpp">
+    <ClCompile Include="..\..\..\test\lcp-client-lib\tests\DateTimeTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\LcpCryptoLibUnitTest\AesCbcSymmetricAlgorithmTest.cpp">
+    <ClCompile Include="..\..\..\test\lcp-client-lib\tests\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\src\LcpCryptoLibUnitTest\TestUtils.h">
+    <ClInclude Include="..\..\..\test\lcp-client-lib\tests\TestUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
