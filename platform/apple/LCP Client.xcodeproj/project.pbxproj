@@ -13,40 +13,40 @@
 		5A0116911C088BA4006F1A6F /* LCPLicense.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A0116871C088BA4006F1A6F /* LCPLicense.mm */; };
 		5A0116921C088BA4006F1A6F /* LCPService.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A0116891C088BA4006F1A6F /* LCPService.mm */; };
 		5A0116931C088BA4006F1A6F /* UICKeyChainStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A01168D1C088BA4006F1A6F /* UICKeyChainStore.m */; };
-		5A1B62281C198D3C00D45788 /* Acquisition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B61C61C198D3C00D45788 /* Acquisition.cpp */; };
-		5A1B62291C198D3C00D45788 /* AesCbcSymmetricAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B61C81C198D3C00D45788 /* AesCbcSymmetricAlgorithm.cpp */; };
-		5A1B622A1C198D3C00D45788 /* AlgorithmNames.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B61CA1C198D3C00D45788 /* AlgorithmNames.cpp */; };
-		5A1B622B1C198D3C00D45788 /* Certificate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B61CF1C198D3C00D45788 /* Certificate.cpp */; };
-		5A1B622C1C198D3C00D45788 /* CertificateExtension.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B61D11C198D3C00D45788 /* CertificateExtension.cpp */; };
-		5A1B622D1C198D3C00D45788 /* CertificateRevocationList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B61D31C198D3C00D45788 /* CertificateRevocationList.cpp */; };
-		5A1B622E1C198D3C00D45788 /* CrlDistributionPoints.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B61D51C198D3C00D45788 /* CrlDistributionPoints.cpp */; };
-		5A1B622F1C198D3C00D45788 /* CrlUpdater.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B61D71C198D3C00D45788 /* CrlUpdater.cpp */; };
-		5A1B62301C198D3C00D45788 /* CryptoLcpNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B61DA1C198D3C00D45788 /* CryptoLcpNode.cpp */; };
-		5A1B62311C198D3C00D45788 /* CryptoppCryptoProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B61DC1C198D3C00D45788 /* CryptoppCryptoProvider.cpp */; };
-		5A1B62321C198D3C00D45788 /* CryptoppUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B61DE1C198D3C00D45788 /* CryptoppUtils.cpp */; };
-		5A1B62331C198D3C00D45788 /* DateTime.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B61E01C198D3C00D45788 /* DateTime.cpp */; };
-		5A1B62341C198D3C00D45788 /* EncryptionProfileNames.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B61E51C198D3C00D45788 /* EncryptionProfileNames.cpp */; };
-		5A1B62351C198D3C00D45788 /* EncryptionProfilesManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B61E71C198D3C00D45788 /* EncryptionProfilesManager.cpp */; };
-		5A1B62361C198D3C00D45788 /* JsonCanonicalizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B61F11C198D3C00D45788 /* JsonCanonicalizer.cpp */; };
-		5A1B62371C198D3C00D45788 /* JsonValueReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B61F31C198D3C00D45788 /* JsonValueReader.cpp */; };
-		5A1B62381C198D3C00D45788 /* Lcp1dot0EncryptionProfile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B61F51C198D3C00D45788 /* Lcp1dot0EncryptionProfile.cpp */; };
-		5A1B62391C198D3C00D45788 /* LcpService.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B61F71C198D3C00D45788 /* LcpService.cpp */; };
-		5A1B623A1C198D3C00D45788 /* LcpServiceCreator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B61F91C198D3C00D45788 /* LcpServiceCreator.cpp */; };
-		5A1B623B1C198D3C00D45788 /* LcpUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B61FA1C198D3C00D45788 /* LcpUtils.cpp */; };
-		5A1B623C1C198D3C00D45788 /* LinksLcpNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B61FC1C198D3C00D45788 /* LinksLcpNode.cpp */; };
-		5A1B623E1C198D3C00D45788 /* RightsLcpNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B62141C198D3C00D45788 /* RightsLcpNode.cpp */; };
-		5A1B623F1C198D3C00D45788 /* RightsService.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B62161C198D3C00D45788 /* RightsService.cpp */; };
-		5A1B62401C198D3C00D45788 /* RootLcpNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B62181C198D3C00D45788 /* RootLcpNode.cpp */; };
-		5A1B62411C198D3C00D45788 /* RsaSha256SignatureAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B621A1C198D3C00D45788 /* RsaSha256SignatureAlgorithm.cpp */; };
-		5A1B62421C198D3C00D45788 /* Sha256HashAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B621C1C198D3C00D45788 /* Sha256HashAlgorithm.cpp */; };
-		5A1B62431C198D3C00D45788 /* SymmetricAlgorithmEncryptedStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B62201C198D3C00D45788 /* SymmetricAlgorithmEncryptedStream.cpp */; };
-		5A1B62441C198D3C00D45788 /* ThreadTimer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B62221C198D3C00D45788 /* ThreadTimer.cpp */; };
-		5A1B62451C198D3C00D45788 /* UserLcpNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A1B62241C198D3C00D45788 /* UserLcpNode.cpp */; };
 		5A2D65501C170EAB00ED4673 /* time64.c in Sources */ = {isa = PBXBuildFile; fileRef = 5A2D654C1C170EAB00ED4673 /* time64.c */; };
-		5A517DCA1C0751E60005877F /* LcpContentFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A517DC71C0751E60005877F /* LcpContentFilter.cpp */; };
 		5A5C61531C04C01800185159 /* libcryptopp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A5C61521C04BFF500185159 /* libcryptopp.a */; };
 		5A6EEB0A1C0C61CD0003A6DC /* LCPiOSNetProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A6EEB081C0C61CD0003A6DC /* LCPiOSNetProvider.mm */; };
 		5AA9E25E1C119FBE006470DD /* libziplib (iOS).a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AA9E25D1C119FAD006470DD /* libziplib (iOS).a */; };
+		5AF00D661C1F0A58008D0A5E /* LcpContentFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D001C1F0A58008D0A5E /* LcpContentFilter.cpp */; };
+		5AF00D671C1F0A58008D0A5E /* Acquisition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D061C1F0A58008D0A5E /* Acquisition.cpp */; };
+		5AF00D681C1F0A58008D0A5E /* AesCbcSymmetricAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D081C1F0A58008D0A5E /* AesCbcSymmetricAlgorithm.cpp */; };
+		5AF00D691C1F0A58008D0A5E /* AlgorithmNames.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D0A1C1F0A58008D0A5E /* AlgorithmNames.cpp */; };
+		5AF00D6A1C1F0A58008D0A5E /* Certificate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D0F1C1F0A58008D0A5E /* Certificate.cpp */; };
+		5AF00D6B1C1F0A58008D0A5E /* CertificateExtension.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D111C1F0A58008D0A5E /* CertificateExtension.cpp */; };
+		5AF00D6C1C1F0A58008D0A5E /* CertificateRevocationList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D131C1F0A58008D0A5E /* CertificateRevocationList.cpp */; };
+		5AF00D6D1C1F0A58008D0A5E /* CrlDistributionPoints.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D161C1F0A58008D0A5E /* CrlDistributionPoints.cpp */; };
+		5AF00D6E1C1F0A58008D0A5E /* CrlUpdater.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D181C1F0A58008D0A5E /* CrlUpdater.cpp */; };
+		5AF00D6F1C1F0A58008D0A5E /* CryptoLcpNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D1B1C1F0A58008D0A5E /* CryptoLcpNode.cpp */; };
+		5AF00D701C1F0A58008D0A5E /* CryptoppCryptoProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D1D1C1F0A58008D0A5E /* CryptoppCryptoProvider.cpp */; };
+		5AF00D711C1F0A58008D0A5E /* CryptoppUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D1F1C1F0A58008D0A5E /* CryptoppUtils.cpp */; };
+		5AF00D721C1F0A58008D0A5E /* DateTime.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D211C1F0A58008D0A5E /* DateTime.cpp */; };
+		5AF00D731C1F0A58008D0A5E /* EncryptionProfileNames.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D261C1F0A58008D0A5E /* EncryptionProfileNames.cpp */; };
+		5AF00D741C1F0A58008D0A5E /* EncryptionProfilesManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D281C1F0A58008D0A5E /* EncryptionProfilesManager.cpp */; };
+		5AF00D751C1F0A58008D0A5E /* JsonCanonicalizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D321C1F0A58008D0A5E /* JsonCanonicalizer.cpp */; };
+		5AF00D761C1F0A58008D0A5E /* JsonValueReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D341C1F0A58008D0A5E /* JsonValueReader.cpp */; };
+		5AF00D771C1F0A58008D0A5E /* Lcp1dot0EncryptionProfile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D361C1F0A58008D0A5E /* Lcp1dot0EncryptionProfile.cpp */; };
+		5AF00D781C1F0A58008D0A5E /* LcpService.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D381C1F0A58008D0A5E /* LcpService.cpp */; };
+		5AF00D791C1F0A58008D0A5E /* LcpServiceCreator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D3A1C1F0A58008D0A5E /* LcpServiceCreator.cpp */; };
+		5AF00D7A1C1F0A58008D0A5E /* LcpUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D3C1C1F0A58008D0A5E /* LcpUtils.cpp */; };
+		5AF00D7B1C1F0A58008D0A5E /* LinksLcpNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D3E1C1F0A58008D0A5E /* LinksLcpNode.cpp */; };
+		5AF00D7C1C1F0A58008D0A5E /* RightsLcpNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D541C1F0A58008D0A5E /* RightsLcpNode.cpp */; };
+		5AF00D7D1C1F0A58008D0A5E /* RightsService.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D561C1F0A58008D0A5E /* RightsService.cpp */; };
+		5AF00D7E1C1F0A58008D0A5E /* RootLcpNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D581C1F0A58008D0A5E /* RootLcpNode.cpp */; };
+		5AF00D7F1C1F0A58008D0A5E /* RsaSha256SignatureAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D5A1C1F0A58008D0A5E /* RsaSha256SignatureAlgorithm.cpp */; };
+		5AF00D801C1F0A58008D0A5E /* Sha256HashAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D5C1C1F0A58008D0A5E /* Sha256HashAlgorithm.cpp */; };
+		5AF00D811C1F0A58008D0A5E /* SymmetricAlgorithmEncryptedStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D601C1F0A58008D0A5E /* SymmetricAlgorithmEncryptedStream.cpp */; };
+		5AF00D821C1F0A58008D0A5E /* ThreadTimer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D621C1F0A58008D0A5E /* ThreadTimer.cpp */; };
+		5AF00D831C1F0A58008D0A5E /* UserLcpNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D641C1F0A58008D0A5E /* UserLcpNode.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,105 +79,10 @@
 		5A0116891C088BA4006F1A6F /* LCPService.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LCPService.mm; sourceTree = "<group>"; };
 		5A01168C1C088BA4006F1A6F /* UICKeyChainStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UICKeyChainStore.h; sourceTree = "<group>"; };
 		5A01168D1C088BA4006F1A6F /* UICKeyChainStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UICKeyChainStore.m; sourceTree = "<group>"; };
-		5A1B61C61C198D3C00D45788 /* Acquisition.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Acquisition.cpp; sourceTree = "<group>"; };
-		5A1B61C71C198D3C00D45788 /* Acquisition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Acquisition.h; sourceTree = "<group>"; };
-		5A1B61C81C198D3C00D45788 /* AesCbcSymmetricAlgorithm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AesCbcSymmetricAlgorithm.cpp; sourceTree = "<group>"; };
-		5A1B61C91C198D3C00D45788 /* AesCbcSymmetricAlgorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AesCbcSymmetricAlgorithm.h; sourceTree = "<group>"; };
-		5A1B61CA1C198D3C00D45788 /* AlgorithmNames.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AlgorithmNames.cpp; sourceTree = "<group>"; };
-		5A1B61CB1C198D3C00D45788 /* AlgorithmNames.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlgorithmNames.h; sourceTree = "<group>"; };
-		5A1B61CC1C198D3C00D45788 /* BaseDownloadRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseDownloadRequest.h; sourceTree = "<group>"; };
-		5A1B61CD1C198D3C00D45788 /* BaseLcpNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseLcpNode.h; sourceTree = "<group>"; };
-		5A1B61CE1C198D3C00D45788 /* CanonicalWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanonicalWriter.h; sourceTree = "<group>"; };
-		5A1B61CF1C198D3C00D45788 /* Certificate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Certificate.cpp; sourceTree = "<group>"; };
-		5A1B61D01C198D3C00D45788 /* Certificate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Certificate.h; sourceTree = "<group>"; };
-		5A1B61D11C198D3C00D45788 /* CertificateExtension.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CertificateExtension.cpp; sourceTree = "<group>"; };
-		5A1B61D21C198D3C00D45788 /* CertificateExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CertificateExtension.h; sourceTree = "<group>"; };
-		5A1B61D31C198D3C00D45788 /* CertificateRevocationList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CertificateRevocationList.cpp; sourceTree = "<group>"; };
-		5A1B61D41C198D3C00D45788 /* CertificateRevocationList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CertificateRevocationList.h; sourceTree = "<group>"; };
-		5A1B61D51C198D3C00D45788 /* CrlDistributionPoints.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CrlDistributionPoints.cpp; sourceTree = "<group>"; };
-		5A1B61D61C198D3C00D45788 /* CrlDistributionPoints.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrlDistributionPoints.h; sourceTree = "<group>"; };
-		5A1B61D71C198D3C00D45788 /* CrlUpdater.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CrlUpdater.cpp; sourceTree = "<group>"; };
-		5A1B61D81C198D3C00D45788 /* CrlUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrlUpdater.h; sourceTree = "<group>"; };
-		5A1B61D91C198D3C00D45788 /* CryptoAlgorithmInterfaces.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CryptoAlgorithmInterfaces.h; sourceTree = "<group>"; };
-		5A1B61DA1C198D3C00D45788 /* CryptoLcpNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CryptoLcpNode.cpp; sourceTree = "<group>"; };
-		5A1B61DB1C198D3C00D45788 /* CryptoLcpNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CryptoLcpNode.h; sourceTree = "<group>"; };
-		5A1B61DC1C198D3C00D45788 /* CryptoppCryptoProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CryptoppCryptoProvider.cpp; sourceTree = "<group>"; };
-		5A1B61DD1C198D3C00D45788 /* CryptoppCryptoProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CryptoppCryptoProvider.h; sourceTree = "<group>"; };
-		5A1B61DE1C198D3C00D45788 /* CryptoppUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CryptoppUtils.cpp; sourceTree = "<group>"; };
-		5A1B61DF1C198D3C00D45788 /* CryptoppUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CryptoppUtils.h; sourceTree = "<group>"; };
-		5A1B61E01C198D3C00D45788 /* DateTime.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DateTime.cpp; sourceTree = "<group>"; };
-		5A1B61E11C198D3C00D45788 /* DateTime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DateTime.h; sourceTree = "<group>"; };
-		5A1B61E21C198D3C00D45788 /* DecryptionContextImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DecryptionContextImpl.h; sourceTree = "<group>"; };
-		5A1B61E31C198D3C00D45788 /* DownloadInFileRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownloadInFileRequest.h; sourceTree = "<group>"; };
-		5A1B61E41C198D3C00D45788 /* DownloadInMemoryRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownloadInMemoryRequest.h; sourceTree = "<group>"; };
-		5A1B61E51C198D3C00D45788 /* EncryptionProfileNames.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EncryptionProfileNames.cpp; sourceTree = "<group>"; };
-		5A1B61E61C198D3C00D45788 /* EncryptionProfileNames.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncryptionProfileNames.h; sourceTree = "<group>"; };
-		5A1B61E71C198D3C00D45788 /* EncryptionProfilesManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EncryptionProfilesManager.cpp; sourceTree = "<group>"; };
-		5A1B61E81C198D3C00D45788 /* EncryptionProfilesManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncryptionProfilesManager.h; sourceTree = "<group>"; };
-		5A1B61E91C198D3C00D45788 /* ICertificate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ICertificate.h; sourceTree = "<group>"; };
-		5A1B61EA1C198D3C00D45788 /* ICryptoProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ICryptoProvider.h; sourceTree = "<group>"; };
-		5A1B61EB1C198D3C00D45788 /* IDecryptionContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDecryptionContext.h; sourceTree = "<group>"; };
-		5A1B61EC1C198D3C00D45788 /* IDownloadRequestCreator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDownloadRequestCreator.h; sourceTree = "<group>"; };
-		5A1B61ED1C198D3C00D45788 /* IEncryptionProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IEncryptionProfile.h; sourceTree = "<group>"; };
-		5A1B61EE1C198D3C00D45788 /* IKeyProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKeyProvider.h; sourceTree = "<group>"; };
-		5A1B61EF1C198D3C00D45788 /* ILcpNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ILcpNode.h; sourceTree = "<group>"; };
-		5A1B61F01C198D3C00D45788 /* IRightsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IRightsManager.h; sourceTree = "<group>"; };
-		5A1B61F11C198D3C00D45788 /* JsonCanonicalizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JsonCanonicalizer.cpp; sourceTree = "<group>"; };
-		5A1B61F21C198D3C00D45788 /* JsonCanonicalizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JsonCanonicalizer.h; sourceTree = "<group>"; };
-		5A1B61F31C198D3C00D45788 /* JsonValueReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JsonValueReader.cpp; sourceTree = "<group>"; };
-		5A1B61F41C198D3C00D45788 /* JsonValueReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JsonValueReader.h; sourceTree = "<group>"; };
-		5A1B61F51C198D3C00D45788 /* Lcp1dot0EncryptionProfile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Lcp1dot0EncryptionProfile.cpp; sourceTree = "<group>"; };
-		5A1B61F61C198D3C00D45788 /* Lcp1dot0EncryptionProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lcp1dot0EncryptionProfile.h; sourceTree = "<group>"; };
-		5A1B61F71C198D3C00D45788 /* LcpService.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LcpService.cpp; sourceTree = "<group>"; };
-		5A1B61F81C198D3C00D45788 /* LcpService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LcpService.h; sourceTree = "<group>"; };
-		5A1B61F91C198D3C00D45788 /* LcpServiceCreator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LcpServiceCreator.cpp; sourceTree = "<group>"; };
-		5A1B61FA1C198D3C00D45788 /* LcpUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LcpUtils.cpp; sourceTree = "<group>"; };
-		5A1B61FB1C198D3C00D45788 /* LcpUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LcpUtils.h; sourceTree = "<group>"; };
-		5A1B61FC1C198D3C00D45788 /* LinksLcpNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LinksLcpNode.cpp; sourceTree = "<group>"; };
-		5A1B61FD1C198D3C00D45788 /* LinksLcpNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LinksLcpNode.h; sourceTree = "<group>"; };
-		5A1B62001C198D3C00D45788 /* DefaultFileSystemProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DefaultFileSystemProvider.h; sourceTree = "<group>"; };
-		5A1B62011C198D3C00D45788 /* IAcquistion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAcquistion.h; sourceTree = "<group>"; };
-		5A1B62021C198D3C00D45788 /* IAcquistionCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAcquistionCallback.h; sourceTree = "<group>"; };
-		5A1B62031C198D3C00D45788 /* ICrypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ICrypto.h; sourceTree = "<group>"; };
-		5A1B62041C198D3C00D45788 /* IFileSystemProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFileSystemProvider.h; sourceTree = "<group>"; };
-		5A1B62051C198D3C00D45788 /* ILcpService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ILcpService.h; sourceTree = "<group>"; };
-		5A1B62061C198D3C00D45788 /* ILicense.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ILicense.h; sourceTree = "<group>"; };
-		5A1B62071C198D3C00D45788 /* ILinks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ILinks.h; sourceTree = "<group>"; };
-		5A1B62081C198D3C00D45788 /* INetProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = INetProvider.h; sourceTree = "<group>"; };
-		5A1B62091C198D3C00D45788 /* IRights.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IRights.h; sourceTree = "<group>"; };
-		5A1B620A1C198D3C00D45788 /* IRightsService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IRightsService.h; sourceTree = "<group>"; };
-		5A1B620B1C198D3C00D45788 /* IStorageProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IStorageProvider.h; sourceTree = "<group>"; };
-		5A1B620C1C198D3C00D45788 /* IUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IUser.h; sourceTree = "<group>"; };
-		5A1B620D1C198D3C00D45788 /* IValueIterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IValueIterator.h; sourceTree = "<group>"; };
-		5A1B620E1C198D3C00D45788 /* lcp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lcp.h; sourceTree = "<group>"; };
-		5A1B620F1C198D3C00D45788 /* LcpServiceCreator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LcpServiceCreator.h; sourceTree = "<group>"; };
-		5A1B62101C198D3C00D45788 /* LcpStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LcpStatus.h; sourceTree = "<group>"; };
-		5A1B62111C198D3C00D45788 /* StreamInterfaces.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StreamInterfaces.h; sourceTree = "<group>"; };
-		5A1B62141C198D3C00D45788 /* RightsLcpNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RightsLcpNode.cpp; sourceTree = "<group>"; };
-		5A1B62151C198D3C00D45788 /* RightsLcpNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RightsLcpNode.h; sourceTree = "<group>"; };
-		5A1B62161C198D3C00D45788 /* RightsService.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RightsService.cpp; sourceTree = "<group>"; };
-		5A1B62171C198D3C00D45788 /* RightsService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RightsService.h; sourceTree = "<group>"; };
-		5A1B62181C198D3C00D45788 /* RootLcpNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RootLcpNode.cpp; sourceTree = "<group>"; };
-		5A1B62191C198D3C00D45788 /* RootLcpNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootLcpNode.h; sourceTree = "<group>"; };
-		5A1B621A1C198D3C00D45788 /* RsaSha256SignatureAlgorithm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RsaSha256SignatureAlgorithm.cpp; sourceTree = "<group>"; };
-		5A1B621B1C198D3C00D45788 /* RsaSha256SignatureAlgorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RsaSha256SignatureAlgorithm.h; sourceTree = "<group>"; };
-		5A1B621C1C198D3C00D45788 /* Sha256HashAlgorithm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Sha256HashAlgorithm.cpp; sourceTree = "<group>"; };
-		5A1B621D1C198D3C00D45788 /* Sha256HashAlgorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sha256HashAlgorithm.h; sourceTree = "<group>"; };
-		5A1B621E1C198D3C00D45788 /* SimpleKeyProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleKeyProvider.h; sourceTree = "<group>"; };
-		5A1B621F1C198D3C00D45788 /* SimpleMemoryWritableStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleMemoryWritableStream.h; sourceTree = "<group>"; };
-		5A1B62201C198D3C00D45788 /* SymmetricAlgorithmEncryptedStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SymmetricAlgorithmEncryptedStream.cpp; sourceTree = "<group>"; };
-		5A1B62211C198D3C00D45788 /* SymmetricAlgorithmEncryptedStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SymmetricAlgorithmEncryptedStream.h; sourceTree = "<group>"; };
-		5A1B62221C198D3C00D45788 /* ThreadTimer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ThreadTimer.cpp; sourceTree = "<group>"; };
-		5A1B62231C198D3C00D45788 /* ThreadTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThreadTimer.h; sourceTree = "<group>"; };
-		5A1B62241C198D3C00D45788 /* UserLcpNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UserLcpNode.cpp; sourceTree = "<group>"; };
-		5A1B62251C198D3C00D45788 /* UserLcpNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserLcpNode.h; sourceTree = "<group>"; };
 		5A2D654C1C170EAB00ED4673 /* time64.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = time64.c; sourceTree = "<group>"; };
 		5A2D654D1C170EAB00ED4673 /* time64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = time64.h; sourceTree = "<group>"; };
 		5A2D654E1C170EAB00ED4673 /* time64_config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = time64_config.h; sourceTree = "<group>"; };
 		5A2D654F1C170EAB00ED4673 /* time64_limits.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = time64_limits.h; sourceTree = "<group>"; };
-		5A517DC71C0751E60005877F /* LcpContentFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LcpContentFilter.cpp; sourceTree = "<group>"; };
-		5A517DC91C0751E60005877F /* LcpContentFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LcpContentFilter.h; sourceTree = "<group>"; };
-		5A517DD51C075C700005877F /* LcpFilterContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LcpFilterContext.h; sourceTree = "<group>"; };
 		5A5C614D1C04BFF500185159 /* cryptopp.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cryptopp.xcodeproj; path = cryptopp/cryptopp.xcodeproj; sourceTree = "<group>"; };
 		5A6EEB081C0C61CD0003A6DC /* LCPiOSNetProvider.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LCPiOSNetProvider.mm; sourceTree = "<group>"; };
 		5A6EEB091C0C61CD0003A6DC /* LCPiOSNetProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCPiOSNetProvider.h; sourceTree = "<group>"; };
@@ -215,10 +120,107 @@
 		5AAEF1AE1BF9D3FD003CF710 /* core.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = core.h; sourceTree = "<group>"; };
 		5AAEF1AF1BF9D3FD003CF710 /* unchecked.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = unchecked.h; sourceTree = "<group>"; };
 		5AAEF1B01BF9D3FD003CF710 /* utf8.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utf8.h; sourceTree = "<group>"; };
-		5ABE4AB31C0F4ACE00FA5A55 /* LcpSeekableByteStreamAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LcpSeekableByteStreamAdapter.h; sourceTree = "<group>"; };
 		5ACE2E1B1BF21D8C00AC0585 /* libLCP-client-iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libLCP-client-iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5ACE2E7D1BF21EBE00AC0585 /* LCP Client.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "LCP Client.xcconfig"; sourceTree = "<group>"; };
-		CAF172651C1B0F5D00D12C19 /* ContainerIterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContainerIterator.h; sourceTree = "<group>"; };
+		5AF00D001C1F0A58008D0A5E /* LcpContentFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LcpContentFilter.cpp; sourceTree = "<group>"; };
+		5AF00D011C1F0A58008D0A5E /* LcpFilterContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LcpFilterContext.h; sourceTree = "<group>"; };
+		5AF00D021C1F0A58008D0A5E /* LcpSeekableByteStreamAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LcpSeekableByteStreamAdapter.h; sourceTree = "<group>"; };
+		5AF00D041C1F0A58008D0A5E /* LcpContentFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LcpContentFilter.h; sourceTree = "<group>"; };
+		5AF00D061C1F0A58008D0A5E /* Acquisition.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Acquisition.cpp; sourceTree = "<group>"; };
+		5AF00D071C1F0A58008D0A5E /* Acquisition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Acquisition.h; sourceTree = "<group>"; };
+		5AF00D081C1F0A58008D0A5E /* AesCbcSymmetricAlgorithm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AesCbcSymmetricAlgorithm.cpp; sourceTree = "<group>"; };
+		5AF00D091C1F0A58008D0A5E /* AesCbcSymmetricAlgorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AesCbcSymmetricAlgorithm.h; sourceTree = "<group>"; };
+		5AF00D0A1C1F0A58008D0A5E /* AlgorithmNames.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AlgorithmNames.cpp; sourceTree = "<group>"; };
+		5AF00D0B1C1F0A58008D0A5E /* AlgorithmNames.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlgorithmNames.h; sourceTree = "<group>"; };
+		5AF00D0C1C1F0A58008D0A5E /* BaseDownloadRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseDownloadRequest.h; sourceTree = "<group>"; };
+		5AF00D0D1C1F0A58008D0A5E /* BaseLcpNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseLcpNode.h; sourceTree = "<group>"; };
+		5AF00D0E1C1F0A58008D0A5E /* CanonicalWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanonicalWriter.h; sourceTree = "<group>"; };
+		5AF00D0F1C1F0A58008D0A5E /* Certificate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Certificate.cpp; sourceTree = "<group>"; };
+		5AF00D101C1F0A58008D0A5E /* Certificate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Certificate.h; sourceTree = "<group>"; };
+		5AF00D111C1F0A58008D0A5E /* CertificateExtension.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CertificateExtension.cpp; sourceTree = "<group>"; };
+		5AF00D121C1F0A58008D0A5E /* CertificateExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CertificateExtension.h; sourceTree = "<group>"; };
+		5AF00D131C1F0A58008D0A5E /* CertificateRevocationList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CertificateRevocationList.cpp; sourceTree = "<group>"; };
+		5AF00D141C1F0A58008D0A5E /* CertificateRevocationList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CertificateRevocationList.h; sourceTree = "<group>"; };
+		5AF00D151C1F0A58008D0A5E /* ContainerIterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContainerIterator.h; sourceTree = "<group>"; };
+		5AF00D161C1F0A58008D0A5E /* CrlDistributionPoints.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CrlDistributionPoints.cpp; sourceTree = "<group>"; };
+		5AF00D171C1F0A58008D0A5E /* CrlDistributionPoints.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrlDistributionPoints.h; sourceTree = "<group>"; };
+		5AF00D181C1F0A58008D0A5E /* CrlUpdater.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CrlUpdater.cpp; sourceTree = "<group>"; };
+		5AF00D191C1F0A58008D0A5E /* CrlUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrlUpdater.h; sourceTree = "<group>"; };
+		5AF00D1A1C1F0A58008D0A5E /* CryptoAlgorithmInterfaces.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CryptoAlgorithmInterfaces.h; sourceTree = "<group>"; };
+		5AF00D1B1C1F0A58008D0A5E /* CryptoLcpNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CryptoLcpNode.cpp; sourceTree = "<group>"; };
+		5AF00D1C1C1F0A58008D0A5E /* CryptoLcpNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CryptoLcpNode.h; sourceTree = "<group>"; };
+		5AF00D1D1C1F0A58008D0A5E /* CryptoppCryptoProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CryptoppCryptoProvider.cpp; sourceTree = "<group>"; };
+		5AF00D1E1C1F0A58008D0A5E /* CryptoppCryptoProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CryptoppCryptoProvider.h; sourceTree = "<group>"; };
+		5AF00D1F1C1F0A58008D0A5E /* CryptoppUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CryptoppUtils.cpp; sourceTree = "<group>"; };
+		5AF00D201C1F0A58008D0A5E /* CryptoppUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CryptoppUtils.h; sourceTree = "<group>"; };
+		5AF00D211C1F0A58008D0A5E /* DateTime.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DateTime.cpp; sourceTree = "<group>"; };
+		5AF00D221C1F0A58008D0A5E /* DateTime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DateTime.h; sourceTree = "<group>"; };
+		5AF00D231C1F0A58008D0A5E /* DecryptionContextImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DecryptionContextImpl.h; sourceTree = "<group>"; };
+		5AF00D241C1F0A58008D0A5E /* DownloadInFileRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownloadInFileRequest.h; sourceTree = "<group>"; };
+		5AF00D251C1F0A58008D0A5E /* DownloadInMemoryRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownloadInMemoryRequest.h; sourceTree = "<group>"; };
+		5AF00D261C1F0A58008D0A5E /* EncryptionProfileNames.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EncryptionProfileNames.cpp; sourceTree = "<group>"; };
+		5AF00D271C1F0A58008D0A5E /* EncryptionProfileNames.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncryptionProfileNames.h; sourceTree = "<group>"; };
+		5AF00D281C1F0A58008D0A5E /* EncryptionProfilesManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EncryptionProfilesManager.cpp; sourceTree = "<group>"; };
+		5AF00D291C1F0A58008D0A5E /* EncryptionProfilesManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncryptionProfilesManager.h; sourceTree = "<group>"; };
+		5AF00D2A1C1F0A58008D0A5E /* ICertificate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ICertificate.h; sourceTree = "<group>"; };
+		5AF00D2B1C1F0A58008D0A5E /* ICryptoProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ICryptoProvider.h; sourceTree = "<group>"; };
+		5AF00D2C1C1F0A58008D0A5E /* IDecryptionContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDecryptionContext.h; sourceTree = "<group>"; };
+		5AF00D2D1C1F0A58008D0A5E /* IDownloadRequestCreator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDownloadRequestCreator.h; sourceTree = "<group>"; };
+		5AF00D2E1C1F0A58008D0A5E /* IEncryptionProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IEncryptionProfile.h; sourceTree = "<group>"; };
+		5AF00D2F1C1F0A58008D0A5E /* IKeyProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKeyProvider.h; sourceTree = "<group>"; };
+		5AF00D301C1F0A58008D0A5E /* ILcpNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ILcpNode.h; sourceTree = "<group>"; };
+		5AF00D311C1F0A58008D0A5E /* IRightsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IRightsManager.h; sourceTree = "<group>"; };
+		5AF00D321C1F0A58008D0A5E /* JsonCanonicalizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JsonCanonicalizer.cpp; sourceTree = "<group>"; };
+		5AF00D331C1F0A58008D0A5E /* JsonCanonicalizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JsonCanonicalizer.h; sourceTree = "<group>"; };
+		5AF00D341C1F0A58008D0A5E /* JsonValueReader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JsonValueReader.cpp; sourceTree = "<group>"; };
+		5AF00D351C1F0A58008D0A5E /* JsonValueReader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JsonValueReader.h; sourceTree = "<group>"; };
+		5AF00D361C1F0A58008D0A5E /* Lcp1dot0EncryptionProfile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Lcp1dot0EncryptionProfile.cpp; sourceTree = "<group>"; };
+		5AF00D371C1F0A58008D0A5E /* Lcp1dot0EncryptionProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lcp1dot0EncryptionProfile.h; sourceTree = "<group>"; };
+		5AF00D381C1F0A58008D0A5E /* LcpService.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LcpService.cpp; sourceTree = "<group>"; };
+		5AF00D391C1F0A58008D0A5E /* LcpService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LcpService.h; sourceTree = "<group>"; };
+		5AF00D3A1C1F0A58008D0A5E /* LcpServiceCreator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LcpServiceCreator.cpp; sourceTree = "<group>"; };
+		5AF00D3B1C1F0A58008D0A5E /* LcpTypedefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LcpTypedefs.h; sourceTree = "<group>"; };
+		5AF00D3C1C1F0A58008D0A5E /* LcpUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LcpUtils.cpp; sourceTree = "<group>"; };
+		5AF00D3D1C1F0A58008D0A5E /* LcpUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LcpUtils.h; sourceTree = "<group>"; };
+		5AF00D3E1C1F0A58008D0A5E /* LinksLcpNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LinksLcpNode.cpp; sourceTree = "<group>"; };
+		5AF00D3F1C1F0A58008D0A5E /* LinksLcpNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LinksLcpNode.h; sourceTree = "<group>"; };
+		5AF00D401C1F0A58008D0A5E /* NonCopyable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NonCopyable.h; sourceTree = "<group>"; };
+		5AF00D421C1F0A58008D0A5E /* DefaultFileSystemProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DefaultFileSystemProvider.h; sourceTree = "<group>"; };
+		5AF00D431C1F0A58008D0A5E /* IAcquistion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAcquistion.h; sourceTree = "<group>"; };
+		5AF00D441C1F0A58008D0A5E /* IAcquistionCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAcquistionCallback.h; sourceTree = "<group>"; };
+		5AF00D451C1F0A58008D0A5E /* ICrypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ICrypto.h; sourceTree = "<group>"; };
+		5AF00D461C1F0A58008D0A5E /* IFileSystemProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IFileSystemProvider.h; sourceTree = "<group>"; };
+		5AF00D471C1F0A58008D0A5E /* ILcpService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ILcpService.h; sourceTree = "<group>"; };
+		5AF00D481C1F0A58008D0A5E /* ILicense.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ILicense.h; sourceTree = "<group>"; };
+		5AF00D491C1F0A58008D0A5E /* ILinks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ILinks.h; sourceTree = "<group>"; };
+		5AF00D4A1C1F0A58008D0A5E /* INetProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = INetProvider.h; sourceTree = "<group>"; };
+		5AF00D4B1C1F0A58008D0A5E /* IRights.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IRights.h; sourceTree = "<group>"; };
+		5AF00D4C1C1F0A58008D0A5E /* IRightsService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IRightsService.h; sourceTree = "<group>"; };
+		5AF00D4D1C1F0A58008D0A5E /* IStorageProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IStorageProvider.h; sourceTree = "<group>"; };
+		5AF00D4E1C1F0A58008D0A5E /* IUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IUser.h; sourceTree = "<group>"; };
+		5AF00D4F1C1F0A58008D0A5E /* IValueIterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IValueIterator.h; sourceTree = "<group>"; };
+		5AF00D501C1F0A58008D0A5E /* lcp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lcp.h; sourceTree = "<group>"; };
+		5AF00D511C1F0A58008D0A5E /* LcpServiceCreator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LcpServiceCreator.h; sourceTree = "<group>"; };
+		5AF00D521C1F0A58008D0A5E /* LcpStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LcpStatus.h; sourceTree = "<group>"; };
+		5AF00D531C1F0A58008D0A5E /* StreamInterfaces.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StreamInterfaces.h; sourceTree = "<group>"; };
+		5AF00D541C1F0A58008D0A5E /* RightsLcpNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RightsLcpNode.cpp; sourceTree = "<group>"; };
+		5AF00D551C1F0A58008D0A5E /* RightsLcpNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RightsLcpNode.h; sourceTree = "<group>"; };
+		5AF00D561C1F0A58008D0A5E /* RightsService.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RightsService.cpp; sourceTree = "<group>"; };
+		5AF00D571C1F0A58008D0A5E /* RightsService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RightsService.h; sourceTree = "<group>"; };
+		5AF00D581C1F0A58008D0A5E /* RootLcpNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RootLcpNode.cpp; sourceTree = "<group>"; };
+		5AF00D591C1F0A58008D0A5E /* RootLcpNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootLcpNode.h; sourceTree = "<group>"; };
+		5AF00D5A1C1F0A58008D0A5E /* RsaSha256SignatureAlgorithm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RsaSha256SignatureAlgorithm.cpp; sourceTree = "<group>"; };
+		5AF00D5B1C1F0A58008D0A5E /* RsaSha256SignatureAlgorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RsaSha256SignatureAlgorithm.h; sourceTree = "<group>"; };
+		5AF00D5C1C1F0A58008D0A5E /* Sha256HashAlgorithm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Sha256HashAlgorithm.cpp; sourceTree = "<group>"; };
+		5AF00D5D1C1F0A58008D0A5E /* Sha256HashAlgorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sha256HashAlgorithm.h; sourceTree = "<group>"; };
+		5AF00D5E1C1F0A58008D0A5E /* SimpleKeyProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleKeyProvider.h; sourceTree = "<group>"; };
+		5AF00D5F1C1F0A58008D0A5E /* SimpleMemoryWritableStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleMemoryWritableStream.h; sourceTree = "<group>"; };
+		5AF00D601C1F0A58008D0A5E /* SymmetricAlgorithmEncryptedStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SymmetricAlgorithmEncryptedStream.cpp; sourceTree = "<group>"; };
+		5AF00D611C1F0A58008D0A5E /* SymmetricAlgorithmEncryptedStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SymmetricAlgorithmEncryptedStream.h; sourceTree = "<group>"; };
+		5AF00D621C1F0A58008D0A5E /* ThreadTimer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ThreadTimer.cpp; sourceTree = "<group>"; };
+		5AF00D631C1F0A58008D0A5E /* ThreadTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThreadTimer.h; sourceTree = "<group>"; };
+		5AF00D641C1F0A58008D0A5E /* UserLcpNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UserLcpNode.cpp; sourceTree = "<group>"; };
+		5AF00D651C1F0A58008D0A5E /* UserLcpNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserLcpNode.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -281,114 +283,6 @@
 			name = Sources;
 			sourceTree = "<group>";
 		};
-		5A1B61C51C198D3C00D45788 /* LcpCryptoLib */ = {
-			isa = PBXGroup;
-			children = (
-				5A1B61C61C198D3C00D45788 /* Acquisition.cpp */,
-				5A1B61C71C198D3C00D45788 /* Acquisition.h */,
-				5A1B61C81C198D3C00D45788 /* AesCbcSymmetricAlgorithm.cpp */,
-				5A1B61C91C198D3C00D45788 /* AesCbcSymmetricAlgorithm.h */,
-				5A1B61CA1C198D3C00D45788 /* AlgorithmNames.cpp */,
-				5A1B61CB1C198D3C00D45788 /* AlgorithmNames.h */,
-				5A1B61CC1C198D3C00D45788 /* BaseDownloadRequest.h */,
-				5A1B61CD1C198D3C00D45788 /* BaseLcpNode.h */,
-				5A1B61CE1C198D3C00D45788 /* CanonicalWriter.h */,
-				5A1B61CF1C198D3C00D45788 /* Certificate.cpp */,
-				5A1B61D01C198D3C00D45788 /* Certificate.h */,
-				5A1B61D11C198D3C00D45788 /* CertificateExtension.cpp */,
-				5A1B61D21C198D3C00D45788 /* CertificateExtension.h */,
-				5A1B61D31C198D3C00D45788 /* CertificateRevocationList.cpp */,
-				5A1B61D41C198D3C00D45788 /* CertificateRevocationList.h */,
-				CAF172651C1B0F5D00D12C19 /* ContainerIterator.h */,
-				5A1B61D51C198D3C00D45788 /* CrlDistributionPoints.cpp */,
-				5A1B61D61C198D3C00D45788 /* CrlDistributionPoints.h */,
-				5A1B61D71C198D3C00D45788 /* CrlUpdater.cpp */,
-				5A1B61D81C198D3C00D45788 /* CrlUpdater.h */,
-				5A1B61D91C198D3C00D45788 /* CryptoAlgorithmInterfaces.h */,
-				5A1B61DA1C198D3C00D45788 /* CryptoLcpNode.cpp */,
-				5A1B61DB1C198D3C00D45788 /* CryptoLcpNode.h */,
-				5A1B61DC1C198D3C00D45788 /* CryptoppCryptoProvider.cpp */,
-				5A1B61DD1C198D3C00D45788 /* CryptoppCryptoProvider.h */,
-				5A1B61DE1C198D3C00D45788 /* CryptoppUtils.cpp */,
-				5A1B61DF1C198D3C00D45788 /* CryptoppUtils.h */,
-				5A1B61E01C198D3C00D45788 /* DateTime.cpp */,
-				5A1B61E11C198D3C00D45788 /* DateTime.h */,
-				5A1B61E21C198D3C00D45788 /* DecryptionContextImpl.h */,
-				5A1B61E31C198D3C00D45788 /* DownloadInFileRequest.h */,
-				5A1B61E41C198D3C00D45788 /* DownloadInMemoryRequest.h */,
-				5A1B61E51C198D3C00D45788 /* EncryptionProfileNames.cpp */,
-				5A1B61E61C198D3C00D45788 /* EncryptionProfileNames.h */,
-				5A1B61E71C198D3C00D45788 /* EncryptionProfilesManager.cpp */,
-				5A1B61E81C198D3C00D45788 /* EncryptionProfilesManager.h */,
-				5A1B61E91C198D3C00D45788 /* ICertificate.h */,
-				5A1B61EA1C198D3C00D45788 /* ICryptoProvider.h */,
-				5A1B61EB1C198D3C00D45788 /* IDecryptionContext.h */,
-				5A1B61EC1C198D3C00D45788 /* IDownloadRequestCreator.h */,
-				5A1B61ED1C198D3C00D45788 /* IEncryptionProfile.h */,
-				5A1B61EE1C198D3C00D45788 /* IKeyProvider.h */,
-				5A1B61EF1C198D3C00D45788 /* ILcpNode.h */,
-				5A1B61F01C198D3C00D45788 /* IRightsManager.h */,
-				5A1B61F11C198D3C00D45788 /* JsonCanonicalizer.cpp */,
-				5A1B61F21C198D3C00D45788 /* JsonCanonicalizer.h */,
-				5A1B61F31C198D3C00D45788 /* JsonValueReader.cpp */,
-				5A1B61F41C198D3C00D45788 /* JsonValueReader.h */,
-				5A1B61F51C198D3C00D45788 /* Lcp1dot0EncryptionProfile.cpp */,
-				5A1B61F61C198D3C00D45788 /* Lcp1dot0EncryptionProfile.h */,
-				5A1B61F71C198D3C00D45788 /* LcpService.cpp */,
-				5A1B61F81C198D3C00D45788 /* LcpService.h */,
-				5A1B61F91C198D3C00D45788 /* LcpServiceCreator.cpp */,
-				5A1B61FA1C198D3C00D45788 /* LcpUtils.cpp */,
-				5A1B61FB1C198D3C00D45788 /* LcpUtils.h */,
-				5A1B61FC1C198D3C00D45788 /* LinksLcpNode.cpp */,
-				5A1B61FD1C198D3C00D45788 /* LinksLcpNode.h */,
-				5A1B61FE1C198D3C00D45788 /* Public */,
-				5A1B62141C198D3C00D45788 /* RightsLcpNode.cpp */,
-				5A1B62151C198D3C00D45788 /* RightsLcpNode.h */,
-				5A1B62161C198D3C00D45788 /* RightsService.cpp */,
-				5A1B62171C198D3C00D45788 /* RightsService.h */,
-				5A1B62181C198D3C00D45788 /* RootLcpNode.cpp */,
-				5A1B62191C198D3C00D45788 /* RootLcpNode.h */,
-				5A1B621A1C198D3C00D45788 /* RsaSha256SignatureAlgorithm.cpp */,
-				5A1B621B1C198D3C00D45788 /* RsaSha256SignatureAlgorithm.h */,
-				5A1B621C1C198D3C00D45788 /* Sha256HashAlgorithm.cpp */,
-				5A1B621D1C198D3C00D45788 /* Sha256HashAlgorithm.h */,
-				5A1B621E1C198D3C00D45788 /* SimpleKeyProvider.h */,
-				5A1B621F1C198D3C00D45788 /* SimpleMemoryWritableStream.h */,
-				5A1B62201C198D3C00D45788 /* SymmetricAlgorithmEncryptedStream.cpp */,
-				5A1B62211C198D3C00D45788 /* SymmetricAlgorithmEncryptedStream.h */,
-				5A1B62221C198D3C00D45788 /* ThreadTimer.cpp */,
-				5A1B62231C198D3C00D45788 /* ThreadTimer.h */,
-				5A1B62241C198D3C00D45788 /* UserLcpNode.cpp */,
-				5A1B62251C198D3C00D45788 /* UserLcpNode.h */,
-			);
-			path = LcpCryptoLib;
-			sourceTree = "<group>";
-		};
-		5A1B61FE1C198D3C00D45788 /* Public */ = {
-			isa = PBXGroup;
-			children = (
-				5A1B62001C198D3C00D45788 /* DefaultFileSystemProvider.h */,
-				5A1B62011C198D3C00D45788 /* IAcquistion.h */,
-				5A1B62021C198D3C00D45788 /* IAcquistionCallback.h */,
-				5A1B62031C198D3C00D45788 /* ICrypto.h */,
-				5A1B62041C198D3C00D45788 /* IFileSystemProvider.h */,
-				5A1B62051C198D3C00D45788 /* ILcpService.h */,
-				5A1B62061C198D3C00D45788 /* ILicense.h */,
-				5A1B62071C198D3C00D45788 /* ILinks.h */,
-				5A1B62081C198D3C00D45788 /* INetProvider.h */,
-				5A1B62091C198D3C00D45788 /* IRights.h */,
-				5A1B620A1C198D3C00D45788 /* IRightsService.h */,
-				5A1B620B1C198D3C00D45788 /* IStorageProvider.h */,
-				5A1B620C1C198D3C00D45788 /* IUser.h */,
-				5A1B620D1C198D3C00D45788 /* IValueIterator.h */,
-				5A1B620E1C198D3C00D45788 /* lcp.h */,
-				5A1B620F1C198D3C00D45788 /* LcpServiceCreator.h */,
-				5A1B62101C198D3C00D45788 /* LcpStatus.h */,
-				5A1B62111C198D3C00D45788 /* StreamInterfaces.h */,
-			);
-			path = Public;
-			sourceTree = "<group>";
-		};
 		5A2D654B1C170EAB00ED4673 /* time64 */ = {
 			isa = PBXGroup;
 			children = (
@@ -398,25 +292,6 @@
 				5A2D654F1C170EAB00ED4673 /* time64_limits.h */,
 			);
 			path = time64;
-			sourceTree = "<group>";
-		};
-		5A517DC61C0751E60005877F /* LcpContentFilter */ = {
-			isa = PBXGroup;
-			children = (
-				5A517DC71C0751E60005877F /* LcpContentFilter.cpp */,
-				5A517DD51C075C700005877F /* LcpFilterContext.h */,
-				5ABE4AB31C0F4ACE00FA5A55 /* LcpSeekableByteStreamAdapter.h */,
-				5A517DC81C0751E60005877F /* Public */,
-			);
-			path = LcpContentFilter;
-			sourceTree = "<group>";
-		};
-		5A517DC81C0751E60005877F /* Public */ = {
-			isa = PBXGroup;
-			children = (
-				5A517DC91C0751E60005877F /* LcpContentFilter.h */,
-			);
-			path = Public;
 			sourceTree = "<group>";
 		};
 		5A5C614E1C04BFF500185159 /* Products */ = {
@@ -438,8 +313,8 @@
 		5AAEEF011BF9D3FC003CF710 /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				5A1B61C51C198D3C00D45788 /* LcpCryptoLib */,
-				5A517DC61C0751E60005877F /* LcpContentFilter */,
+				5AF00CFF1C1F0A58008D0A5E /* lcp-content-filter */,
+				5AF00D051C1F0A58008D0A5E /* lcp-client-lib */,
 				5AAEEF311BF9D3FC003CF710 /* third-parties */,
 			);
 			name = Common;
@@ -554,6 +429,135 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		5AF00CFF1C1F0A58008D0A5E /* lcp-content-filter */ = {
+			isa = PBXGroup;
+			children = (
+				5AF00D001C1F0A58008D0A5E /* LcpContentFilter.cpp */,
+				5AF00D011C1F0A58008D0A5E /* LcpFilterContext.h */,
+				5AF00D021C1F0A58008D0A5E /* LcpSeekableByteStreamAdapter.h */,
+				5AF00D031C1F0A58008D0A5E /* public */,
+			);
+			path = "lcp-content-filter";
+			sourceTree = "<group>";
+		};
+		5AF00D031C1F0A58008D0A5E /* public */ = {
+			isa = PBXGroup;
+			children = (
+				5AF00D041C1F0A58008D0A5E /* LcpContentFilter.h */,
+			);
+			path = public;
+			sourceTree = "<group>";
+		};
+		5AF00D051C1F0A58008D0A5E /* lcp-client-lib */ = {
+			isa = PBXGroup;
+			children = (
+				5AF00D061C1F0A58008D0A5E /* Acquisition.cpp */,
+				5AF00D071C1F0A58008D0A5E /* Acquisition.h */,
+				5AF00D081C1F0A58008D0A5E /* AesCbcSymmetricAlgorithm.cpp */,
+				5AF00D091C1F0A58008D0A5E /* AesCbcSymmetricAlgorithm.h */,
+				5AF00D0A1C1F0A58008D0A5E /* AlgorithmNames.cpp */,
+				5AF00D0B1C1F0A58008D0A5E /* AlgorithmNames.h */,
+				5AF00D0C1C1F0A58008D0A5E /* BaseDownloadRequest.h */,
+				5AF00D0D1C1F0A58008D0A5E /* BaseLcpNode.h */,
+				5AF00D0E1C1F0A58008D0A5E /* CanonicalWriter.h */,
+				5AF00D0F1C1F0A58008D0A5E /* Certificate.cpp */,
+				5AF00D101C1F0A58008D0A5E /* Certificate.h */,
+				5AF00D111C1F0A58008D0A5E /* CertificateExtension.cpp */,
+				5AF00D121C1F0A58008D0A5E /* CertificateExtension.h */,
+				5AF00D131C1F0A58008D0A5E /* CertificateRevocationList.cpp */,
+				5AF00D141C1F0A58008D0A5E /* CertificateRevocationList.h */,
+				5AF00D151C1F0A58008D0A5E /* ContainerIterator.h */,
+				5AF00D161C1F0A58008D0A5E /* CrlDistributionPoints.cpp */,
+				5AF00D171C1F0A58008D0A5E /* CrlDistributionPoints.h */,
+				5AF00D181C1F0A58008D0A5E /* CrlUpdater.cpp */,
+				5AF00D191C1F0A58008D0A5E /* CrlUpdater.h */,
+				5AF00D1A1C1F0A58008D0A5E /* CryptoAlgorithmInterfaces.h */,
+				5AF00D1B1C1F0A58008D0A5E /* CryptoLcpNode.cpp */,
+				5AF00D1C1C1F0A58008D0A5E /* CryptoLcpNode.h */,
+				5AF00D1D1C1F0A58008D0A5E /* CryptoppCryptoProvider.cpp */,
+				5AF00D1E1C1F0A58008D0A5E /* CryptoppCryptoProvider.h */,
+				5AF00D1F1C1F0A58008D0A5E /* CryptoppUtils.cpp */,
+				5AF00D201C1F0A58008D0A5E /* CryptoppUtils.h */,
+				5AF00D211C1F0A58008D0A5E /* DateTime.cpp */,
+				5AF00D221C1F0A58008D0A5E /* DateTime.h */,
+				5AF00D231C1F0A58008D0A5E /* DecryptionContextImpl.h */,
+				5AF00D241C1F0A58008D0A5E /* DownloadInFileRequest.h */,
+				5AF00D251C1F0A58008D0A5E /* DownloadInMemoryRequest.h */,
+				5AF00D261C1F0A58008D0A5E /* EncryptionProfileNames.cpp */,
+				5AF00D271C1F0A58008D0A5E /* EncryptionProfileNames.h */,
+				5AF00D281C1F0A58008D0A5E /* EncryptionProfilesManager.cpp */,
+				5AF00D291C1F0A58008D0A5E /* EncryptionProfilesManager.h */,
+				5AF00D2A1C1F0A58008D0A5E /* ICertificate.h */,
+				5AF00D2B1C1F0A58008D0A5E /* ICryptoProvider.h */,
+				5AF00D2C1C1F0A58008D0A5E /* IDecryptionContext.h */,
+				5AF00D2D1C1F0A58008D0A5E /* IDownloadRequestCreator.h */,
+				5AF00D2E1C1F0A58008D0A5E /* IEncryptionProfile.h */,
+				5AF00D2F1C1F0A58008D0A5E /* IKeyProvider.h */,
+				5AF00D301C1F0A58008D0A5E /* ILcpNode.h */,
+				5AF00D311C1F0A58008D0A5E /* IRightsManager.h */,
+				5AF00D321C1F0A58008D0A5E /* JsonCanonicalizer.cpp */,
+				5AF00D331C1F0A58008D0A5E /* JsonCanonicalizer.h */,
+				5AF00D341C1F0A58008D0A5E /* JsonValueReader.cpp */,
+				5AF00D351C1F0A58008D0A5E /* JsonValueReader.h */,
+				5AF00D361C1F0A58008D0A5E /* Lcp1dot0EncryptionProfile.cpp */,
+				5AF00D371C1F0A58008D0A5E /* Lcp1dot0EncryptionProfile.h */,
+				5AF00D381C1F0A58008D0A5E /* LcpService.cpp */,
+				5AF00D391C1F0A58008D0A5E /* LcpService.h */,
+				5AF00D3A1C1F0A58008D0A5E /* LcpServiceCreator.cpp */,
+				5AF00D3B1C1F0A58008D0A5E /* LcpTypedefs.h */,
+				5AF00D3C1C1F0A58008D0A5E /* LcpUtils.cpp */,
+				5AF00D3D1C1F0A58008D0A5E /* LcpUtils.h */,
+				5AF00D3E1C1F0A58008D0A5E /* LinksLcpNode.cpp */,
+				5AF00D3F1C1F0A58008D0A5E /* LinksLcpNode.h */,
+				5AF00D401C1F0A58008D0A5E /* NonCopyable.h */,
+				5AF00D411C1F0A58008D0A5E /* public */,
+				5AF00D541C1F0A58008D0A5E /* RightsLcpNode.cpp */,
+				5AF00D551C1F0A58008D0A5E /* RightsLcpNode.h */,
+				5AF00D561C1F0A58008D0A5E /* RightsService.cpp */,
+				5AF00D571C1F0A58008D0A5E /* RightsService.h */,
+				5AF00D581C1F0A58008D0A5E /* RootLcpNode.cpp */,
+				5AF00D591C1F0A58008D0A5E /* RootLcpNode.h */,
+				5AF00D5A1C1F0A58008D0A5E /* RsaSha256SignatureAlgorithm.cpp */,
+				5AF00D5B1C1F0A58008D0A5E /* RsaSha256SignatureAlgorithm.h */,
+				5AF00D5C1C1F0A58008D0A5E /* Sha256HashAlgorithm.cpp */,
+				5AF00D5D1C1F0A58008D0A5E /* Sha256HashAlgorithm.h */,
+				5AF00D5E1C1F0A58008D0A5E /* SimpleKeyProvider.h */,
+				5AF00D5F1C1F0A58008D0A5E /* SimpleMemoryWritableStream.h */,
+				5AF00D601C1F0A58008D0A5E /* SymmetricAlgorithmEncryptedStream.cpp */,
+				5AF00D611C1F0A58008D0A5E /* SymmetricAlgorithmEncryptedStream.h */,
+				5AF00D621C1F0A58008D0A5E /* ThreadTimer.cpp */,
+				5AF00D631C1F0A58008D0A5E /* ThreadTimer.h */,
+				5AF00D641C1F0A58008D0A5E /* UserLcpNode.cpp */,
+				5AF00D651C1F0A58008D0A5E /* UserLcpNode.h */,
+			);
+			path = "lcp-client-lib";
+			sourceTree = "<group>";
+		};
+		5AF00D411C1F0A58008D0A5E /* public */ = {
+			isa = PBXGroup;
+			children = (
+				5AF00D421C1F0A58008D0A5E /* DefaultFileSystemProvider.h */,
+				5AF00D431C1F0A58008D0A5E /* IAcquistion.h */,
+				5AF00D441C1F0A58008D0A5E /* IAcquistionCallback.h */,
+				5AF00D451C1F0A58008D0A5E /* ICrypto.h */,
+				5AF00D461C1F0A58008D0A5E /* IFileSystemProvider.h */,
+				5AF00D471C1F0A58008D0A5E /* ILcpService.h */,
+				5AF00D481C1F0A58008D0A5E /* ILicense.h */,
+				5AF00D491C1F0A58008D0A5E /* ILinks.h */,
+				5AF00D4A1C1F0A58008D0A5E /* INetProvider.h */,
+				5AF00D4B1C1F0A58008D0A5E /* IRights.h */,
+				5AF00D4C1C1F0A58008D0A5E /* IRightsService.h */,
+				5AF00D4D1C1F0A58008D0A5E /* IStorageProvider.h */,
+				5AF00D4E1C1F0A58008D0A5E /* IUser.h */,
+				5AF00D4F1C1F0A58008D0A5E /* IValueIterator.h */,
+				5AF00D501C1F0A58008D0A5E /* lcp.h */,
+				5AF00D511C1F0A58008D0A5E /* LcpServiceCreator.h */,
+				5AF00D521C1F0A58008D0A5E /* LcpStatus.h */,
+				5AF00D531C1F0A58008D0A5E /* StreamInterfaces.h */,
+			);
+			path = public;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -636,44 +640,44 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5A1B62321C198D3C00D45788 /* CryptoppUtils.cpp in Sources */,
-				5A1B62291C198D3C00D45788 /* AesCbcSymmetricAlgorithm.cpp in Sources */,
+				5AF00D7F1C1F0A58008D0A5E /* RsaSha256SignatureAlgorithm.cpp in Sources */,
+				5AF00D711C1F0A58008D0A5E /* CryptoppUtils.cpp in Sources */,
+				5AF00D681C1F0A58008D0A5E /* AesCbcSymmetricAlgorithm.cpp in Sources */,
 				5A01168E1C088BA4006F1A6F /* LCPAcquisition.mm in Sources */,
-				5A1B62301C198D3C00D45788 /* CryptoLcpNode.cpp in Sources */,
-				5A1B62331C198D3C00D45788 /* DateTime.cpp in Sources */,
+				5AF00D6F1C1F0A58008D0A5E /* CryptoLcpNode.cpp in Sources */,
+				5AF00D7D1C1F0A58008D0A5E /* RightsService.cpp in Sources */,
+				5AF00D721C1F0A58008D0A5E /* DateTime.cpp in Sources */,
 				5A6EEB0A1C0C61CD0003A6DC /* LCPiOSNetProvider.mm in Sources */,
+				5AF00D811C1F0A58008D0A5E /* SymmetricAlgorithmEncryptedStream.cpp in Sources */,
 				5A0116921C088BA4006F1A6F /* LCPService.mm in Sources */,
-				5A1B62281C198D3C00D45788 /* Acquisition.cpp in Sources */,
-				5A1B62451C198D3C00D45788 /* UserLcpNode.cpp in Sources */,
-				5A1B622D1C198D3C00D45788 /* CertificateRevocationList.cpp in Sources */,
-				5A1B622C1C198D3C00D45788 /* CertificateExtension.cpp in Sources */,
-				5A1B62411C198D3C00D45788 /* RsaSha256SignatureAlgorithm.cpp in Sources */,
-				5A1B623F1C198D3C00D45788 /* RightsService.cpp in Sources */,
-				5A1B62361C198D3C00D45788 /* JsonCanonicalizer.cpp in Sources */,
+				5AF00D671C1F0A58008D0A5E /* Acquisition.cpp in Sources */,
+				5AF00D6C1C1F0A58008D0A5E /* CertificateRevocationList.cpp in Sources */,
+				5AF00D6B1C1F0A58008D0A5E /* CertificateExtension.cpp in Sources */,
+				5AF00D751C1F0A58008D0A5E /* JsonCanonicalizer.cpp in Sources */,
+				5AF00D821C1F0A58008D0A5E /* ThreadTimer.cpp in Sources */,
 				5A0116911C088BA4006F1A6F /* LCPLicense.mm in Sources */,
-				5A1B622E1C198D3C00D45788 /* CrlDistributionPoints.cpp in Sources */,
-				5A1B62421C198D3C00D45788 /* Sha256HashAlgorithm.cpp in Sources */,
-				5A1B623B1C198D3C00D45788 /* LcpUtils.cpp in Sources */,
-				5A1B62311C198D3C00D45788 /* CryptoppCryptoProvider.cpp in Sources */,
-				5A1B62431C198D3C00D45788 /* SymmetricAlgorithmEncryptedStream.cpp in Sources */,
-				5A1B623A1C198D3C00D45788 /* LcpServiceCreator.cpp in Sources */,
-				5A1B62441C198D3C00D45788 /* ThreadTimer.cpp in Sources */,
-				5A1B62371C198D3C00D45788 /* JsonValueReader.cpp in Sources */,
-				5A1B62351C198D3C00D45788 /* EncryptionProfilesManager.cpp in Sources */,
-				5A1B622A1C198D3C00D45788 /* AlgorithmNames.cpp in Sources */,
-				5A1B622B1C198D3C00D45788 /* Certificate.cpp in Sources */,
-				5A1B622F1C198D3C00D45788 /* CrlUpdater.cpp in Sources */,
+				5AF00D6D1C1F0A58008D0A5E /* CrlDistributionPoints.cpp in Sources */,
+				5AF00D7A1C1F0A58008D0A5E /* LcpUtils.cpp in Sources */,
+				5AF00D701C1F0A58008D0A5E /* CryptoppCryptoProvider.cpp in Sources */,
+				5AF00D791C1F0A58008D0A5E /* LcpServiceCreator.cpp in Sources */,
+				5AF00D761C1F0A58008D0A5E /* JsonValueReader.cpp in Sources */,
+				5AF00D741C1F0A58008D0A5E /* EncryptionProfilesManager.cpp in Sources */,
+				5AF00D691C1F0A58008D0A5E /* AlgorithmNames.cpp in Sources */,
+				5AF00D6A1C1F0A58008D0A5E /* Certificate.cpp in Sources */,
+				5AF00D801C1F0A58008D0A5E /* Sha256HashAlgorithm.cpp in Sources */,
+				5AF00D6E1C1F0A58008D0A5E /* CrlUpdater.cpp in Sources */,
 				5A0116901C088BA4006F1A6F /* LCPiOSStorageProvider.mm in Sources */,
-				5A1B62341C198D3C00D45788 /* EncryptionProfileNames.cpp in Sources */,
-				5A1B623E1C198D3C00D45788 /* RightsLcpNode.cpp in Sources */,
-				5A1B62381C198D3C00D45788 /* Lcp1dot0EncryptionProfile.cpp in Sources */,
+				5AF00D731C1F0A58008D0A5E /* EncryptionProfileNames.cpp in Sources */,
+				5AF00D7C1C1F0A58008D0A5E /* RightsLcpNode.cpp in Sources */,
+				5AF00D771C1F0A58008D0A5E /* Lcp1dot0EncryptionProfile.cpp in Sources */,
+				5AF00D661C1F0A58008D0A5E /* LcpContentFilter.cpp in Sources */,
 				5A0116931C088BA4006F1A6F /* UICKeyChainStore.m in Sources */,
 				5A2D65501C170EAB00ED4673 /* time64.c in Sources */,
+				5AF00D7B1C1F0A58008D0A5E /* LinksLcpNode.cpp in Sources */,
+				5AF00D831C1F0A58008D0A5E /* UserLcpNode.cpp in Sources */,
 				5A01168F1C088BA4006F1A6F /* LCPError.mm in Sources */,
-				5A1B623C1C198D3C00D45788 /* LinksLcpNode.cpp in Sources */,
-				5A1B62401C198D3C00D45788 /* RootLcpNode.cpp in Sources */,
-				5A517DCA1C0751E60005877F /* LcpContentFilter.cpp in Sources */,
-				5A1B62391C198D3C00D45788 /* LcpService.cpp in Sources */,
+				5AF00D7E1C1F0A58008D0A5E /* RootLcpNode.cpp in Sources */,
+				5AF00D781C1F0A58008D0A5E /* LcpService.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
