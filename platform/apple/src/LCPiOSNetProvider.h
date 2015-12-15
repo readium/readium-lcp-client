@@ -4,7 +4,7 @@
 //  Any commercial use is strictly prohibited.
 //
 
-#import "../../../src/LcpCryptoLib/Public/INetProvider.h"
+#import "../../../src/lcp-client-lib/public/INetProvider.h"
 #import <Foundation/Foundation.h>
 
 @class LCPiOSNetProvider;

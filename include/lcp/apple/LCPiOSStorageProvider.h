@@ -4,7 +4,7 @@
 //  Any commercial use is strictly prohibited.
 //
 
-#import "../../../src/LcpCryptoLib/Public/IStorageProvider.h"
+#import "../../../src/lcp-client-lib/public/IStorageProvider.h"
 #import <Foundation/Foundation.h>
 
 @class UICKeyChainStore;

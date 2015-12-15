@@ -21,8 +21,8 @@ The library is a standalone solution and can be used without the Readium SDK. An
 
 It is composed of several sub-projects:
 
-* **LcpCryptoLib**, which is the standalone LCP C++ decryption library
-* **LcpContentFilter**, an implementation of Readium SDK's Content Filter for LCP protected EPUB.
+* **LCP Client Library**, which is the standalone LCP C++ client library
+* **LCP Content Filter**, an implementation of Readium SDK's Content Filter for LCP protected EPUB.
 * **Obj-C bridge**, for the public API of LcpCryptoLib, to use on iOS and OS X.
 
 
@@ -80,7 +80,15 @@ A License instance can be in two states: *encrypted* or *decrypted*. If its User
 The owner of the License instance is the LCP Service that created it. And the same License object will be returned for subsequent calls using the same canonical JSON.
 
 You can take profit of that to have different components of your application using the same License object. For example, the Readium Content Filter will open a License using the shared LCP Service, but will not try to decrypt it since it doesn't have any way to prompt the User for the passphrase. It is the host app that should ask the user for his passphrase, if needed, and decrypt the shared License instance.
- 
+
+### Thread Safety
+The library is thread-safe. The `IValueIterator`, `IReadableStream`, `IWritableStream` implementations are not thread-safe. They must be used only by one thread at a time.
+
+### Ownership Strategy
+All the methods with `Create` prefix implement the Factory Method pattern. The client of such methods takes ownership of the returned pointer. Other methods just use pointers owned by the `ILcpService` instance.
+
+### Error Handling Strategy
+The library returns the `Status` object to notify the client about LCP-specific errors. In other cases, when some error occurs inside of the library, STL exceptions may be thrown.
 
 ## Attributions
 

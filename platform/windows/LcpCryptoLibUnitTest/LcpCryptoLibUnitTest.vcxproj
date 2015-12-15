@@ -96,7 +96,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../../../src/LcpCryptoLib;../../../src/third-parties/gtest/include;../../../src/third-parties;../../../src/LcpCryptoLibTestTools</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../src/lcp-client-lib;../../../src/third-parties/gtest/include;../../../src/third-parties</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -115,7 +115,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../../../src/LcpCryptoLib;../../../src/third-parties/gtest/include;../../../src/third-parties;../../../src/LcpCryptoLibTestTools</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../src/lcp-client-lib;../../../src/third-parties/gtest/include;../../../src/third-parties</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -136,7 +136,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../../../src/LcpCryptoLib;../../../src/third-parties/gtest/include;../../../src/third-parties;../../../src/LcpCryptoLibTestTools</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../src/lcp-client-lib;../../../src/third-parties/gtest/include;../../../src/third-parties</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -159,7 +159,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../../../src/LcpCryptoLib;../../../src/third-parties/gtest/include;../../../src/third-parties;../../../src/LcpCryptoLibTestTools</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../src/lcp-client-lib;../../../src/third-parties/gtest/include;../../../src/third-parties</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -185,13 +185,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\LcpCryptoLibUnitTest\AesCbcSymmetricAlgorithmTest.cpp" />
-    <ClCompile Include="..\..\..\src\LcpCryptoLibUnitTest\CertificateTest.cpp" />
-    <ClCompile Include="..\..\..\src\LcpCryptoLibUnitTest\DateTimeTest.cpp" />
-    <ClCompile Include="..\..\..\src\LcpCryptoLibUnitTest\main.cpp" />
+    <ClCompile Include="..\..\..\test\lcp-client-lib\tests\AesCbcSymmetricAlgorithmTest.cpp" />
+    <ClCompile Include="..\..\..\test\lcp-client-lib\tests\CertificateTest.cpp" />
+    <ClCompile Include="..\..\..\test\lcp-client-lib\tests\DateTimeTest.cpp" />
+    <ClCompile Include="..\..\..\test\lcp-client-lib\tests\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\src\LcpCryptoLibUnitTest\TestUtils.h" />
+    <ClInclude Include="..\..\..\test\lcp-client-lib\tests\TestUtils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
