@@ -12,7 +12,6 @@ NSString *const LCPErrorExtensionKey = @"LCPErrorExtension";
 
 using namespace lcp;
 
-NSInteger const LCPErrorCommonFail = StatusCode::ErrorCommonFail;
 NSInteger const LCPErrorCommonNoNetProvider = StatusCode::ErrorCommonNoNetProvider;
 NSInteger const LCPErrorCommonNoStorageProvider = StatusCode::ErrorCommonNoStorageProvider;
 NSInteger const LCPErrorCommonEncryptionProfileNotFound = StatusCode::ErrorCommonEncryptionProfileNotFound;
@@ -29,6 +28,7 @@ NSInteger const LCPErrorOpeningContentProviderCertificateNotVerified = StatusCod
 NSInteger const LCPErrorOpeningContentProviderCertificateRevoked = StatusCode::ErrorOpeningContentProviderCertificateRevoked;
 NSInteger const LCPErrorOpeningContentProviderCertificateNotStarted = StatusCode::ErrorOpeningContentProviderCertificateNotStarted;
 NSInteger const LCPErrorOpeningContentProviderCertificateExpired = StatusCode::ErrorOpeningContentProviderCertificateExpired;
+NSInteger const LCPErrorOpeningDuplicateLicenseInstance = StatusCode::ErrorOpeningDuplicateLicenseInstance;
 NSInteger const LCPErrorAcquisitionNoAcquisitionLink = StatusCode::ErrorAcquisitionNoAcquisitionLink;
 NSInteger const LCPErrorAcquisitionPublicationCorrupted = StatusCode::ErrorAcquisitionPublicationCorrupted;
 NSInteger const LCPErrorAcquisitionPublicationWrongType = StatusCode::ErrorAcquisitionPublicationWrongType;

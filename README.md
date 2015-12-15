@@ -82,13 +82,13 @@ The owner of the License instance is the LCP Service that created it. And the sa
 You can take profit of that to have different components of your application using the same License object. For example, the Readium Content Filter will open a License using the shared LCP Service, but will not try to decrypt it since it doesn't have any way to prompt the User for the passphrase. It is the host app that should ask the user for his passphrase, if needed, and decrypt the shared License instance.
 
 ### Thread Safety
-The library is thread-safe. The IValueIterator, IReadableStream, IWritableStream implementations are not thread-safe. They must be used only by one thread at a time.
+The library is thread-safe. The `IValueIterator`, `IReadableStream`, `IWritableStream` implementations are not thread-safe. They must be used only by one thread at a time.
 
 ### Ownership Strategy
-All the methods with 'Create' prefix impelement the Factory Method pattern. The client of such methods takes owenership of the returned pointer. Other methods just use pointers until the ILcpService instance is alive.
+All the methods with `Create` prefix implement the Factory Method pattern. The client of such methods takes ownership of the returned pointer. Other methods just use pointers owned by the `ILcpService` instance.
 
 ### Error Handling Strategy
-The library returns the lcp::Status object to notify the client about the LCP-specific error. In other cases, when some error occurs inside of the library, the STL exceptions may be thrown.
+The library returns the `Status` object to notify the client about LCP-specific errors. In other cases, when some error occurs inside of the library, STL exceptions may be thrown.
 
 ## Attributions
 
