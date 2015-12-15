@@ -6,24 +6,21 @@
 
 #include <gtest/gtest.h>
 #include "public/lcp.h"
+#include "TestInfo.h"
 #include "AesCbcSymmetricAlgorithm.h"
 #include "DecryptionContextImpl.h"
 
 namespace lcptest
 {
-    const unsigned char contentKey[] =
-    { 0xe5, 0x42, 0xdb, 0x50, 0xa5, 0xa8, 0x89, 0x68, 0x4f, 0xa8, 0x14, 0x01, 0xc0, 0x42, 0x80, 0x3a,
-      0xd7, 0x4a, 0xf6, 0xfe, 0x3f, 0x27, 0xfb, 0x11, 0x1b, 0x30, 0x0a, 0x44, 0x34, 0xf8, 0xb2, 0x5d };
-
     class AesCbcRangedDecryptionTest : public ::testing::Test
     {
     protected:
         void SetUp()
         {
-            m_key.assign(contentKey, contentKey + sizeof(contentKey) / sizeof(contentKey[0]));
+            m_key.assign(TestContentKey, TestContentKey + sizeof(TestContentKey) / sizeof(TestContentKey[0]));
 
             m_file.reset(
-                m_fsProvider.GetFile("..\\..\\..\\src\\testing-data\\moby-dick-20120118.epub\\OPS\\chapter_001.xhtml",
+                m_fsProvider.GetFile("..\\..\\..\\test\\lcp-client-lib\\data\\moby-dick-20120118.epub\\OPS\\chapter_001.xhtml",
                     lcp::IFileSystemProvider::ReadOnly)
                 );
 
@@ -378,5 +375,49 @@ namespace lcptest
         decryptedBuffer.resize(outSize);
 
         ASSERT_STREQ(decryptedBuffer.c_str(), decrypted.c_str());
+    }
+
+    TEST(AesCbcOneShotDecryptionTest, XhtmlFileDecrypt)
+    {
+        lcp::KeyType key(TestContentKey, TestContentKey + sizeof(TestContentKey) / sizeof(TestContentKey[0]));
+        lcp::AesCbcSymmetricAlgorithm aesCbc(key);
+
+        std::fstream encryptedFile("..\\..\\..\\test\\lcp-client-lib\\data\\moby-dick-20120118.epub\\OPS\\chapter_001.xhtml", std::ios::in | std::ios::binary);
+        std::string encryptedFileStr(
+            (std::istreambuf_iterator<char>(encryptedFile)),
+            std::istreambuf_iterator<char>()
+            );
+
+        std::vector<unsigned char> decrypted(encryptedFileStr.size());
+        size_t outSize = aesCbc.Decrypt(
+            reinterpret_cast<const unsigned char *>(encryptedFileStr.data()),
+            encryptedFileStr.size(),
+            decrypted.data(),
+            decrypted.size()
+            );
+
+        decrypted.resize(outSize);
+        std::string decryptedStr(decrypted.begin(), decrypted.end());
+
+        std::fstream decryptedFile("..\\..\\..\\test\\lcp-client-lib\\data\\chapter_001_decrypted.xhtml", std::ios::in | std::ios::binary);
+        std::string decryptedFileStr(
+            (std::istreambuf_iterator<char>(decryptedFile)),
+            std::istreambuf_iterator<char>()
+            );
+
+        ASSERT_STREQ(decryptedFileStr.c_str(), decryptedStr.c_str());
+
+        decryptedFile.close();
+        encryptedFile.close();
+    }
+
+    TEST(AesCbcBase64DecryptionTest, UserKeyCheckDecrypt)
+    {
+        lcp::KeyType key(TestUserKey, TestUserKey + sizeof(TestUserKey) / sizeof(TestUserKey[0]));
+        lcp::AesCbcSymmetricAlgorithm aesCbc(key);
+
+        std::string id = aesCbc.Decrypt("XW3MtvGZrWe74uhsrPRVki0eSDTTtM2x+g6YIA8BSObfWEeaLRRkoxGOgRuEcsnT2Fphhs5rB2xW8NI+mnHlIg==");
+
+        ASSERT_STREQ("df09ac25-a386-4c5c-b167-33ce4c36ca65", id.c_str());
     }
 }

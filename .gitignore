@@ -41,6 +41,7 @@ bld/
 [Bb]in/
 [Oo]bj/
 ipch/
+.vs/
 
 
 # Windows

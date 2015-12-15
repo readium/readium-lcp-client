@@ -304,9 +304,6 @@
     <ClCompile Include="..\..\..\src\lcp-client-lib\RightsService.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\lcp-client-lib\SymmetricAlgorithmEncryptedStream.cpp">
-      <Filter>Source Files\Crypto</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\lcp-client-lib\AesCbcSymmetricAlgorithm.cpp">
       <Filter>Source Files\Crypto\Cryptopp</Filter>
     </ClCompile>
@@ -345,6 +342,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\lcp-client-lib\CrlUpdater.cpp">
       <Filter>Source Files\Crypto</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\lcp-client-lib\SymmetricAlgorithmEncryptedStream.cpp">
+      <Filter>Source Files\Crypto\Cryptopp</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

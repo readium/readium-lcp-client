@@ -89,7 +89,7 @@ int main(int argc, char ** argv)
                 "sRUY0rGxLlw403f3YtAG/ohzt5i8DKiKUG3YAnwRbL/VzXLZaHru7XBC40wmKefKqoA0RHyNEddXgtY/aXzOlfTvp+xirop+D4DwJIbaj8"
                 "/wHKWYGBucA/VgGY7JeSYYTUSuz2RoYtjPNRELIXN8A+D+nkJ3dxdFQ6jFfVfahN3nCIgRqRIOt1KaNI39CShccCaWJ5DeSASLXLPcEjrTi"
                 "/pyDzC4kLF0VjHYlKT7lq5RkMO6GeC+7YFvJtAyssM2nqunA2lUgyQHb1q4Ih/dcYOACubtBwW0ITpHz8N7eO+r1dtH/BF4yxeWl6p5kGLvuPXNU21ThgA==\","
-                "\"value\" : \"q/3IInic9c/EaJHyG1Kkqk5v1zlJNsiQBmxz4lykhyD3dA2jg2ZzrOenYU9GxP/xhe5H5Kt2WaJ/hnt8+GWrEx1QOwnNE"
+                "\"value\":\"q/3IInic9c/EaJHyG1Kkqk5v1zlJNsiQBmxz4lykhyD3dA2jg2ZzrOenYU9GxP/xhe5H5Kt2WaJ/hnt8+GWrEx1QOwnNE"
                 "ij5CmIpZ63yRNKnFS5rSRnDMYmQT/fkUYco7BUi7MPPU6OFf4+kaToNWl8m/ZlMxDcS3BZnVhSEKzUNQn1f2y3sUcXjes7wHbImDc6dRthbL"
                 "/E+assh5HEqakrDuA4lM8XNfukEYQJnivqhqMLOGM33RnS5nZKrPPK/c2F/vGjJffSrlX3W3Jlds0/MZ6wtVeKIugR06c56V6+qKsnMLAQJa"
                 "eOxxBXmbFdAEyplP9irn4D9tQZKqbbMIw==\""
@@ -130,7 +130,7 @@ int main(int argc, char ** argv)
             return 0;
         }
 
-        std::fstream mobyDickLicenseFile("..\\..\\..\\src\\testing-data\\moby-dick-20120118.epub\\META-INF\\license.lcpl");
+        std::fstream mobyDickLicenseFile("..\\..\\..\\test\\lcp-client-lib\\data\\moby-dick-20120118.epub\\META-INF\\license.lcpl");
         std::string mobyDickLicenseStr(
             (std::istreambuf_iterator<char>(mobyDickLicenseFile)),
             std::istreambuf_iterator<char>()
@@ -166,7 +166,7 @@ int main(int argc, char ** argv)
         }
 
         // One-shot decryption
-        std::fstream encryptedFile("..\\..\\..\\src\\testing-data\\moby-dick-20120118.epub\\OPS\\chapter_001.xhtml", std::ios::in | std::ios::binary);
+        std::fstream encryptedFile("..\\..\\..\\test\\lcp-client-lib\\data\\moby-dick-20120118.epub\\OPS\\chapter_001.xhtml", std::ios::in | std::ios::binary);
         std::string encryptedFileStr(
             (std::istreambuf_iterator<char>(encryptedFile)),
             std::istreambuf_iterator<char>()
@@ -193,7 +193,7 @@ int main(int argc, char ** argv)
 
         //Ranged decryption
         std::unique_ptr<lcp::IFile> file(fsProvider.GetFile(
-            "..\\..\\..\\src\\testing-data\\moby-dick-20120118.epub\\OPS\\chapter_001.xhtml",
+            "..\\..\\..\\test\\lcp-client-lib\\data\\moby-dick-20120118.epub\\OPS\\chapter_001.xhtml",
             lcp::IFileSystemProvider::ReadOnly)
             );
 

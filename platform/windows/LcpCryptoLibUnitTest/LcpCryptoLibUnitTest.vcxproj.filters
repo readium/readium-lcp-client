@@ -27,9 +27,21 @@
     <ClCompile Include="..\..\..\test\lcp-client-lib\tests\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\test\lcp-client-lib\tests\Sha256HashAlgorithmTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\lcp-client-lib\tests\JsonCanonicalizerTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\lcp-client-lib\tests\LcpServiceTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\test\lcp-client-lib\tests\TestUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\test\lcp-client-lib\tests\TestInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

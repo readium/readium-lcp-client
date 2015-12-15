@@ -96,7 +96,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../../../src/lcp-client-lib;../../../src/third-parties/gtest/include;../../../src/third-parties</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../src/lcp-client-lib;../../../src/third-parties/gtest/include;../../../src/third-parties;../../../test/lcp-client-lib/tools</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -115,7 +115,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../../../src/lcp-client-lib;../../../src/third-parties/gtest/include;../../../src/third-parties</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../src/lcp-client-lib;../../../src/third-parties/gtest/include;../../../src/third-parties;../../../test/lcp-client-lib/tools</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -136,7 +136,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../../../src/lcp-client-lib;../../../src/third-parties/gtest/include;../../../src/third-parties</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../src/lcp-client-lib;../../../src/third-parties/gtest/include;../../../src/third-parties;../../../test/lcp-client-lib/tools</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -159,7 +159,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../../../src/lcp-client-lib;../../../src/third-parties/gtest/include;../../../src/third-parties</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../../src/lcp-client-lib;../../../src/third-parties/gtest/include;../../../src/third-parties;../../../test/lcp-client-lib/tools</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -180,6 +180,12 @@
     <ProjectReference Include="..\..\..\src\third-parties\gtest\msvc\gtest.vcxproj">
       <Project>{c8f6c172-56f2-4e76-b5fa-c3b423b31be7}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\src\third-parties\ziplib\Source\ZipLib\extlibs\zlib\zlib_cryptolib.vcxproj">
+      <Project>{baeb16b3-db4c-432f-9e6a-2acadea0691d}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\src\third-parties\ziplib\Source\ZipLib\ZipLib_CryptoLib.vcxproj">
+      <Project>{5c9fd859-ddf9-4510-8397-b329b0ae8c48}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\LcpCryptoLib\LcpCryptoLib.vcxproj">
       <Project>{260b5bb3-0bef-4dc9-ac6f-e848ff487b2b}</Project>
     </ProjectReference>
@@ -188,9 +194,13 @@
     <ClCompile Include="..\..\..\test\lcp-client-lib\tests\AesCbcSymmetricAlgorithmTest.cpp" />
     <ClCompile Include="..\..\..\test\lcp-client-lib\tests\CertificateTest.cpp" />
     <ClCompile Include="..\..\..\test\lcp-client-lib\tests\DateTimeTest.cpp" />
+    <ClCompile Include="..\..\..\test\lcp-client-lib\tests\JsonCanonicalizerTest.cpp" />
+    <ClCompile Include="..\..\..\test\lcp-client-lib\tests\LcpServiceTest.cpp" />
     <ClCompile Include="..\..\..\test\lcp-client-lib\tests\main.cpp" />
+    <ClCompile Include="..\..\..\test\lcp-client-lib\tests\Sha256HashAlgorithmTest.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\test\lcp-client-lib\tests\TestInfo.h" />
     <ClInclude Include="..\..\..\test\lcp-client-lib\tests\TestUtils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
