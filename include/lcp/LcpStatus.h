@@ -24,8 +24,6 @@ namespace lcp
             //
             // No Error
             ErrorCommonSuccess,
-            // Unknown error
-            ErrorCommonFail,
             // No NetProvider implementation has been given.
             ErrorCommonNoNetProvider,
             // No StorageProvider implementation has been given.
@@ -67,6 +65,8 @@ namespace lcp
             ErrorOpeningContentProviderCertificateNotStarted,
             // The Content Provider Certificate is expired
             ErrorOpeningContentProviderCertificateExpired,
+            // Trying to save duplicate license instance while opening
+            ErrorOpeningDuplicateLicenseInstance,
 
             //
             // Errors when acquiring a protected publication from a License.

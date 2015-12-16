@@ -12,7 +12,6 @@ extern NSString *const LCPErrorExtensionKey;
 // Not an enum because these are actually aliases to the C++ enum values.
 // We don't want to compile this header as an Objective-C++ file.
 // @see LcpStatus.h for documentation
-extern NSInteger const LCPErrorCommonFail;
 extern NSInteger const LCPErrorCommonNoNetProvider;
 extern NSInteger const LCPErrorCommonNoStorageProvider;
 extern NSInteger const LCPErrorCommonEncryptionProfileNotFound;
@@ -29,6 +28,7 @@ extern NSInteger const LCPErrorOpeningContentProviderCertificateNotVerified;
 extern NSInteger const LCPErrorOpeningContentProviderCertificateRevoked;
 extern NSInteger const LCPErrorOpeningContentProviderCertificateNotStarted;
 extern NSInteger const LCPErrorOpeningContentProviderCertificateExpired;
+extern NSInteger const LCPErrorOpeningDuplicateLicenseInstance;
 extern NSInteger const LCPErrorAcquisitionNoAcquisitionLink;
 extern NSInteger const LCPErrorAcquisitionPublicationCorrupted;
 extern NSInteger const LCPErrorAcquisitionPublicationWrongType;
