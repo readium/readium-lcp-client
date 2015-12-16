@@ -36,12 +36,24 @@
     <ClCompile Include="..\..\..\test\lcp-client-lib\tests\LcpServiceTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\test\lcp-client-lib\tests\RightsServiceTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\test\lcp-client-lib\tests\CryptoppCryptoProviderTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\test\lcp-client-lib\tests\TestUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\test\lcp-client-lib\tests\TestInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\test\lcp-client-lib\tests\FakeLicenseImpl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\test\lcp-client-lib\tests\FakeCryptoImpl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

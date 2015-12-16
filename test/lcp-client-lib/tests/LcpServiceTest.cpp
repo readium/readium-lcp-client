@@ -1,3 +1,9 @@
+//
+//  Created by Artem Brazhnikov on 11/15.
+//  Copyright © 2015 Mantano. All rights reserved.
+//  Any commercial use is strictly prohibited.
+//
+
 #include <memory>
 #include <gtest/gtest.h>
 #include "public/lcp.h"
@@ -6,18 +12,35 @@
 
 namespace lcptest
 {
-    TEST(LcpServiceTest, LcpServiceOpen)
+    class LcpServiceTest : public ::testing::Test
     {
-        TestStorageProvider storageProvider("..\\..\\..\\src\\testing-data\\storage.json");
-        lcp::DefaultFileSystemProvider fsProvider;
+    protected:
+        void SetUp()
+        {
+            m_storageProvider.reset(new TestStorageProvider("storage.json", true));
 
-        lcp::ILcpService * lcpServiceRaw = nullptr;
-        lcp::LcpServiceCreator creator;
-        lcp::Status res = creator.CreateLcpService(TestRootCertificate, nullptr, &storageProvider, nullptr, &lcpServiceRaw);
-        std::unique_ptr<lcp::ILcpService> lcpService(lcpServiceRaw);
+            lcp::ILcpService * lcpServiceRaw = nullptr;
+            lcp::LcpServiceCreator creator;
+            lcp::Status res = creator.CreateLcpService(TestRootCertificate, nullptr, m_storageProvider.get(), nullptr, &lcpServiceRaw);
+            if (!lcp::Status::IsSuccess(res))
+            {
+                throw std::runtime_error("can not create ILcpService");
+            }
+            m_lcpService.reset(lcpServiceRaw);
+        }
+        void TearDown()
+        {
+            m_lcpService.reset();
+        }
 
-        ASSERT_EQ(lcp::StatusCode::ErrorCommonSuccess, res.Code);
+    protected:
+        lcp::DefaultFileSystemProvider m_fsProvider;
+        std::unique_ptr<TestStorageProvider> m_storageProvider;
+        std::unique_ptr<lcp::ILcpService> m_lcpService;
+    };
 
+    TEST_F(LcpServiceTest, LcpServiceOpen_CheckLicenseParsing)
+    {
         std::fstream mobyDickLicenseFile("..\\..\\..\\test\\lcp-client-lib\\data\\moby-dick-20120118.epub\\META-INF\\license.lcpl");
         std::string mobyDickLicenseStr(
             (std::istreambuf_iterator<char>(mobyDickLicenseFile)),
@@ -25,8 +48,9 @@ namespace lcptest
             );
 
         lcp::ILicense * license = nullptr;
-        res = lcpService->OpenLicense(mobyDickLicenseStr, &license);
+        lcp::Status res = m_lcpService->OpenLicense(mobyDickLicenseStr, &license);
         ASSERT_EQ(lcp::StatusCode::ErrorCommonSuccess, res.Code);
+
 
         ASSERT_STREQ(TestCanonicalJson.c_str(), license->CanonicalContent().c_str());
         ASSERT_STREQ("df09ac25-a386-4c5c-b167-33ce4c36ca65", license->Id().c_str());
@@ -69,5 +93,21 @@ namespace lcptest
         std::string editRightVal;
         ASSERT_TRUE(license->Rights()->GetRightValue("edit", editRightVal));
         ASSERT_STREQ("false", editRightVal.c_str());
+    }
+
+    TEST_F(LcpServiceTest, LcpServiceOpen_DecryptLicense)
+    {
+        std::fstream mobyDickLicenseFile("..\\..\\..\\test\\lcp-client-lib\\data\\moby-dick-20120118.epub\\META-INF\\license.lcpl");
+        std::string mobyDickLicenseStr(
+            (std::istreambuf_iterator<char>(mobyDickLicenseFile)),
+            std::istreambuf_iterator<char>()
+            );
+
+        lcp::ILicense * license = nullptr;
+        lcp::Status res = m_lcpService->OpenLicense(mobyDickLicenseStr, &license);
+        ASSERT_EQ(lcp::StatusCode::ErrorCommonSuccess, res.Code);
+
+        res = m_lcpService->DecryptLicense(license, "White whales are huge!");
+        ASSERT_EQ(lcp::StatusCode::ErrorCommonSuccess, res.Code);
     }
 }

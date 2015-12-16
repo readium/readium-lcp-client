@@ -17,6 +17,7 @@ namespace lcp
     {
         std::string id;
         std::string content;
+        std::string canonicalContent;
         std::string issued;
         std::string provider;
         std::string updated;
@@ -68,7 +69,6 @@ namespace lcp
         ILinks * m_links;
         IUser * m_user;
         IRights * m_rights;
-        std::string m_licenseJson;
         bool m_decrypted;
         std::unique_ptr<IKeyProvider> m_keyProvider;
     };

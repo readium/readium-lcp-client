@@ -88,7 +88,13 @@ namespace lcp
         {
             return value;
         }
-        return std::string();
+        else
+        {
+            return m_storageProvider->GetValue(
+                LicenseRightsVaultId,
+                this->BuildStorageProviderRightsKey(license, rightId)
+                );
+        }
     }
 
     std::string RightsService::BuildStorageProviderRightsKey(ILicense * license, const std::string & rightId) const

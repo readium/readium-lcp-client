@@ -193,13 +193,17 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\test\lcp-client-lib\tests\AesCbcSymmetricAlgorithmTest.cpp" />
     <ClCompile Include="..\..\..\test\lcp-client-lib\tests\CertificateTest.cpp" />
+    <ClCompile Include="..\..\..\test\lcp-client-lib\tests\CryptoppCryptoProviderTest.cpp" />
     <ClCompile Include="..\..\..\test\lcp-client-lib\tests\DateTimeTest.cpp" />
     <ClCompile Include="..\..\..\test\lcp-client-lib\tests\JsonCanonicalizerTest.cpp" />
     <ClCompile Include="..\..\..\test\lcp-client-lib\tests\LcpServiceTest.cpp" />
     <ClCompile Include="..\..\..\test\lcp-client-lib\tests\main.cpp" />
+    <ClCompile Include="..\..\..\test\lcp-client-lib\tests\RightsServiceTest.cpp" />
     <ClCompile Include="..\..\..\test\lcp-client-lib\tests\Sha256HashAlgorithmTest.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\test\lcp-client-lib\tests\FakeCryptoImpl.h" />
+    <ClInclude Include="..\..\..\test\lcp-client-lib\tests\FakeLicenseImpl.h" />
     <ClInclude Include="..\..\..\test\lcp-client-lib\tests\TestInfo.h" />
     <ClInclude Include="..\..\..\test\lcp-client-lib\tests\TestUtils.h" />
   </ItemGroup>

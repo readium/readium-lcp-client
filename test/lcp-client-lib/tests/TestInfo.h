@@ -1,3 +1,9 @@
+//
+//  Created by Artem Brazhnikov on 11/15.
+//  Copyright © 2015 Mantano. All rights reserved.
+//  Any commercial use is strictly prohibited.
+//
+
 #ifndef __TEST_INFO_H__
 #define __TEST_INFO_H__
 
@@ -12,6 +18,86 @@ namespace lcptest
     static const unsigned char TestContentKey[] =
     { 0xe5, 0x42, 0xdb, 0x50, 0xa5, 0xa8, 0x89, 0x68, 0x4f, 0xa8, 0x14, 0x01, 0xc0, 0x42, 0x80, 0x3a,
         0xd7, 0x4a, 0xf6, 0xfe, 0x3f, 0x27, 0xfb, 0x11, 0x1b, 0x30, 0x0a, 0x44, 0x34, 0xf8, 0xb2, 0x5d };
+
+    const char TestLicenseFromSpec[] =
+        u8"{ \"id\": \"ef15e740-697f-11e3-949a-0800200c9a66\","
+        "\"issued\": \"2013-11-04T01:08:15+01:00\","
+        "\"updated\": \"2014-02-21T09:44:17+01:00\","
+        "\"provider\": \"http://www.imaginaryebookretailer.com\","
+        "\"encryption\": {"
+        "\"profile\": \"http://readium.org/lcp/profile-1.0\","
+        "\"content_key\": {"
+        "\"encrypted_value\": \"/k8RpXqf4E2WEunCp76E8PjhS051NXwAXeTD1ioazYxCRGvHLAck/KQ3cCh5JxDmCK0nRLyAxs1X0aA3z55boQ==\","
+        "\"algorithm\": \"http://www.w3.org/2001/04/xmlenc#aes256-cbc\""
+        "},"
+        "\"user_key\": {"
+        "\"text_hint\": \"Enter your email address\","
+        "\"algorithm\": \"http://www.w3.org/2001/04/xmlenc#sha256\","
+        "\"key_check\": \"jJEjUDipHK3OjGt6kFq7dcOLZuicQFUYwQ+TYkAIWKm6Xv6kpHFhF7LOkUK/Owww\""
+        "}"
+        "},"
+        "\"links\": {"
+        "\"publication\": {"
+        "\"href\": \"http://www.example.com/file.epub\","
+        "\"type\" : \"application/epub+zip\","
+        "\"length\" : \"\","
+        "\"hash\" : \"\""
+        "},"
+        "\"hint\": {"
+        "\"href\": \"http://www.example.com/passphraseHint?user_id=1234\","
+        "\"type\" : \"text/html\""
+        "},"
+        "\"http://mylcpextension.com/authentication\" : {"
+        "\"href\": \"http://www.example.com/authenticateMe\","
+        "\"title\" : \"Authentication service\","
+        "\"type\" : \"application/vnd.myextension.authentication+json\""
+        "},"
+        "\"http://mylcpextension.com/book_recommendations\" : ["
+        "{"
+        "\"href\": \"http://www.example.com/recommended/1\","
+        "\"type\" : \"text/html\""
+        "},"
+        "{"
+        "\"href\": \"http://www.example.com/recommended/1.opds\","
+        "\"type\" : \"application/atom+xml; profile=opds-catalog; kind=acquisition\""
+        "}"
+        "]"
+        "},"
+        "\"rights\": {"
+        "\"print\": 0,"
+        "\"copy\" : 2048,"
+        "\"tts\" : true,"
+        "\"start\" : \"2013-11-04T01:08:15+01:00\","
+        "\"end\" : \"2016-11-25T01:08:15+01:00\","
+        "\"http://www.imaginaryebookretailer.com/lcp/rights/tweet\" : true,"
+        "\"http://www.imaginaryebookretailer.com/lcp/rights/tweet234\" : 2.4894324894e-5,"
+        "\"http://www.imaginaryebookretailer.com/lcp/rights/tweet234546\" : 0e-5,"
+        "\"http://www.imaginaryebookretailer.com/lcp/rights/tweet2345463453\" : \"Hello world!\""
+        "},"
+        "\"user\": {"
+        "\"id\": \"d9f298a7-7f34-49e7-8aae-4378ecb1d597\","
+        "\"email\" : \"EnCt2b8c6d2afd94ae4ed201b27049d8ce1afe31a90ceb8c6d2afd94ae4ed201b2704RjkaXRveAAarHwdlID1KCIwEmS\","
+        "\"encrypted\" : [\"email\"],"
+        "\"http://www.imaginaryebookretailer.com/lcp/user/language\" : \"tlh\""
+        "},"
+        "\"signature\": {"
+        "\"algorithm\": \"http://www.w3.org/2001/04/xmldsig-more#rsa-sha256\","
+        "\"certificate\" : \"MIIDEjCCAfoCCQDwMOjkYYOjPjANBgkqhkiG9w0BAQUFADBLMQswCQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZ"
+        "vcm5pYTETMBEGA1UEBxMKRXZlcnl3aGVyZTESMBAGA1UEAxMJbG9jYWxob3N0MB4XDTE0MDEwMjIxMjYxNloXDTE1MDEwMjIxMjYxNlowS"
+        "zELMAkGA1UEBhMCVVMxEzARBgNVBAgTCkNhbGlmb3JuaWExEzARBgNVBAcTCkV2ZXJ5d2hlcmUxEjAQBgNVBAMTCWxvY2FsaG9zdDCCASI"
+        "wDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAOpCRECG7icpf0H37kuAM7s42oqggBoikoTpo5yapy+s5eFSp8HSqwhIYgZ4SghNLkj3e"
+        "652SALav7chyZ2vWvitZycY+aq50n5UTTxDvdwsC5ZNeTycuzVWZALKGhV7VUPEhtWZNm0gruntronNa8l2WS0aF7P5SbhJ65SDQGprFFa"
+        "YOSyN6550P3kqaAO7tDddcA1cmuIIDRf8tOIIeMkBFk1Qf+lh+3uRP2wztOTECSMRxX/hIkCe5DRFDK2MuDUyc/iY8IbY0hMFFGw5J7MWO"
+        "wZLBOaZHX+Lf5lOYByPbMH78O0dda6T+tLYAVzsmJdHJFtaRguCaJVtSXKQUAMCAwEAATANBgkqhkiG9w0BAQUFAAOCAQEAi9HIM+FMfqX"
+        "sRUY0rGxLlw403f3YtAG/ohzt5i8DKiKUG3YAnwRbL/VzXLZaHru7XBC40wmKefKqoA0RHyNEddXgtY/aXzOlfTvp+xirop+D4DwJIbaj8"
+        "/wHKWYGBucA/VgGY7JeSYYTUSuz2RoYtjPNRELIXN8A+D+nkJ3dxdFQ6jFfVfahN3nCIgRqRIOt1KaNI39CShccCaWJ5DeSASLXLPcEjrTi"
+        "/pyDzC4kLF0VjHYlKT7lq5RkMO6GeC+7YFvJtAyssM2nqunA2lUgyQHb1q4Ih/dcYOACubtBwW0ITpHz8N7eO+r1dtH/BF4yxeWl6p5kGLvuPXNU21ThgA==\","
+        "\"value\":\"q/3IInic9c/EaJHyG1Kkqk5v1zlJNsiQBmxz4lykhyD3dA2jg2ZzrOenYU9GxP/xhe5H5Kt2WaJ/hnt8+GWrEx1QOwnNE"
+        "ij5CmIpZ63yRNKnFS5rSRnDMYmQT/fkUYco7BUi7MPPU6OFf4+kaToNWl8m/ZlMxDcS3BZnVhSEKzUNQn1f2y3sUcXjes7wHbImDc6dRthbL"
+        "/E+assh5HEqakrDuA4lM8XNfukEYQJnivqhqMLOGM33RnS5nZKrPPK/c2F/vGjJffSrlX3W3Jlds0/MZ6wtVeKIugR06c56V6+qKsnMLAQJa"
+        "eOxxBXmbFdAEyplP9irn4D9tQZKqbbMIw==\""
+        "}"
+        "}";
 
     static std::string TestCanonicalJson = u8"{\"encryption\":{\"content_key\":{\"algorithm\":\"http://www.w3.org/2001/04/xmlenc#aes256-cbc\","
         "\"encrypted_value\":\"7GMxrWNzUFpcwRNhclNECE3ZxvODsBt13N52zBoWdd6lQSNITVEJBXKxencovnPBBthBgE/6UE3sEmZYSfMrkQ==\"},\"profile\""
@@ -98,6 +184,24 @@ namespace lcptest
         "PUid4j29U3q10SGFF6cCt1DzjvUcCwHGhHA02Men70EgZFADPLWmLg0HglKUh1iZ"
         "WcBGtev/8VsUijyjsM072C6Ut5TwNyrrthb952+eKlmxLNgT0o5hVYxjXhtwLQsL"
         "7QZhrypAM1DLYqQjkiDI7hlvt7QuDGTJ";
+
+    static std::string TestSsDotComCertificate = "MIIC/TCCAeWgAwIBAgIJAJLEh2Aa2YxXMA0GCSqGSIb3DQEBBQUAMBUxEzARBgNV"
+        "BAMMCnd3dy5zcy5jb20wHhcNMTUxMTE2MDAxODA1WhcNMjUxMTEzMDAxODA1WjAV"
+        "MRMwEQYDVQQDDAp3d3cuc3MuY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIB"
+        "CgKCAQEAsVmlGwn1FsIvJIunadrnxCPnH8/BClckac4wPy2RKCb+dhIso4WbSHoQ"
+        "qJql2BOm4GyEpYbRgnhQYca9sfbdU3n6aCm+TIDLOPLYfjLSwk84aCGsansc7QDb"
+        "YaUciktjVIp330DcJ0jHBoM3d2b5V/ldebp3z4uEZAscU6fRusb9qtOcBArz7xiz"
+        "ek1m/fgWKAgVEkAtpEFxVqFXjqs3doRlIYP6IIWbPDPaKXYVmeCUNrMzcltdX1sQ"
+        "/BpMWzDzDb/OMk0inejVY9vU16GFOkvRQ0vbPUUSVX995plFD6LaAzd16k9DogOj"
+        "5pAYQiGoR2/HwzlosWfBwBSoriN2XwIDAQABo1AwTjAdBgNVHQ4EFgQUSCshmgKI"
+        "zoGC/hDbLb25TN+QtIAwHwYDVR0jBBgwFoAUSCshmgKIzoGC/hDbLb25TN+QtIAw"
+        "DAYDVR0TBAUwAwEB/zANBgkqhkiG9w0BAQUFAAOCAQEAGlc5qh9n8wlCtsRNb7tP"
+        "3oHpUBFANlXXxuA1LtZDWMXzIkdE0vVFjPMnbOAtFEL8Hgu2y+GSHFDYnmcKKdlw"
+        "+4LjTzROTiHUHlSwgf/vU0sdexJCuhUrEtlPe9PJ+hWx8zdVMrS0rD4+NAm+ViEr"
+        "O+7XogSPE7r4J+uL4d53K5xNGynEMcICiPzw2zk/cQFU8qFvcKOR9ngedcbkFrAM"
+        "TQt13/Y3BrjQRrC62bHfu8bmqvaX/XAeTl+RzQGqW5th9MaENAPUd2I1djniW4iK"
+        "xX9g8wbHWzzOdVxDgG1oguG1R7WwpZ+Lil8mMrcLwI2Q9kOWAP/MWCGJuJuToT1k"
+        "dw==";
 }
 
 #endif //__TEST_INFO_H__

@@ -23,14 +23,14 @@ namespace lcp
         IUser * user,
         IRights * rights
         )
-        : m_licenseJson(licenseJson)
-        , m_crypto(crypto)
+        : m_crypto(crypto)
         , m_links(links)
         , m_user(user)
         , m_rights(rights)
         , m_decrypted(false)
     {
-        m_rootInfo.content = canonicalJson;
+        m_rootInfo.content = licenseJson;
+        m_rootInfo.canonicalContent = canonicalJson;
     }
 
     std::string RootLcpNode::Id() const
@@ -40,12 +40,12 @@ namespace lcp
 
     std::string RootLcpNode::CanonicalContent() const
     {
-        return m_rootInfo.content;
+        return m_rootInfo.canonicalContent;
     }
 
     std::string RootLcpNode::OriginalContent() const
     {
-        return m_licenseJson;
+        return m_rootInfo.content;
     }
 
     std::string RootLcpNode::Issued() const
@@ -134,7 +134,7 @@ namespace lcp
     void RootLcpNode::ParseNode(const rapidjson::Value & parentObject, JsonValueReader * reader)
     {
         rapidjson::Document rootObject;
-        if (rootObject.Parse<rapidjson::kParseValidateEncodingFlag>(m_licenseJson.data()).HasParseError())
+        if (rootObject.Parse<rapidjson::kParseValidateEncodingFlag>(m_rootInfo.content.data()).HasParseError())
         {
             throw StatusException(JsonValueReader::CreateRapidJsonError(
                 rootObject.GetParseError(), rootObject.GetErrorOffset())
