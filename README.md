@@ -88,7 +88,7 @@ The library is thread-safe. The `IValueIterator`, `IReadableStream`, `IWritableS
 All the methods with `Create` prefix implement the Factory Method pattern. The client of such methods takes ownership of the returned pointer. Other methods just use pointers owned by the `ILcpService` instance.
 
 ### Error Handling Strategy
-The library returns the `Status` object to notify the client about LCP-specific errors. In other cases, when some error occurs inside of the library, STL exceptions may be thrown.
+The library returns the `Status` object to notify the client about LCP-specific errors. In other cases, when some error occurs inside of the library, STL exceptions can be thrown.
 
 ## Attributions
 
