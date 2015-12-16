@@ -138,7 +138,6 @@ int main(int argc, char ** argv)
 
         lcp::ILicense * rawLicPtr = nullptr;
         res = lcpService->OpenLicense(mobyDickLicenseStr, &rawLicPtr);
-        //res = lcpService->OpenLicense(jsonLicenseSpec, &rawLicPtr);
         if (!lcp::Status::IsSuccess(res))
         {
             std::cout << "Status: " << res.Code << "; Extension: " << res.Extension << std::endl;

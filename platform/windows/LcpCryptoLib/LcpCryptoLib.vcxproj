@@ -124,6 +124,7 @@
     <ProjectGuid>{260B5BB3-0BEF-4DC9-AC6F-E848FF487B2B}</ProjectGuid>
     <RootNamespace>lcp-client-lib</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <ProjectName>lcp-client-lib</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
