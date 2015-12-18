@@ -122,6 +122,7 @@
 		5AAEF1B01BF9D3FD003CF710 /* utf8.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utf8.h; sourceTree = "<group>"; };
 		5ACE2E1B1BF21D8C00AC0585 /* libLCP-client-iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libLCP-client-iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5ACE2E7D1BF21EBE00AC0585 /* LCP Client.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "LCP Client.xcconfig"; sourceTree = "<group>"; };
+		5AE235571C2453E0000FEB05 /* IncludeMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IncludeMacros.h; sourceTree = "<group>"; };
 		5AF00D001C1F0A58008D0A5E /* LcpContentFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LcpContentFilter.cpp; sourceTree = "<group>"; };
 		5AF00D011C1F0A58008D0A5E /* LcpFilterContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LcpFilterContext.h; sourceTree = "<group>"; };
 		5AF00D021C1F0A58008D0A5E /* LcpSeekableByteStreamAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LcpSeekableByteStreamAdapter.h; sourceTree = "<group>"; };
@@ -529,6 +530,7 @@
 				5AF00D631C1F0A58008D0A5E /* ThreadTimer.h */,
 				5AF00D641C1F0A58008D0A5E /* UserLcpNode.cpp */,
 				5AF00D651C1F0A58008D0A5E /* UserLcpNode.h */,
+				5AE235571C2453E0000FEB05 /* IncludeMacros.h */,
 			);
 			path = "lcp-client-lib";
 			sourceTree = "<group>";

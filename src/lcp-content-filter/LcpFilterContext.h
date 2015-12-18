@@ -7,9 +7,13 @@
 #ifndef __LCP_FILTER_CONTEXT_H__
 #define __LCP_FILTER_CONTEXT_H__
 
+#include "IncludeMacros.h"
 #include "LcpContentFilter.h"
-#include <ePub3/filter.h>
 #include <vector>
+
+READIUM_INCLUDE_START
+#include <ePub3/filter.h>
+READIUM_INCLUDE_END
 
 namespace lcp {
     class LcpFilterContext : public RangeFilterContext

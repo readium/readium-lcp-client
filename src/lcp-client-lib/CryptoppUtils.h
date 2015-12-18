@@ -7,10 +7,14 @@
 #ifndef __CERTIFICATE_UTILS_H__
 #define __CERTIFICATE_UTILS_H__
 
+#include "IncludeMacros.h"
+#include "LcpTypedefs.h"
 #include <string>
+
+CRYPTOPP_INCLUDE_START
 #include <cryptopp/rsa.h>
 #include <cryptopp/secblock.h>
-#include "LcpTypedefs.h"
+CRYPTOPP_INCLUDE_END
 
 using namespace CryptoPP;
 

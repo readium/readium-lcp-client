@@ -4,9 +4,13 @@
 //  Any commercial use is strictly prohibited.
 //
 
-#include <cryptopp/asn.h>
 #include "CertificateRevocationList.h"
 #include "CryptoppUtils.h"
+#include "IncludeMacros.h"
+
+CRYPTOPP_INCLUDE_START
+#include <cryptopp/asn.h>
+CRYPTOPP_INCLUDE_END
 
 using namespace CryptoPP;
 

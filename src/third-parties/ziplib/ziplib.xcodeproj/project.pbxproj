@@ -553,6 +553,7 @@
 				5AA9E0F11C119F19006470DD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

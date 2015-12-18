@@ -7,12 +7,16 @@
 #ifndef __AES_CBC_SYMMETRIC_ALGORITHM_H__
 #define __AES_CBC_SYMMETRIC_ALGORITHM_H__
 
+#include "CryptoAlgorithmInterfaces.h"
+#include "IncludeMacros.h"
+#include "LcpTypedefs.h"
+#include "NonCopyable.h"
+
+CRYPTOPP_INCLUDE_START
 #include <cryptopp/aes.h>
 #include <cryptopp/modes.h>
 #include <cryptopp/filters.h>
-#include "CryptoAlgorithmInterfaces.h"
-#include "NonCopyable.h"
-#include "LcpTypedefs.h"
+CRYPTOPP_INCLUDE_END
 
 namespace lcp
 {

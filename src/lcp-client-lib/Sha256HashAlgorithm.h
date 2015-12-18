@@ -7,9 +7,13 @@
 #ifndef __SHA256_HASH_ALGORITHM_H__
 #define __SHA256_HASH_ALGORITHM_H__
 
-#include <cryptopp/sha.h>
+#include "IncludeMacros.h"
 #include "CryptoAlgorithmInterfaces.h"
 #include "NonCopyable.h"
+
+CRYPTOPP_INCLUDE_START
+#include <cryptopp/sha.h>
+CRYPTOPP_INCLUDE_END
 
 namespace lcp
 {

@@ -4,14 +4,18 @@
 //  Any commercial use is strictly prohibited.
 //
 
-#include <memory>
-#include <sstream>
-#include "ziplib/Source/ZipLib/ZipFile.h"
+#include "public/ILicense.h"
 #include "Acquisition.h"
 #include "DownloadInFileRequest.h"
-#include "LcpUtils.h"
-#include "public/ILicense.h"
+#include "IncludeMacros.h"
 #include "ICryptoProvider.h"
+#include "LcpUtils.h"
+#include <memory>
+#include <sstream>
+
+ZIPLIB_INCLUDE_START
+#include "ziplib/Source/ZipLib/ZipFile.h"
+ZIPLIB_INCLUDE_END
 
 namespace lcp
 {

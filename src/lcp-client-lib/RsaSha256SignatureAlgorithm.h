@@ -7,9 +7,13 @@
 #ifndef __RSA_SHA256_SIGNATURE_ALGORITHM_H__
 #define __RSA_SHA256_SIGNATURE_ALGORITHM_H__
 
-#include <cryptopp/rsa.h>
 #include "CryptoAlgorithmInterfaces.h"
+#include "IncludeMacros.h"
 #include "NonCopyable.h"
+
+CRYPTOPP_INCLUDE_START
+#include <cryptopp/rsa.h>
+CRYPTOPP_INCLUDE_END
 
 namespace lcp
 {

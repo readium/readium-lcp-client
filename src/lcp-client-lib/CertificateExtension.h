@@ -7,9 +7,13 @@
 #ifndef __CERTIFICATE_EXTENSION_H__
 #define __CERTIFICATE_EXTENSION_H__
 
+#include "IncludeMacros.h"
+#include "ICertificate.h"
+
+CRYPTOPP_INCLUDE_START
 #include <cryptopp/cryptlib.h>
 #include <cryptopp/asn.h>
-#include "ICertificate.h"
+CRYPTOPP_INCLUDE_END
 
 namespace lcp
 {

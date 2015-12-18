@@ -12,10 +12,13 @@
 #include "LcpFilterContext.h"
 #include "LcpSeekableByteStreamAdapter.h"
 #include "StreamInterfaces.h"
+
+READIUM_INCLUDE_START
 #include <ePub3/container.h>
 #include <ePub3/filter_manager.h>
 #include <ePub3/package.h>
 #include <ePub3/utilities/byte_stream.h>
+READIUM_INCLUDE_END
 
 #if DEBUG
 #define LOG(msg) std::cout << "LCP: " << msg << std::endl

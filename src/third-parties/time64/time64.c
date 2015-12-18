@@ -39,6 +39,11 @@ gmtime64_r() is a 64-bit equivalent of gmtime_r().
 
 */
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wshorten-64-to-32"
+#pragma clang diagnostic ignored "-Wunreachable-code"
+#pragma clang diagnostic ignored "-Wunused-const-variable"
+
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -828,3 +833,5 @@ char *ctime64( const Time64_T* time ) {
     //tzset();
     return asctime64(localtime64(time));
 }
+
+#pragma clang diagnostic pop

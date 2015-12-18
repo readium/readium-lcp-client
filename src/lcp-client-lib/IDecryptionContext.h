@@ -7,6 +7,8 @@
 #ifndef __I_DECRYPTION_CONTEXT_H__
 #define __I_DECRYPTION_CONTEXT_H__
 
+#include <stdlib.h>
+
 namespace lcp
 {
     struct DecRangeInfo

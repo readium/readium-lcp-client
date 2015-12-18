@@ -7,11 +7,15 @@
 #ifndef __LCP_CONTENT_FILTER_H__
 #define __LCP_CONTENT_FILTER_H__
 
+#include "IncludeMacros.h"
 #include "ILicense.h"
 #include "ILcpService.h"
+
+READIUM_INCLUDE_START
 #include <ePub3/utilities/pointer_type.h>
 #include <ePub3/ePub3.h>
 #include <ePub3/filter.h>
+READIUM_INCLUDE_END
 
 using namespace ePub3;
 using namespace std;

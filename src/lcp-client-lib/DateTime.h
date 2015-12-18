@@ -7,8 +7,8 @@
 #ifndef __DATE_TIME_H__
 #define __DATE_TIME_H__
 
-#include <string>
 #include "time64/time64.h"
+#include <string>
 
 namespace lcp
 {

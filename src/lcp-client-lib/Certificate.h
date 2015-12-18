@@ -7,14 +7,18 @@
 #ifndef __CERTIFICATE_H__
 #define __CERTIFICATE_H__
 
-#include <string>
-#include <cryptopp/rsa.h>
-#include <cryptopp/secblock.h>
-#include "ICertificate.h"
 #include "CertificateExtension.h"
 #include "CrlDistributionPoints.h"
-#include "NonCopyable.h"
+#include "IncludeMacros.h"
+#include "ICertificate.h"
 #include "LcpTypedefs.h"
+#include "NonCopyable.h"
+#include <string>
+
+CRYPTOPP_INCLUDE_START
+#include <cryptopp/rsa.h>
+#include <cryptopp/secblock.h>
+CRYPTOPP_INCLUDE_END
 
 using namespace CryptoPP;
 

@@ -4,21 +4,22 @@
 //  Any commercial use is strictly prohibited.
 //
 
+#include "Certificate.h"
+#include "CryptoAlgorithmInterfaces.h"
+#include "CryptoppUtils.h"
+#include "IncludeMacros.h"
+#include "IEncryptionProfile.h"
+#include "LcpUtils.h"
+
+CRYPTOPP_INCLUDE_START
 #include <cryptopp/cryptlib.h>
 #include <cryptopp/queue.h>
-
 #include <cryptopp/rsa.h>
 #include <cryptopp/sha.h>
 #include <cryptopp/md5.h>
-
 #include <cryptopp/asn.h>
 #include <cryptopp/oids.h>
-
-#include "IEncryptionProfile.h"
-#include "CryptoAlgorithmInterfaces.h"
-#include "Certificate.h"
-#include "CryptoppUtils.h"
-#include "LcpUtils.h"
+CRYPTOPP_INCLUDE_END
 
 using namespace CryptoPP;
 
@@ -162,7 +163,7 @@ namespace lcp
         }
         else if (m_signatureAlgorithmId == md5withRSAEncryption())
         {
-            rootVerifierPtr.reset(new RSASS<PKCS1v15, MD5>::Verifier(publicKey));
+            rootVerifierPtr.reset(new RSASS<PKCS1v15, Weak::MD5>::Verifier(publicKey));
         }
         else
         {

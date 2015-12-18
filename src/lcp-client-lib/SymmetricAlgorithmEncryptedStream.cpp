@@ -4,9 +4,13 @@
 //  Any commercial use is strictly prohibited.
 //
 
-#include <cryptopp/cryptlib.h>
-#include "SymmetricAlgorithmEncryptedStream.h"
+#include "IncludeMacros.h"
 #include "DecryptionContextImpl.h"
+#include "SymmetricAlgorithmEncryptedStream.h"
+
+CRYPTOPP_INCLUDE_START
+#include <cryptopp/cryptlib.h>
+CRYPTOPP_INCLUDE_END
 
 namespace lcp
 {

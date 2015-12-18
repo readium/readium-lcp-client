@@ -4,11 +4,15 @@
 //  Any commercial use is strictly prohibited.
 //
 
+#include "CryptoppUtils.h"
+#include "IncludeMacros.h"
 #include <sstream>
+
+CRYPTOPP_INCLUDE_START
 #include <cryptopp/base64.h>
 #include <cryptopp/hex.h>
 #include <cryptopp/osrng.h>
-#include "CryptoppUtils.h"
+CRYPTOPP_INCLUDE_END
 
 using namespace CryptoPP;
 
