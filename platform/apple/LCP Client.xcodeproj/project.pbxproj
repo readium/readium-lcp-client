@@ -47,6 +47,46 @@
 		5AF00D811C1F0A58008D0A5E /* SymmetricAlgorithmEncryptedStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D601C1F0A58008D0A5E /* SymmetricAlgorithmEncryptedStream.cpp */; };
 		5AF00D821C1F0A58008D0A5E /* ThreadTimer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D621C1F0A58008D0A5E /* ThreadTimer.cpp */; };
 		5AF00D831C1F0A58008D0A5E /* UserLcpNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D641C1F0A58008D0A5E /* UserLcpNode.cpp */; };
+		833882991C5FC728003400CD /* LCPAcquisition.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A0116811C088BA4006F1A6F /* LCPAcquisition.mm */; };
+		8338829A1C5FC728003400CD /* LCPError.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A0116831C088BA4006F1A6F /* LCPError.mm */; };
+		8338829B1C5FC728003400CD /* LCPiOSStorageProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A0116851C088BA4006F1A6F /* LCPiOSStorageProvider.mm */; };
+		8338829C1C5FC728003400CD /* LCPiOSNetProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A6EEB081C0C61CD0003A6DC /* LCPiOSNetProvider.mm */; };
+		8338829D1C5FC728003400CD /* LCPLicense.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A0116871C088BA4006F1A6F /* LCPLicense.mm */; };
+		8338829E1C5FC728003400CD /* LCPService.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A0116891C088BA4006F1A6F /* LCPService.mm */; };
+		8338829F1C5FC728003400CD /* UICKeyChainStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A01168D1C088BA4006F1A6F /* UICKeyChainStore.m */; };
+		833882A01C5FC728003400CD /* LcpContentFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D001C1F0A58008D0A5E /* LcpContentFilter.cpp */; };
+		833882A11C5FC728003400CD /* Acquisition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D061C1F0A58008D0A5E /* Acquisition.cpp */; };
+		833882A21C5FC728003400CD /* AesCbcSymmetricAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D081C1F0A58008D0A5E /* AesCbcSymmetricAlgorithm.cpp */; };
+		833882A31C5FC728003400CD /* AlgorithmNames.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D0A1C1F0A58008D0A5E /* AlgorithmNames.cpp */; };
+		833882A41C5FC728003400CD /* Certificate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D0F1C1F0A58008D0A5E /* Certificate.cpp */; };
+		833882A51C5FC728003400CD /* CertificateExtension.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D111C1F0A58008D0A5E /* CertificateExtension.cpp */; };
+		833882A61C5FC728003400CD /* CertificateRevocationList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D131C1F0A58008D0A5E /* CertificateRevocationList.cpp */; };
+		833882A71C5FC728003400CD /* CrlDistributionPoints.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D161C1F0A58008D0A5E /* CrlDistributionPoints.cpp */; };
+		833882A81C5FC729003400CD /* CrlUpdater.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D181C1F0A58008D0A5E /* CrlUpdater.cpp */; };
+		833882A91C5FC729003400CD /* CryptoLcpNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D1B1C1F0A58008D0A5E /* CryptoLcpNode.cpp */; };
+		833882AA1C5FC729003400CD /* CryptoppCryptoProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D1D1C1F0A58008D0A5E /* CryptoppCryptoProvider.cpp */; };
+		833882AB1C5FC729003400CD /* CryptoppUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D1F1C1F0A58008D0A5E /* CryptoppUtils.cpp */; };
+		833882AC1C5FC729003400CD /* DateTime.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D211C1F0A58008D0A5E /* DateTime.cpp */; };
+		833882AD1C5FC729003400CD /* EncryptionProfileNames.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D261C1F0A58008D0A5E /* EncryptionProfileNames.cpp */; };
+		833882AE1C5FC729003400CD /* EncryptionProfilesManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D281C1F0A58008D0A5E /* EncryptionProfilesManager.cpp */; };
+		833882AF1C5FC729003400CD /* JsonCanonicalizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D321C1F0A58008D0A5E /* JsonCanonicalizer.cpp */; };
+		833882B01C5FC729003400CD /* JsonValueReader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D341C1F0A58008D0A5E /* JsonValueReader.cpp */; };
+		833882B11C5FC729003400CD /* Lcp1dot0EncryptionProfile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D361C1F0A58008D0A5E /* Lcp1dot0EncryptionProfile.cpp */; };
+		833882B21C5FC729003400CD /* LcpService.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D381C1F0A58008D0A5E /* LcpService.cpp */; };
+		833882B31C5FC729003400CD /* LcpServiceCreator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D3A1C1F0A58008D0A5E /* LcpServiceCreator.cpp */; };
+		833882B41C5FC729003400CD /* LcpUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D3C1C1F0A58008D0A5E /* LcpUtils.cpp */; };
+		833882B51C5FC729003400CD /* LinksLcpNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D3E1C1F0A58008D0A5E /* LinksLcpNode.cpp */; };
+		833882B61C5FC729003400CD /* RightsLcpNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D541C1F0A58008D0A5E /* RightsLcpNode.cpp */; };
+		833882B71C5FC729003400CD /* RightsService.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D561C1F0A58008D0A5E /* RightsService.cpp */; };
+		833882B81C5FC729003400CD /* RootLcpNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D581C1F0A58008D0A5E /* RootLcpNode.cpp */; };
+		833882B91C5FC729003400CD /* RsaSha256SignatureAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D5A1C1F0A58008D0A5E /* RsaSha256SignatureAlgorithm.cpp */; };
+		833882BA1C5FC729003400CD /* Sha256HashAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D5C1C1F0A58008D0A5E /* Sha256HashAlgorithm.cpp */; };
+		833882BB1C5FC729003400CD /* SymmetricAlgorithmEncryptedStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D601C1F0A58008D0A5E /* SymmetricAlgorithmEncryptedStream.cpp */; };
+		833882BC1C5FC729003400CD /* ThreadTimer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D621C1F0A58008D0A5E /* ThreadTimer.cpp */; };
+		833882BD1C5FC729003400CD /* UserLcpNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D641C1F0A58008D0A5E /* UserLcpNode.cpp */; };
+		833882BE1C5FC729003400CD /* time64.c in Sources */ = {isa = PBXBuildFile; fileRef = 5A2D654C1C170EAB00ED4673 /* time64.c */; };
+		833882BF1C5FC75B003400CD /* libcryptopp (OSX).a in Frameworks */ = {isa = PBXBuildFile; fileRef = 833882931C5FC6DE003400CD /* libcryptopp (OSX).a */; };
+		833882C01C5FC75B003400CD /* libziplib (OSX).a in Frameworks */ = {isa = PBXBuildFile; fileRef = 833882971C5FC6DE003400CD /* libziplib (OSX).a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +103,20 @@
 			proxyType = 2;
 			remoteGlobalIDString = 5AA9E0E91C119F19006470DD;
 			remoteInfo = "ziplib (iOS)";
+		};
+		833882921C5FC6DE003400CD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5A5C614D1C04BFF500185159 /* cryptopp.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 833881F91C5FC60C003400CD;
+			remoteInfo = "cryptopp (OSX)";
+		};
+		833882961C5FC6DE003400CD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5AA9E2581C119FAD006470DD /* ziplib.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 833881D81C5FC4F9003400CD;
+			remoteInfo = "ziplib (OSX)";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -221,6 +275,7 @@
 		5AF00D631C1F0A58008D0A5E /* ThreadTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThreadTimer.h; sourceTree = "<group>"; };
 		5AF00D641C1F0A58008D0A5E /* UserLcpNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UserLcpNode.cpp; sourceTree = "<group>"; };
 		5AF00D651C1F0A58008D0A5E /* UserLcpNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserLcpNode.h; sourceTree = "<group>"; };
+		833882881C5FC6DD003400CD /* libLCP Client (OSX).a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libLCP Client (OSX).a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -230,6 +285,15 @@
 			files = (
 				5AA9E25E1C119FBE006470DD /* libziplib (iOS).a in Frameworks */,
 				5A5C61531C04C01800185159 /* libcryptopp.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		833882851C5FC6DD003400CD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				833882BF1C5FC75B003400CD /* libcryptopp (OSX).a in Frameworks */,
+				833882C01C5FC75B003400CD /* libziplib (OSX).a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -298,6 +362,7 @@
 			isa = PBXGroup;
 			children = (
 				5A5C61521C04BFF500185159 /* libcryptopp.a */,
+				833882931C5FC6DE003400CD /* libcryptopp (OSX).a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -306,6 +371,7 @@
 			isa = PBXGroup;
 			children = (
 				5AA9E25D1C119FAD006470DD /* libziplib (iOS).a */,
+				833882971C5FC6DE003400CD /* libziplib (OSX).a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -425,6 +491,7 @@
 			isa = PBXGroup;
 			children = (
 				5ACE2E1B1BF21D8C00AC0585 /* libLCP-client-iOS.a */,
+				833882881C5FC6DD003400CD /* libLCP Client (OSX).a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -560,6 +627,16 @@
 		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+		833882861C5FC6DD003400CD /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXNativeTarget section */
 		5ACE2E1A1BF21D8C00AC0585 /* LCP Client (iOS) */ = {
 			isa = PBXNativeTarget;
@@ -577,6 +654,23 @@
 			productReference = 5ACE2E1B1BF21D8C00AC0585 /* libLCP-client-iOS.a */;
 			productType = "com.apple.product-type.library.static";
 		};
+		833882871C5FC6DD003400CD /* LCP Client (OSX) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 833882981C5FC6DE003400CD /* Build configuration list for PBXNativeTarget "LCP Client (OSX)" */;
+			buildPhases = (
+				833882841C5FC6DD003400CD /* Sources */,
+				833882851C5FC6DD003400CD /* Frameworks */,
+				833882861C5FC6DD003400CD /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "LCP Client (OSX)";
+			productName = "LCP Client (OSX)";
+			productReference = 833882881C5FC6DD003400CD /* libLCP Client (OSX).a */;
+			productType = "com.apple.product-type.library.static";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -588,6 +682,9 @@
 				TargetAttributes = {
 					5ACE2E1A1BF21D8C00AC0585 = {
 						CreatedOnToolsVersion = 7.1;
+					};
+					833882871C5FC6DD003400CD = {
+						CreatedOnToolsVersion = 7.2;
 					};
 				};
 			};
@@ -614,6 +711,7 @@
 			projectRoot = "";
 			targets = (
 				5ACE2E1A1BF21D8C00AC0585 /* LCP Client (iOS) */,
+				833882871C5FC6DD003400CD /* LCP Client (OSX) */,
 			);
 		};
 /* End PBXProject section */
@@ -631,6 +729,20 @@
 			fileType = archive.ar;
 			path = "libziplib (iOS).a";
 			remoteRef = 5AA9E25C1C119FAD006470DD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		833882931C5FC6DE003400CD /* libcryptopp (OSX).a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libcryptopp (OSX).a";
+			remoteRef = 833882921C5FC6DE003400CD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		833882971C5FC6DE003400CD /* libziplib (OSX).a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libziplib (OSX).a";
+			remoteRef = 833882961C5FC6DE003400CD /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -681,6 +793,51 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		833882841C5FC6DD003400CD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				833882991C5FC728003400CD /* LCPAcquisition.mm in Sources */,
+				8338829A1C5FC728003400CD /* LCPError.mm in Sources */,
+				8338829B1C5FC728003400CD /* LCPiOSStorageProvider.mm in Sources */,
+				8338829C1C5FC728003400CD /* LCPiOSNetProvider.mm in Sources */,
+				8338829D1C5FC728003400CD /* LCPLicense.mm in Sources */,
+				8338829E1C5FC728003400CD /* LCPService.mm in Sources */,
+				8338829F1C5FC728003400CD /* UICKeyChainStore.m in Sources */,
+				833882A01C5FC728003400CD /* LcpContentFilter.cpp in Sources */,
+				833882A11C5FC728003400CD /* Acquisition.cpp in Sources */,
+				833882A21C5FC728003400CD /* AesCbcSymmetricAlgorithm.cpp in Sources */,
+				833882A31C5FC728003400CD /* AlgorithmNames.cpp in Sources */,
+				833882A41C5FC728003400CD /* Certificate.cpp in Sources */,
+				833882A51C5FC728003400CD /* CertificateExtension.cpp in Sources */,
+				833882A61C5FC728003400CD /* CertificateRevocationList.cpp in Sources */,
+				833882A71C5FC728003400CD /* CrlDistributionPoints.cpp in Sources */,
+				833882A81C5FC729003400CD /* CrlUpdater.cpp in Sources */,
+				833882A91C5FC729003400CD /* CryptoLcpNode.cpp in Sources */,
+				833882AA1C5FC729003400CD /* CryptoppCryptoProvider.cpp in Sources */,
+				833882AB1C5FC729003400CD /* CryptoppUtils.cpp in Sources */,
+				833882AC1C5FC729003400CD /* DateTime.cpp in Sources */,
+				833882AD1C5FC729003400CD /* EncryptionProfileNames.cpp in Sources */,
+				833882AE1C5FC729003400CD /* EncryptionProfilesManager.cpp in Sources */,
+				833882AF1C5FC729003400CD /* JsonCanonicalizer.cpp in Sources */,
+				833882B01C5FC729003400CD /* JsonValueReader.cpp in Sources */,
+				833882B11C5FC729003400CD /* Lcp1dot0EncryptionProfile.cpp in Sources */,
+				833882B21C5FC729003400CD /* LcpService.cpp in Sources */,
+				833882B31C5FC729003400CD /* LcpServiceCreator.cpp in Sources */,
+				833882B41C5FC729003400CD /* LcpUtils.cpp in Sources */,
+				833882B51C5FC729003400CD /* LinksLcpNode.cpp in Sources */,
+				833882B61C5FC729003400CD /* RightsLcpNode.cpp in Sources */,
+				833882B71C5FC729003400CD /* RightsService.cpp in Sources */,
+				833882B81C5FC729003400CD /* RootLcpNode.cpp in Sources */,
+				833882B91C5FC729003400CD /* RsaSha256SignatureAlgorithm.cpp in Sources */,
+				833882BA1C5FC729003400CD /* Sha256HashAlgorithm.cpp in Sources */,
+				833882BB1C5FC729003400CD /* SymmetricAlgorithmEncryptedStream.cpp in Sources */,
+				833882BC1C5FC729003400CD /* ThreadTimer.cpp in Sources */,
+				833882BD1C5FC729003400CD /* UserLcpNode.cpp in Sources */,
+				833882BE1C5FC729003400CD /* time64.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
@@ -714,6 +871,8 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
+					"CRYPTOPP_DISABLE_ASM=1",
+					"CRYPTOPP_DISABLE_SSE2=1",
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -753,6 +912,11 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"FEATURES_READIUM=$(FEATURES_READIUM)",
+					"CRYPTOPP_DISABLE_SSE2=1",
+					"CRYPTOPP_DISABLE_ASM=1",
+				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -792,6 +956,28 @@
 			};
 			name = Release;
 		};
+		8338828E1C5FC6DE003400CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				EXECUTABLE_PREFIX = lib;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		8338828F1C5FC6DE003400CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				EXECUTABLE_PREFIX = lib;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -812,6 +998,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		833882981C5FC6DE003400CD /* Build configuration list for PBXNativeTarget "LCP Client (OSX)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8338828E1C5FC6DE003400CD /* Debug */,
+				8338828F1C5FC6DE003400CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};
