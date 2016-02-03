@@ -1,0 +1,9 @@
+//
+//  Created by Mickaël Menu on 03/02/2016.
+//  Copyright © 2016 Mantano. All rights reserved.
+//  Any commercial use is strictly prohibited.
+//
+
+PRODUCT_NAME = LCP-client-OSX
+
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) CRYPTOPP_DISABLE_SSE2=1 CRYPTOPP_DISABLE_ASM=1

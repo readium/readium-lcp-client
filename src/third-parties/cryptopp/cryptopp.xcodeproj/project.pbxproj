@@ -135,6 +135,134 @@
 		5A5C61491C04BB5900185159 /* zdeflate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60C31C04BB5900185159 /* zdeflate.cpp */; };
 		5A5C614A1C04BB5900185159 /* zinflate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60C41C04BB5900185159 /* zinflate.cpp */; };
 		5A5C614B1C04BB5900185159 /* zlib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60C51C04BB5900185159 /* zlib.cpp */; };
+		833882041C5FC64D003400CD /* 3way.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60401C04BB5800185159 /* 3way.cpp */; };
+		833882051C5FC64D003400CD /* adhoc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60411C04BB5800185159 /* adhoc.cpp */; };
+		833882061C5FC64D003400CD /* adler32.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60421C04BB5800185159 /* adler32.cpp */; };
+		833882071C5FC64D003400CD /* algebra.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60431C04BB5800185159 /* algebra.cpp */; };
+		833882081C5FC64D003400CD /* algparam.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60441C04BB5800185159 /* algparam.cpp */; };
+		833882091C5FC64D003400CD /* arc4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60451C04BB5800185159 /* arc4.cpp */; };
+		8338820A1C5FC64D003400CD /* asn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60461C04BB5800185159 /* asn.cpp */; };
+		8338820B1C5FC64D003400CD /* authenc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60471C04BB5800185159 /* authenc.cpp */; };
+		8338820C1C5FC64D003400CD /* base32.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60481C04BB5800185159 /* base32.cpp */; };
+		8338820D1C5FC64D003400CD /* base64.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60491C04BB5800185159 /* base64.cpp */; };
+		8338820E1C5FC64D003400CD /* basecode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C604A1C04BB5800185159 /* basecode.cpp */; };
+		8338820F1C5FC64D003400CD /* bench.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C604B1C04BB5800185159 /* bench.cpp */; };
+		833882101C5FC64D003400CD /* bench2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C604C1C04BB5800185159 /* bench2.cpp */; };
+		833882111C5FC64D003400CD /* bfinit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C604D1C04BB5800185159 /* bfinit.cpp */; };
+		833882121C5FC64D003400CD /* blowfish.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C604E1C04BB5800185159 /* blowfish.cpp */; };
+		833882131C5FC64D003400CD /* blumshub.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C604F1C04BB5800185159 /* blumshub.cpp */; };
+		833882141C5FC64D003400CD /* camellia.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60501C04BB5800185159 /* camellia.cpp */; };
+		833882151C5FC64D003400CD /* cast.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60511C04BB5800185159 /* cast.cpp */; };
+		833882161C5FC64D003400CD /* casts.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60521C04BB5800185159 /* casts.cpp */; };
+		833882171C5FC64D003400CD /* cbcmac.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60531C04BB5800185159 /* cbcmac.cpp */; };
+		833882181C5FC64D003400CD /* ccm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60541C04BB5800185159 /* ccm.cpp */; };
+		833882191C5FC64D003400CD /* channels.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60551C04BB5800185159 /* channels.cpp */; };
+		8338821A1C5FC64D003400CD /* cmac.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60561C04BB5900185159 /* cmac.cpp */; };
+		8338821B1C5FC64D003400CD /* cpu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60571C04BB5900185159 /* cpu.cpp */; };
+		8338821C1C5FC64D003400CD /* crc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60581C04BB5900185159 /* crc.cpp */; };
+		8338821D1C5FC64D003400CD /* cryptlib_bds.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60591C04BB5900185159 /* cryptlib_bds.cpp */; };
+		8338821E1C5FC64D003400CD /* cryptlib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C605A1C04BB5900185159 /* cryptlib.cpp */; };
+		8338821F1C5FC64D003400CD /* default.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C605C1C04BB5900185159 /* default.cpp */; };
+		833882201C5FC64D003400CD /* des.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C605D1C04BB5900185159 /* des.cpp */; };
+		833882211C5FC64D003400CD /* dessp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C605E1C04BB5900185159 /* dessp.cpp */; };
+		833882221C5FC64D003400CD /* dh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C605F1C04BB5900185159 /* dh.cpp */; };
+		833882231C5FC64D003400CD /* dh2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60601C04BB5900185159 /* dh2.cpp */; };
+		833882241C5FC64D003400CD /* dll.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60611C04BB5900185159 /* dll.cpp */; };
+		833882251C5FC64D003400CD /* dsa.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60631C04BB5900185159 /* dsa.cpp */; };
+		833882261C5FC64D003400CD /* eax.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60641C04BB5900185159 /* eax.cpp */; };
+		833882271C5FC64D003400CD /* ec2n.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60651C04BB5900185159 /* ec2n.cpp */; };
+		833882281C5FC64D003400CD /* eccrypto.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60661C04BB5900185159 /* eccrypto.cpp */; };
+		833882291C5FC64D003400CD /* ecp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60671C04BB5900185159 /* ecp.cpp */; };
+		8338822A1C5FC64D003400CD /* elgamal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60681C04BB5900185159 /* elgamal.cpp */; };
+		8338822B1C5FC64D003400CD /* emsa2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60691C04BB5900185159 /* emsa2.cpp */; };
+		8338822C1C5FC64D003400CD /* eprecomp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C606A1C04BB5900185159 /* eprecomp.cpp */; };
+		8338822D1C5FC64D003400CD /* esign.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C606B1C04BB5900185159 /* esign.cpp */; };
+		8338822E1C5FC64D003400CD /* files.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C606C1C04BB5900185159 /* files.cpp */; };
+		8338822F1C5FC64D003400CD /* filters.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C606D1C04BB5900185159 /* filters.cpp */; };
+		833882301C5FC64D003400CD /* fips140.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C606E1C04BB5900185159 /* fips140.cpp */; };
+		833882311C5FC64D003400CD /* fipsalgt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C606F1C04BB5900185159 /* fipsalgt.cpp */; };
+		833882321C5FC64D003400CD /* fipstest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60701C04BB5900185159 /* fipstest.cpp */; };
+		833882331C5FC64D003400CD /* gcm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60711C04BB5900185159 /* gcm.cpp */; };
+		833882341C5FC64D003400CD /* gf2_32.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60721C04BB5900185159 /* gf2_32.cpp */; };
+		833882351C5FC64D003400CD /* gf2n.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60731C04BB5900185159 /* gf2n.cpp */; };
+		833882361C5FC64D003400CD /* gf256.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60741C04BB5900185159 /* gf256.cpp */; };
+		833882371C5FC64D003400CD /* gfpcrypt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60751C04BB5900185159 /* gfpcrypt.cpp */; };
+		833882381C5FC64D003400CD /* gost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60761C04BB5900185159 /* gost.cpp */; };
+		833882391C5FC64D003400CD /* gzip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60771C04BB5900185159 /* gzip.cpp */; };
+		8338823A1C5FC64D003400CD /* hex.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60781C04BB5900185159 /* hex.cpp */; };
+		8338823B1C5FC64D003400CD /* hmac.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60791C04BB5900185159 /* hmac.cpp */; };
+		8338823C1C5FC64D003400CD /* hrtimer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C607A1C04BB5900185159 /* hrtimer.cpp */; };
+		8338823D1C5FC64D003400CD /* ida.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C607B1C04BB5900185159 /* ida.cpp */; };
+		8338823E1C5FC64D003400CD /* idea.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C607C1C04BB5900185159 /* idea.cpp */; };
+		8338823F1C5FC64D003400CD /* integer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C607D1C04BB5900185159 /* integer.cpp */; };
+		833882401C5FC64D003400CD /* iterhash.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C607E1C04BB5900185159 /* iterhash.cpp */; };
+		833882411C5FC64D003400CD /* luc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C607F1C04BB5900185159 /* luc.cpp */; };
+		833882421C5FC64D003400CD /* mars.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60801C04BB5900185159 /* mars.cpp */; };
+		833882431C5FC64D003400CD /* marss.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60811C04BB5900185159 /* marss.cpp */; };
+		833882441C5FC64D003400CD /* md2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60821C04BB5900185159 /* md2.cpp */; };
+		833882451C5FC64D003400CD /* md4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60831C04BB5900185159 /* md4.cpp */; };
+		833882461C5FC64D003400CD /* md5.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60841C04BB5900185159 /* md5.cpp */; };
+		833882471C5FC64D003400CD /* misc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60851C04BB5900185159 /* misc.cpp */; };
+		833882481C5FC64D003400CD /* modes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60861C04BB5900185159 /* modes.cpp */; };
+		833882491C5FC64D003400CD /* mqueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60871C04BB5900185159 /* mqueue.cpp */; };
+		8338824A1C5FC64D003400CD /* mqv.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60881C04BB5900185159 /* mqv.cpp */; };
+		8338824B1C5FC64D003400CD /* nbtheory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60891C04BB5900185159 /* nbtheory.cpp */; };
+		8338824C1C5FC64D003400CD /* network.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C608A1C04BB5900185159 /* network.cpp */; };
+		8338824D1C5FC64D003400CD /* oaep.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C608B1C04BB5900185159 /* oaep.cpp */; };
+		8338824E1C5FC64D003400CD /* osrng.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C608C1C04BB5900185159 /* osrng.cpp */; };
+		8338824F1C5FC64D003400CD /* panama.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C608D1C04BB5900185159 /* panama.cpp */; };
+		833882501C5FC64E003400CD /* pch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C608E1C04BB5900185159 /* pch.cpp */; };
+		833882511C5FC64E003400CD /* pkcspad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C608F1C04BB5900185159 /* pkcspad.cpp */; };
+		833882521C5FC64E003400CD /* polynomi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60901C04BB5900185159 /* polynomi.cpp */; };
+		833882531C5FC64E003400CD /* pssr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60911C04BB5900185159 /* pssr.cpp */; };
+		833882541C5FC64E003400CD /* pubkey.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60921C04BB5900185159 /* pubkey.cpp */; };
+		833882551C5FC64E003400CD /* queue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60931C04BB5900185159 /* queue.cpp */; };
+		833882561C5FC64E003400CD /* rabin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60941C04BB5900185159 /* rabin.cpp */; };
+		833882571C5FC64E003400CD /* randpool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60951C04BB5900185159 /* randpool.cpp */; };
+		833882581C5FC64E003400CD /* rc2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60961C04BB5900185159 /* rc2.cpp */; };
+		833882591C5FC64E003400CD /* rc5.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60971C04BB5900185159 /* rc5.cpp */; };
+		8338825A1C5FC64E003400CD /* rc6.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60981C04BB5900185159 /* rc6.cpp */; };
+		8338825B1C5FC64E003400CD /* rdtables.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60991C04BB5900185159 /* rdtables.cpp */; };
+		8338825C1C5FC64E003400CD /* rijndael.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C609B1C04BB5900185159 /* rijndael.cpp */; };
+		8338825D1C5FC64E003400CD /* ripemd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C609C1C04BB5900185159 /* ripemd.cpp */; };
+		8338825E1C5FC64E003400CD /* rng.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C609D1C04BB5900185159 /* rng.cpp */; };
+		8338825F1C5FC64E003400CD /* rsa.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C609E1C04BB5900185159 /* rsa.cpp */; };
+		833882601C5FC64E003400CD /* rw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C609F1C04BB5900185159 /* rw.cpp */; };
+		833882611C5FC64E003400CD /* safer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60A01C04BB5900185159 /* safer.cpp */; };
+		833882621C5FC64E003400CD /* salsa.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60A11C04BB5900185159 /* salsa.cpp */; };
+		833882631C5FC64E003400CD /* seal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60A21C04BB5900185159 /* seal.cpp */; };
+		833882641C5FC64E003400CD /* seed.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60A31C04BB5900185159 /* seed.cpp */; };
+		833882651C5FC64E003400CD /* serpent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60A41C04BB5900185159 /* serpent.cpp */; };
+		833882661C5FC64E003400CD /* sha.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60A51C04BB5900185159 /* sha.cpp */; };
+		833882671C5FC64E003400CD /* sha3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60A61C04BB5900185159 /* sha3.cpp */; };
+		833882681C5FC64E003400CD /* shacal2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60A71C04BB5900185159 /* shacal2.cpp */; };
+		833882691C5FC64E003400CD /* shark.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60A81C04BB5900185159 /* shark.cpp */; };
+		8338826A1C5FC64E003400CD /* sharkbox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60A91C04BB5900185159 /* sharkbox.cpp */; };
+		8338826B1C5FC64E003400CD /* simple.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60AA1C04BB5900185159 /* simple.cpp */; };
+		8338826C1C5FC64E003400CD /* skipjack.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60AB1C04BB5900185159 /* skipjack.cpp */; };
+		8338826D1C5FC64E003400CD /* socketft.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60AC1C04BB5900185159 /* socketft.cpp */; };
+		8338826E1C5FC64E003400CD /* sosemanuk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60AD1C04BB5900185159 /* sosemanuk.cpp */; };
+		8338826F1C5FC64E003400CD /* square.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60AE1C04BB5900185159 /* square.cpp */; };
+		833882701C5FC64E003400CD /* squaretb.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60AF1C04BB5900185159 /* squaretb.cpp */; };
+		833882711C5FC64E003400CD /* strciphr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60B01C04BB5900185159 /* strciphr.cpp */; };
+		833882721C5FC64E003400CD /* tea.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60B11C04BB5900185159 /* tea.cpp */; };
+		833882731C5FC64E003400CD /* test.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60B21C04BB5900185159 /* test.cpp */; };
+		833882741C5FC64E003400CD /* tftables.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60B31C04BB5900185159 /* tftables.cpp */; };
+		833882751C5FC64E003400CD /* tiger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60B41C04BB5900185159 /* tiger.cpp */; };
+		833882761C5FC64E003400CD /* tigertab.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60B51C04BB5900185159 /* tigertab.cpp */; };
+		833882771C5FC64E003400CD /* trdlocal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60B61C04BB5900185159 /* trdlocal.cpp */; };
+		833882781C5FC64E003400CD /* ttmac.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60B71C04BB5900185159 /* ttmac.cpp */; };
+		833882791C5FC64E003400CD /* twofish.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60B81C04BB5900185159 /* twofish.cpp */; };
+		8338827A1C5FC64E003400CD /* vmac.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60BC1C04BB5900185159 /* vmac.cpp */; };
+		8338827B1C5FC64E003400CD /* wait.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60BD1C04BB5900185159 /* wait.cpp */; };
+		8338827C1C5FC64E003400CD /* wake.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60BE1C04BB5900185159 /* wake.cpp */; };
+		8338827D1C5FC64F003400CD /* whrlpool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60BF1C04BB5900185159 /* whrlpool.cpp */; };
+		8338827E1C5FC64F003400CD /* winpipes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60C01C04BB5900185159 /* winpipes.cpp */; };
+		8338827F1C5FC64F003400CD /* xtr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60C11C04BB5900185159 /* xtr.cpp */; };
+		833882801C5FC64F003400CD /* xtrcrypt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60C21C04BB5900185159 /* xtrcrypt.cpp */; };
+		833882811C5FC64F003400CD /* zdeflate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60C31C04BB5900185159 /* zdeflate.cpp */; };
+		833882821C5FC64F003400CD /* zinflate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60C41C04BB5900185159 /* zinflate.cpp */; };
+		833882831C5FC64F003400CD /* zlib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60C51C04BB5900185159 /* zlib.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -150,7 +278,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		5A5C5FAC1C04BAD700185159 /* libcryptopp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libcryptopp.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A5C5FAC1C04BAD700185159 /* libcryptopp (iOS).a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libcryptopp (iOS).a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A5C5FB91C04BB5800185159 /* 3way.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 3way.h; sourceTree = "<group>"; };
 		5A5C5FBA1C04BB5800185159 /* adler32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = adler32.h; sourceTree = "<group>"; };
 		5A5C5FBB1C04BB5800185159 /* aes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes.h; sourceTree = "<group>"; };
@@ -415,10 +543,18 @@
 		5A5C60C41C04BB5900185159 /* zinflate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = zinflate.cpp; sourceTree = "<group>"; };
 		5A5C60C51C04BB5900185159 /* zlib.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = zlib.cpp; sourceTree = "<group>"; };
 		5A5C614C1C04BCD100185159 /* cryptopp.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = cryptopp.xcconfig; sourceTree = "<group>"; };
+		833881F91C5FC60C003400CD /* libcryptopp (OS X).a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libcryptopp (OS X).a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		5A5C5FA91C04BAD700185159 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		833881F61C5FC60C003400CD /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -440,7 +576,8 @@
 		5A5C5FAD1C04BAD700185159 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				5A5C5FAC1C04BAD700185159 /* libcryptopp.a */,
+				5A5C5FAC1C04BAD700185159 /* libcryptopp (iOS).a */,
+				833881F91C5FC60C003400CD /* libcryptopp (OS X).a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -717,10 +854,20 @@
 		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+		833881F71C5FC60C003400CD /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXNativeTarget section */
-		5A5C5FAB1C04BAD700185159 /* cryptopp */ = {
+		5A5C5FAB1C04BAD700185159 /* cryptopp (iOS) */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 5A5C5FB51C04BAD700185159 /* Build configuration list for PBXNativeTarget "cryptopp" */;
+			buildConfigurationList = 5A5C5FB51C04BAD700185159 /* Build configuration list for PBXNativeTarget "cryptopp (iOS)" */;
 			buildPhases = (
 				5A5C5FA81C04BAD700185159 /* Sources */,
 				5A5C5FA91C04BAD700185159 /* Frameworks */,
@@ -730,9 +877,26 @@
 			);
 			dependencies = (
 			);
-			name = cryptopp;
+			name = "cryptopp (iOS)";
 			productName = cryptopp;
-			productReference = 5A5C5FAC1C04BAD700185159 /* libcryptopp.a */;
+			productReference = 5A5C5FAC1C04BAD700185159 /* libcryptopp (iOS).a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		833881F81C5FC60C003400CD /* cryptopp (OS X) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 833882031C5FC60C003400CD /* Build configuration list for PBXNativeTarget "cryptopp (OS X)" */;
+			buildPhases = (
+				833881F51C5FC60C003400CD /* Sources */,
+				833881F61C5FC60C003400CD /* Frameworks */,
+				833881F71C5FC60C003400CD /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "cryptopp (OS X)";
+			productName = "cryptopp (OSX)";
+			productReference = 833881F91C5FC60C003400CD /* libcryptopp (OS X).a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -746,6 +910,9 @@
 				TargetAttributes = {
 					5A5C5FAB1C04BAD700185159 = {
 						CreatedOnToolsVersion = 7.1;
+					};
+					833881F81C5FC60C003400CD = {
+						CreatedOnToolsVersion = 7.2;
 					};
 				};
 			};
@@ -761,7 +928,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				5A5C5FAB1C04BAD700185159 /* cryptopp */,
+				5A5C5FAB1C04BAD700185159 /* cryptopp (iOS) */,
+				833881F81C5FC60C003400CD /* cryptopp (OS X) */,
 			);
 		};
 /* End PBXProject section */
@@ -902,6 +1070,141 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		833881F51C5FC60C003400CD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				833882041C5FC64D003400CD /* 3way.cpp in Sources */,
+				833882051C5FC64D003400CD /* adhoc.cpp in Sources */,
+				833882061C5FC64D003400CD /* adler32.cpp in Sources */,
+				833882071C5FC64D003400CD /* algebra.cpp in Sources */,
+				833882081C5FC64D003400CD /* algparam.cpp in Sources */,
+				833882091C5FC64D003400CD /* arc4.cpp in Sources */,
+				8338820A1C5FC64D003400CD /* asn.cpp in Sources */,
+				8338820B1C5FC64D003400CD /* authenc.cpp in Sources */,
+				8338820C1C5FC64D003400CD /* base32.cpp in Sources */,
+				8338820D1C5FC64D003400CD /* base64.cpp in Sources */,
+				8338820E1C5FC64D003400CD /* basecode.cpp in Sources */,
+				8338820F1C5FC64D003400CD /* bench.cpp in Sources */,
+				833882101C5FC64D003400CD /* bench2.cpp in Sources */,
+				833882111C5FC64D003400CD /* bfinit.cpp in Sources */,
+				833882121C5FC64D003400CD /* blowfish.cpp in Sources */,
+				833882131C5FC64D003400CD /* blumshub.cpp in Sources */,
+				833882141C5FC64D003400CD /* camellia.cpp in Sources */,
+				833882151C5FC64D003400CD /* cast.cpp in Sources */,
+				833882161C5FC64D003400CD /* casts.cpp in Sources */,
+				833882171C5FC64D003400CD /* cbcmac.cpp in Sources */,
+				833882181C5FC64D003400CD /* ccm.cpp in Sources */,
+				833882191C5FC64D003400CD /* channels.cpp in Sources */,
+				8338821A1C5FC64D003400CD /* cmac.cpp in Sources */,
+				8338821B1C5FC64D003400CD /* cpu.cpp in Sources */,
+				8338821C1C5FC64D003400CD /* crc.cpp in Sources */,
+				8338821D1C5FC64D003400CD /* cryptlib_bds.cpp in Sources */,
+				8338821E1C5FC64D003400CD /* cryptlib.cpp in Sources */,
+				8338821F1C5FC64D003400CD /* default.cpp in Sources */,
+				833882201C5FC64D003400CD /* des.cpp in Sources */,
+				833882211C5FC64D003400CD /* dessp.cpp in Sources */,
+				833882221C5FC64D003400CD /* dh.cpp in Sources */,
+				833882231C5FC64D003400CD /* dh2.cpp in Sources */,
+				833882241C5FC64D003400CD /* dll.cpp in Sources */,
+				833882251C5FC64D003400CD /* dsa.cpp in Sources */,
+				833882261C5FC64D003400CD /* eax.cpp in Sources */,
+				833882271C5FC64D003400CD /* ec2n.cpp in Sources */,
+				833882281C5FC64D003400CD /* eccrypto.cpp in Sources */,
+				833882291C5FC64D003400CD /* ecp.cpp in Sources */,
+				8338822A1C5FC64D003400CD /* elgamal.cpp in Sources */,
+				8338822B1C5FC64D003400CD /* emsa2.cpp in Sources */,
+				8338822C1C5FC64D003400CD /* eprecomp.cpp in Sources */,
+				8338822D1C5FC64D003400CD /* esign.cpp in Sources */,
+				8338822E1C5FC64D003400CD /* files.cpp in Sources */,
+				8338822F1C5FC64D003400CD /* filters.cpp in Sources */,
+				833882301C5FC64D003400CD /* fips140.cpp in Sources */,
+				833882311C5FC64D003400CD /* fipsalgt.cpp in Sources */,
+				833882321C5FC64D003400CD /* fipstest.cpp in Sources */,
+				833882331C5FC64D003400CD /* gcm.cpp in Sources */,
+				833882341C5FC64D003400CD /* gf2_32.cpp in Sources */,
+				833882351C5FC64D003400CD /* gf2n.cpp in Sources */,
+				833882361C5FC64D003400CD /* gf256.cpp in Sources */,
+				833882371C5FC64D003400CD /* gfpcrypt.cpp in Sources */,
+				833882381C5FC64D003400CD /* gost.cpp in Sources */,
+				833882391C5FC64D003400CD /* gzip.cpp in Sources */,
+				8338823A1C5FC64D003400CD /* hex.cpp in Sources */,
+				8338823B1C5FC64D003400CD /* hmac.cpp in Sources */,
+				8338823C1C5FC64D003400CD /* hrtimer.cpp in Sources */,
+				8338823D1C5FC64D003400CD /* ida.cpp in Sources */,
+				8338823E1C5FC64D003400CD /* idea.cpp in Sources */,
+				8338823F1C5FC64D003400CD /* integer.cpp in Sources */,
+				833882401C5FC64D003400CD /* iterhash.cpp in Sources */,
+				833882411C5FC64D003400CD /* luc.cpp in Sources */,
+				833882421C5FC64D003400CD /* mars.cpp in Sources */,
+				833882431C5FC64D003400CD /* marss.cpp in Sources */,
+				833882441C5FC64D003400CD /* md2.cpp in Sources */,
+				833882451C5FC64D003400CD /* md4.cpp in Sources */,
+				833882461C5FC64D003400CD /* md5.cpp in Sources */,
+				833882471C5FC64D003400CD /* misc.cpp in Sources */,
+				833882481C5FC64D003400CD /* modes.cpp in Sources */,
+				833882491C5FC64D003400CD /* mqueue.cpp in Sources */,
+				8338824A1C5FC64D003400CD /* mqv.cpp in Sources */,
+				8338824B1C5FC64D003400CD /* nbtheory.cpp in Sources */,
+				8338824C1C5FC64D003400CD /* network.cpp in Sources */,
+				8338824D1C5FC64D003400CD /* oaep.cpp in Sources */,
+				8338824E1C5FC64D003400CD /* osrng.cpp in Sources */,
+				8338824F1C5FC64D003400CD /* panama.cpp in Sources */,
+				833882501C5FC64E003400CD /* pch.cpp in Sources */,
+				833882511C5FC64E003400CD /* pkcspad.cpp in Sources */,
+				833882521C5FC64E003400CD /* polynomi.cpp in Sources */,
+				833882531C5FC64E003400CD /* pssr.cpp in Sources */,
+				833882541C5FC64E003400CD /* pubkey.cpp in Sources */,
+				833882551C5FC64E003400CD /* queue.cpp in Sources */,
+				833882561C5FC64E003400CD /* rabin.cpp in Sources */,
+				833882571C5FC64E003400CD /* randpool.cpp in Sources */,
+				833882581C5FC64E003400CD /* rc2.cpp in Sources */,
+				833882591C5FC64E003400CD /* rc5.cpp in Sources */,
+				8338825A1C5FC64E003400CD /* rc6.cpp in Sources */,
+				8338825B1C5FC64E003400CD /* rdtables.cpp in Sources */,
+				8338825C1C5FC64E003400CD /* rijndael.cpp in Sources */,
+				8338825D1C5FC64E003400CD /* ripemd.cpp in Sources */,
+				8338825E1C5FC64E003400CD /* rng.cpp in Sources */,
+				8338825F1C5FC64E003400CD /* rsa.cpp in Sources */,
+				833882601C5FC64E003400CD /* rw.cpp in Sources */,
+				833882611C5FC64E003400CD /* safer.cpp in Sources */,
+				833882621C5FC64E003400CD /* salsa.cpp in Sources */,
+				833882631C5FC64E003400CD /* seal.cpp in Sources */,
+				833882641C5FC64E003400CD /* seed.cpp in Sources */,
+				833882651C5FC64E003400CD /* serpent.cpp in Sources */,
+				833882661C5FC64E003400CD /* sha.cpp in Sources */,
+				833882671C5FC64E003400CD /* sha3.cpp in Sources */,
+				833882681C5FC64E003400CD /* shacal2.cpp in Sources */,
+				833882691C5FC64E003400CD /* shark.cpp in Sources */,
+				8338826A1C5FC64E003400CD /* sharkbox.cpp in Sources */,
+				8338826B1C5FC64E003400CD /* simple.cpp in Sources */,
+				8338826C1C5FC64E003400CD /* skipjack.cpp in Sources */,
+				8338826D1C5FC64E003400CD /* socketft.cpp in Sources */,
+				8338826E1C5FC64E003400CD /* sosemanuk.cpp in Sources */,
+				8338826F1C5FC64E003400CD /* square.cpp in Sources */,
+				833882701C5FC64E003400CD /* squaretb.cpp in Sources */,
+				833882711C5FC64E003400CD /* strciphr.cpp in Sources */,
+				833882721C5FC64E003400CD /* tea.cpp in Sources */,
+				833882731C5FC64E003400CD /* test.cpp in Sources */,
+				833882741C5FC64E003400CD /* tftables.cpp in Sources */,
+				833882751C5FC64E003400CD /* tiger.cpp in Sources */,
+				833882761C5FC64E003400CD /* tigertab.cpp in Sources */,
+				833882771C5FC64E003400CD /* trdlocal.cpp in Sources */,
+				833882781C5FC64E003400CD /* ttmac.cpp in Sources */,
+				833882791C5FC64E003400CD /* twofish.cpp in Sources */,
+				8338827A1C5FC64E003400CD /* vmac.cpp in Sources */,
+				8338827B1C5FC64E003400CD /* wait.cpp in Sources */,
+				8338827C1C5FC64E003400CD /* wake.cpp in Sources */,
+				8338827D1C5FC64F003400CD /* whrlpool.cpp in Sources */,
+				8338827E1C5FC64F003400CD /* winpipes.cpp in Sources */,
+				8338827F1C5FC64F003400CD /* xtr.cpp in Sources */,
+				833882801C5FC64F003400CD /* xtrcrypt.cpp in Sources */,
+				833882811C5FC64F003400CD /* zdeflate.cpp in Sources */,
+				833882821C5FC64F003400CD /* zinflate.cpp in Sources */,
+				833882831C5FC64F003400CD /* zlib.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
@@ -983,6 +1286,32 @@
 			};
 			name = Release;
 		};
+		833882011C5FC60C003400CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_RTTI = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		833882021C5FC60C003400CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_RTTI = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -995,11 +1324,20 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		5A5C5FB51C04BAD700185159 /* Build configuration list for PBXNativeTarget "cryptopp" */ = {
+		5A5C5FB51C04BAD700185159 /* Build configuration list for PBXNativeTarget "cryptopp (iOS)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				5A5C5FB61C04BAD700185159 /* Debug */,
 				5A5C5FB71C04BAD700185159 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		833882031C5FC60C003400CD /* Build configuration list for PBXNativeTarget "cryptopp (OS X)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				833882011C5FC60C003400CD /* Debug */,
+				833882021C5FC60C003400CD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
