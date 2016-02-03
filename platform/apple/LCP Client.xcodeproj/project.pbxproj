@@ -14,7 +14,7 @@
 		5A0116921C088BA4006F1A6F /* LCPService.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A0116891C088BA4006F1A6F /* LCPService.mm */; };
 		5A0116931C088BA4006F1A6F /* UICKeyChainStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A01168D1C088BA4006F1A6F /* UICKeyChainStore.m */; };
 		5A2D65501C170EAB00ED4673 /* time64.c in Sources */ = {isa = PBXBuildFile; fileRef = 5A2D654C1C170EAB00ED4673 /* time64.c */; };
-		5A5C61531C04C01800185159 /* libcryptopp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A5C61521C04BFF500185159 /* libcryptopp.a */; };
+		5A5C61531C04C01800185159 /* libcryptopp (iOS).a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A5C61521C04BFF500185159 /* libcryptopp (iOS).a */; };
 		5A6EEB0A1C0C61CD0003A6DC /* LCPiOSNetProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A6EEB081C0C61CD0003A6DC /* LCPiOSNetProvider.mm */; };
 		5AA9E25E1C119FBE006470DD /* libziplib (iOS).a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AA9E25D1C119FAD006470DD /* libziplib (iOS).a */; };
 		5AF00D661C1F0A58008D0A5E /* LcpContentFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D001C1F0A58008D0A5E /* LcpContentFilter.cpp */; };
@@ -85,8 +85,8 @@
 		833882BC1C5FC729003400CD /* ThreadTimer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D621C1F0A58008D0A5E /* ThreadTimer.cpp */; };
 		833882BD1C5FC729003400CD /* UserLcpNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00D641C1F0A58008D0A5E /* UserLcpNode.cpp */; };
 		833882BE1C5FC729003400CD /* time64.c in Sources */ = {isa = PBXBuildFile; fileRef = 5A2D654C1C170EAB00ED4673 /* time64.c */; };
-		833882BF1C5FC75B003400CD /* libcryptopp (OSX).a in Frameworks */ = {isa = PBXBuildFile; fileRef = 833882931C5FC6DE003400CD /* libcryptopp (OSX).a */; };
-		833882C01C5FC75B003400CD /* libziplib (OSX).a in Frameworks */ = {isa = PBXBuildFile; fileRef = 833882971C5FC6DE003400CD /* libziplib (OSX).a */; };
+		833882BF1C5FC75B003400CD /* libcryptopp (OS X).a in Frameworks */ = {isa = PBXBuildFile; fileRef = 833882931C5FC6DE003400CD /* libcryptopp (OS X).a */; };
+		833882C01C5FC75B003400CD /* libziplib (OS X).a in Frameworks */ = {isa = PBXBuildFile; fileRef = 833882971C5FC6DE003400CD /* libziplib (OS X).a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -133,6 +133,8 @@
 		5A0116891C088BA4006F1A6F /* LCPService.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LCPService.mm; sourceTree = "<group>"; };
 		5A01168C1C088BA4006F1A6F /* UICKeyChainStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UICKeyChainStore.h; sourceTree = "<group>"; };
 		5A01168D1C088BA4006F1A6F /* UICKeyChainStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UICKeyChainStore.m; sourceTree = "<group>"; };
+		5A2496AE1C620ECA00EABFFC /* LCP Client (iOS).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "LCP Client (iOS).xcconfig"; sourceTree = "<group>"; };
+		5A2496B31C620ED600EABFFC /* LCP Client (OS X).xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "LCP Client (OS X).xcconfig"; sourceTree = "<group>"; };
 		5A2D654C1C170EAB00ED4673 /* time64.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = time64.c; sourceTree = "<group>"; };
 		5A2D654D1C170EAB00ED4673 /* time64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = time64.h; sourceTree = "<group>"; };
 		5A2D654E1C170EAB00ED4673 /* time64_config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = time64_config.h; sourceTree = "<group>"; };
@@ -275,7 +277,7 @@
 		5AF00D631C1F0A58008D0A5E /* ThreadTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThreadTimer.h; sourceTree = "<group>"; };
 		5AF00D641C1F0A58008D0A5E /* UserLcpNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UserLcpNode.cpp; sourceTree = "<group>"; };
 		5AF00D651C1F0A58008D0A5E /* UserLcpNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserLcpNode.h; sourceTree = "<group>"; };
-		833882881C5FC6DD003400CD /* libLCP Client (OSX).a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libLCP Client (OSX).a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		833882881C5FC6DD003400CD /* libLCP-client-OSX.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libLCP-client-OSX.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -284,7 +286,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5AA9E25E1C119FBE006470DD /* libziplib (iOS).a in Frameworks */,
-				5A5C61531C04C01800185159 /* libcryptopp.a in Frameworks */,
+				5A5C61531C04C01800185159 /* libcryptopp (iOS).a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -292,8 +294,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				833882BF1C5FC75B003400CD /* libcryptopp (OSX).a in Frameworks */,
-				833882C01C5FC75B003400CD /* libziplib (OSX).a in Frameworks */,
+				833882BF1C5FC75B003400CD /* libcryptopp (OS X).a in Frameworks */,
+				833882C01C5FC75B003400CD /* libziplib (OS X).a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -361,8 +363,8 @@
 		5A5C614E1C04BFF500185159 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				5A5C61521C04BFF500185159 /* libcryptopp.a */,
-				833882931C5FC6DE003400CD /* libcryptopp (OSX).a */,
+				5A5C61521C04BFF500185159 /* libcryptopp (iOS).a */,
+				833882931C5FC6DE003400CD /* libcryptopp (OS X).a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -371,7 +373,7 @@
 			isa = PBXGroup;
 			children = (
 				5AA9E25D1C119FAD006470DD /* libziplib (iOS).a */,
-				833882971C5FC6DE003400CD /* libziplib (OSX).a */,
+				833882971C5FC6DE003400CD /* libziplib (OS X).a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -483,6 +485,8 @@
 			children = (
 				5A0116941C088BB1006F1A6F /* Sources */,
 				5ACE2E7D1BF21EBE00AC0585 /* LCP Client.xcconfig */,
+				5A2496AE1C620ECA00EABFFC /* LCP Client (iOS).xcconfig */,
+				5A2496B31C620ED600EABFFC /* LCP Client (OS X).xcconfig */,
 				5ACE2E0C1BF21D7900AC0585 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -491,7 +495,7 @@
 			isa = PBXGroup;
 			children = (
 				5ACE2E1B1BF21D8C00AC0585 /* libLCP-client-iOS.a */,
-				833882881C5FC6DD003400CD /* libLCP Client (OSX).a */,
+				833882881C5FC6DD003400CD /* libLCP-client-OSX.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -654,9 +658,9 @@
 			productReference = 5ACE2E1B1BF21D8C00AC0585 /* libLCP-client-iOS.a */;
 			productType = "com.apple.product-type.library.static";
 		};
-		833882871C5FC6DD003400CD /* LCP Client (OSX) */ = {
+		833882871C5FC6DD003400CD /* LCP Client (OS X) */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 833882981C5FC6DE003400CD /* Build configuration list for PBXNativeTarget "LCP Client (OSX)" */;
+			buildConfigurationList = 833882981C5FC6DE003400CD /* Build configuration list for PBXNativeTarget "LCP Client (OS X)" */;
 			buildPhases = (
 				833882841C5FC6DD003400CD /* Sources */,
 				833882851C5FC6DD003400CD /* Frameworks */,
@@ -666,9 +670,9 @@
 			);
 			dependencies = (
 			);
-			name = "LCP Client (OSX)";
+			name = "LCP Client (OS X)";
 			productName = "LCP Client (OSX)";
-			productReference = 833882881C5FC6DD003400CD /* libLCP Client (OSX).a */;
+			productReference = 833882881C5FC6DD003400CD /* libLCP-client-OSX.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -711,16 +715,16 @@
 			projectRoot = "";
 			targets = (
 				5ACE2E1A1BF21D8C00AC0585 /* LCP Client (iOS) */,
-				833882871C5FC6DD003400CD /* LCP Client (OSX) */,
+				833882871C5FC6DD003400CD /* LCP Client (OS X) */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		5A5C61521C04BFF500185159 /* libcryptopp.a */ = {
+		5A5C61521C04BFF500185159 /* libcryptopp (iOS).a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
-			path = libcryptopp.a;
+			path = "libcryptopp (iOS).a";
 			remoteRef = 5A5C61511C04BFF500185159 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -731,17 +735,17 @@
 			remoteRef = 5AA9E25C1C119FAD006470DD /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		833882931C5FC6DE003400CD /* libcryptopp (OSX).a */ = {
+		833882931C5FC6DE003400CD /* libcryptopp (OS X).a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
-			path = "libcryptopp (OSX).a";
+			path = "libcryptopp (OS X).a";
 			remoteRef = 833882921C5FC6DE003400CD /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		833882971C5FC6DE003400CD /* libziplib (OSX).a */ = {
+		833882971C5FC6DE003400CD /* libziplib (OS X).a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
-			path = "libziplib (OSX).a";
+			path = "libziplib (OS X).a";
 			remoteRef = 833882961C5FC6DE003400CD /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -869,8 +873,8 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
 					"$(inherited)",
+					"DEBUG=1",
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -910,7 +914,6 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = "FEATURES_READIUM=$(FEATURES_READIUM)";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
@@ -926,59 +929,48 @@
 		};
 		5ACE2E221BF21D8C00AC0585 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5A2496AE1C620ECA00EABFFC /* LCP Client (iOS).xcconfig */;
 			buildSettings = {
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/third-parties/cryptopp/lib",
 				);
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "LCP-client-iOS";
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
 		};
 		5ACE2E231BF21D8C00AC0585 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5A2496AE1C620ECA00EABFFC /* LCP Client (iOS).xcconfig */;
 			buildSettings = {
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/third-parties/cryptopp/lib",
 				);
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "LCP-client-iOS";
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
 		};
 		8338828E1C5FC6DE003400CD /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5A2496B31C620ED600EABFFC /* LCP Client (OS X).xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "-";
 				EXECUTABLE_PREFIX = lib;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-					"CRYPTOPP_DISABLE_SSE2=1",
-					"CRYPTOPP_DISABLE_ASM=1",
-				);
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
 		8338828F1C5FC6DE003400CD /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5A2496B31C620ED600EABFFC /* LCP Client (OS X).xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "-";
 				EXECUTABLE_PREFIX = lib;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"FEATURES_READIUM=$(FEATURES_READIUM)",
-					"CRYPTOPP_DISABLE_SSE2=1",
-					"CRYPTOPP_DISABLE_ASM=1",
-				);
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -1004,7 +996,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		833882981C5FC6DE003400CD /* Build configuration list for PBXNativeTarget "LCP Client (OSX)" */ = {
+		833882981C5FC6DE003400CD /* Build configuration list for PBXNativeTarget "LCP Client (OS X)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8338828E1C5FC6DE003400CD /* Debug */,

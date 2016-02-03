@@ -278,7 +278,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		5A5C5FAC1C04BAD700185159 /* libcryptopp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libcryptopp.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A5C5FAC1C04BAD700185159 /* libcryptopp (iOS).a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libcryptopp (iOS).a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A5C5FB91C04BB5800185159 /* 3way.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 3way.h; sourceTree = "<group>"; };
 		5A5C5FBA1C04BB5800185159 /* adler32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = adler32.h; sourceTree = "<group>"; };
 		5A5C5FBB1C04BB5800185159 /* aes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes.h; sourceTree = "<group>"; };
@@ -543,7 +543,7 @@
 		5A5C60C41C04BB5900185159 /* zinflate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = zinflate.cpp; sourceTree = "<group>"; };
 		5A5C60C51C04BB5900185159 /* zlib.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = zlib.cpp; sourceTree = "<group>"; };
 		5A5C614C1C04BCD100185159 /* cryptopp.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = cryptopp.xcconfig; sourceTree = "<group>"; };
-		833881F91C5FC60C003400CD /* libcryptopp (OSX).a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libcryptopp (OSX).a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		833881F91C5FC60C003400CD /* libcryptopp (OS X).a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libcryptopp (OS X).a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -576,8 +576,8 @@
 		5A5C5FAD1C04BAD700185159 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				5A5C5FAC1C04BAD700185159 /* libcryptopp.a */,
-				833881F91C5FC60C003400CD /* libcryptopp (OSX).a */,
+				5A5C5FAC1C04BAD700185159 /* libcryptopp (iOS).a */,
+				833881F91C5FC60C003400CD /* libcryptopp (OS X).a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -865,9 +865,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		5A5C5FAB1C04BAD700185159 /* cryptopp */ = {
+		5A5C5FAB1C04BAD700185159 /* cryptopp (iOS) */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 5A5C5FB51C04BAD700185159 /* Build configuration list for PBXNativeTarget "cryptopp" */;
+			buildConfigurationList = 5A5C5FB51C04BAD700185159 /* Build configuration list for PBXNativeTarget "cryptopp (iOS)" */;
 			buildPhases = (
 				5A5C5FA81C04BAD700185159 /* Sources */,
 				5A5C5FA91C04BAD700185159 /* Frameworks */,
@@ -877,14 +877,14 @@
 			);
 			dependencies = (
 			);
-			name = cryptopp;
+			name = "cryptopp (iOS)";
 			productName = cryptopp;
-			productReference = 5A5C5FAC1C04BAD700185159 /* libcryptopp.a */;
+			productReference = 5A5C5FAC1C04BAD700185159 /* libcryptopp (iOS).a */;
 			productType = "com.apple.product-type.library.static";
 		};
-		833881F81C5FC60C003400CD /* cryptopp (OSX) */ = {
+		833881F81C5FC60C003400CD /* cryptopp (OS X) */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 833882031C5FC60C003400CD /* Build configuration list for PBXNativeTarget "cryptopp (OSX)" */;
+			buildConfigurationList = 833882031C5FC60C003400CD /* Build configuration list for PBXNativeTarget "cryptopp (OS X)" */;
 			buildPhases = (
 				833881F51C5FC60C003400CD /* Sources */,
 				833881F61C5FC60C003400CD /* Frameworks */,
@@ -894,9 +894,9 @@
 			);
 			dependencies = (
 			);
-			name = "cryptopp (OSX)";
+			name = "cryptopp (OS X)";
 			productName = "cryptopp (OSX)";
-			productReference = 833881F91C5FC60C003400CD /* libcryptopp (OSX).a */;
+			productReference = 833881F91C5FC60C003400CD /* libcryptopp (OS X).a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -928,8 +928,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				5A5C5FAB1C04BAD700185159 /* cryptopp */,
-				833881F81C5FC60C003400CD /* cryptopp (OSX) */,
+				5A5C5FAB1C04BAD700185159 /* cryptopp (iOS) */,
+				833881F81C5FC60C003400CD /* cryptopp (OS X) */,
 			);
 		};
 /* End PBXProject section */
@@ -1346,7 +1346,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		5A5C5FB51C04BAD700185159 /* Build configuration list for PBXNativeTarget "cryptopp" */ = {
+		5A5C5FB51C04BAD700185159 /* Build configuration list for PBXNativeTarget "cryptopp (iOS)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				5A5C5FB61C04BAD700185159 /* Debug */,
@@ -1355,13 +1355,14 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		833882031C5FC60C003400CD /* Build configuration list for PBXNativeTarget "cryptopp (OSX)" */ = {
+		833882031C5FC60C003400CD /* Build configuration list for PBXNativeTarget "cryptopp (OS X)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				833882011C5FC60C003400CD /* Debug */,
 				833882021C5FC60C003400CD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

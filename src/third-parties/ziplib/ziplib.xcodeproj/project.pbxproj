@@ -144,7 +144,7 @@
 		5AA9E1EF1C119F65006470DD /* ZipArchiveEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZipArchiveEntry.h; sourceTree = "<group>"; };
 		5AA9E1F01C119F65006470DD /* ZipFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ZipFile.cpp; sourceTree = "<group>"; };
 		5AA9E1F11C119F65006470DD /* ZipFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZipFile.h; sourceTree = "<group>"; };
-		833881D81C5FC4F9003400CD /* libziplib (OSX).a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libziplib (OSX).a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		833881D81C5FC4F9003400CD /* libziplib (OS X).a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libziplib (OS X).a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -178,7 +178,7 @@
 			isa = PBXGroup;
 			children = (
 				5AA9E0E91C119F19006470DD /* libziplib (iOS).a */,
-				833881D81C5FC4F9003400CD /* libziplib (OSX).a */,
+				833881D81C5FC4F9003400CD /* libziplib (OS X).a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -409,9 +409,9 @@
 			productReference = 5AA9E0E91C119F19006470DD /* libziplib (iOS).a */;
 			productType = "com.apple.product-type.library.static";
 		};
-		833881D71C5FC4F9003400CD /* ziplib (OSX) */ = {
+		833881D71C5FC4F9003400CD /* ziplib (OS X) */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 833881E21C5FC4F9003400CD /* Build configuration list for PBXNativeTarget "ziplib (OSX)" */;
+			buildConfigurationList = 833881E21C5FC4F9003400CD /* Build configuration list for PBXNativeTarget "ziplib (OS X)" */;
 			buildPhases = (
 				833881D41C5FC4F9003400CD /* Sources */,
 				833881D51C5FC4F9003400CD /* Frameworks */,
@@ -421,9 +421,9 @@
 			);
 			dependencies = (
 			);
-			name = "ziplib (OSX)";
+			name = "ziplib (OS X)";
 			productName = "ziplib (OSX)";
-			productReference = 833881D81C5FC4F9003400CD /* libziplib (OSX).a */;
+			productReference = 833881D81C5FC4F9003400CD /* libziplib (OS X).a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -456,7 +456,7 @@
 			projectRoot = "";
 			targets = (
 				5AA9E0E81C119F19006470DD /* ziplib (iOS) */,
-				833881D71C5FC4F9003400CD /* ziplib (OSX) */,
+				833881D71C5FC4F9003400CD /* ziplib (OS X) */,
 			);
 		};
 /* End PBXProject section */
@@ -664,13 +664,14 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		833881E21C5FC4F9003400CD /* Build configuration list for PBXNativeTarget "ziplib (OSX)" */ = {
+		833881E21C5FC4F9003400CD /* Build configuration list for PBXNativeTarget "ziplib (OS X)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				833881E01C5FC4F9003400CD /* Debug */,
 				833881E11C5FC4F9003400CD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
