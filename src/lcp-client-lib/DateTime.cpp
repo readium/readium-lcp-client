@@ -221,10 +221,14 @@ namespace lcp
     {
         result = {};
         std::tm tempResult = {};
-        std::istringstream strm(time);
-        strm >> std::get_time(&tempResult, format.c_str());
+
+        if (strptime(time.c_str(), format.c_str(), &tempResult) == NULL) {
+            // Unable to convert time
+            return false;
+        }
+
         result = TmToTm64(tempResult);
-        return (!strm.fail());
+        return true;
     }
 
     /*static*/ TM DateTime::TmToTm64(const std::tm & from)

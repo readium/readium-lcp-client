@@ -7,7 +7,9 @@
 #ifndef __LCP_UTILS_H__
 #define __LCP_UTILS_H__
 
+#include <sstream>
 #include <string>
+#include <stdexcept>
 #include "public/LcpStatus.h"
 
 namespace lcp
@@ -37,6 +39,14 @@ namespace lcp
     void ValidateUtf8(const std::string & utf8Str);
     bool EqualsUtf8(const std::string & left, const std::string & right);
     bool LexicographicalCompareUtf8(const std::string & left, const std::string & right);
+
+    int StringToInt(const std::string & val);
+    template <typename T>
+    std::string ToString(T val) {
+        std::stringstream stream;
+        stream << val;
+        return stream.str();
+    }
 }
 
 #endif //__LCP_UTILS_H__

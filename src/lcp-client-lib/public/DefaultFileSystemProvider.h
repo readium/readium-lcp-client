@@ -10,6 +10,8 @@
 #include <fstream>
 #include <sstream>
 #include <errno.h>
+#include <stdexcept>
+#include <cstring>
 #include "IFileSystemProvider.h"
 
 namespace lcp

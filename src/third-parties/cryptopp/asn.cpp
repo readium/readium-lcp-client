@@ -8,6 +8,7 @@
 
 #include <iomanip>
 #include <time.h>
+#include<cstdlib>
 
 NAMESPACE_BEGIN(CryptoPP)
 USING_NAMESPACE(std)
@@ -215,7 +216,8 @@ void BERDecodeTime(CryptoPP::BufferedTransformation& bt, std::string& time)
     time.assign(secBlockTime.begin(), secBlockTime.end());
     if (b == UTC_TIME)
     {
-        int years = std::stoi(time.substr(0, 2));
+        int years = std::atoi(time.substr(0, 2).c_str());
+       
         if (years < 50)
             time = "20" + time;
         else
