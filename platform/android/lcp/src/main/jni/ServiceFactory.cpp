@@ -12,15 +12,14 @@
 #include <string>
 
 namespace lcp {
-    ILcpService * ServiceFactory::build(const std::string &certPath) {
-        StorageProvider * storageProvider = new StorageProvider();
+    ILcpService * ServiceFactory::build(const std::string &certContent, StorageProvider* storageProvider) {
         NetProvider * netProvider = new NetProvider();
         DefaultFileSystemProvider * fileSystemProvider = new DefaultFileSystemProvider();
         LcpServiceCreator serviceCreator;
         ILcpService * service = nullptr;
 
         serviceCreator.CreateLcpService(
-                certPath,
+                certContent,
                 netProvider,
                 storageProvider,
                 fileSystemProvider,
@@ -29,13 +28,14 @@ namespace lcp {
     }
 }
 
-JNIEXPORT jobject JNICALL Java_org_readium_sdk_lcp_ServiceFactory_build(JNIEnv *env,
-                                                                        jobject obj,
-                                                                        jstring jCertPath) {
-    const char * cCertPath = env->GetStringUTFChars(jCertPath, 0);
-    std::string certPath(cCertPath);
+JNIEXPORT jobject JNICALL Java_org_readium_sdk_lcp_ServiceFactory_nativeBuild(
+        JNIEnv *env, jobject obj, jstring jCertContent, jobject jStorageProvider
+    ) {
+    const char * cCertContent = env->GetStringUTFChars(jCertContent, 0);
+    std::string certContent(cCertContent);
     lcp::ServiceFactory serviceFactory;
-    lcp::ILcpService * service = serviceFactory.build(certPath);
+    lcp::StorageProvider *storageProvider = new lcp::StorageProvider(env, jStorageProvider);
+    lcp::ILcpService * service = serviceFactory.build(certContent, storageProvider);
     lcp::LcpContentFilter::Register(service);
     jclass cls = env->FindClass("org/readium/sdk/lcp/Service");
     jmethodID methodId = env->GetMethodID(cls, "<init>", "(J)V");

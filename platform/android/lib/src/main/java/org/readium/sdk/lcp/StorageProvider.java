@@ -1,33 +1,43 @@
 package org.readium.sdk.lcp;
 
 import android.content.SharedPreferences;
+import 	android.content.Context;
+
+import java.util.Set;
 
 /**
- * Created by clebeaupin on 29/01/16.
+ * Store keys in shared preferences
  */
 public class StorageProvider {
-    private String vaultId;
-    private SharedPreferences storage;
+    private static final String PREFS_NAME_PREFIX = "org.readium.sdk.lcp.";
+    private Context context;
 
-    public StorageProvider(String vaultId, SharedPreferences storage) {
-        this.storage = storage;
-        this.vaultId = vaultId;
+    public StorageProvider(Context context) {
+        this.context = context;
     }
 
-    public String getValue(String key) {
-        //s = getSharedPreferences(PREFS_NAME, 0);
-        return "tti";
+    private SharedPreferences getVault(String vaultId) {
+        return this.context.getSharedPreferences(PREFS_NAME_PREFIX + vaultId, Context.MODE_PRIVATE);
     }
 
-    public void setValue(String key,String value) {
-
+    public String getValue(String vaultId, String key) {
+        SharedPreferences prefs = this.getVault(vaultId);
+        return prefs.getString(key, "");
     }
 
-    public static String getToto() {
-        return "test Toto";
+    public void setValue(String vaultId, String key, String value) {
+        SharedPreferences prefs = this.getVault(vaultId);
+        prefs.edit().putString(key, value).apply();
     }
 
-    public static String getRealValue(String key) {
-        return "coucou";
+    /**
+     * Return all keys of vault
+     * @param vaultId
+     * @return
+     */
+    public String[] getKeys(String vaultId) {
+        SharedPreferences prefs = this.getVault(vaultId);
+        Set<String> keySet = prefs.getAll().keySet();
+        return keySet.toArray(new String[keySet.size()]);
     }
 }

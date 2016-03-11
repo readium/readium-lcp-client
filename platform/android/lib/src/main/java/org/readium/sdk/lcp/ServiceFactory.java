@@ -19,5 +19,14 @@ public class ServiceFactory {
      */
     private ServiceFactory() {}
 
-    public static native Service build(String certPath);
+
+
+    public static Service build(String certContent, StorageProvider storageProvider) {
+        certContent = certContent.replaceAll("-*BEGIN CERTIFICATE-*", "");
+        certContent = certContent.replaceAll("-*END CERTIFICATE-*", "");
+        certContent = certContent.replaceAll("[\r\n]*", "");
+        return ServiceFactory.nativeBuild(certContent, storageProvider);
+    }
+
+    private native static Service nativeBuild(String certContent, StorageProvider storageProvider);
 }
