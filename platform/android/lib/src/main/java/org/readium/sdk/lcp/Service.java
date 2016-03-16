@@ -14,8 +14,25 @@ public class Service {
         this.nativePtr = nativePtr;
     }
 
-    public License openLicense(String licenseJson) {
-        return this.nativeOpenLicense(this.nativePtr, licenseJson);
+    public License openLicense(InputStream licenseInputStream) {
+        // Read the license input stream
+        String licenseContent = "";
+
+        try {
+            byte[] data = new byte[licenseInputStream.available()];
+            licenseInputStream.read(data);
+            licenseInputStream.close();
+            licenseContent = new String(data, "UTF-8");
+        } catch (IOException e) {
+            // Unable to open license
+            return null;
+        }
+
+        return this.openLicense(licenseContent);
+    }
+
+    public License openLicense(String licenseContent) {
+        return this.nativeOpenLicense(this.nativePtr, licenseContent);
     }
 
     /**
@@ -27,6 +44,5 @@ public class Service {
         return this.nativePtr;
     }
 
-
-    private native License nativeOpenLicense(long nativePtr, String licenseJson);
+    private native License nativeOpenLicense(long nativePtr, String licenseContent);
 }
