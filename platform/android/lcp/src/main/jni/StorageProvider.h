@@ -65,13 +65,12 @@ namespace lcp {
 
     class StorageProvider : public IStorageProvider {
     private:
-        JNIEnv* jEnv;
         jobject jStorageProvider;
         jmethodID jGetValueMethodId;
         jmethodID jSetValueMethodId;
         jmethodID jGetKeysMethodId;
     public:
-        StorageProvider(JNIEnv* env, jobject jStorageProvider);
+        StorageProvider(jobject jStorageProvider);
         ~StorageProvider();
         std::string GetValue(const std::string &vaultId, const std::string &key);
 
