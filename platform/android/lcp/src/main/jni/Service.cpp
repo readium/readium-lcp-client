@@ -7,12 +7,6 @@
 #include <public/LcpStatus.h>
 #include <public/ILcpService.h>
 
-JNIEXPORT jobject JNICALL Java_org_readium_sdk_lcp_Service_decryptLicense(
-        JNIEnv *env, jobject obj, jobject jLicense, jstring jUserPassphrase) {
-    jobject test;
-    return test;
-}
-
 JNIEXPORT jobject JNICALL Java_org_readium_sdk_lcp_Service_nativeOpenLicense(
         JNIEnv *env, jobject obj, jlong servicePtr, jstring jLicenseJson) {
     const char * cLicenseJson = env->GetStringUTFChars(jLicenseJson, 0);

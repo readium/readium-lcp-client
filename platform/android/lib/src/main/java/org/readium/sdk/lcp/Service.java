@@ -1,5 +1,8 @@
 package org.readium.sdk.lcp;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 public class Service {
     /**
      * Native Container Pointer.

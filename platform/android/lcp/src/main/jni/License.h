@@ -23,6 +23,9 @@ JNIEXPORT jboolean JNICALL Java_org_readium_sdk_lcp_License_nativeIsDecrypted(
 JNIEXPORT void JNICALL Java_org_readium_sdk_lcp_License_nativeDecrypt(
         JNIEnv *env, jobject obj, jlong licensePtr, jlong servicePtr, jstring jPassphrase);
 
+JNIEXPORT jobject JNICALL Java_org_readium_sdk_lcp_License_nativeCreateAcquisition(
+        JNIEnv *env, jobject obj, jlong licensePtr, jlong servicePtr, jstring jDstPath);
+
 #ifdef __cplusplus
 }
 #endif

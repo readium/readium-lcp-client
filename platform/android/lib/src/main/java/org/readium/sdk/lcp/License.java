@@ -21,6 +21,12 @@ public class License {
         return this.nativeIsDecrypted(this.nativePtr);
     }
 
+
+    public Acquisition createAcquisition(String dstPath) {
+        return this.nativeCreateAcquisition(this.nativePtr, this.servicePtr, dstPath);
+    }
+
+
     /**
      * Returns the native Container pointer.
      * DO NOT USE FROM JAVA SIDE UNLESS TO PASS TO NATIVE CODE!
@@ -32,4 +38,5 @@ public class License {
 
     private native boolean nativeIsDecrypted(long nativePtr);
     private native void nativeDecrypt(long nativePtr, long servicePtr, String passphrase);
+    private native Acquisition nativeCreateAcquisition(long nativePtr, long servicePtr, String dstPath);
 }
