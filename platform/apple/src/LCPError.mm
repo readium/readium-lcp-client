@@ -1,13 +1,13 @@
 //
 //  Created by Mickaël Menu on 27/11/15.
-//  Copyright © 2015 Mantano. All rights reserved.
-//  Any commercial use is strictly prohibited.
+//  Copyright (c) 2014 Readium Foundation and/or its licensees. All rights reserved.
+//
 //
 
 #import "LcpStatus.h"
 #import "LCPError.h"
 
-NSString *const LCPErrorDomain = @"com.mantano.lcp.error";
+NSString *const LCPErrorDomain = @"org.readium.lcp.error";
 NSString *const LCPErrorExtensionKey = @"LCPErrorExtension";
 
 using namespace lcp;

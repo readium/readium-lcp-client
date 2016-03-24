@@ -1,7 +1,7 @@
 //
 //  Created by Mickaël Menu on 30/11/15.
-//  Copyright © 2015 Mantano. All rights reserved.
-//  Any commercial use is strictly prohibited.
+//  Copyright (c) 2014 Readium Foundation and/or its licensees. All rights reserved.
+//
 //
 
 #import "LCPiOSNetProvider.h"

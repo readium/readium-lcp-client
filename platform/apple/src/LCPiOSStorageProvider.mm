@@ -1,7 +1,7 @@
 //
 //  Created by Mickaël Menu on 26/10/15.
-//  Copyright © 2015 Mantano. All rights reserved.
-//  Any commercial use is strictly prohibited.
+//  Copyright (c) 2014 Readium Foundation and/or its licensees. All rights reserved.
+//
 //
 
 #import "LCPiOSStorageProvider.h"
@@ -9,7 +9,7 @@
 #import "third-parties/UICKeyChainStore/UICKeyChainStore.h"
 #import <vector>
 
-static NSString *const MNOLCPStorageProviderServiceTemplate = @"com.mantano.lcp.%@";
+static NSString *const MNOLCPStorageProviderServiceTemplate = @"org.readium.lcp.%@";
 
 using namespace std;
 

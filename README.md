@@ -1,8 +1,9 @@
-# Mantano LCP Client library
+readium-lcp-client
+==================
 
-Created by Artem Brazhnikov, Mickaël Menu.  
-Copyright © 2015 Mantano. All rights reserved.  
-Any commercial use is strictly prohibited.
+This repository is for the Readium Lightweight Content Protection (LCP) client side implementation work.
+
+Created by Artem Brazhnikov, Mickaël Menu.
 
 
 ## Overview
