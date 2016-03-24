@@ -1,0 +1,34 @@
+import org.apache.tools.ant.taskdefs.condition.Os
+
+if (rootProject.hasProperty("readium_ndk_debug") && rootProject.readium_ndk_debug) {
+    // Use gradle experimental receipt to debug C/C++ code
+    println "${project.name}: Use gradle experimental to build application"
+    apply from: 'build_experimental.gradle'
+} else {
+    //TODO
+    apply from: 'build_experimental.gradle'
+    //apply from: 'build_stable.gradle'
+}
+
+task buildMk(type: Exec) {
+    // Retrieve ndk dir
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    def ndkDir = properties.getProperty('ndk.dir', null)
+
+    // Call ndk build
+    def ndkBuildExt = Os.isFamily(Os.FAMILY_WINDOWS) ? ".cmd" : ""
+    commandLine "$ndkDir/ndk-build${ndkBuildExt}",
+            '-C', file('.').absolutePath,
+            'NDK_APPLICATION_MK=Application.mk',
+            'APP_BUILD_SCRIPT=Android.mk',
+            'NDK_PROJECT_PATH=.'
+}
+
+tasks.whenTaskAdded { task ->
+    def taskName = task.name
+
+    if (taskName.startsWith("compile")) {
+        task.dependsOn "buildMk"
+    }
+}

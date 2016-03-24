@@ -13,7 +13,7 @@
 
 READIUM_INCLUDE_START
 #include <ePub3/utilities/pointer_type.h>
-#include <ePub3/ePub3.h>
+//#include <ePub3/ePub3.h>
 #include <ePub3/filter.h>
 READIUM_INCLUDE_END
 

@@ -4,13 +4,21 @@
 //
 //
 
-#include <sstream>
 #include <iomanip>
+#include <limits>
 #include "utf8-cpp/utf8.h"
 #include "LcpUtils.h"
 
 namespace lcp
 {
+    int StringToInt(const std::string & val) {
+        std::stringstream ss(val);
+        int result;
+        ss<<val;
+        ss>>result;
+        return result;
+    }
+
     std::string BoolToString(bool val)
     {
         return (val) ? "true" : "false";

@@ -89,11 +89,11 @@ namespace lcp
 
         if (name == PrintRight)
         {
-            m_rights.print = std::stoi(value);
+            m_rights.print = StringToInt(value);
         }
         else if (name == CopyRight)
         {
-            m_rights.copy = std::stoi(value);
+            m_rights.copy = StringToInt(value);
         }
         else if (name == TtsRight)
         {
@@ -118,7 +118,7 @@ namespace lcp
             if (m_rights.print >= amount)
             {
                 m_rights.print -= amount;
-                this->SetRightValueInMap(name, std::to_string(m_rights.print));
+                this->SetRightValueInMap(name, ToString(m_rights.print));
                 result = true;
             }
             else if (m_rights.print == IRightsService::UNLIMITED)
@@ -131,7 +131,7 @@ namespace lcp
             if (m_rights.copy >= amount)
             {
                 m_rights.copy -= amount;
-                this->SetRightValueInMap(name, std::to_string(m_rights.copy));
+                this->SetRightValueInMap(name, ToString(m_rights.copy));
                 result = true;
             }
             else if (m_rights.copy == IRightsService::UNLIMITED)
@@ -176,11 +176,11 @@ namespace lcp
     {
         if (m_rights.valuesMap.find(PrintRight) == m_rights.valuesMap.end())
         {
-            this->SetRightValueInMap(PrintRight, std::to_string(m_rights.print));
+            this->SetRightValueInMap(PrintRight, ToString(m_rights.print));
         }
         if (m_rights.valuesMap.find(CopyRight) == m_rights.valuesMap.end())
         {
-            this->SetRightValueInMap(CopyRight, std::to_string(m_rights.copy));
+            this->SetRightValueInMap(CopyRight, ToString(m_rights.copy));
         }
         if (m_rights.valuesMap.find(TtsRight) == m_rights.valuesMap.end())
         {
