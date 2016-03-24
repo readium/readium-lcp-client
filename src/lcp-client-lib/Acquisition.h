@@ -9,6 +9,7 @@
 
 #include <string>
 #include <mutex>
+#include <memory>
 #include "public/IAcquistion.h"
 #include "public/IAcquistionCallback.h"
 #include "public/INetProvider.h"
