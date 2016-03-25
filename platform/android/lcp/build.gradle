@@ -4,10 +4,6 @@ if (rootProject.hasProperty("readium_ndk_debug") && rootProject.readium_ndk_debu
     // Use gradle experimental receipt to debug C/C++ code
     println "${project.name}: Use gradle experimental to build application"
     apply from: 'build_experimental.gradle'
-} else {
-    //TODO
-    apply from: 'build_experimental.gradle'
-    //apply from: 'build_stable.gradle'
 }
 
 task buildMk(type: Exec) {
@@ -18,11 +14,15 @@ task buildMk(type: Exec) {
 
     // Call ndk build
     def ndkBuildExt = Os.isFamily(Os.FAMILY_WINDOWS) ? ".cmd" : ""
+    def projectPath = file('.').absolutePath
+    def buildScript = (rootProject.hasProperty("readium_ndk_debug") &&
+            rootProject.readium_ndk_debug) ? "Experimental.mk" : "Stable.mk"
+    environment 'EPUB3_PATH', project(':epub3').projectDir
     commandLine "$ndkDir/ndk-build${ndkBuildExt}",
-            '-C', file('.').absolutePath,
+            '-C', projectPath,
             'NDK_APPLICATION_MK=Application.mk',
-            'APP_BUILD_SCRIPT=Android.mk',
-            'NDK_PROJECT_PATH=.'
+            "APP_BUILD_SCRIPT=${buildScript}",
+            "NDK_PROJECT_PATH=${projectPath}"
 }
 
 tasks.whenTaskAdded { task ->
