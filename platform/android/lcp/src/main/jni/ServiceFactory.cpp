@@ -4,9 +4,11 @@
 
 #include "ServiceFactory.h"
 #include "Util.h"
+#include "CredentialHandler.h"
 #include <public/DefaultFileSystemProvider.h>
 #include <public/LcpServiceCreator.h>
 #include <public/LcpContentFilter.h>
+#include <public/LcpContentModule.h>
 
 namespace lcp {
     ILcpService * ServiceFactory::build(
@@ -30,7 +32,7 @@ namespace lcp {
 
 JNIEXPORT jobject JNICALL Java_org_readium_sdk_lcp_ServiceFactory_nativeBuild(
         JNIEnv *env, jobject obj, jstring jCertContent,
-        jobject jStorageProvider, jobject jNetProvider
+        jobject jStorageProvider, jobject jNetProvider, jobject jCredentialHandler
     ) {
     // Initialize jvm
     lcp::initJvm(env);
@@ -40,7 +42,8 @@ JNIEXPORT jobject JNICALL Java_org_readium_sdk_lcp_ServiceFactory_nativeBuild(
     lcp::StorageProvider * storageProvider = new lcp::StorageProvider(jStorageProvider);
     lcp::NetProvider * netProvider = new lcp::NetProvider(jNetProvider);
     lcp::ILcpService * service = serviceFactory.build(certContent, storageProvider, netProvider);
-    lcp::LcpContentFilter::Register(service);
+    lcp::ICredentialHandler * credentialHandler = new lcp::CredentialHandler(jCredentialHandler, service);
+    lcp::LcpContentModule::Register(service, credentialHandler);
     jclass cls = env->FindClass("org/readium/sdk/lcp/Service");
     jmethodID methodId = env->GetMethodID(cls, "<init>", "(J)V");
     return env->NewObject(cls, methodId, (jlong) service);

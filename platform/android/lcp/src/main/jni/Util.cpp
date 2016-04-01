@@ -16,8 +16,7 @@ JNIEnv * lcp::getJNIEnv() {
     int envStat = jVm->GetEnv((void **) &env, JNI_VERSION_1_6);
 
     if (envStat == JNI_EDETACHED) {
-        void *threadArgs;
-        jVm->AttachCurrentThread(&env, threadArgs);
+        jVm->AttachCurrentThread(&env, nullptr);
     } else if (envStat == JNI_OK) {
         //
     } else if (envStat == JNI_EVERSION) {

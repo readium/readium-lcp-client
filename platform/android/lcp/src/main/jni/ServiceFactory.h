@@ -18,14 +18,14 @@ extern "C" {
 namespace lcp {
     class ServiceFactory {
     public:
-        ILcpService * build(const std::string &certPath,
-                            StorageProvider* storageProvider, NetProvider *netProvider);
+        ILcpService * build(const std::string &certPath, StorageProvider* storageProvider,
+                            NetProvider *netProvider);
     };
 }
 
 JNIEXPORT jobject JNICALL Java_org_readium_sdk_lcp_ServiceFactory_nativeBuild(
         JNIEnv *env, jobject obj, jstring jCertContent,
-        jobject jStorageProvider, jobject jNetProvider);
+        jobject jStorageProvider, jobject jNetProvider, jobject jCredentialHandler);
 
 
 #ifdef __cplusplus
