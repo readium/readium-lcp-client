@@ -38,6 +38,11 @@ namespace lcp
             INetProviderCallback * callback
             ) = 0;
 
+        //
+        // The implementer should cancel the request
+        // The implementation should be asynchronous
+        virtual void CancelDownloadRequest(IDownloadRequest * request) {};
+
         virtual ~INetProvider() {}
     };
 

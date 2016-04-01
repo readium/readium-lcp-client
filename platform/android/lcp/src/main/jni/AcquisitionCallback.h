@@ -19,6 +19,7 @@ namespace lcp {
         jmethodID jOnAcquisitionStartedMethodId;
         jmethodID jOnAcquisitionEndedMethodId;
         jmethodID jOnAcquisitionProgressedMethodId;
+        jmethodID jOnAcquisitionCanceledMethodId;
     public:
         AcquisitionCallback(jobject jAcquisitionCallback);
         ~AcquisitionCallback();

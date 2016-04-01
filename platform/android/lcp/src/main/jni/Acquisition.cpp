@@ -19,3 +19,10 @@ JNIEXPORT void JNICALL Java_org_readium_sdk_lcp_Acquisition_nativeStart(
 
     acquisition->Start(acquisitionCallback);
 }
+
+JNIEXPORT void JNICALL Java_org_readium_sdk_lcp_Acquisition_nativeCancel(
+        JNIEnv *env, jobject obj, jlong acquisitionPtr) {
+    lcp::IAcquisition * acquisition = (lcp::IAcquisition *) acquisitionPtr;
+
+    acquisition->Cancel();
+}

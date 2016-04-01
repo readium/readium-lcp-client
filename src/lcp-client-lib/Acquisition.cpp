@@ -102,6 +102,7 @@ namespace lcp
     {
         std::unique_lock<std::mutex> locker(m_sync);
         m_request->SetCanceled(true);
+        m_netProvider->CancelDownloadRequest(m_request.get());
         return Status(StatusCode::ErrorCommonSuccess);
     }
 

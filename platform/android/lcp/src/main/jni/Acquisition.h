@@ -11,15 +11,11 @@
 extern "C" {
 #endif
 
-namespace lcp {
-    class Acquisition {
-
-    };
-}
-
 JNIEXPORT void JNICALL Java_org_readium_sdk_lcp_Acquisition_nativeStart(
         JNIEnv *env, jobject obj, jobject jAcquisitionCallback, jlong acquisitionPtr);
 
+JNIEXPORT void JNICALL Java_org_readium_sdk_lcp_Acquisition_nativeCancel(
+        JNIEnv *env, jobject obj, jlong acquisitionPtr);
 
 #ifdef __cplusplus
 }

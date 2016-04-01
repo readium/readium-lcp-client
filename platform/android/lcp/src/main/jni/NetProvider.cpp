@@ -11,6 +11,7 @@ namespace lcp {
         this->jNetProvider = env->NewGlobalRef(jNetProvider);
         jclass jNetProviderClass = env->GetObjectClass(this->jNetProvider);
         this->jDownloadMethodId = env->GetMethodID(jNetProviderClass, "download", "(Ljava/lang/String;Ljava/lang/String;JJ)V");
+        this->jCancelMethodId = env->GetMethodID(jNetProviderClass, "cancel", "(J)V");
     }
 
     NetProvider::~NetProvider(){
@@ -28,6 +29,13 @@ namespace lcp {
         env->CallVoidMethod(this->jNetProvider, this->jDownloadMethodId, jUrl, jDstPath,
                                    (jlong) request, (jlong) callback);
     }
+
+    void NetProvider::CancelDownloadRequest(
+            IDownloadRequest * request
+    ) {
+        JNIEnv * env = getJNIEnv();
+        env->CallVoidMethod(this->jNetProvider, this->jCancelMethodId, (jlong) request);
+    }
 }
 
 JNIEXPORT void JNICALL Java_org_readium_sdk_lcp_NetProviderCallback_nativeOnRequestStarted(
@@ -43,6 +51,13 @@ JNIEXPORT void JNICALL Java_org_readium_sdk_lcp_NetProviderCallback_nativeOnRequ
     lcp::IDownloadRequest * request = (lcp::IDownloadRequest *) requestPtr;
     lcp::Status status(lcp::StatusCode::ErrorCommonSuccess);
     callback->OnRequestEnded(request, status);
+}
+
+JNIEXPORT void JNICALL Java_org_readium_sdk_lcp_NetProviderCallback_nativeOnRequestCanceled(
+        JNIEnv *env, jobject obj, jlong callbackPtr, jlong requestPtr) {
+    lcp::INetProviderCallback * callback = (lcp::INetProviderCallback *) callbackPtr;
+    lcp::IDownloadRequest * request = (lcp::IDownloadRequest *) requestPtr;
+    callback->OnRequestCanceled(request);
 }
 
 JNIEXPORT void JNICALL Java_org_readium_sdk_lcp_NetProviderCallback_nativeOnRequestProgressed(

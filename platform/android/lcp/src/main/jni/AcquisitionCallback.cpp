@@ -16,6 +16,8 @@ namespace lcp {
                 jAcquisitionCallbackClass, "onAcquisitionEnded", "()V");
         this->jOnAcquisitionProgressedMethodId = env->GetMethodID(
                 jAcquisitionCallbackClass, "onAcquisitionProgressed", "(F)V");
+        this->jOnAcquisitionCanceledMethodId = env->GetMethodID(
+                jAcquisitionCallbackClass, "onAcquisitionCanceled", "()V");
     }
 
     AcquisitionCallback::~AcquisitionCallback() {
@@ -36,6 +38,9 @@ namespace lcp {
     }
 
     void AcquisitionCallback::OnAcquisitionCanceled(IAcquisition * acquisition) {
+        JNIEnv * env = getJNIEnv();
+        env->CallVoidMethod(
+                this->jAcquisitionCallback, jOnAcquisitionCanceledMethodId);
     }
 
     void AcquisitionCallback::OnAcquisitionEnded(IAcquisition * acquisition, Status result) {

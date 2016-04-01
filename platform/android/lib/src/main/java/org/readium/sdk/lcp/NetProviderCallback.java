@@ -4,6 +4,7 @@ import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.ProgressCallback;
 
 import java.io.File;
+import java.util.concurrent.CancellationException;
 
 /**
  * Created by clebeaupin on 15/03/16.
@@ -34,7 +35,12 @@ public class NetProviderCallback  implements ProgressCallback, FutureCallback<Fi
     @Override
     public void onCompleted(Exception e, File result) {
         this.checkStart();
-        this.nativeOnRequestEnded(this.nativePtr, this.requestPtr);
+        if (e instanceof CancellationException) {
+            // Request has been canceled
+            this.nativeOnRequestCanceled(this.nativePtr, this.requestPtr);
+        } else {
+            this.nativeOnRequestEnded(this.nativePtr, this.requestPtr);
+        }
     }
 
     @Override
@@ -47,4 +53,5 @@ public class NetProviderCallback  implements ProgressCallback, FutureCallback<Fi
     private native void nativeOnRequestProgressed(long nativePtr, long requestPtr,
                                                   float progress);
     private native void nativeOnRequestEnded(long nativePtr, long requestPtr);
+    private native void nativeOnRequestCanceled(long nativePtr, long requestPtr);
 }

@@ -11,6 +11,7 @@ public class Acquisition {
         void onAcquisitionStarted();
         void onAcquisitionEnded();
         void onAcquisitionProgressed(float progress);
+        void onAcquisitionCanceled();
     }
 
     private Acquisition(long nativePtr) {
@@ -18,7 +19,7 @@ public class Acquisition {
     }
 
     public void cancel() {
-
+        this.nativeCancel(this.nativePtr);
     }
 
     public void start(Listener listener) {
@@ -26,4 +27,6 @@ public class Acquisition {
     }
 
     private native void nativeStart(Listener listener, long nativePtr);
+    private native void nativeCancel(long nativePtr);
+
 }
