@@ -60,7 +60,7 @@ NSString *const LCPRightEnd = @(EndRight);
     INetProvider *netProvider;
     IFileSystemProvider *fileSystemProvider;
     
-#if TARGET_OS_IPHONE
+#if true //TARGET_OS_IPHONE (WORKS FINE FOR BOTH iOS and OSX)
     storageProvider = new iOSStorageProvider();
     netProvider = new iOSNetProvider();
     fileSystemProvider = new DefaultFileSystemProvider();
