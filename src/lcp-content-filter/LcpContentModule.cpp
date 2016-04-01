@@ -58,12 +58,14 @@ namespace lcp {
 
         char *buffer = nullptr;
         std::size_t bufferSize = byteStream->ReadAllBytes((void **) &buffer);
+        byteStream->Close();
 
         if (buffer == nullptr) {
             return ContainerPtr(nullptr);
         }
 
-        std::string licenseJson(buffer);
+        std::string licenseJson(buffer, bufferSize);
+        free(buffer);
 
         // Open license
         lcp::ILicense * license = nullptr;;
