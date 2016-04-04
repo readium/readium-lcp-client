@@ -159,7 +159,8 @@ namespace lcp
 
     void DateTime::ProcessIsoUtcTime(const std::string & isoTime)
     {
-        if (!TimeStringToTm(isoTime, "%Y-%m-%dT%H:%M:%SZ", m_tm))
+        // Fraction of seconds cannot be parsed so remove it
+        if (!TimeStringToTm(isoTime.substr(0, 19), "%Y-%m-%dT%H:%M:%S", m_tm))
         {
             throw std::runtime_error("Cannot parse iso time");
         }
