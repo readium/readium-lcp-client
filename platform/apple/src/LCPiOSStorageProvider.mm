@@ -23,7 +23,11 @@ namespace lcp
             m_keys = [keyChain allKeys];
             
             for (NSString *key in m_keys) {
-                m_values.push_back(std::string([[keyChain stringForKey:key] UTF8String]));
+                NSString* str = [keyChain stringForKey:key];
+                if (str != nil)
+                    m_values.push_back(std::string([str UTF8String]));
+                else
+                    m_values.push_back(std::string("KEYCHAIN ACCESS REFUSED"));
             }
         }
         
