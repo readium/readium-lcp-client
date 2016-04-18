@@ -79,6 +79,11 @@ namespace lcp {
         if (!license->Decrypted()) {
             // Unable to decrypt license so call the credential handler
             credentialHandler->decrypt(license);
+            
+            // This causes throw std::invalid_argument("Unable to open container")
+            // from Container::OpenContainer() !!
+            // So apps that respond to exceptions emit a non-justified error :(
+            // (the current Android app ignores the std::exception raised in the context of the OpenBook() thread, and the CredentialHandler::decrypt() invokes OpenBook() a second time ... confusing execution flow)
             return ContainerPtr(nullptr);
         }
 
