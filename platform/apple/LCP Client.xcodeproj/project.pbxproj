@@ -87,6 +87,8 @@
 		833882BE1C5FC729003400CD /* time64.c in Sources */ = {isa = PBXBuildFile; fileRef = 5A2D654C1C170EAB00ED4673 /* time64.c */; };
 		833882BF1C5FC75B003400CD /* libcryptopp (OS X).a in Frameworks */ = {isa = PBXBuildFile; fileRef = 833882931C5FC6DE003400CD /* libcryptopp (OS X).a */; };
 		833882C01C5FC75B003400CD /* libziplib (OS X).a in Frameworks */ = {isa = PBXBuildFile; fileRef = 833882971C5FC6DE003400CD /* libziplib (OS X).a */; };
+		83534AAE1CC4B2AC0043A730 /* LcpContentModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 83534AAD1CC4B2AC0043A730 /* LcpContentModule.cpp */; };
+		83534AAF1CC4C9660043A730 /* LcpContentModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 83534AAD1CC4B2AC0043A730 /* LcpContentModule.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -279,6 +281,8 @@
 		5AF00D641C1F0A58008D0A5E /* UserLcpNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UserLcpNode.cpp; sourceTree = "<group>"; };
 		5AF00D651C1F0A58008D0A5E /* UserLcpNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserLcpNode.h; sourceTree = "<group>"; };
 		833882881C5FC6DD003400CD /* libLCP-client-OSX.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libLCP-client-OSX.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		83534AA81CC4B2A00043A730 /* LcpContentModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LcpContentModule.h; sourceTree = "<group>"; };
+		83534AAD1CC4B2AC0043A730 /* LcpContentModule.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LcpContentModule.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -504,6 +508,7 @@
 		5AF00CFF1C1F0A58008D0A5E /* lcp-content-filter */ = {
 			isa = PBXGroup;
 			children = (
+				83534AAD1CC4B2AC0043A730 /* LcpContentModule.cpp */,
 				5AF00D001C1F0A58008D0A5E /* LcpContentFilter.cpp */,
 				5AF00D011C1F0A58008D0A5E /* LcpFilterContext.h */,
 				5AF00D021C1F0A58008D0A5E /* LcpSeekableByteStreamAdapter.h */,
@@ -515,6 +520,7 @@
 		5AF00D031C1F0A58008D0A5E /* public */ = {
 			isa = PBXGroup;
 			children = (
+				83534AA81CC4B2A00043A730 /* LcpContentModule.h */,
 				5AF00D041C1F0A58008D0A5E /* LcpContentFilter.h */,
 			);
 			path = public;
@@ -789,6 +795,7 @@
 				5AF00D7C1C1F0A58008D0A5E /* RightsLcpNode.cpp in Sources */,
 				5AF00D771C1F0A58008D0A5E /* Lcp1dot0EncryptionProfile.cpp in Sources */,
 				5AF00D661C1F0A58008D0A5E /* LcpContentFilter.cpp in Sources */,
+				83534AAE1CC4B2AC0043A730 /* LcpContentModule.cpp in Sources */,
 				5A0116931C088BA4006F1A6F /* UICKeyChainStore.m in Sources */,
 				5A2D65501C170EAB00ED4673 /* time64.c in Sources */,
 				5AF00D7B1C1F0A58008D0A5E /* LinksLcpNode.cpp in Sources */,
@@ -803,6 +810,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83534AAF1CC4C9660043A730 /* LcpContentModule.cpp in Sources */,
 				833882991C5FC728003400CD /* LCPAcquisition.mm in Sources */,
 				8338829A1C5FC728003400CD /* LCPError.mm in Sources */,
 				8338829B1C5FC728003400CD /* LCPiOSStorageProvider.mm in Sources */,

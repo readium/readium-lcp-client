@@ -5,12 +5,12 @@
 #if FEATURES_READIUM
 
 #include "public/LcpContentModule.h"
-#include <public/LcpContentFilter.h>
+#include "public/LcpContentFilter.h"
 
 READIUM_INCLUDE_START
 #include <ePub3/container.h>
 #include <ePub3/content_module_manager.h>
-#include <resource_stream.h>
+#include <ePub3/utilities/byte_stream.h>
 READIUM_INCLUDE_END
 
 #if DEBUG
@@ -48,7 +48,7 @@ namespace lcp {
                 ePub3::launch::deferred, &LcpContentModule::DecryptContainer, container);
     }
 
-    static ContainerPtr LcpContentModule::DecryptContainer(ContainerPtr container) {
+    ContainerPtr LcpContentModule::DecryptContainer(ContainerPtr container) {
         // Read lcpl JSON file
         unique_ptr<ePub3::ByteStream> byteStream = container->ReadStreamAtPath("META-INF/license.lcpl");
 

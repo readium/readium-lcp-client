@@ -163,7 +163,7 @@ namespace lcp
         }
         else if (m_signatureAlgorithmId == md5withRSAEncryption())
         {
-            rootVerifierPtr.reset(new RSASS<PKCS1v15, MD5>::Verifier(publicKey));
+            rootVerifierPtr.reset(new RSASS<PKCS1v15, Weak::MD5>::Verifier(publicKey));
         }
         else
         {
