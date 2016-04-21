@@ -16,7 +16,10 @@ CRYPTOPP_INCLUDE_START
 #include <cryptopp/queue.h>
 #include <cryptopp/rsa.h>
 #include <cryptopp/sha.h>
+
+#define CRYPTOPP_ENABLE_NAMESPACE_WEAK 1
 #include <cryptopp/md5.h>
+
 #include <cryptopp/asn.h>
 #include <cryptopp/oids.h>
 CRYPTOPP_INCLUDE_END
