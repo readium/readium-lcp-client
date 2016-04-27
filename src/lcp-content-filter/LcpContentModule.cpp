@@ -4,6 +4,8 @@
 
 #if FEATURES_READIUM
 
+#include "IncludeMacros.h"
+
 #include "public/LcpContentModule.h"
 #include "public/LcpContentFilter.h"
 

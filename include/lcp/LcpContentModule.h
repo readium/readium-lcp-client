@@ -6,7 +6,6 @@
 #ifndef __LCP_CONTENT_MODULE_H__
 #define __LCP_CONTENT_MODULE_H__
 
-#include "IncludeMacros.h"
 #include "ILicense.h"
 #include "ILcpService.h"
 
