@@ -9,8 +9,8 @@ namespace lcp {
     CredentialHandler::CredentialHandler(jobject jCredentialHandler, ILcpService * service) {
         JNIEnv *env = getJNIEnv();
         this->jCredentialHandler = env->NewGlobalRef(jCredentialHandler);
-        jclass jNetProviderClass = env->GetObjectClass(this->jCredentialHandler);
-        this->jDecryptMethodId = env->GetMethodID(jNetProviderClass, "decrypt",
+        jclass jCredentialHandlerClass = env->GetObjectClass(this->jCredentialHandler);
+        this->jDecryptMethodId = env->GetMethodID(jCredentialHandlerClass, "decrypt",
                                                    "(Lorg/readium/sdk/lcp/License;)V");
         this->service = service;
     }
