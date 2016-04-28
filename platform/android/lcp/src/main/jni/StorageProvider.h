@@ -19,9 +19,11 @@ namespace lcp {
     class KeyChainIterator  : public KvStringsIterator
     {
     public:
-        KeyChainIterator()
+        KeyChainIterator(std::vector<std::string> keys, std::vector<std::string> values)
         {
             this->index = 0;
+            this->keys = keys;
+            this->values = values;
         }
 
         void First()

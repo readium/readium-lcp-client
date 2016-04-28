@@ -49,6 +49,6 @@ namespace lcp {
             values.push_back(this->GetValue(vaultId, key));
         }
 
-        return new KeyChainIterator();
+        return new KeyChainIterator(keys, values);
     }
 }
