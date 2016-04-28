@@ -29,7 +29,6 @@ namespace lcp {
         async_result<bool> ApproveUserAction(const UserAction &action);
 
     private:
-        static ContainerPtr DecryptContainer(ContainerPtr container);
         static ILcpService *lcpService;
         static ICredentialHandler * credentialHandler;
     };

@@ -11,6 +11,7 @@
 
 READIUM_INCLUDE_START
 #include <ePub3/container.h>
+#include <ePub3/content_module_exception.h>
 #include <ePub3/content_module_manager.h>
 #include <ePub3/utilities/byte_stream.h>
 READIUM_INCLUDE_END
@@ -45,17 +46,11 @@ namespace lcp {
             return make_ready_future<ContainerPtr>(ContainerPtr(nullptr));
         }
 
-        // Open container and decrypt license asynchronously
-        return (async_result<ContainerPtr>) ePub3::async(
-                ePub3::launch::deferred, &LcpContentModule::DecryptContainer, container);
-    }
-
-    ContainerPtr LcpContentModule::DecryptContainer(ContainerPtr container) {
         // Read lcpl JSON file
         unique_ptr<ePub3::ByteStream> byteStream = container->ReadStreamAtPath("META-INF/license.lcpl");
 
         if (byteStream == nullptr) {
-            return ContainerPtr(nullptr);
+            throw ePub3::ContentModuleException("Unable to read LCPL license");
         }
 
         char *buffer = nullptr;
@@ -63,7 +58,7 @@ namespace lcp {
         byteStream->Close();
 
         if (buffer == nullptr) {
-            return ContainerPtr(nullptr);
+            throw ePub3::ContentModuleException(" LCPL license is empty");
         }
 
         std::string licenseJson(buffer, bufferSize);
@@ -74,22 +69,16 @@ namespace lcp {
         lcp::Status status = lcpService->OpenLicense(licenseJson, &license);
 
         if (status.Code  != lcp::StatusCode::ErrorCommonSuccess) {
-            // Maybe raises an error
-            return ContainerPtr(nullptr);
+            throw ePub3::ContentModuleException("Unable to initialize LCPL license");
         }
 
         if (!license->Decrypted()) {
             // Unable to decrypt license so call the credential handler
             credentialHandler->decrypt(license);
-            
-            // This causes throw std::invalid_argument("Unable to open container")
-            // from Container::OpenContainer() !!
-            // So apps that respond to exceptions emit a non-justified error :(
-            // (the current Android app ignores the std::exception raised in the context of the OpenBook() thread, and the CredentialHandler::decrypt() invokes OpenBook() a second time ... confusing execution flow)
-            return ContainerPtr(nullptr);
+            throw ePub3::ContentModuleException("Unable to decrypt LCPL license");
         }
 
-        return ContainerPtr(container);
+        return make_ready_future<ContainerPtr>(ContainerPtr(container));
     }
 
     async_result<bool> LcpContentModule::ApproveUserAction(const UserAction &action) {
