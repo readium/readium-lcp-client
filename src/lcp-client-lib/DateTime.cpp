@@ -187,13 +187,13 @@ namespace lcp
 
         if (isPlus)
         {
-            m_tm.tm_hour += timeZone.tm_hour;
-            m_tm.tm_min += timeZone.tm_min;
+            m_tm.tm_hour -= timeZone.tm_hour;
+            m_tm.tm_min -= timeZone.tm_min;
         }
         else
         {
-            m_tm.tm_hour -= timeZone.tm_hour;
-            m_tm.tm_min -= timeZone.tm_min;
+            m_tm.tm_hour += timeZone.tm_hour;
+            m_tm.tm_min += timeZone.tm_min;
         }
         m_time = mktime64(&m_tm);
     }
