@@ -6,7 +6,7 @@
 
 #import "LCPiOSNetProvider.h"
 
-#import "../../../include/lcp/lcp.h"
+#import "../../../src/lcp-client-lib/public/lcp.h"
 
 using namespace lcp;
 
