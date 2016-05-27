@@ -73,9 +73,9 @@ namespace lcp {
         }
 
         if (!license->Decrypted()) {
-            // Unable to decrypt license so call the credential handler
+            // decrypt license by calling the credential handler
             credentialHandler->decrypt(license);
-            throw ePub3::ContentModuleException("Unable to decrypt LCPL license");
+            throw ePub3::ContentModuleExceptionDecryptFlow("Decrypting LCPL license ...");
         }
 
         return make_ready_future<ContainerPtr>(ContainerPtr(container));
