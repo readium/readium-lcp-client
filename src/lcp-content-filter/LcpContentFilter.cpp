@@ -18,6 +18,9 @@ READIUM_INCLUDE_START
 #include <ePub3/filter_manager.h>
 #include <ePub3/package.h>
 #include <ePub3/utilities/byte_stream.h>
+#include <zlib.h>
+#include <ePub3/utilities/byte_buffer.h>
+
 READIUM_INCLUDE_END
 
 #if DEBUG
@@ -59,6 +62,7 @@ namespace lcp {
             // filter in a chain of filters.
             size_t bufferLen = len;
             uint8_t *buffer = new unsigned char[bufferLen];
+
             Status res = lcpService->DecryptData(m_license, (const unsigned char *)data, len, buffer, &bufferLen, context->Algorithm());
             if (!Status::IsSuccess(res)) {
                 delete [] buffer;
@@ -66,6 +70,80 @@ namespace lcp {
             }
             
             *outputLen = bufferLen;
+
+            if (context->CompressionMethod() == "8") {
+
+                z_stream zstr = {0};
+
+                zstr.zalloc = (alloc_func)Z_NULL;
+                zstr.zfree = (free_func)Z_NULL;
+
+                zstr.opaque = (voidpf)NULL;
+
+                zstr.total_in = 0;
+                zstr.total_out = 0;
+
+                zstr.next_in = (Bytef *)buffer;
+                zstr.avail_in = bufferLen;
+
+                int64_t inflatedBufferLength = 16*1024;
+                uint8_t* inflatedBuffer = new uint8_t[inflatedBufferLength];
+                zstr.next_out = (Bytef *)inflatedBuffer;
+                zstr.avail_out = inflatedBufferLength; //sizeof(inflatedBuffer)
+
+                ePub3::ByteBuffer byteBuffer;
+                //byteBuffer.EnsureCapacity(bytesToRead);
+
+                int rez = inflateInit2(&zstr, -MAX_WBITS); //(MAX_WBITS + 32)); //15 window bits, and the +32 tells zlib to to detect if using gzip or zlib
+                if (rez == Z_OK) {
+
+                    while (true) {
+                        zstr.next_out = (Bytef *)inflatedBuffer;
+                        zstr.avail_out = inflatedBufferLength; //sizeof(inflatedBuffer)
+
+                        int ress = inflate(&zstr, Z_FINISH);
+
+                        if (ress != Z_STREAM_END && ress != Z_OK && ress != Z_BUF_ERROR) {
+                            inflateEnd(&zstr);
+                            //delete[] deflatedBuffer;
+                            delete[] inflatedBuffer;
+                            delete buffer;
+                            return nullptr;
+                        }
+
+                        byteBuffer.AddBytes(inflatedBuffer, inflatedBufferLength-zstr.avail_out);
+
+                        if (ress == Z_STREAM_END) {
+                            break;
+                        }
+                    }
+                }
+                else {
+                    inflateEnd(&zstr);
+                    //delete[] deflatedBuffer;
+                    delete[] inflatedBuffer;
+                    delete buffer;
+                    return nullptr;
+                }
+
+                inflateEnd(&zstr);
+                //delete[] deflatedBuffer;
+                delete[] inflatedBuffer;
+                delete buffer;
+
+                //readableStream = new BufferReadableStream(inflatedBuffer, inflatedBufferLength);
+
+                *outputLen = byteBuffer.GetBufferSize();
+                // TODO: assert equal context->OriginalLength() (requires string to integer conversion)
+
+                // if existing temp buffer (size == bytesToRead) too small, allocates new one.
+                buffer = context->GetAllocateTemporaryByteBuffer(byteBuffer.GetBufferSize());
+                std::memcpy(buffer, byteBuffer.GetBytes(), byteBuffer.GetBufferSize());
+
+                //not good, as the returned buffer pointer will be freed when byteBuffer is destroyed (stack memory)
+                //buffer = byteBuffer.GetBytes();
+            }
+
             return buffer;
             
         } else {
@@ -78,13 +156,14 @@ namespace lcp {
             if (!byteStream->IsOpen()) {
                 return nullptr;
             }
-            
-            SeekableByteStreamAdapter *readableStream = new SeekableByteStreamAdapter(byteStream);
-            
+
+            IReadableStream *readableStream = new SeekableByteStreamAdapter(byteStream);
+
             IEncryptedStream *encryptedStream;
             Status status = lcpService->CreateEncryptedDataStream(m_license, readableStream, context->Algorithm(), &encryptedStream);
             if (!Status::IsSuccess(status)) {
                 LOG("Failed to create readable stream");
+
                 return nullptr;
             }
             
@@ -99,13 +178,92 @@ namespace lcp {
             }
             
             if (bytesToRead == 0) {
+
                 return nullptr;
             }
             
             uint8_t *buffer = context->GetAllocateTemporaryByteBuffer(bytesToRead);
             encryptedStream->Read(buffer, bytesToRead);
             *outputLen = bytesToRead;
-            
+
+
+            if (context->CompressionMethod() == "8") {
+//
+//                ByteStream::size_type bytesAvailable = byteStream->BytesAvailable();
+//                byteStream->Seek(0, std::ios::beg);
+//                bytesAvailable = byteStream->BytesAvailable();
+//                uint8_t* deflatedBuffer = new uint8_t[bytesAvailable];
+//                //byteStream->ReadAllBytes()
+//                ByteStream::size_type deflatedBufferLength = byteStream->ReadBytes(deflatedBuffer, bytesAvailable);
+
+                z_stream zstr = {0};
+
+                zstr.zalloc = (alloc_func)Z_NULL;
+                zstr.zfree = (free_func)Z_NULL;
+
+                zstr.opaque = (voidpf)NULL;
+
+                zstr.total_in = 0;
+                zstr.total_out = 0;
+
+                zstr.next_in = (Bytef *)buffer;
+                zstr.avail_in = bytesToRead;
+
+                int64_t inflatedBufferLength = 16*1024;
+                uint8_t* inflatedBuffer = new uint8_t[inflatedBufferLength];
+                zstr.next_out = (Bytef *)inflatedBuffer;
+                zstr.avail_out = inflatedBufferLength; //sizeof(inflatedBuffer)
+
+                ePub3::ByteBuffer byteBuffer;
+                //byteBuffer.EnsureCapacity(bytesToRead);
+
+                int rez = inflateInit2(&zstr, -MAX_WBITS); //(MAX_WBITS + 32)); //15 window bits, and the +32 tells zlib to to detect if using gzip or zlib
+                if (rez == Z_OK) {
+
+                    while (true) {
+                        zstr.next_out = (Bytef *)inflatedBuffer;
+                        zstr.avail_out = inflatedBufferLength; //sizeof(inflatedBuffer)
+
+                        int ress = inflate(&zstr, Z_FINISH);
+
+                        if (ress != Z_STREAM_END && ress != Z_OK && ress != Z_BUF_ERROR) {
+                            inflateEnd(&zstr);
+                            //delete[] deflatedBuffer;
+                            delete[] inflatedBuffer;
+                            return nullptr;
+                        }
+
+                        byteBuffer.AddBytes(inflatedBuffer, inflatedBufferLength-zstr.avail_out);
+
+                        if (ress == Z_STREAM_END) {
+                            break;
+                        }
+                    }
+                }
+                else {
+                    inflateEnd(&zstr);
+                    //delete[] deflatedBuffer;
+                    delete[] inflatedBuffer;
+                    return nullptr;
+                }
+
+                inflateEnd(&zstr);
+                //delete[] deflatedBuffer;
+                delete[] inflatedBuffer;
+
+                //readableStream = new BufferReadableStream(inflatedBuffer, inflatedBufferLength);
+
+                *outputLen = byteBuffer.GetBufferSize();
+                // TODO: assert equal context->OriginalLength() (requires string to integer conversion)
+
+                // if existing temp buffer (size == bytesToRead) too small, allocates new one.
+                buffer = context->GetAllocateTemporaryByteBuffer(byteBuffer.GetBufferSize());
+                std::memcpy(buffer, byteBuffer.GetBytes(), byteBuffer.GetBufferSize());
+
+                //not good, as the returned buffer pointer will be freed when byteBuffer is destroyed (stack memory)
+                //buffer = byteBuffer.GetBytes();
+            }
+
             return buffer;
         }
     }
@@ -135,6 +293,7 @@ namespace lcp {
         EncryptionInfoPtr encryptionInfo = item->GetEncryptionInfo();
         if (encryptionInfo != nullptr) {
             filterContext->SetAlgorithm(std::string(encryptionInfo->Algorithm().data()));
+            filterContext->SetCompressionInfo(encryptionInfo->CompressionMethod(), encryptionInfo->UnCompressedSize()); //OriginalLength
         }
         
         return filterContext;

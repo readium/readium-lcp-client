@@ -23,14 +23,33 @@ namespace lcp {
         {
             return m_algorithm;
         }
-        
+
+        const ePub3::string& CompressionMethod() const
+        {
+            return m_compressionMethod;
+        }
+
+        const ePub3::string& OriginalLength() const
+        {
+            return m_originalLength;
+        }
+
         void SetAlgorithm(const std::string algorithm)
         {
             m_algorithm = algorithm;
         }
-        
+
+        void SetCompressionInfo(const ePub3::string& compressionMethod, const ePub3::string& originalLength)
+        {
+            m_compressionMethod = compressionMethod;
+            m_originalLength = originalLength;
+        }
+
+
     protected:
         std::string m_algorithm;
+        ePub3::string m_compressionMethod;
+        ePub3::string m_originalLength;
     };
 }
 
