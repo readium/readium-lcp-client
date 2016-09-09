@@ -26,6 +26,7 @@ namespace lcp
                 NSString* str = [keyChain stringForKey:key];
                 if (str != nil)
                     m_values.push_back(std::string([str UTF8String]));
+                    //m_values.push_back(std::string("DUMMY"));
                 else
                     m_values.push_back(std::string("KEYCHAIN ACCESS REFUSED"));
             }

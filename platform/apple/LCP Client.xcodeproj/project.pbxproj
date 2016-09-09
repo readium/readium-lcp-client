@@ -941,6 +941,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5A2496AE1C620ECA00EABFFC /* LCP Client (iOS).xcconfig */;
 			buildSettings = {
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/third-parties/cryptopp/lib",
@@ -954,6 +955,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5A2496AE1C620ECA00EABFFC /* LCP Client (iOS).xcconfig */;
 			buildSettings = {
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/third-parties/cryptopp/lib",
