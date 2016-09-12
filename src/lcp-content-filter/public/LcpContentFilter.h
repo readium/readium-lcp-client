@@ -39,7 +39,9 @@ namespace lcp {
         virtual FilterContext *InnerMakeFilterContext(ConstManifestItemPtr item) const OVERRIDE;
     
     private:
+        static ILicense *license;
         static ILcpService *lcpService;
+
         static bool SniffLcpContent(ConstManifestItemPtr item);
         static ContentFilterPtr Factory(ConstPackagePtr package);
     };

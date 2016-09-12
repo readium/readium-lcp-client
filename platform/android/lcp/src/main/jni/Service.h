@@ -17,8 +17,8 @@ namespace lcp {
     };
 }
 
-JNIEXPORT jobject JNICALL Java_org_readium_sdk_lcp_Service_nativeOpenLicense(
-        JNIEnv *env, jobject obj, jlong servicePtr, jstring jLicenseJson);
+// JNIEXPORT jobject JNICALL Java_org_readium_sdk_lcp_Service_nativeOpenLicense(
+//         JNIEnv *env, jobject obj, jlong servicePtr, jstring jLicenseJson);
 
 
 #ifdef __cplusplus

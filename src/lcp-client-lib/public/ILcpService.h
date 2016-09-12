@@ -8,6 +8,7 @@
 #define __I_LCP_SERVICE_H__
 
 #include <string>
+#include <future>
 #include "LcpStatus.h"
 
 namespace lcp
@@ -65,7 +66,7 @@ namespace lcp
         // The License will be automatically decrypted if a valid User Key can
         // be found in the storage provider.
         //
-        virtual Status OpenLicense(const std::string & licenseJson, ILicense ** license) = 0;
+        virtual Status OpenLicense(const std::string & licenseJson, std::promise<ILicense*> & licensePromise) = 0;
 
         //
         // Decrypts the License Document using the given User Passphrase.
@@ -73,6 +74,14 @@ namespace lcp
         // stored inside the storage provider for future retrieval.
         //
         virtual Status DecryptLicense(ILicense * license, const std::string & userPassphrase) = 0;
+
+
+        // << LSD
+        //
+        // Checks the License Status Document link in the decrypted license
+        //
+        virtual Status ProcessLicenseStatusDocument(ILicense * license) = 0;
+        // >> LSD
 
         //
         // Decrypts the input data using the given License.

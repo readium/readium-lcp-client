@@ -7,12 +7,18 @@
 #ifndef __LCP_SERVICE_H__
 #define __LCP_SERVICE_H__
 
+#include <condition_variable>
 #include <map>
 #include <memory>
 #include <mutex>
+#include <future>
 #include "LcpTypedefs.h"
 #include "NonCopyable.h"
 #include "public/ILcpService.h"
+
+// << LSD
+#include "public/INetProvider.h"
+// >> LSD
 
 namespace lcp
 {
@@ -21,8 +27,38 @@ namespace lcp
     class EncryptionProfilesManager;
     class ICryptoProvider;
 
-    class LcpService : public ILcpService, public NonCopyable
+    class LcpService : public ILcpService, public NonCopyable,
+    // << LSD
+    public INetProviderCallback
+    // >> LSD
     {
+
+    // << LSD
+    public:
+        virtual Status ProcessLicenseStatusDocument(ILicense * license);
+        
+        // INetProviderCallback
+        virtual void OnRequestStarted(INetRequest * request);
+        virtual void OnRequestProgressed(INetRequest * request, float progress);
+        virtual void OnRequestCanceled(INetRequest * request);
+        virtual void OnRequestEnded(INetRequest * request, Status result);
+    private:
+        static std::string StatusType;
+        std::string ResolveTemplatedURL(const std::string & url);
+        Status LcpService::CheckStatusDocumentHash();
+        bool m_lsdRequestRunning;
+        Status m_lsdRequestStatus;
+        mutable std::mutex m_lsdSync;
+        std::condition_variable m_lsdCondition;
+        Link m_lsdLink;
+        //std::string m_lsdPath;
+        //std::unique_ptr<IFile> m_lsdFile;
+        std::unique_ptr<IDownloadRequest> m_lsdRequest;
+    // >> LSD
+
+    private:
+        Status CheckDecrypted();
+
     public:
         LcpService(
             const std::string & rootCertificate,
@@ -33,7 +69,7 @@ namespace lcp
             );
 
         // ILcpService
-        virtual Status OpenLicense(const std::string & licenseJson, ILicense ** license);
+        virtual Status OpenLicense(const std::string & licenseJson, std::promise<ILicense*> & licensePromise);
 
         virtual Status DecryptLicense(ILicense * license, const std::string & userPassphrase);
 
@@ -78,7 +114,7 @@ namespace lcp
         virtual INetProvider * NetProvider() const;
         virtual IStorageProvider * StorageProvider() const;
         virtual IFileSystemProvider * FileSystemProvider() const;
-        
+
     private:
         bool FindLicense(const std::string & canonicalJson, ILicense ** license);
         

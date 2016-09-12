@@ -20,9 +20,18 @@
 #include "public/INetProvider.h"
 #include "Acquisition.h"
 #include "RightsService.h"
+#include "SimpleMemoryWritableStream.h"
+#include "DownloadInMemoryRequest.h"
+#include "DateTime.h"
+#include "ThreadTimer.h"
 
 namespace lcp
 {
+    // << LSD
+    /*static*/ std::string LcpService::StatusType = "application/vnd.readium.license.status.v1.0+json";
+    // https://github.com/drminside/lsd_client/blob/master/json_schema_lsd.json
+    // >> LSD
+
     /*static*/ std::string LcpService::UnknownProvider = "UnknownProvider";
     /*static*/ std::string LcpService::UnknownUserId = "UnknownUserId";
 
@@ -44,10 +53,13 @@ namespace lcp
     {
     }
 
-    Status LcpService::OpenLicense(const std::string & licenseJson, ILicense ** license)
+    Status LcpService::OpenLicense(const std::string & licenseJson, std::promise<ILicense*> & licensePromise)
     {
         try
         {
+            ILicense* license_;
+            ILicense** license = &license_;
+            
             if (license == nullptr)
             {
                 throw std::invalid_argument("license is nullptr");
@@ -56,7 +68,7 @@ namespace lcp
             std::string canonicalJson = this->CalculateCanonicalForm(licenseJson);
             if (this->FindLicense(canonicalJson, license))
             {
-                return Status(Status(StatusCode::ErrorCommonSuccess));
+                return Status(StatusCode::ErrorCommonSuccess);
             }
 
             std::unique_ptr<CryptoLcpNode> cryptoNode(new CryptoLcpNode(m_encryptionProfilesManager.get()));
@@ -93,17 +105,244 @@ namespace lcp
             *license = insertRes.first->second.get();
             locker.unlock();
 
-            if (!(*license)->Decrypted())
-            {
-                return this->DecryptLicenseOnOpening(*license);
+            Status result = Status(StatusCode::ErrorCommonSuccess);
+
+            // << LSD
+            result = this->ProcessLicenseStatusDocument(license, licensePromise);
+
+            if (result.code == StatusCode::ErrorStatusDocumentNewLicense) {
+                // result = Status(StatusCode::ErrorCommonSuccess);
+
+                // Execution flow: on the client side of the LcpService::OpenLicense() API (i.e. LCP Content Module), the call to licensePromise.get() is blocking,
+                // while the LSD downloader asynchronously acquires the updated license.
+            } else {
+            // >> LSD
+                result = this->CheckDecrypted(*license);
+                licensePromise.set_value(*license);
             }
-            return Status(StatusCode::ErrorCommonSuccess);
+
+            return result;
         }
         catch (const StatusException & ex)
         {
             return ex.ResultStatus();
         }
     }
+
+    Status LcpService::CheckDecrypted(ILicense* license) {
+
+        Status result = Status(StatusCode::ErrorCommonSuccess);
+
+        if (!license->Decrypted())
+        {
+            result = this->DecryptLicenseOnOpening(license);
+            
+            if (result.Code == StatusCode::ErrorDecryptionLicenseEncrypted) {
+                //ASSERT (!license->Decrypted())
+
+                // failure to decrypt using stored user key, we need user passphrase input
+                result = Status(StatusCode::ErrorCommonSuccess);
+                    
+                // Execution flow: on the client side of the LcpService::OpenLicense() API (i.e. LCP Content Module), LICENSE->Decrypted() boolean is checked, and if false then ePub3::ContentModuleExceptionDecryptFlow is raised, then captured quietly where ePub3::Container::OpenContainer() is invoked. Meanwhile, the LCP Crendential Handler triggers asynchronous user action (passphrase input), and this is then followed with another attempt from scratch to "open" the license (see this->DecryptLicense(lic, pass)), and if successful then ePub3::Container::OpenContainer() is invoked all over again (total inversion of control, 2 separate phases).
+
+            } else if (Status::IsSuccess(result)) {
+                //ASSERT (license->Decrypted())
+
+                result = Status(StatusCode::ErrorCommonSuccess);
+            }
+        }
+
+        return result;
+    }
+    
+    // << LSD
+
+    // INetProviderCallback
+    void LcpService::OnRequestStarted(INetRequest * request)
+    {
+        std::unique_lock<std::mutex> locker(m_lsdSync);
+        m_lsdRequestRunning = true;
+    }
+
+    // INetProviderCallback
+    void LcpService::OnRequestProgressed(INetRequest * request, float progress)
+    {
+        // noop
+    }
+
+    // INetProviderCallback
+    void LcpService::OnRequestCanceled(INetRequest * request)
+    {
+        std::unique_lock<std::mutex> locker(m_lsdSync);
+        m_lsdRequestRunning = false;
+        m_lsdCondition.notify_one();
+    }
+
+    // INetProviderCallback
+    void LcpService::OnRequestEnded(INetRequest * request, Status result)
+    {
+        std::unique_lock<std::mutex> locker(m_lsdSync);
+        m_lsdRequestStatus = result;
+        m_lsdRequestRunning = false;
+        try
+        {
+            if (Status::IsSuccess(result))
+            {
+                Status hashCheckResult = this->CheckStatusDocumentHash(m_lsdStream); //m_lsdFile.get()
+                if (Status::IsSuccess(hashCheckResult))
+                {
+                    //std::vector<unsigned char>
+                    Buffer buffer = m_lsdStream->Buffer();
+                    
+                    if (!buffer.empty())
+                    {
+                        std::string bufferStr(buffer.begin(), buffer.end());
+
+                        // C++ 11
+                        //std::string bufferStr(buffer.data(), buffer.size());
+
+                        // C++ 98
+                        //std::string bufferStr(&buffer[0], buffer.size());
+
+                        //TODO: parse JSON bufferStr
+
+                        
+                    }
+                }
+            }
+
+            m_lsdCondition.notify_one();
+        }
+        catch (const std::exception & ex)
+        {
+            m_lsdRequestStatus = Status(StatusCode::ErrorNetworkingRequestFailed, ex.what());
+            m_lsdCondition.notify_one();
+        }
+    }
+
+    Status LcpService::CheckStatusDocumentHash(IReadableStream* stream)
+    {
+        if (!lsdLink.hash.empty())
+        {
+            std::vector<unsigned char> rawHash;
+            Status res = m_cryptoProvider->CalculateFileHash(stream, rawHash);
+            if (!Status::IsSuccess(res))
+                return res;
+
+            std::string hexHash;
+            res = m_cryptoProvider->ConvertRawToHex(rawHash, hexHash);
+            if (!Status::IsSuccess(res))
+                return res;
+
+            if (hexHash != lsdLink.hash)
+            {
+                return Status(StatusCode::ErrorStatusDocumentCorrupted);
+            }
+        }
+        return Status(StatusCode::ErrorCommonSuccess);
+    }
+
+    // https://github.com/drminside/lsd_client/blob/master/lsd_client.py#L453
+    std::string LcpService::ResolveTemplatedURL(const std::string & url)
+    {
+        // TODO
+        return url;
+    }
+
+    // https://docs.google.com/document/d/1ErBf0Gl32jNH-QVKWpGPfZDMWMeQP7dH9YY5g7agguQ
+    // https://docs.google.com/document/d/1VKkAG9aKbKLQYnSjSa5-_cOgnVFsgU9a7bHO0-IkRgk
+    Status LcpService::ProcessLicenseStatusDocument(ILicense** license, std::promise<ILicense*> & licensePromise)
+    {
+        try
+        {
+            if (license == nullptr)
+            {
+                throw std::invalid_argument("license pointer is nullptr");
+            }
+            if (*license == nullptr)
+            {
+                throw std::invalid_argument("license is nullptr");
+            }
+
+            // if (!*license->Decrypted())
+            // {
+            //     return Status(StatusCode::ErrorDecryptionLicenseEncrypted);
+            // }
+
+            // RootLcpNode * rootNode = dynamic_cast<RootLcpNode *>(*license);
+            // if (rootNode == nullptr)
+            // {
+            //     throw std::logic_error("Can not cast ILicense to ILcpNode / RootLcpNode");
+            // }
+            
+            ILinks* links = *license->Links();
+
+            //bool foundLink = links->GetLink(Status, m_lsdLink);
+            //if (!foundLink) {
+            if (!links->Has(StatusDocument))
+            {
+                //return Status(StatusCode::ErrorStatusDocumentNoStatusLink);
+                return Status(StatusCode::ErrorCommonSuccess); // no LSD, noop
+            }
+
+            links->GetLink(StatusDocument, m_lsdLink);
+            if (m_lsdLink.type != StatusType)
+            {
+                return Status(StatusCode::ErrorStatusDocumentWrongType);
+            }
+
+            if (!m_lsdLink.href.length())
+            {
+                return Status(StatusCode::ErrorStatusDocumentInvalidUri);
+            }
+
+            std::string url = m_lsdLink.href;
+            if (m_lsdLink.templated)
+            {
+                url = this->ResolveTemplatedURL(url);
+            }
+
+            if (m_netProvider == nullptr)
+            {
+                return Status(StatusCode::ErrorCommonNoNetProvider);
+            }
+        
+            std::unique_lock<std::mutex> locker(m_lsdSync);
+
+            // m_lsdPath = "/tmp/lsd.json";
+            // m_lsdFile.reset(m_fileSystemProvider->GetFile(m_lsdPath));
+            // if (m_lsdFile.get() == nullptr)
+            // {
+            //     return Status(StatusCode::ErrorStatusDocumentInvalidFilePath);
+            // }
+            // m_lsdRequest.reset(new DownloadInFileRequest(m_lsdLink.href, m_lsdFile.get()));
+
+            m_lsdStream.reset(new SimpleMemoryWritableStream());
+            m_lsdRequest.reset(new DownloadInMemoryRequest(m_lsdLink.href, m_lsdStream.get()));
+
+            locker.unlock();
+
+            m_lsdRequestStatus = Status(StatusCode::ErrorNetworkingRequestFailed);
+
+            m_lsdRequestRunning = false;
+            m_netProvider->StartDownloadRequest(m_lsdRequest.get(), this);
+            
+            m_conditionDownload.wait(locker, [&]() { return !m_lsdRequestRunning; });
+
+            if (Status::IsSuccess(m_lsdRequestStatus) || m_lsdRequest->Canceled())
+            {
+                // TODO
+            }
+
+            return Status(StatusCode::ErrorStatusDocumentNewLicense);
+        }
+        catch (const StatusException & ex)
+        {
+            return ex.ResultStatus();
+        }
+    }
+
+    // >> LSD
 
     Status LcpService::DecryptLicense(ILicense * license, const std::string & userPassphrase)
     {
@@ -164,8 +403,8 @@ namespace lcp
         {
             m_rightsService->SyncRightsFromStorage(license);
         }
-        if (Status::IsSuccess(res) || res.Code == StatusCode::ErrorDecryptionLicenseEncrypted)
-            return Status(StatusCode::ErrorCommonSuccess);
+        // if (Status::IsSuccess(res) || res.Code == StatusCode::ErrorDecryptionLicenseEncrypted)
+        //     return Status(StatusCode::ErrorCommonSuccess);
         return res;
     }
 

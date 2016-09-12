@@ -30,7 +30,8 @@ namespace lcp {
 
     private:
         static ILcpService *lcpService;
-        static ICredentialHandler * credentialHandler;
+        static ICredentialHandler *credentialHandler;
+        static ILicense *lcpLicense;
     };
 }
 

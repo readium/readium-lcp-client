@@ -85,25 +85,25 @@ NSString *const LCPRightEnd = @(EndRight);
     return _nativeService ? _nativeService.get() : nullptr;
 }
 
-- (LCPLicense *)openLicense:(NSString *)licenseJSON error:(NSError **)error
-{
-    if (!licenseJSON)
-        return nil;
+// - (LCPLicense *)openLicense:(NSString *)licenseJSON error:(NSError **)error
+// {
+//     if (!licenseJSON)
+//         return nil;
     
-    LCPLicense *license;
+//     LCPLicense *license;
     
-    ILicense *nativeLicense;
-    Status status = _nativeService->OpenLicense([licenseJSON UTF8String], &nativeLicense);
+//     ILicense *nativeLicense;
+//     Status status = _nativeService->OpenLicense([licenseJSON UTF8String], &nativeLicense);
     
-    if ([self checkStatus:status error:error]) {
-        license = [[LCPLicense alloc] initWithLicense:nativeLicense];
-        LOG("Open license " << (nativeLicense->Decrypted() ? "(decrypted)" : "(still encrypted)"));
-    } else {
-        LOG("Failed to open license <" << status.Code << ": " << status.Extension << ">");
-    }
+//     if ([self checkStatus:status error:error]) {
+//         license = [[LCPLicense alloc] initWithLicense:nativeLicense];
+//         LOG("Open license " << (nativeLicense->Decrypted() ? "(decrypted)" : "(still encrypted)"));
+//     } else {
+//         LOG("Failed to open license <" << status.Code << ": " << status.Extension << ">");
+//     }
     
-    return license;
-}
+//     return license;
+// }
 
 - (BOOL)decryptLicense:(LCPLicense *)license passphrase:(NSString *)passphrase error:(NSError **)error
 {

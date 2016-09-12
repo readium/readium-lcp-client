@@ -100,6 +100,8 @@ namespace lcp
     // Location where a Reading System can redirect a User looking
     // for additional information about its passphrase.
     static const char * Hint = "hint";
+    // Location of the license status document
+    static const char * StatusDocument = "status";
     // Conveys an identifier for the link's context.
     static const char * Self = "self";
 }

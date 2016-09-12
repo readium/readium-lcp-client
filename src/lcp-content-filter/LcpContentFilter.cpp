@@ -256,31 +256,38 @@ namespace lcp {
             return nullptr;
         }
         
-        // read license.lcpl
-        std::unique_ptr<ePub3::ByteStream> stream = container->ReadStreamAtPath(LcpLicensePath);
-        void *buffer = nullptr;
-        size_t length = stream->ReadAllBytes(&buffer);
-        std::string licenseJSON((char *)buffer, length);
-        free (buffer);
-        
-        // create content filter
-        shared_ptr<LcpContentFilter> contentFilter = nullptr;
-        ILicense *license;
-        Status res = lcpService->OpenLicense(licenseJSON, &license);
-        if (Status::IsSuccess(res)) {
-            return New(license);
-        } else {
-            LOG("Failed to parse license <" << res.Code << ": " << res.Extension << ">");
+        if (LcpContentFilter::license != NULL) {
+            return New(LcpContentFilter::license);
         }
+
+        // // read license.lcpl
+        // std::unique_ptr<ePub3::ByteStream> stream = container->ReadStreamAtPath(LcpLicensePath);
+        // void *buffer = nullptr;
+        // size_t length = stream->ReadAllBytes(&buffer);
+        // std::string licenseJSON((char *)buffer, length);
+        // free (buffer);
+        
+        // // create content filter
+        // //shared_ptr<LcpContentFilter> contentFilter = nullptr;
+
+        // ILicense *license = nullptr;
+        // Status res = lcpService->OpenLicense(licenseJSON, &license);
+        // if (Status::IsSuccess(res)) {
+        //     return New(license);
+        // } else {
+        //     LOG("Failed to parse license <" << res.Code << ": " << res.Extension << ">");
+        // }
         
         return nullptr;
     }
     
+    ILicense *LcpContentFilter::license = NULL:
     ILcpService *LcpContentFilter::lcpService = NULL;
     
-    void LcpContentFilter::Register(ILcpService *const lcpService)
+    void LcpContentFilter::Register(ILcpService *const lcpService, ILicense *license)
     {
         LcpContentFilter::lcpService = lcpService;
+        LcpContentFilter::license = license;
         FilterManager::Instance()->RegisterFilter("LcpFilter", MustAccessRawBytes, LcpContentFilter::Factory);
     }
 }

@@ -22,13 +22,15 @@ READIUM_INCLUDE_END
 #define LOG(msg)
 #endif
 
+static std::string const LcpLicensePath = "META-INF/license.lcpl";
+
 namespace lcp {
     ePub3::string LcpContentModule::GetModuleName() {
         return ePub3::string("lcp");
     }
 
     void LcpContentModule::RegisterContentFilters() {
-        LcpContentFilter::Register(lcpService);
+        LcpContentFilter::Register(lcpService, license);
     }
 
     async_result<ContainerPtr> LcpContentModule::ProcessFile(const ePub3::string &path, ePub3::launch policy) {
@@ -40,7 +42,7 @@ namespace lcp {
         }
 
         // Search for a lcpl file in META-INF
-        bool licenseExists = container->FileExistsAtPath("META-INF/license.lcpl");
+        bool licenseExists = container->FileExistsAtPath(LcpLicensePath);
 
         if (!licenseExists) {
             return make_ready_future<ContainerPtr>(ContainerPtr(nullptr));
@@ -58,23 +60,35 @@ namespace lcp {
         byteStream->Close();
 
         if (buffer == nullptr) {
-            throw ePub3::ContentModuleException(" LCPL license is empty");
+            throw ePub3::ContentModuleException("LCPL license is empty");
         }
 
         std::string licenseJson(buffer, bufferSize);
         free(buffer);
 
-        // Open license
-        lcp::ILicense * license = nullptr;;
-        lcp::Status status = lcpService->OpenLicense(licenseJson, &license);
+        std::promise<ILicense*> licensePromise;
+        auto licenseFuture = licensePromise.get_future();
+        Status status = lcpService->OpenLicense(licenseJson, licensePromise);
 
-        if (status.Code  != lcp::StatusCode::ErrorCommonSuccess) {
+        if (status.Code != StatusCode::ErrorCommonSuccess
+            && status.Code != StatusCode::ErrorStatusDocumentNewLicense) {
             throw ePub3::ContentModuleException("Unable to initialize LCPL license");
         }
 
-        if (!license->Decrypted()) {
+        // ...blocks until licensePromise.set_value(licensePtr)
+        LcpContentModule::lcpLicense = licenseFuture.get();
+        // std::future_status status = licenseFuture.wait_for(std::chrono::system_clock::duration(0));
+        // if (status == std::future_status::ready) {
+        //     LcpContentModule::lcpLicense = licenseFuture.get();
+        // }
+
+        if (LcpContentModule::lcpLicense == NULL) {
+            throw ePub3::ContentModuleException("Unable to get LCPL license");
+        }
+
+        if (!LcpContentModule::lcpLicense->Decrypted()) {
             // decrypt license by calling the credential handler
-            credentialHandler->decrypt(license);
+            credentialHandler->decrypt(LcpContentModule::lcpLicense);
             throw ePub3::ContentModuleExceptionDecryptFlow("Decrypting LCPL license ...");
         }
 
@@ -85,7 +99,9 @@ namespace lcp {
         async_result<bool> result;
         return result;
     }
-
+    
+    ILicense *LcpContentModule::lcpLicense = NULL:
+    
     ILcpService *LcpContentModule::lcpService = NULL;
     ICredentialHandler *LcpContentModule::credentialHandler = NULL;
 
