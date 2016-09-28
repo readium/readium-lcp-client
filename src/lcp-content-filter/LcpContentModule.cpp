@@ -41,16 +41,14 @@ namespace lcp {
             return make_ready_future<ContainerPtr>(ContainerPtr(nullptr));
         }
 
-        // Search for a lcpl file in META-INF
+        // Search for the lcpl file in META-INF
         bool licenseExists = container->FileExistsAtPath(LcpLicensePath);
-
         if (!licenseExists) {
             return make_ready_future<ContainerPtr>(ContainerPtr(nullptr));
         }
 
         // Read lcpl JSON file
-        unique_ptr<ePub3::ByteStream> byteStream = container->ReadStreamAtPath("META-INF/license.lcpl");
-
+        unique_ptr<ePub3::ByteStream> byteStream = container->ReadStreamAtPath(LcpLicensePath);
         if (byteStream == nullptr) {
             throw ePub3::ContentModuleException("Unable to read LCPL license");
         }
@@ -68,7 +66,7 @@ namespace lcp {
 
         std::promise<ILicense*> licensePromise;
         auto licenseFuture = licensePromise.get_future();
-        Status status = lcpService->OpenLicense(licenseJson, licensePromise);
+        Status status = lcpService->OpenLicense(path, licenseJson, licensePromise);
 
         if (status.Code != StatusCode::ErrorCommonSuccess
             && status.Code != StatusCode::ErrorStatusDocumentNewLicense) {

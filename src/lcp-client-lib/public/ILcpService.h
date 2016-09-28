@@ -80,7 +80,7 @@ namespace lcp
         //
         // Checks the License Status Document link in the decrypted license
         //
-        virtual Status ProcessLicenseStatusDocument(ILicense * license) = 0;
+        virtual Status ProcessLicenseStatusDocument(ILicense** license, std::promise<ILicense*> & licensePromise) = 0;
         // >> LSD
 
         //

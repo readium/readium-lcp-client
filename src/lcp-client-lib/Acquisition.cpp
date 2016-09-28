@@ -17,6 +17,8 @@ ZIPLIB_INCLUDE_START
 #include "ziplib/Source/ZipLib/ZipFile.h"
 ZIPLIB_INCLUDE_END
 
+static std::string const LcpLicensePath = "META-INF/license.lcpl";
+
 namespace lcp
 {
     /*static*/ const char * Acquisition::PublicationType = u8"application/epub+zip";
@@ -170,7 +172,7 @@ namespace lcp
             // Release the epub file to perform zip operations
             m_file.reset();
             std::stringstream licenseStream(m_license->OriginalContent());
-            ZipFile::AddFile(m_publicationPath, licenseStream, "META-INF/license.lcpl");
+            ZipFile::AddFile(m_publicationPath, licenseStream, LcpLicensePath);
 
             if (m_callback != nullptr)
             {

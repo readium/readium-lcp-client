@@ -31,7 +31,7 @@ READIUM_INCLUDE_END
 #define LOG(msg)
 #endif
 
-static std::string const LcpLicensePath = "META-INF/license.lcpl";
+//static std::string const LcpLicensePath = "META-INF/license.lcpl";
 
 namespace lcp {
     bool LcpContentFilter::SniffLcpContent(ConstManifestItemPtr item)
@@ -251,16 +251,14 @@ namespace lcp {
     
     ContentFilterPtr LcpContentFilter::Factory(ConstPackagePtr package)
     {
-        ContainerPtr container = package->GetContainer();
-        if (!container->FileExistsAtPath(LcpLicensePath)) {
-            return nullptr;
-        }
-        
         if (LcpContentFilter::license != NULL) {
             return New(LcpContentFilter::license);
         }
 
-        // // read license.lcpl
+        // ContainerPtr container = package->GetContainer();
+        // if (!container->FileExistsAtPath(LcpLicensePath)) {
+        //     return nullptr;
+        // }
         // std::unique_ptr<ePub3::ByteStream> stream = container->ReadStreamAtPath(LcpLicensePath);
         // void *buffer = nullptr;
         // size_t length = stream->ReadAllBytes(&buffer);

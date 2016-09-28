@@ -53,8 +53,10 @@ namespace lcp
     {
     }
 
-    Status LcpService::OpenLicense(const std::string & licenseJson, std::promise<ILicense*> & licensePromise)
+    Status LcpService::OpenLicense(const std::string & publicationPath, const std::string & licenseJson, std::promise<ILicense*> & licensePromise)
     {
+        m_publicationPath = publicationPath;
+
         try
         {
             ILicense* license_;
@@ -206,8 +208,20 @@ namespace lcp
 
                         //TODO: parse JSON bufferStr
 
+                        // TODO: download updated LCP licence
+                        //m_lsdNewLcpLicenseString
+                                
+                        if (!m_lsdNewLcpLicenseString.empty())
+                        {
+                            std::stringstream licenseStream(m_lsdNewLcpLicenseString);
+                            ZipFile::AddFile(m_publicationPath, licenseStream, LcpLicensePath);
+                        }
                         
                     }
+                }
+                else 
+                {
+                    m_lsdRequestStatus = hashCheckResult;
                 }
             }
 

@@ -35,7 +35,7 @@ namespace lcp
 
     // << LSD
     public:
-        virtual Status ProcessLicenseStatusDocument(ILicense * license);
+        virtual Status ProcessLicenseStatusDocument(ILicense** license, std::promise<ILicense*> & licensePromise);
         
         // INetProviderCallback
         virtual void OnRequestStarted(INetRequest * request);
@@ -54,6 +54,8 @@ namespace lcp
         //std::string m_lsdPath;
         //std::unique_ptr<IFile> m_lsdFile;
         std::unique_ptr<IDownloadRequest> m_lsdRequest;
+        std::string m_publicationPath;
+        std:string m_lsdNewLcpLicenseString;
     // >> LSD
 
     private:
