@@ -98,9 +98,10 @@ namespace lcp
             // 404 Not found
             ErrorNetworkingRequestNotFound,
             // Any other network error
-            ErrorNetworkingRequestFailed,
+            ErrorNetworkingRequestFailed
 
-
+#if !DISABLE_LSD
+            ,
 
             // License Status Document: invalid content-type declaration,
             // incorrect string value for 'type' field of LCP license 'links' > 'status' JSON property,
@@ -120,6 +121,7 @@ namespace lcp
             //ErrorStatusDocumentInvalidFilePath,
 
             ErrorStatusDocumentNewLicense
+#endif //!DISABLE_LSD
         };
     };
 

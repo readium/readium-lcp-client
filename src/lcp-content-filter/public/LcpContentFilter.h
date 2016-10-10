@@ -32,15 +32,16 @@ namespace lcp {
         virtual OperatingMode GetOperatingMode() const OVERRIDE { return OperatingMode::SupportsByteRanges; }
         virtual ByteStream::size_type BytesAvailable(FilterContext *context, SeekableByteStream *byteStream) const OVERRIDE;
     
-        static void Register(ILcpService *const lcpService);
+        static void Register(ILcpService *const lcpService, ILicense *const lcpLicense);
     
     protected:
         ILicense *m_license;
         virtual FilterContext *InnerMakeFilterContext(ConstManifestItemPtr item) const OVERRIDE;
     
     private:
-        static ILicense *license;
+        // initialized via LcpContentFilter::Register(ILcpService *const service, ILicense *const license)
         static ILcpService *lcpService;
+        static ILicense *lcpLicense;
 
         static bool SniffLcpContent(ConstManifestItemPtr item);
         static ContentFilterPtr Factory(ConstPackagePtr package);

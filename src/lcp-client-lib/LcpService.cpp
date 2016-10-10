@@ -17,20 +17,27 @@
 #include "CryptoppCryptoProvider.h"
 #include "SimpleKeyProvider.h"
 #include "public/IStorageProvider.h"
-#include "public/INetProvider.h"
 #include "Acquisition.h"
 #include "RightsService.h"
-#include "SimpleMemoryWritableStream.h"
+
+#if !DISABLE_LSD
+#include "IncludeMacros.h"
+
+ZIPLIB_INCLUDE_START
+#include "ziplib/Source/ZipLib/ZipFile.h"
+ZIPLIB_INCLUDE_END
+
 #include "DownloadInMemoryRequest.h"
 #include "DateTime.h"
 #include "ThreadTimer.h"
+#endif //!DISABLE_LSD
 
 namespace lcp
 {
-    // << LSD
+#if !DISABLE_LSD
     /*static*/ std::string LcpService::StatusType = "application/vnd.readium.license.status.v1.0+json";
     // https://github.com/drminside/lsd_client/blob/master/json_schema_lsd.json
-    // >> LSD
+#endif //!DISABLE_LSD
 
     /*static*/ std::string LcpService::UnknownProvider = "UnknownProvider";
     /*static*/ std::string LcpService::UnknownUserId = "UnknownUserId";
@@ -53,9 +60,21 @@ namespace lcp
     {
     }
 
-    Status LcpService::OpenLicense(const std::string & publicationPath, const std::string & licenseJson, std::promise<ILicense*> & licensePromise)
+//    Status LcpService::OpenLicenseIgnoreStatusDocument(const std::string & licenseJson, ILicense** license) {
+//
+//    }
+
+    Status LcpService::OpenLicense(
+#if !DISABLE_LSD
+            const ePub3::string & publicationPath,
+#endif //!DISABLE_LSD
+            const std::string & licenseJson, std::promise<ILicense*> & licensePromise)
     {
+#if !DISABLE_LSD
         m_publicationPath = publicationPath;
+
+        bool ignoreStatusDocument = m_publicationPath.empty();
+#endif //!DISABLE_LSD
 
         try
         {
@@ -109,19 +128,24 @@ namespace lcp
 
             Status result = Status(StatusCode::ErrorCommonSuccess);
 
-            // << LSD
-            result = this->ProcessLicenseStatusDocument(license, licensePromise);
+#if !DISABLE_LSD
+            if (!ignoreStatusDocument) {
+                result = this->ProcessLicenseStatusDocument(license, licensePromise);
+            }
 
-            if (result.code == StatusCode::ErrorStatusDocumentNewLicense) {
+            if (result.Code == StatusCode::ErrorStatusDocumentNewLicense) {
                 // result = Status(StatusCode::ErrorCommonSuccess);
 
                 // Execution flow: on the client side of the LcpService::OpenLicense() API (i.e. LCP Content Module), the call to licensePromise.get() is blocking,
                 // while the LSD downloader asynchronously acquires the updated license.
             } else {
-            // >> LSD
+#endif //!DISABLE_LSD
                 result = this->CheckDecrypted(*license);
+
                 licensePromise.set_value(*license);
+#if !DISABLE_LSD
             }
+#endif //!DISABLE_LSD
 
             return result;
         }
@@ -156,8 +180,8 @@ namespace lcp
 
         return result;
     }
-    
-    // << LSD
+
+#if !DISABLE_LSD
 
     // INetProviderCallback
     void LcpService::OnRequestStarted(INetRequest * request)
@@ -216,7 +240,6 @@ namespace lcp
                             std::stringstream licenseStream(m_lsdNewLcpLicenseString);
                             ZipFile::AddFile(m_publicationPath, licenseStream, LcpLicensePath);
                         }
-                        
                     }
                 }
                 else 
@@ -265,6 +288,7 @@ namespace lcp
 
     // https://docs.google.com/document/d/1ErBf0Gl32jNH-QVKWpGPfZDMWMeQP7dH9YY5g7agguQ
     // https://docs.google.com/document/d/1VKkAG9aKbKLQYnSjSa5-_cOgnVFsgU9a7bHO0-IkRgk
+    // https://docs.google.com/document/d/1oNfXQZRSGqwpexLrhw0-0a2taEvVDXS9cPs8oBKLb0U
     Status LcpService::ProcessLicenseStatusDocument(ILicense** license, std::promise<ILicense*> & licensePromise)
     {
         try
@@ -340,8 +364,8 @@ namespace lcp
 
             m_lsdRequestRunning = false;
             m_netProvider->StartDownloadRequest(m_lsdRequest.get(), this);
-            
-            m_conditionDownload.wait(locker, [&]() { return !m_lsdRequestRunning; });
+
+            m_lsdCondition.wait(locker, [&]() { return !m_lsdRequestRunning; });
 
             if (Status::IsSuccess(m_lsdRequestStatus) || m_lsdRequest->Canceled())
             {
@@ -356,7 +380,7 @@ namespace lcp
         }
     }
 
-    // >> LSD
+#endif //!DISABLE_LSD
 
     Status LcpService::DecryptLicense(ILicense * license, const std::string & userPassphrase)
     {

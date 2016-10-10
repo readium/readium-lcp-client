@@ -29,8 +29,10 @@ namespace lcp {
         async_result<bool> ApproveUserAction(const UserAction &action);
 
     private:
+        // initialized via LcpContentModule::Register(ILcpService *const service, ICredentialHandler * credentialHandler)
         static ILcpService *lcpService;
-        static ICredentialHandler *credentialHandler;
+        static ICredentialHandler *lcpCredentialHandler;
+
         static ILicense *lcpLicense;
     };
 }

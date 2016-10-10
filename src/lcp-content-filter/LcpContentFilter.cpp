@@ -147,7 +147,7 @@ namespace lcp {
             size_t bufferLen = len;
             uint8_t *buffer = new unsigned char[bufferLen];
 
-            Status res = lcpService->DecryptData(m_license, (const unsigned char *)data, len, buffer, &bufferLen, context->Algorithm());
+            Status res = LcpContentFilter::lcpService->DecryptData(m_license, (const unsigned char *)data, len, buffer, &bufferLen, context->Algorithm());
             if (!Status::IsSuccess(res)) {
                 delete [] buffer;
                 return nullptr;
@@ -173,7 +173,7 @@ namespace lcp {
             IReadableStream *readableStream = new SeekableByteStreamAdapter(byteStream);
 
             IEncryptedStream *encryptedStream;
-            Status status = lcpService->CreateEncryptedDataStream(m_license, readableStream, context->Algorithm(), &encryptedStream);
+            Status status = LcpContentFilter::lcpService->CreateEncryptedDataStream(m_license, readableStream, context->Algorithm(), &encryptedStream);
             if (!Status::IsSuccess(status)) {
                 LOG("Failed to create readable stream");
 
@@ -211,7 +211,7 @@ namespace lcp {
         if (context != nullptr) {
             SeekableByteStreamAdapter *readableStream = new SeekableByteStreamAdapter(byteStream);
             IEncryptedStream *encryptedStream;
-            Status status = lcpService->CreateEncryptedDataStream(m_license, readableStream, context->Algorithm(), &encryptedStream);
+            Status status = LcpContentFilter::lcpService->CreateEncryptedDataStream(m_license, readableStream, context->Algorithm(), &encryptedStream);
             
             if (Status::IsSuccess(status)) {
 
@@ -251,8 +251,8 @@ namespace lcp {
     
     ContentFilterPtr LcpContentFilter::Factory(ConstPackagePtr package)
     {
-        if (LcpContentFilter::license != NULL) {
-            return New(LcpContentFilter::license);
+        if (LcpContentFilter::lcpLicense != NULL) {
+            return New(LcpContentFilter::lcpLicense);
         }
 
         // ContainerPtr container = package->GetContainer();
@@ -269,7 +269,7 @@ namespace lcp {
         // //shared_ptr<LcpContentFilter> contentFilter = nullptr;
 
         // ILicense *license = nullptr;
-        // Status res = lcpService->OpenLicense(licenseJSON, &license);
+        // Status res = LcpContentFilter::lcpService->OpenLicense(licenseJSON, &license);
         // if (Status::IsSuccess(res)) {
         //     return New(license);
         // } else {
@@ -278,14 +278,17 @@ namespace lcp {
         
         return nullptr;
     }
-    
-    ILicense *LcpContentFilter::license = NULL:
+
+    // static
+    ILicense *LcpContentFilter::lcpLicense = NULL;
+
+    // static
     ILcpService *LcpContentFilter::lcpService = NULL;
     
-    void LcpContentFilter::Register(ILcpService *const lcpService, ILicense *license)
+    void LcpContentFilter::Register(ILcpService *const service, ILicense *const license)
     {
-        LcpContentFilter::lcpService = lcpService;
-        LcpContentFilter::license = license;
+        LcpContentFilter::lcpService = service;
+        LcpContentFilter::lcpLicense = license;
         FilterManager::Instance()->RegisterFilter("LcpFilter", MustAccessRawBytes, LcpContentFilter::Factory);
     }
 }

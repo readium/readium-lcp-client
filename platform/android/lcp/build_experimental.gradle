@@ -38,6 +38,7 @@ model {
                     "-frtti",
                     "-fpic",
                     "-DFEATURES_READIUM",
+                    "-DDISABLE_LSD",
                     "-I" + project(':epub3').projectDir +  "/include",
                     "-I${file("../../../src/lcp-client-lib")}".toString(),
                     "-I${file("../../../src/lcp-client-lib/public")}".toString(),

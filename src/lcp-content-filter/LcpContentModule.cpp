@@ -30,7 +30,11 @@ namespace lcp {
     }
 
     void LcpContentModule::RegisterContentFilters() {
-        LcpContentFilter::Register(lcpService, license);
+
+        if (LcpContentModule::lcpLicense == NULL) {
+            throw ePub3::ContentModuleException("LcpContentModule::RegisterContentFilters() called before LCP license is obtained from LcpContentModule::ProcessFile()!");
+        }
+        LcpContentFilter::Register(LcpContentModule::lcpService, LcpContentModule::lcpLicense);
     }
 
     async_result<ContainerPtr> LcpContentModule::ProcessFile(const ePub3::string &path, ePub3::launch policy) {
@@ -66,10 +70,18 @@ namespace lcp {
 
         std::promise<ILicense*> licensePromise;
         auto licenseFuture = licensePromise.get_future();
-        Status status = lcpService->OpenLicense(path, licenseJson, licensePromise);
+
+        Status status = LcpContentModule::lcpService->OpenLicense(
+#if !DISABLE_LSD
+                path,
+#endif //!DISABLE_LSD
+                licenseJson, licensePromise);
 
         if (status.Code != StatusCode::ErrorCommonSuccess
-            && status.Code != StatusCode::ErrorStatusDocumentNewLicense) {
+#if !DISABLE_LSD
+            && status.Code != StatusCode::ErrorStatusDocumentNewLicense
+#endif //!DISABLE_LSD
+                ) {
             throw ePub3::ContentModuleException("Unable to initialize LCPL license");
         }
 
@@ -79,6 +91,7 @@ namespace lcp {
         // if (status == std::future_status::ready) {
         //     LcpContentModule::lcpLicense = licenseFuture.get();
         // }
+        // NOTE: LcpContentModule::RegisterContentFilters() needs LcpContentModule::lcpLicense to be set.
 
         if (LcpContentModule::lcpLicense == NULL) {
             throw ePub3::ContentModuleException("Unable to get LCPL license");
@@ -86,7 +99,7 @@ namespace lcp {
 
         if (!LcpContentModule::lcpLicense->Decrypted()) {
             // decrypt license by calling the credential handler
-            credentialHandler->decrypt(LcpContentModule::lcpLicense);
+            LcpContentModule::lcpCredentialHandler->decrypt(LcpContentModule::lcpLicense);
             throw ePub3::ContentModuleExceptionDecryptFlow("Decrypting LCPL license ...");
         }
 
@@ -97,16 +110,20 @@ namespace lcp {
         async_result<bool> result;
         return result;
     }
-    
-    ILicense *LcpContentModule::lcpLicense = NULL:
-    
-    ILcpService *LcpContentModule::lcpService = NULL;
-    ICredentialHandler *LcpContentModule::credentialHandler = NULL;
 
-    void LcpContentModule::Register(ILcpService *const lcpService,
+    // static
+    ILicense *LcpContentModule::lcpLicense = NULL;
+
+    // static
+    ILcpService *LcpContentModule::lcpService = NULL;
+
+    // static
+    ICredentialHandler *LcpContentModule::lcpCredentialHandler = NULL;
+
+    void LcpContentModule::Register(ILcpService *const service,
                                     ICredentialHandler * credentialHandler) {
-        LcpContentModule::lcpService = lcpService;
-        LcpContentModule::credentialHandler = credentialHandler;
+        LcpContentModule::lcpService = service;
+        LcpContentModule::lcpCredentialHandler = credentialHandler;
         auto contentModule = std::make_shared<LcpContentModule>();
         ContentModuleManager::Instance()->RegisterContentModule(contentModule, "LcpContentModule");
     }
