@@ -46,7 +46,13 @@ public class NetProviderCallback  implements ProgressCallback, FutureCallback<Fi
     @Override
     public void onProgress(long downloaded, long total) {
         this.checkStart();
-        this.nativeOnRequestProgressed(this.nativePtr, this.requestPtr, ((float)downloaded/total));
+
+        // total is -1, bug with LCP server? (content-disposition attachment / HTTP header)
+        if (total <= downloaded) {
+            total = downloaded*2;
+        }
+        float val = (downloaded/(float)total);
+        this.nativeOnRequestProgressed(this.nativePtr, this.requestPtr, val);
     }
 
     private native void nativeOnRequestStarted(long nativePtr, long requestPtr);
