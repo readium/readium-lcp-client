@@ -6,7 +6,10 @@
 #include <public/ILicense.h>
 #include <public/LcpStatus.h>
 #include <public/ILcpService.h>
+
+#if !DISABLE_LSD
 #include <ePub3/utilities/utfstring.h>
+#endif //!DISABLE_LSD
 
 JNIEXPORT jobject JNICALL Java_org_readium_sdk_lcp_Service_nativeOpenLicense(
          JNIEnv *env, jobject obj, jlong servicePtr, jstring jLicenseJson) {
