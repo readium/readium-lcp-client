@@ -30,11 +30,61 @@ ZIPLIB_INCLUDE_END
 #include "DownloadInMemoryRequest.h"
 #include "DateTime.h"
 #include "ThreadTimer.h"
+
 #endif //!DISABLE_LSD
 
 namespace lcp
 {
 #if !DISABLE_LSD
+    class BufferRedableStreamAdapter : public IReadableStream
+    {
+    public:
+        BufferRedableStreamAdapter(const std::vector<unsigned char> &buffer) : m_buffer(buffer), m_pos(0) {}
+
+        virtual void Read(unsigned char * pBuffer, int64_t sizeToRead)
+        {
+            int64_t available = this->Size() - m_pos;
+            if (sizeToRead <= 0) {
+                return;
+            }
+            if (sizeToRead > available) {
+                sizeToRead = available;
+            }
+            //std::memcpy(pBuffer, sizeToRead);
+            for (int i = 0; i < sizeToRead; i++) {
+                *(pBuffer+i) = m_buffer[m_pos+i];
+            }
+        }
+
+        virtual void SetReadPosition(int64_t pos)
+        {
+            m_pos = pos;
+            if (m_pos < 0) {
+                m_pos = 0;
+            } else if (m_pos >= this->Size()) {
+                m_pos = (this->Size()-1);
+            }
+        }
+
+        virtual int64_t ReadPosition() const
+        {
+            return m_pos;
+        }
+
+        virtual int64_t Size()
+        {
+            return m_buffer.size();
+        }
+
+    protected:
+        std::vector<unsigned char> m_buffer;
+        int64_t m_pos;
+    };
+#endif //!DISABLE_LSD
+
+#if !DISABLE_LSD
+    static std::string const LcpLicensePath = "META-INF/license.lcpl";
+
     /*static*/ std::string LcpService::StatusType = "application/vnd.readium.license.status.v1.0+json";
     // https://github.com/drminside/lsd_client/blob/master/json_schema_lsd.json
 #endif //!DISABLE_LSD
@@ -57,12 +107,12 @@ namespace lcp
         , m_jsonReader(new JsonValueReader())
         , m_encryptionProfilesManager(new EncryptionProfilesManager())
         , m_cryptoProvider(new CryptoppCryptoProvider(m_encryptionProfilesManager.get(), m_netProvider, defaultCrlUrl))
+#if !DISABLE_LSD
+        , m_lsdRequestStatus(Status(lcp::StatusCode::ErrorCommonSuccess))
+#endif //!DISABLE_LSD
     {
     }
 
-//    Status LcpService::OpenLicenseIgnoreStatusDocument(const std::string & licenseJson, ILicense** license) {
-//
-//    }
 
     Status LcpService::OpenLicense(
 #if !DISABLE_LSD
@@ -83,12 +133,19 @@ namespace lcp
             
             if (license == nullptr)
             {
+                licensePromise.set_value(nullptr);
                 throw std::invalid_argument("license is nullptr");
             }
 
             std::string canonicalJson = this->CalculateCanonicalForm(licenseJson);
-            if (this->FindLicense(canonicalJson, license))
+
+            if (
+#if !DISABLE_LSD
+            ignoreStatusDocument &&
+#endif //!DISABLE_LSD
+                    this->FindLicense(canonicalJson, license))
             {
+                licensePromise.set_value(*license);
                 return Status(StatusCode::ErrorCommonSuccess);
             }
 
@@ -114,13 +171,16 @@ namespace lcp
             rootNode->ParseNode(parentValue, m_jsonReader.get());
 
             Status res = rootNode->VerifyNode(rootNode.get(), this, m_cryptoProvider.get());
-            if (!Status::IsSuccess(res))
+            if (!Status::IsSuccess(res)) {
+                licensePromise.set_value(nullptr);
                 return res;
+            }
 
             std::unique_lock<std::mutex> locker(m_licensesSync);
             auto insertRes = m_licenses.insert(std::make_pair(std::move(canonicalJson), std::move(rootNode)));
             if (!insertRes.second)
             {
+                licensePromise.set_value(nullptr);
                 return Status(StatusCode::ErrorOpeningDuplicateLicenseInstance, "Two License instances with the same canonical form");
             }
             *license = insertRes.first->second.get();
@@ -133,7 +193,7 @@ namespace lcp
                 result = this->ProcessLicenseStatusDocument(license, licensePromise);
             }
 
-            if (result.Code == StatusCode::ErrorStatusDocumentNewLicense) {
+            if (result.Code == StatusCode::ErrorStatusDocumentNewLicense) { // SUCCESS
                 // result = Status(StatusCode::ErrorCommonSuccess);
 
                 // Execution flow: on the client side of the LcpService::OpenLicense() API (i.e. LCP Content Module), the call to licensePromise.get() is blocking,
@@ -151,6 +211,7 @@ namespace lcp
         }
         catch (const StatusException & ex)
         {
+            licensePromise.set_value(nullptr);
             return ex.ResultStatus();
         }
     }
@@ -193,7 +254,8 @@ namespace lcp
     // INetProviderCallback
     void LcpService::OnRequestProgressed(INetRequest * request, float progress)
     {
-        // noop
+        float p = progress;
+        float pp = p;
     }
 
     // INetProviderCallback
@@ -209,12 +271,12 @@ namespace lcp
     {
         std::unique_lock<std::mutex> locker(m_lsdSync);
         m_lsdRequestStatus = result;
-        m_lsdRequestRunning = false;
+
         try
         {
             if (Status::IsSuccess(result))
             {
-                Status hashCheckResult = this->CheckStatusDocumentHash(m_lsdStream); //m_lsdFile.get()
+                Status hashCheckResult = this->CheckStatusDocumentHash(new BufferRedableStreamAdapter(m_lsdStream->Buffer()));
                 if (Status::IsSuccess(hashCheckResult))
                 {
                     //std::vector<unsigned char>
@@ -232,13 +294,15 @@ namespace lcp
 
                         //TODO: parse JSON bufferStr
 
-                        // TODO: download updated LCP licence
+                        // TODO: download updated LCP licence if necessary (yet another async operation, this time with more complex HTTP request)
                         //m_lsdNewLcpLicenseString
+                        m_lsdNewLcpLicenseString = m_lsdOriginalLicense->OriginalContent(); // TODO: remove this, just for testing!
                                 
                         if (!m_lsdNewLcpLicenseString.empty())
                         {
                             std::stringstream licenseStream(m_lsdNewLcpLicenseString);
-                            ZipFile::AddFile(m_publicationPath, licenseStream, LcpLicensePath);
+                            std::string publicationPath(m_publicationPath.c_str());
+                            ZipFile::AddFile(publicationPath, licenseStream, LcpLicensePath);
                         }
                     }
                 }
@@ -248,18 +312,23 @@ namespace lcp
                 }
             }
 
+            m_lsdRequestRunning = false;
             m_lsdCondition.notify_one();
         }
         catch (const std::exception & ex)
         {
-            m_lsdRequestStatus = Status(StatusCode::ErrorNetworkingRequestFailed, ex.what());
+            m_lsdRequestStatus = Status(StatusCode::ErrorNetworkingRequestFailed); //, ex.what()
+
+            m_lsdRequestRunning = false;
             m_lsdCondition.notify_one();
         }
     }
 
     Status LcpService::CheckStatusDocumentHash(IReadableStream* stream)
     {
-        if (!lsdLink.hash.empty())
+        m_lsdLink.hash = "abcdefg"; // TODO: remove this! (just testing)
+
+        if (!m_lsdLink.hash.empty())
         {
             std::vector<unsigned char> rawHash;
             Status res = m_cryptoProvider->CalculateFileHash(stream, rawHash);
@@ -271,9 +340,9 @@ namespace lcp
             if (!Status::IsSuccess(res))
                 return res;
 
-            if (hexHash != lsdLink.hash)
+            if (hexHash != m_lsdLink.hash)
             {
-                return Status(StatusCode::ErrorStatusDocumentCorrupted);
+                return Status(StatusCode::ErrorStatusDocumentHashCheckFail);
             }
         }
         return Status(StatusCode::ErrorCommonSuccess);
@@ -302,6 +371,8 @@ namespace lcp
                 throw std::invalid_argument("license is nullptr");
             }
 
+            m_lsdOriginalLicense = *license;
+
             // if (!*license->Decrypted())
             // {
             //     return Status(StatusCode::ErrorDecryptionLicenseEncrypted);
@@ -313,7 +384,7 @@ namespace lcp
             //     throw std::logic_error("Can not cast ILicense to ILcpNode / RootLcpNode");
             // }
             
-            ILinks* links = *license->Links();
+            ILinks* links = (*license)->Links();
 
             //bool foundLink = links->GetLink(Status, m_lsdLink);
             //if (!foundLink) {
@@ -362,12 +433,12 @@ namespace lcp
 
             m_lsdRequestStatus = Status(StatusCode::ErrorNetworkingRequestFailed);
 
-            m_lsdRequestRunning = false;
             m_netProvider->StartDownloadRequest(m_lsdRequest.get(), this);
+            m_lsdRequestRunning = true;
 
             m_lsdCondition.wait(locker, [&]() { return !m_lsdRequestRunning; });
 
-            if (Status::IsSuccess(m_lsdRequestStatus) || m_lsdRequest->Canceled())
+            if (!Status::IsSuccess(m_lsdRequestStatus) || m_lsdRequest->Canceled())
             {
                 // TODO
             }

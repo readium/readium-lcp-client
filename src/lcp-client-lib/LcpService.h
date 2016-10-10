@@ -50,7 +50,7 @@ namespace lcp
 
         static std::string StatusType;
         bool m_lsdRequestRunning;
-        Status m_lsdRequestStatus;
+        lcp::Status m_lsdRequestStatus;
         mutable std::mutex m_lsdSync;
         std::condition_variable m_lsdCondition;
         lcp::Link m_lsdLink;
@@ -60,6 +60,7 @@ namespace lcp
         ePub3::string m_publicationPath;
         std::string m_lsdNewLcpLicenseString;
         std::unique_ptr<SimpleMemoryWritableStream> m_lsdStream;
+        ILicense * m_lsdOriginalLicense;
 #endif //!DISABLE_LSD
 
     private:
@@ -80,8 +81,6 @@ namespace lcp
                 const ePub3::string & publicationPath,
 #endif //!DISABLE_LSD
                 const std::string & licenseJson, std::promise<ILicense*> & licensePromise);
-
-        //virtual Status OpenLicenseIgnoreStatusDocument(const std::string & licenseJson, ILicense** license);
 
         virtual Status DecryptLicense(ILicense * license, const std::string & userPassphrase);
 

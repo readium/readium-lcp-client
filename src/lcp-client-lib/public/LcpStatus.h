@@ -112,11 +112,11 @@ namespace lcp
             ErrorStatusDocumentInvalidUri,
 
             // License Status Document: the downloaded file doesn't match the hash.
-            ErrorStatusDocumentCorrupted,
+            ErrorStatusDocumentHashCheckFail,
 
             // License Status Document: incorrect syntax / format
-            // for file retrived from the 'href' URI of 'type' "application/vnd.readium.license.status.v1.0+json".
-            ErrorStatusDocumentNotValid,
+            // for file retrieved from the 'href' URI of 'type' "application/vnd.readium.license.status.v1.0+json".
+            //ErrorStatusDocumentNotValid,
 
             //ErrorStatusDocumentInvalidFilePath,
 

@@ -76,8 +76,6 @@ namespace lcp
 #endif //!DISABLE_LSD
                 const std::string & licenseJson, std::promise<ILicense*> & licensePromise) = 0;
 
-        //virtual Status OpenLicenseIgnoreStatusDocument(const std::string & licenseJson, ILicense** license) = 0;
-
         //
         // Decrypts the License Document using the given User Passphrase.
         // If the resulting User Key is valid, it will be permanently 
