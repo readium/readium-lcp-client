@@ -19,6 +19,7 @@ public class NetProviderCallback  implements ProgressCallback, FutureCallback<Fi
 
     // Set to true if the download has started
     private boolean hasStarted = false;
+    private boolean hasEnded = false;
 
     NetProviderCallback(long nativePtr, long requestPtr) {
         this.nativePtr = nativePtr;
@@ -35,11 +36,18 @@ public class NetProviderCallback  implements ProgressCallback, FutureCallback<Fi
     @Override
     public void onCompleted(Exception e, File result) {
         this.checkStart();
+        if (hasEnded) {
+            return;
+        }
+        hasEnded = true;
         if (e instanceof CancellationException) {
             // Request has been canceled
             this.nativeOnRequestCanceled(this.nativePtr, this.requestPtr);
-        } else {
+        } else if (e == null) {
             this.nativeOnRequestEnded(this.nativePtr, this.requestPtr);
+        } else {
+            //File error?
+            this.nativeOnRequestCanceled(this.nativePtr, this.requestPtr);
         }
     }
 
@@ -48,11 +56,17 @@ public class NetProviderCallback  implements ProgressCallback, FutureCallback<Fi
         this.checkStart();
 
         // total is -1, bug with LCP server? (content-disposition attachment / HTTP header)
-        if (total <= downloaded) {
+        if (total < downloaded) {
             total = downloaded*2;
         }
         float val = (downloaded/(float)total);
         this.nativeOnRequestProgressed(this.nativePtr, this.requestPtr, val);
+
+        if (total == downloaded) {
+            hasEnded = true;
+            this.nativeOnRequestEnded(this.nativePtr, this.requestPtr);
+            // ALSO HANDLED BY FILE DOWNLOAD FINISH (see Future<File> in NetProvider.java, raises same callback onCompleted())
+        }
     }
 
     private native void nativeOnRequestStarted(long nativePtr, long requestPtr);
