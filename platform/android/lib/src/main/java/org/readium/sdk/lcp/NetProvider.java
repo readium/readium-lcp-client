@@ -52,7 +52,9 @@ public class NetProvider {
 
         Future<File> request = Ion.with(this.context)
                 .load(url)
-                .progress(callback)
+                .progress(callback) // not UI thread
+                //.progressHandler(callback) // UI thread
+                //.setTimeout(1000)
                 .write(new File(dstPath))
                 .setCallback(callback);
         this.requests.put(requestPtr, request);
