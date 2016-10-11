@@ -116,9 +116,7 @@ namespace lcp
 
             // License Status Document: incorrect syntax / format
             // for file retrieved from the 'href' URI of 'type' "application/vnd.readium.license.status.v1.0+json".
-            //ErrorStatusDocumentNotValid,
-
-            //ErrorStatusDocumentInvalidFilePath,
+            ErrorOpeningLicenseStatusDocumentNotValid,
 
             ErrorStatusDocumentNewLicense
 #endif //!DISABLE_LSD

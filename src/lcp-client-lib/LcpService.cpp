@@ -27,7 +27,9 @@ ZIPLIB_INCLUDE_START
 #include "ziplib/Source/ZipLib/ZipFile.h"
 ZIPLIB_INCLUDE_END
 
-#include "DownloadInMemoryRequest.h"
+//#include "DownloadInMemoryRequest.h"
+#include "DownloadInFileRequest.h"
+
 #include "DateTime.h"
 #include "ThreadTimer.h"
 
@@ -52,7 +54,8 @@ namespace lcp
             }
             //std::memcpy(pBuffer, sizeToRead);
             for (int i = 0; i < sizeToRead; i++) {
-                *(pBuffer+i) = m_buffer[m_pos+i];
+                char c = m_buffer[m_pos+i];
+                *(pBuffer+i) = c;
             }
         }
 
@@ -139,20 +142,23 @@ namespace lcp
 
             std::string canonicalJson = this->CalculateCanonicalForm(licenseJson);
 
-            if (
-#if !DISABLE_LSD
-            ignoreStatusDocument &&
-#endif //!DISABLE_LSD
-                    this->FindLicense(canonicalJson, license)) {
+            bool foundLicense = this->FindLicense(canonicalJson, license);
+            if (foundLicense) {
                 Status res = Status(StatusCode::ErrorCommonSuccess);
-//#if !DISABLE_LSD
-//                if (!(*license)->Decrypted()) {
-//                    // the license may actually already be decrypted (ProcessLicenseStatusDocument() skipped this step)
-//                    res = this->CheckDecrypted(*license);
-//                }
-//#endif //!DISABLE_LSD
-                licensePromise.set_value(*license);
-                return res;
+
+                if (!(*license)->Decrypted()) {
+                    // THIS SHOULD NEVER HAPPEN!
+                    res = this->CheckDecrypted(*license);
+                }
+
+#if !DISABLE_LSD
+                if (ignoreStatusDocument) {
+#endif //!DISABLE_LSD
+                    licensePromise.set_value(*license);
+                    return res;
+#if !DISABLE_LSD
+                }
+#endif //!DISABLE_LSD
             }
 
             std::unique_ptr<CryptoLcpNode> cryptoNode(new CryptoLcpNode(m_encryptionProfilesManager.get()));
@@ -182,15 +188,18 @@ namespace lcp
                 return res;
             }
 
-            std::unique_lock<std::mutex> locker(m_licensesSync);
-            auto insertRes = m_licenses.insert(std::make_pair(std::move(canonicalJson), std::move(rootNode)));
-            if (!insertRes.second)
-            {
-                licensePromise.set_value(nullptr);
-                return Status(StatusCode::ErrorOpeningDuplicateLicenseInstance, "Two License instances with the same canonical form");
+            if (!foundLicense) { // we check because foundLicense can be true when !DISABLE_LSD && !ignoreStatusDocument
+                std::unique_lock<std::mutex> locker(m_licensesSync);
+                auto insertRes = m_licenses.insert(
+                        std::make_pair(std::move(canonicalJson), std::move(rootNode)));
+                if (!insertRes.second) {
+                    licensePromise.set_value(nullptr);
+                    return Status(StatusCode::ErrorOpeningDuplicateLicenseInstance,
+                                  "Two License instances with the same canonical form");
+                }
+                *license = insertRes.first->second.get();
+                locker.unlock();
             }
-            *license = insertRes.first->second.get();
-            locker.unlock();
 
             Status result = Status(StatusCode::ErrorCommonSuccess);
 
@@ -286,28 +295,131 @@ namespace lcp
         {
             if (Status::IsSuccess(result))
             {
+#if USE_MEMORY_NOT_FILE
                 Status hashCheckResult = this->CheckStatusDocumentHash(new BufferRedableStreamAdapter(m_lsdStream->Buffer()));
+#else
+                Status hashCheckResult = this->CheckStatusDocumentHash(m_lsdFile.get());
+#endif //USE_MEMORY_NOT_FILE
+
                 if (Status::IsSuccess(hashCheckResult))
                 {
-                    //std::vector<unsigned char>
-                    Buffer buffer = m_lsdStream->Buffer();
-                    
-                    if (!buffer.empty())
-                    {
-                        std::string bufferStr(buffer.begin(), buffer.end());
+                    std::string jsonStr;
+
+#if USE_MEMORY_NOT_FILE
+
+                    const std::vector<unsigned char> & chars = m_lsdStream->Buffer();
+
+                    if (!chars.empty()) {
+                        std::string bufferStr(chars.begin(), chars.end());
 
                         // C++ 11
-                        //std::string bufferStr(buffer.data(), buffer.size());
+                        std::string bufferStr_(chars.data(), chars.size());
 
                         // C++ 98
-                        //std::string bufferStr(&buffer[0], buffer.size());
+                        std::string bufferStr__(&chars[0], chars.size());
 
-                        //TODO: parse JSON bufferStr
+                    }
+#else
+                    int length = m_lsdFile.get()->Size();
+                    unsigned char * buf = new unsigned char[length];
+                    m_lsdFile.get()->Read(buf, length);
+                    jsonStr.assign(reinterpret_cast<char*>(buf), length);
+                    delete[] buf;
+
+#endif //USE_MEMORY_NOT_FILE
+
+
+                    if (!jsonStr.empty())
+                    {
+                        rapidjson::Document jsonDoc;
+                        if (jsonDoc.Parse<rapidjson::kParseValidateEncodingFlag>(jsonStr.data()).HasParseError())
+                        {
+                            throw StatusException(JsonValueReader::CreateRapidJsonError(jsonDoc.GetParseError(), jsonDoc.GetErrorOffset()));
+                        }
+
+                        if (!jsonDoc.IsObject())
+                        {
+                            throw StatusException(JsonValueReader::CreateRapidJsonError(rapidjson::kParseErrorValueInvalid));
+                        }
+
+                        std::string lsd_id = m_jsonReader->ReadStringCheck("id", jsonDoc);
+                        std::string lsd_status = m_jsonReader->ReadStringCheck("status", jsonDoc);
+                        std::string lsd_message = m_jsonReader->ReadString("message", jsonDoc);
+                        int lsd_device_count = m_jsonReader->ReadInteger("device_count", jsonDoc);
+
+                        const rapidjson::Value & jsonPotentialRights = m_jsonReader->ReadObject("potential_rights", jsonDoc);
+                        const rapidjson::Value & jsonUpdated = m_jsonReader->ReadObjectCheck("updated", jsonDoc);
+
+                        const rapidjson::Value & jsonLinks = m_jsonReader->ReadObjectCheck("links", jsonDoc);
+
+                        if (!jsonLinks.HasMember("license"))
+                        {
+                            throw StatusException(Status(StatusCode::ErrorOpeningLicenseStatusDocumentNotValid, "LSD links missing license"));
+                        }
+
+                        std::string licenseToDownload;
+
+                        auto it = jsonLinks.FindMember("license");
+                        if (it != jsonLinks.MemberEnd()) {
+                            if (it->value.IsArray()) {
+                                for (auto arrayIt = it->value.Begin(); arrayIt != it->value.End(); ++arrayIt)
+                                {
+                                    std::string lsd_LinksLicenseHref = m_jsonReader->ReadStringCheck("href", *arrayIt);
+                                    std::string lsd_LinksLicenseType = m_jsonReader->ReadString("type", *arrayIt);
+                                    if (lsd_LinksLicenseType.empty() || lsd_LinksLicenseType == "application/vnd.readium.lcp.license.v1.0+json") {
+                                        licenseToDownload = lsd_LinksLicenseHref;
+                                        break;
+                                    }
+                                }
+                            } else if (it->value.IsObject()) {
+
+                                std::string lsd_LinksLicenseHref = m_jsonReader->ReadStringCheck("href", it->value);
+                                std::string lsd_LinksLicenseType = m_jsonReader->ReadString("type", it->value);
+                                if (lsd_LinksLicenseType.empty() || lsd_LinksLicenseType == "application/vnd.readium.lcp.license.v1.0+json") {
+                                    licenseToDownload = lsd_LinksLicenseHref;
+                                }
+                            }
+                        }
+//
+//                        rapidjson::Type type = jsonLinksLicense.GetType();
+//                        if (type == rapidjson::kObjectType)
+//                        {
+//                        }
+//                        else if (type == rapidjson::kArrayType)
+//                        {
+//                        }
+
+//
+//                        for (auto it = jsonLinks.MemberBegin(); it != jsonLinks.MemberEnd(); ++it)
+//                        {
+//                            rapidjson::Type type = it->value.GetType();
+//
+//                            std::string linkMember(it->name.GetString(), it->name.GetStringLength());
+//
+//                            if (type == rapidjson::kObjectType)
+//                            {
+//                                if (linkMember == "license") {
+//                                    //it->value
+//                                }
+//                            }
+//                            else if (type == rapidjson::kArrayType)
+//                            {
+//                                for (auto arrayIt = it->value.Begin(); arrayIt != it->value.End(); ++arrayIt)
+//                                {
+//                                    //*arrayIt
+//                                }
+//                            }
+//                            else
+//                            {
+//                                throw StatusException(Status(StatusCode::ErrorOpeningLicenseStatusDocumentNotValid, "links object is not valid"));
+//                            }
+//                        }
+
 
                         // TODO: download updated LCP licence if necessary (yet another async operation, this time with more complex HTTP request)
                         //m_lsdNewLcpLicenseString
                         m_lsdNewLcpLicenseString = m_lsdOriginalLicense->OriginalContent(); // TODO: remove this, just for testing!
-                                
+
                         if (!m_lsdNewLcpLicenseString.empty())
                         {
                             std::stringstream licenseStream(m_lsdNewLcpLicenseString);
@@ -324,7 +436,7 @@ namespace lcp
                         }
                     }
                 }
-                else 
+                else
                 {
                     m_lsdRequestStatus = hashCheckResult;
                 }
@@ -442,17 +554,19 @@ namespace lcp
             }
         
             std::unique_lock<std::mutex> locker(m_lsdSync);
-
-            // m_lsdPath = "/tmp/lsd.json";
-            // m_lsdFile.reset(m_fileSystemProvider->GetFile(m_lsdPath));
-            // if (m_lsdFile.get() == nullptr)
-            // {
-            //     return Status(StatusCode::ErrorStatusDocumentInvalidFilePath);
-            // }
-            // m_lsdRequest.reset(new DownloadInFileRequest(m_lsdLink.href, m_lsdFile.get()));
-
+#if USE_MEMORY_NOT_FILE
             m_lsdStream.reset(new SimpleMemoryWritableStream());
             m_lsdRequest.reset(new DownloadInMemoryRequest(m_lsdLink.href, m_lsdStream.get()));
+#else
+            std::string lsdPath(m_publicationPath.c_str());
+            lsdPath = lsdPath + "_TEMP.lsd";
+            m_lsdFile.reset(m_fileSystemProvider->GetFile(lsdPath));
+            if (m_lsdFile.get() == nullptr)
+            {
+                return Status(StatusCode::ErrorAcquisitionInvalidFilePath);
+            }
+            m_lsdRequest.reset(new DownloadInFileRequest(m_lsdLink.href, m_lsdFile.get()));
+#endif //USE_MEMORY_NOT_FILE
 
             locker.unlock();
 

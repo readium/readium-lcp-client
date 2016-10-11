@@ -20,7 +20,11 @@
 //#include <public/lcp.h>
 #include "public/ILinks.h"
 #include "public/INetProvider.h"
-#include "SimpleMemoryWritableStream.h"
+#if USE_MEMORY_NOT_FILE
+    #include "SimpleMemoryWritableStream.h"
+#else
+    #include <public/IFileSystemProvider.h>
+#endif //USE_MEMORY_NOT_FILE
 #endif //!DISABLE_LSD
 
 namespace lcp
@@ -59,7 +63,11 @@ namespace lcp
         std::unique_ptr<IDownloadRequest> m_lsdRequest;
         ePub3::string m_publicationPath;
         std::string m_lsdNewLcpLicenseString;
+#if USE_MEMORY_NOT_FILE
         std::unique_ptr<SimpleMemoryWritableStream> m_lsdStream;
+#else
+        std::unique_ptr<IFile> m_lsdFile;
+#endif //USE_MEMORY_NOT_FILE
         ILicense * m_lsdOriginalLicense;
         std::promise<ILicense*> * m_lsdLicensePromise;
 #endif //!DISABLE_LSD
