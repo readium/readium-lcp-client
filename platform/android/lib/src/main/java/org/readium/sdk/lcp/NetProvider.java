@@ -7,6 +7,7 @@ import com.koushikdutta.async.future.Future;
 import com.koushikdutta.ion.Ion;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,6 +38,18 @@ public class NetProvider {
     public void download(String url, String dstPath, long requestPtr, long callbackPtr) {
         // Build ion request
         NetProviderCallback callback = new NetProviderCallback(callbackPtr, requestPtr);
+
+        if (dstPath == null || dstPath.isEmpty()) {
+            File outputDir = this.context.getCacheDir();
+            File outputFile = null;
+            try {
+                outputFile = File.createTempFile("readium_lcp_download", ".tmp", outputDir);
+                dstPath = outputFile.getAbsolutePath();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
         Future<File> request = Ion.with(this.context)
                 .load(url)
                 .progress(callback)
