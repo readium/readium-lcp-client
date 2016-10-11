@@ -61,6 +61,7 @@ namespace lcp
         std::string m_lsdNewLcpLicenseString;
         std::unique_ptr<SimpleMemoryWritableStream> m_lsdStream;
         ILicense * m_lsdOriginalLicense;
+        std::promise<ILicense*> * m_lsdLicensePromise;
 #endif //!DISABLE_LSD
 
     private:

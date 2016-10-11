@@ -143,10 +143,16 @@ namespace lcp
 #if !DISABLE_LSD
             ignoreStatusDocument &&
 #endif //!DISABLE_LSD
-                    this->FindLicense(canonicalJson, license))
-            {
+                    this->FindLicense(canonicalJson, license)) {
+                Status res = Status(StatusCode::ErrorCommonSuccess);
+//#if !DISABLE_LSD
+//                if (!(*license)->Decrypted()) {
+//                    // the license may actually already be decrypted (ProcessLicenseStatusDocument() skipped this step)
+//                    res = this->CheckDecrypted(*license);
+//                }
+//#endif //!DISABLE_LSD
                 licensePromise.set_value(*license);
-                return Status(StatusCode::ErrorCommonSuccess);
+                return res;
             }
 
             std::unique_ptr<CryptoLcpNode> cryptoNode(new CryptoLcpNode(m_encryptionProfilesManager.get()));
@@ -188,6 +194,8 @@ namespace lcp
 
             Status result = Status(StatusCode::ErrorCommonSuccess);
 
+            result = this->CheckDecrypted(license_);
+
 #if !DISABLE_LSD
             if (!ignoreStatusDocument) {
                 result = this->ProcessLicenseStatusDocument(license, licensePromise);
@@ -200,9 +208,8 @@ namespace lcp
                 // while the LSD downloader asynchronously acquires the updated license.
             } else {
 #endif //!DISABLE_LSD
-                result = this->CheckDecrypted(*license);
 
-                licensePromise.set_value(*license);
+                licensePromise.set_value(license_);
 #if !DISABLE_LSD
             }
 #endif //!DISABLE_LSD
@@ -264,6 +271,9 @@ namespace lcp
         std::unique_lock<std::mutex> locker(m_lsdSync);
         m_lsdRequestRunning = false;
         m_lsdCondition.notify_one();
+
+        //m_lsdRequestStatus = this->CheckDecrypted(m_lsdOriginalLicense);
+        m_lsdLicensePromise->set_value(m_lsdOriginalLicense);
     }
 
     // INetProviderCallback
@@ -303,6 +313,14 @@ namespace lcp
                             std::stringstream licenseStream(m_lsdNewLcpLicenseString);
                             std::string publicationPath(m_publicationPath.c_str());
                             ZipFile::AddFile(publicationPath, licenseStream, LcpLicensePath);
+
+                            m_lsdRequestStatus = this->OpenLicense("", m_lsdNewLcpLicenseString, *m_lsdLicensePromise);
+
+                            m_lsdRequestRunning = false;
+                            m_lsdCondition.notify_one();
+                            //m_lsdRequestStatus = this->CheckDecrypted(newLicense);
+                            //m_lsdLicensePromise->set_value(newLicense);
+                            return;
                         }
                     }
                 }
@@ -314,19 +332,25 @@ namespace lcp
 
             m_lsdRequestRunning = false;
             m_lsdCondition.notify_one();
+
+            //m_lsdRequestStatus = this->CheckDecrypted(m_lsdOriginalLicense);
+            m_lsdLicensePromise->set_value(m_lsdOriginalLicense);
         }
         catch (const std::exception & ex)
         {
-            m_lsdRequestStatus = Status(StatusCode::ErrorNetworkingRequestFailed); //, ex.what()
+            m_lsdRequestStatus = Status(StatusCode::ErrorNetworkingRequestFailed, ex.what());
 
             m_lsdRequestRunning = false;
             m_lsdCondition.notify_one();
+
+            //m_lsdRequestStatus = this->CheckDecrypted(m_lsdOriginalLicense);
+            m_lsdLicensePromise->set_value(m_lsdOriginalLicense);
         }
     }
 
     Status LcpService::CheckStatusDocumentHash(IReadableStream* stream)
     {
-        m_lsdLink.hash = "abcdefg"; // TODO: remove this! (just testing)
+        //m_lsdLink.hash = "abcdefg"; // TODO: remove this! (just testing)
 
         if (!m_lsdLink.hash.empty())
         {
@@ -372,6 +396,7 @@ namespace lcp
             }
 
             m_lsdOriginalLicense = *license;
+            m_lsdLicensePromise = & licensePromise;
 
             // if (!*license->Decrypted())
             // {
@@ -436,13 +461,14 @@ namespace lcp
             m_netProvider->StartDownloadRequest(m_lsdRequest.get(), this);
             m_lsdRequestRunning = true;
 
-            m_lsdCondition.wait(locker, [&]() { return !m_lsdRequestRunning; });
+//            m_lsdCondition.wait(locker, [&]() { return !m_lsdRequestRunning; });
+//            if (!Status::IsSuccess(m_lsdRequestStatus) || m_lsdRequest->Canceled())
+//            {
+//                // TODO
+//            }
 
-            if (!Status::IsSuccess(m_lsdRequestStatus) || m_lsdRequest->Canceled())
-            {
-                // TODO
-            }
-
+            //m_lsdRequestStatus = this->CheckDecrypted(newLicense);
+            //licensePromise.set_value(*newLicense);
             return Status(StatusCode::ErrorStatusDocumentNewLicense);
         }
         catch (const StatusException & ex)
