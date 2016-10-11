@@ -77,9 +77,9 @@ namespace lcp {
 #endif //!DISABLE_LSD
                 licenseJson, licensePromise);
 
-        if (status.Code != StatusCode::ErrorCommonSuccess
+        if ((status.Code != StatusCode::ErrorCommonSuccess)
 #if !DISABLE_LSD
-            && status.Code != StatusCode::ErrorStatusDocumentNewLicense
+            && (status.Code != StatusCode::ErrorStatusDocumentNewLicense)
 #endif //!DISABLE_LSD
                 ) {
             throw ePub3::ContentModuleException("Unable to initialize LCPL license");
