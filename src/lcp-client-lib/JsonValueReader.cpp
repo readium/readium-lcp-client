@@ -60,7 +60,7 @@ namespace lcp
         auto it = jsonValue.FindMember(name.c_str());
         if (it != jsonValue.MemberEnd() && it->value.IsBool())
         {
-            return jsonValue.GetBool();
+            return it->value.GetBool();
         }
         return false;
     }
@@ -70,7 +70,7 @@ namespace lcp
         auto it = jsonValue.FindMember(name.c_str());
         if (it != jsonValue.MemberEnd() && it->value.IsInt())
         {
-            return jsonValue.GetInt();
+            return it->value.GetInt();
         }
         return 0;
     }
