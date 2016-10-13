@@ -7,7 +7,6 @@
 #ifndef __LCP_SERVICE_H__
 #define __LCP_SERVICE_H__
 
-#include <condition_variable>
 #include <map>
 #include <memory>
 #include <mutex>
@@ -17,6 +16,7 @@
 #include "public/ILcpService.h"
 
 #if !DISABLE_LSD
+//#include <condition_variable>
 //#include <public/lcp.h>
 #include "public/ILinks.h"
 #include "public/INetProvider.h"
@@ -56,7 +56,7 @@ namespace lcp
         bool m_lsdRequestRunning;
         lcp::Status m_lsdRequestStatus;
         mutable std::mutex m_lsdSync;
-        std::condition_variable m_lsdCondition;
+        //std::condition_variable m_lsdCondition;
         lcp::Link m_lsdLink;
         //std::string m_lsdPath;
         //std::unique_ptr<IFile> m_lsdFile;

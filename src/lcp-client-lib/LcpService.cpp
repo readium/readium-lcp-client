@@ -279,7 +279,7 @@ namespace lcp
     {
         std::unique_lock<std::mutex> locker(m_lsdSync);
         m_lsdRequestRunning = false;
-        m_lsdCondition.notify_one();
+        //m_lsdCondition.notify_one();
 
         //m_lsdRequestStatus = this->CheckDecrypted(m_lsdOriginalLicense);
         m_lsdLicensePromise->set_value(m_lsdOriginalLicense);
@@ -325,6 +325,7 @@ namespace lcp
                     m_lsdFile.get()->Read(buf, length);
                     jsonStr.assign(reinterpret_cast<char*>(buf), length);
                     delete[] buf;
+                    //m_lsdFile->delete() // TODO
 
 #endif //USE_MEMORY_NOT_FILE
 
@@ -429,7 +430,7 @@ namespace lcp
                             m_lsdRequestStatus = this->OpenLicense("", m_lsdNewLcpLicenseString, *m_lsdLicensePromise);
 
                             m_lsdRequestRunning = false;
-                            m_lsdCondition.notify_one();
+                            //m_lsdCondition.notify_one();
                             //m_lsdRequestStatus = this->CheckDecrypted(newLicense);
                             //m_lsdLicensePromise->set_value(newLicense);
                             return;
@@ -443,7 +444,7 @@ namespace lcp
             }
 
             m_lsdRequestRunning = false;
-            m_lsdCondition.notify_one();
+            //m_lsdCondition.notify_one();
 
             //m_lsdRequestStatus = this->CheckDecrypted(m_lsdOriginalLicense);
             m_lsdLicensePromise->set_value(m_lsdOriginalLicense);
@@ -453,7 +454,7 @@ namespace lcp
             m_lsdRequestStatus = Status(StatusCode::ErrorNetworkingRequestFailed, ex.what());
 
             m_lsdRequestRunning = false;
-            m_lsdCondition.notify_one();
+            //m_lsdCondition.notify_one();
 
             //m_lsdRequestStatus = this->CheckDecrypted(m_lsdOriginalLicense);
             m_lsdLicensePromise->set_value(m_lsdOriginalLicense);
