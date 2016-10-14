@@ -15,41 +15,103 @@ namespace lcp
 {
     void LinksLcpNode::ParseNode(const rapidjson::Value & parentObject, JsonValueReader * reader)
     {
-        const rapidjson::Value & linksObject = reader->ReadObjectCheck("links", parentObject);
-        
-        if (!linksObject.HasMember(Hint))
+        auto ite = parentObject.FindMember("links");
+        if (ite == parentObject.MemberEnd())
         {
             throw StatusException(Status(StatusCode::ErrorOpeningLicenseNotValid, "links object is not valid"));
         }
 
-        for (auto it = linksObject.MemberBegin(); it != linksObject.MemberEnd(); ++it)
-        {
-            rapidjson::Type type = it->value.GetType();
+        // ite->name == "links"
 
-            if (type == rapidjson::kObjectType)
-            {
-                Link link = this->ParseLinkValues(it->value, reader);
-                m_linksMultiMap.insert(std::make_pair(
-                    std::string(it->name.GetString(), it->name.GetStringLength()), link)
-                    );
-            }
-            else if (type == rapidjson::kArrayType)
-            {
-                for (auto arrayIt = it->value.Begin(); arrayIt != it->value.End(); ++arrayIt)
-                {
-                    Link link = this->ParseLinkValues(*arrayIt, reader);
-                    m_linksMultiMap.insert(std::make_pair(
-                        std::string(it->name.GetString(), it->name.GetStringLength()), link)
-                        );
-                }
-            }
-            else
+        // legacy JSON format, links is object map (now array of objects with "rel" field instead of object key)
+        if (ite->value.IsObject())
+        {
+            const rapidjson::Value & linksObject = ite->value; //reader->ReadObjectCheck("links", parentObject);
+            
+            if (!linksObject.HasMember(Hint))
             {
                 throw StatusException(Status(StatusCode::ErrorOpeningLicenseNotValid, "links object is not valid"));
             }
-        }
 
-        BaseLcpNode::ParseNode(linksObject, reader);
+            for (auto it = linksObject.MemberBegin(); it != linksObject.MemberEnd(); ++it)
+            {
+                auto name = std::string(it->name.GetString(), it->name.GetStringLength());
+
+                rapidjson::Type type = it->value.GetType();
+
+                if (type == rapidjson::kObjectType)
+                {
+                    Link link = this->ParseLinkValues(it->value, reader);
+                    m_linksMultiMap.insert(std::make_pair(name, link));
+                }
+                else if (type == rapidjson::kArrayType)
+                {
+                    for (auto arrayIt = it->value.Begin(); arrayIt != it->value.End(); ++arrayIt)
+                    {
+                        Link link = this->ParseLinkValues(*arrayIt, reader);
+                        m_linksMultiMap.insert(std::make_pair(name, link));
+                    }
+                }
+                else
+                {
+                    throw StatusException(Status(StatusCode::ErrorOpeningLicenseNotValid, "links object is not valid"));
+                }
+            }
+
+            // does nothing (links objects have no children)
+            // see LcpService.spp rootNode->AddChildNode(std::move(linksNode))
+            BaseLcpNode::ParseNode(linksObject, reader);
+        }
+        else if (ite->value.IsArray())
+        {
+            const rapidjson::Value & linksArray = ite->value;
+
+            bool hintFound = false;
+
+            for (auto arrayIt = linksArray.Begin(); arrayIt != linksArray.End(); ++arrayIt)
+            {
+                if (!arrayIt->IsObject())
+                {
+                    throw StatusException(Status(StatusCode::ErrorOpeningLicenseNotValid, "links object is not valid"));
+                }
+
+                auto relItem = arrayIt->FindMember("rel");
+                if (relItem == arrayIt->MemberEnd())
+                {
+                    throw StatusException(Status(StatusCode::ErrorOpeningLicenseNotValid, "links object is not valid"));
+                }
+                if (!relItem->value.IsString())
+                {
+                    throw StatusException(Status(StatusCode::ErrorOpeningLicenseNotValid, "links object is not valid"));
+                }
+                
+                auto name = std::string(relItem->value.GetString(), relItem->value.GetStringLength());
+                if (name.empty())
+                {
+                    throw StatusException(Status(StatusCode::ErrorOpeningLicenseNotValid, "links object is not valid"));
+                }
+                if (name == Hint)
+                {
+                    hintFound = true;
+                }
+
+                Link link = this->ParseLinkValues(*arrayIt, reader);
+                m_linksMultiMap.insert(std::make_pair(name, link));
+            }
+
+            if (!hintFound)
+            {
+                throw StatusException(Status(StatusCode::ErrorOpeningLicenseNotValid, "links object is not valid"));
+            }
+
+            // does nothing (links objects have no children)
+            // see LcpService.spp rootNode->AddChildNode(std::move(linksNode))
+            BaseLcpNode::ParseNode(linksArray, reader);
+        }
+        else
+        {
+            throw StatusException(Status(StatusCode::ErrorOpeningLicenseNotValid, "links object is not valid"));
+        }
     }
 
     bool LinksLcpNode::GetLinks(const std::string & name, std::vector<Link> & links) const
