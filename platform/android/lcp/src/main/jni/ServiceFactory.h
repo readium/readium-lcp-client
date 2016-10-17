@@ -25,7 +25,7 @@ namespace lcp {
 
 JNIEXPORT jobject JNICALL Java_org_readium_sdk_lcp_ServiceFactory_nativeBuild(
         JNIEnv *env, jobject obj, jstring jCertContent,
-        jobject jStorageProvider, jobject jNetProvider, jobject jCredentialHandler);
+        jobject jStorageProvider, jobject jNetProvider, jobject jCredentialHandler, jobject jStatusDocumentHandler);
 
 
 #ifdef __cplusplus

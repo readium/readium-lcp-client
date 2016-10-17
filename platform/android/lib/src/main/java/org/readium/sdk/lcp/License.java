@@ -26,6 +26,12 @@ public class License {
         return this.nativeCreateAcquisition(this.nativePtr, this.servicePtr, dstPath);
     }
 
+    public StatusDocumentProcessing createStatusDocumentProcessing(String dstPath) {
+        return this.nativeCreateStatusDocumentProcessing(this.nativePtr, this.servicePtr, dstPath);
+    }
+
+
+
 
     /**
      * Returns the native Container pointer.
@@ -39,4 +45,5 @@ public class License {
     private native boolean nativeIsDecrypted(long nativePtr);
     private native void nativeDecrypt(long nativePtr, long servicePtr, String passphrase);
     private native Acquisition nativeCreateAcquisition(long nativePtr, long servicePtr, String dstPath);
+    private native StatusDocumentProcessing nativeCreateStatusDocumentProcessing(long nativePtr, long servicePtr, String dstPath);
 }

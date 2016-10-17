@@ -68,40 +68,49 @@ namespace lcp {
         std::string licenseJson(buffer, bufferSize);
         free(buffer);
 
-        std::promise<ILicense*> licensePromise;
-        auto licenseFuture = licensePromise.get_future();
+        ILicense* license = nullptr;
+        ILicense** licensePTR = &license;
 
         Status status = LcpContentModule::lcpService->OpenLicense(
 #if !DISABLE_LSD
                 path,
 #endif //!DISABLE_LSD
-                licenseJson, licensePromise);
+                licenseJson, licensePTR);
 
         if ((status.Code != StatusCode::ErrorCommonSuccess)
 #if !DISABLE_LSD
-            && (status.Code != StatusCode::ErrorStatusDocumentNewLicense)
+            && (status.Code != StatusCode::LicenseStatusDocumentStartProcessing)
 #endif //!DISABLE_LSD
                 ) {
             throw ePub3::ContentModuleException("Unable to initialize LCPL license");
         }
 
-        // ...blocks until licensePromise.set_value(licensePtr)
-        LcpContentModule::lcpLicense = licenseFuture.get();
-        // std::future_status status = licenseFuture.wait_for(std::chrono::system_clock::duration(0));
-        // if (status == std::future_status::ready) {
-        //     LcpContentModule::lcpLicense = licenseFuture.get();
-        // }
-        // NOTE: LcpContentModule::RegisterContentFilters() needs LcpContentModule::lcpLicense to be set.
-
-        if (LcpContentModule::lcpLicense == NULL) {
+        if ((*licensePTR) == nullptr) {
             throw ePub3::ContentModuleException("Unable to get LCPL license");
         }
 
-        if (!LcpContentModule::lcpLicense->Decrypted()) {
-            // decrypt license by calling the credential handler
-            LcpContentModule::lcpCredentialHandler->decrypt(LcpContentModule::lcpLicense);
-            throw ePub3::ContentModuleExceptionDecryptFlow("Decrypting LCPL license ...");
+#if !DISABLE_LSD
+        if (status.Code == StatusCode::LicenseStatusDocumentStartProcessing) {
+
+            // Should be non-blocking, to ensure that the exception below is captured on the app side and the main thread resumes activity to process the next events in the queue
+            LcpContentModule::lcpStatusDocumentHandler->process((*licensePTR)); //LcpContentModule::lcpService, path
+
+            // the caller gracefully degrades by interrupting the EPUB opening process (the call to lsdProcessingHandler->process() above will attempt again).
+            throw ePub3::ContentModuleExceptionDecryptFlow("LCPL license status document processing...");
         }
+#endif //!DISABLE_LSD
+
+        if (!(*licensePTR)->Decrypted()) {
+
+            // Should be non-blocking, to ensure that the exception below is captured on the app side and the main thread resumes activity to process the next events in the queue
+            LcpContentModule::lcpCredentialHandler->decrypt((*licensePTR));
+
+            // the caller gracefully degrades by interrupting the EPUB opening process (the call to credentialHandler->decrypt() above will attempt again).
+            throw ePub3::ContentModuleExceptionDecryptFlow("LCPL license decrypt needs user passphrase input...");
+        }
+
+        // NOTE: LcpContentModule::RegisterContentFilters() needs LcpContentModule::lcpLicense to be set.
+        LcpContentModule::lcpLicense = (*licensePTR);
 
         return make_ready_future<ContainerPtr>(ContainerPtr(container));
     }
@@ -119,11 +128,14 @@ namespace lcp {
 
     // static
     ICredentialHandler *LcpContentModule::lcpCredentialHandler = NULL;
+    IStatusDocumentHandler *LcpContentModule::lcpStatusDocumentHandler = NULL;
 
     void LcpContentModule::Register(ILcpService *const service,
-                                    ICredentialHandler * credentialHandler) {
+                                    ICredentialHandler * credentialHandler,
+                                    IStatusDocumentHandler * statusDocumentHandler) {
         LcpContentModule::lcpService = service;
         LcpContentModule::lcpCredentialHandler = credentialHandler;
+        LcpContentModule::lcpStatusDocumentHandler = statusDocumentHandler;
         auto contentModule = std::make_shared<LcpContentModule>();
         ContentModuleManager::Instance()->RegisterContentModule(contentModule, "LcpContentModule");
     }

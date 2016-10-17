@@ -7,9 +7,7 @@
 #include <public/LcpStatus.h>
 #include <public/ILcpService.h>
 
-#if !DISABLE_LSD
 #include <ePub3/utilities/utfstring.h>
-#endif //!DISABLE_LSD
 
 JNIEXPORT jobject JNICALL Java_org_readium_sdk_lcp_Service_nativeOpenLicense(
          JNIEnv *env, jobject obj, jlong servicePtr, jstring jLicenseJson) {
@@ -17,28 +15,17 @@ JNIEXPORT jobject JNICALL Java_org_readium_sdk_lcp_Service_nativeOpenLicense(
      std::string licenseJson(cLicenseJson);
      lcp::ILcpService * service = (lcp::ILcpService *) servicePtr;
 
-     lcp::ILicense * license = nullptr;
+     lcp::ILicense* license = nullptr;
+     lcp::ILicense** licensePTR = &license;
 
-     std::promise<lcp::ILicense*> licensePromise;
-     auto licenseFuture = licensePromise.get_future();
-
-#if !DISABLE_LSD
      const ePub3::string epubPath("");
-#endif //!DISABLE_LSD
 
      lcp::Status status = service->OpenLicense(
-#if !DISABLE_LSD
              epubPath,
-#endif //!DISABLE_LSD
-             licenseJson, licensePromise);
-
-     if (status.Code == lcp::StatusCode::ErrorCommonSuccess) {
-
-         // ...blocks until licensePromise.set_value(licensePtr)
-         license = licenseFuture.get();
-     }
+             licenseJson,
+             licensePTR);
 
      jclass cls = env->FindClass("org/readium/sdk/lcp/License");
      jmethodID methodId = env->GetMethodID(cls, "<init>", "(JJ)V");
-     return env->NewObject(cls, methodId, (jlong) license, (jlong) service);
+     return env->NewObject(cls, methodId, (jlong) (*licensePTR), (jlong) service);
  }

@@ -26,6 +26,9 @@ JNIEXPORT void JNICALL Java_org_readium_sdk_lcp_License_nativeDecrypt(
 JNIEXPORT jobject JNICALL Java_org_readium_sdk_lcp_License_nativeCreateAcquisition(
         JNIEnv *env, jobject obj, jlong licensePtr, jlong servicePtr, jstring jDstPath);
 
+JNIEXPORT jobject JNICALL Java_org_readium_sdk_lcp_License_nativeCreateStatusDocumentProcessing(
+        JNIEnv *env, jobject obj, jlong licensePtr, jlong servicePtr, jstring jDstPath);
+
 #ifdef __cplusplus
 }
 #endif

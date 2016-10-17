@@ -19,19 +19,25 @@ namespace lcp {
         virtual void decrypt(ILicense *license) = 0;
     };
 
+    class IStatusDocumentHandler {
+    public:
+        virtual void process(ILicense *license) = 0;
+    };
+
     class LcpContentModule : public ContentModule
     {
     public:
         ePub3::string GetModuleName();
         void RegisterContentFilters();
-        static void Register(ILcpService *const lcpService, ICredentialHandler * credentialHandler);
+        static void Register(ILcpService *const lcpService, ICredentialHandler * credentialHandler, IStatusDocumentHandler * statusDocumentHandler);
         async_result<ContainerPtr> ProcessFile(const ePub3::string &path, ePub3::launch policy);
         async_result<bool> ApproveUserAction(const UserAction &action);
 
     private:
-        // initialized via LcpContentModule::Register(ILcpService *const service, ICredentialHandler * credentialHandler)
+        // initialized via LcpContentModule::Register(ILcpService *const service, ICredentialHandler * credentialHandler, IStatusDocumentHandler *lcpStatusDocumentHandler)
         static ILcpService *lcpService;
         static ICredentialHandler *lcpCredentialHandler;
+        static IStatusDocumentHandler *lcpStatusDocumentHandler;
 
         static ILicense *lcpLicense;
     };

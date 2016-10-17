@@ -22,14 +22,15 @@ public class ServiceFactory {
 
 
     public static Service build(String certContent, StorageProvider storageProvider,
-                                NetProvider netProvider, CredentialHandler credentialHandler) {
+                                NetProvider netProvider,
+                                CredentialHandler credentialHandler, StatusDocumentHandler statusDocumentHandler) {
         certContent = certContent.replaceAll("-*BEGIN CERTIFICATE-*", "");
         certContent = certContent.replaceAll("-*END CERTIFICATE-*", "");
         certContent = certContent.replaceAll("[\r\n]*", "");
-        return ServiceFactory.nativeBuild(certContent, storageProvider, netProvider, credentialHandler);
+        return ServiceFactory.nativeBuild(certContent, storageProvider, netProvider, credentialHandler, statusDocumentHandler);
     }
 
     private native static Service nativeBuild(
             String certContent, StorageProvider storageProvider, NetProvider netProvider,
-            CredentialHandler credentialHandler);
+            CredentialHandler credentialHandler, StatusDocumentHandler statusDocumentHandler);
 }

@@ -10,22 +10,9 @@
 #include <map>
 #include <memory>
 #include <mutex>
-#include <future>
 #include "LcpTypedefs.h"
 #include "NonCopyable.h"
 #include "public/ILcpService.h"
-
-#if !DISABLE_LSD
-//#include <condition_variable>
-//#include <public/lcp.h>
-#include "public/ILinks.h"
-#include "public/INetProvider.h"
-#if USE_MEMORY_NOT_FILE
-    #include "SimpleMemoryWritableStream.h"
-#else
-    #include <public/IFileSystemProvider.h>
-#endif //USE_MEMORY_NOT_FILE
-#endif //!DISABLE_LSD
 
 namespace lcp
 {
@@ -35,45 +22,14 @@ namespace lcp
     class ICryptoProvider;
 
     class LcpService : public ILcpService, public NonCopyable
-#if !DISABLE_LSD
-    ,
-    public INetProviderCallback
-#endif //!DISABLE_LSD
     {
-#if !DISABLE_LSD
-    public:
-        // INetProviderCallback
-        virtual void OnRequestStarted(INetRequest * request);
-        virtual void OnRequestProgressed(INetRequest * request, float progress);
-        virtual void OnRequestCanceled(INetRequest * request);
-        virtual void OnRequestEnded(INetRequest * request, Status result);
     private:
-        Status ProcessLicenseStatusDocument(ILicense** license, std::promise<ILicense*> & licensePromise);
-        std::string ResolveTemplatedURL(const std::string & url);
-        Status CheckStatusDocumentHash(IReadableStream* stream);
-
-        static std::string StatusType;
-        bool m_lsdRequestRunning;
-        lcp::Status m_lsdRequestStatus;
-        mutable std::mutex m_lsdSync;
-        //std::condition_variable m_lsdCondition;
-        lcp::Link m_lsdLink;
-        //std::string m_lsdPath;
-        //std::unique_ptr<IFile> m_lsdFile;
-        std::unique_ptr<IDownloadRequest> m_lsdRequest;
         ePub3::string m_publicationPath;
-        std::string m_lsdNewLcpLicenseString;
-#if USE_MEMORY_NOT_FILE
-        std::unique_ptr<SimpleMemoryWritableStream> m_lsdStream;
-#else
-        std::unique_ptr<IFile> m_lsdFile;
-#endif //USE_MEMORY_NOT_FILE
-        ILicense * m_lsdOriginalLicense;
-        std::promise<ILicense*> * m_lsdLicensePromise;
-#endif //!DISABLE_LSD
-
-    private:
         Status CheckDecrypted(ILicense* license);
+#if !DISABLE_LSD
+        ILicense* m_LicenseStatusDocumentThatStartedProcessing;
+        Status CheckLicenseStatusDocument(ILicense* license);
+#endif //!DISABLE_LSD
 
     public:
         LcpService(
@@ -86,10 +42,9 @@ namespace lcp
 
         // ILcpService
         virtual Status OpenLicense(
-#if !DISABLE_LSD
                 const ePub3::string & publicationPath,
-#endif //!DISABLE_LSD
-                const std::string & licenseJson, std::promise<ILicense*> & licensePromise);
+                const std::string & licenseJson,
+                ILicense** licensePTR);
 
         virtual Status DecryptLicense(ILicense * license, const std::string & userPassphrase);
 
@@ -123,10 +78,16 @@ namespace lcp
             );
 
         virtual Status CreatePublicationAcquisition(
-            const std::string & publicationPath,
-            ILicense * license,
-            IAcquisition ** acquisition
-            );
+                const std::string & publicationPath,
+                ILicense * license,
+                IAcquisition ** acquisition
+        );
+
+        virtual Status CreatePublicationStatusDocumentProcessing(
+                const std::string & publicationPath,
+                ILicense * license,
+                IStatusDocumentProcessing ** statusDocumentProcessing
+        );
 
         virtual IRightsService * GetRightsService() const;
 
@@ -166,6 +127,7 @@ namespace lcp
         std::mutex m_licensesSync;
 
     private:
+
         static std::string UnknownProvider;
         static std::string UnknownUserId;
     };

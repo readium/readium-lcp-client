@@ -102,23 +102,7 @@ namespace lcp
 
 #if !DISABLE_LSD
             ,
-
-            // License Status Document: invalid content-type declaration,
-            // incorrect string value for 'type' field of LCP license 'links' > 'status' JSON property,
-            // should be "application/vnd.readium.license.status.v1.0+json".
-            ErrorStatusDocumentWrongType,
-
-            // License Status Document: retrieval URI is not correct.
-            ErrorStatusDocumentInvalidUri,
-
-            // License Status Document: the downloaded file doesn't match the hash.
-            ErrorStatusDocumentHashCheckFail,
-
-            // License Status Document: incorrect syntax / format
-            // for file retrieved from the 'href' URI of 'type' "application/vnd.readium.license.status.v1.0+json".
-            ErrorOpeningLicenseStatusDocumentNotValid,
-
-            ErrorStatusDocumentNewLicense
+            LicenseStatusDocumentStartProcessing
 #endif //!DISABLE_LSD
         };
     };
