@@ -5,6 +5,7 @@ import com.koushikdutta.ion.ProgressCallback;
 
 import java.io.File;
 import java.util.concurrent.CancellationException;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Created by clebeaupin on 15/03/16.
@@ -43,10 +44,13 @@ public class NetProviderCallback  implements ProgressCallback, FutureCallback<Fi
         if (e instanceof CancellationException) {
             // Request has been canceled
             this.nativeOnRequestCanceled(this.nativePtr, this.requestPtr);
-        } else if (e == null) {
+        } else if (e instanceof TimeoutException) {
+            // Request timeout
+            this.nativeOnRequestCanceled(this.nativePtr, this.requestPtr);
+        } else if (e == null && result != null) {
             this.nativeOnRequestEnded(this.nativePtr, this.requestPtr);
         } else {
-            //File error?
+            // Other errors
             this.nativeOnRequestCanceled(this.nativePtr, this.requestPtr);
         }
     }
@@ -55,18 +59,17 @@ public class NetProviderCallback  implements ProgressCallback, FutureCallback<Fi
     public void onProgress(long downloaded, long total) {
         this.checkStart();
 
-        // total is -1, bug with LCP server? (content-disposition attachment / HTTP header)
+        // total is -1 when HTTP content-length header is not set.
         if (total < downloaded) {
             total = downloaded*2;
         }
         float val = (downloaded/(float)total);
         this.nativeOnRequestProgressed(this.nativePtr, this.requestPtr, val);
-
-        if (total == downloaded) {
-            hasEnded = true;
-            this.nativeOnRequestEnded(this.nativePtr, this.requestPtr);
-            // ALSO HANDLED BY FILE DOWNLOAD FINISH (see Future<File> in NetProvider.java, raises same callback onCompleted())
-        }
+//
+//        if (total == downloaded) {
+//            hasEnded = true;
+//            this.nativeOnRequestEnded(this.nativePtr, this.requestPtr);
+//        }
     }
 
     private native void nativeOnRequestStarted(long nativePtr, long requestPtr);
