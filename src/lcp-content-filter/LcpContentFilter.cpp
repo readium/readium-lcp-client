@@ -254,28 +254,6 @@ namespace lcp {
         if (LcpContentFilter::lcpLicense != NULL) {
             return New(LcpContentFilter::lcpLicense);
         }
-
-        // ContainerPtr container = package->GetContainer();
-        // if (!container->FileExistsAtPath(LcpLicensePath)) {
-        //     return nullptr;
-        // }
-        // std::unique_ptr<ePub3::ByteStream> stream = container->ReadStreamAtPath(LcpLicensePath);
-        // void *buffer = nullptr;
-        // size_t length = stream->ReadAllBytes(&buffer);
-        // std::string licenseJSON((char *)buffer, length);
-        // free (buffer);
-        
-        // // create content filter
-        // //shared_ptr<LcpContentFilter> contentFilter = nullptr;
-
-        // ILicense *license = nullptr;
-        // Status res = LcpContentFilter::lcpService->OpenLicense(licenseJSON, &license);
-        // if (Status::IsSuccess(res)) {
-        //     return New(license);
-        // } else {
-        //     LOG("Failed to parse license <" << res.Code << ": " << res.Extension << ">");
-        // }
-        
         return nullptr;
     }
 
