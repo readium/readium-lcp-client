@@ -11,9 +11,11 @@
 
 JNIEXPORT jobject JNICALL Java_org_readium_sdk_lcp_Service_nativeOpenLicense(
         JNIEnv *env, jobject obj, jlong servicePtr, jstring jLicenseJson) {
+
+     lcp::ILcpService * service = (lcp::ILcpService *) servicePtr;
+
      const char * cLicenseJson = env->GetStringUTFChars(jLicenseJson, 0);
      std::string licenseJson(cLicenseJson);
-     lcp::ILcpService * service = (lcp::ILcpService *) servicePtr;
 
      lcp::ILicense* license = nullptr;
      lcp::ILicense** licensePTR = &license;
