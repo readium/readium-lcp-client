@@ -167,8 +167,7 @@ namespace lcp
 
     Status LcpService::CheckLicenseStatusDocument(ILicense* license)
     {
-        // TODO this is disabled only to debug the segfault issue, so that LSD can't possibly interfere.
-        if (true || m_publicationPath.empty()) { // if a standalone LCPL, we wait until the linked EPUB is downloaded, then status doc will be checked.
+        if (m_publicationPath.empty()) { // if a standalone LCPL, we wait until the linked EPUB is downloaded, then status doc will be checked.
             m_LicenseStatusDocumentThatStartedProcessing = nullptr; // just to ensure the state is clean
             return Status(StatusCode::ErrorCommonSuccess);
         }
