@@ -18,10 +18,18 @@ namespace lcp
     RootLcpNode::RootLcpNode(
         const std::string & licenseJson,
         const std::string & canonicalJson,
+
+#if ENABLE_GENERIC_JSON_NODE
         ICrypto * crypto,
         ILinks * links,
         IUser * user,
         IRights * rights
+#else
+        CryptoLcpNode * crypto,
+        LinksLcpNode * links,
+        UserLcpNode * user,
+        RightsLcpNode * rights
+#endif //ENABLE_GENERIC_JSON_NODE
         )
         : m_crypto(crypto)
         , m_links(links)
@@ -118,17 +126,57 @@ namespace lcp
         {
             return res;
         }
+#if ENABLE_GENERIC_JSON_NODE
         return BaseLcpNode::VerifyNode(license, clientProvider, cryptoProvider);
+#else
+        res = m_crypto->VerifyNode(license, clientProvider, cryptoProvider);
+        if (!Status::IsSuccess(res))
+            return res;
+
+        res = m_links->VerifyNode(license, clientProvider, cryptoProvider);
+        if (!Status::IsSuccess(res))
+            return res;
+
+        res = m_user->VerifyNode(license, clientProvider, cryptoProvider);
+        if (!Status::IsSuccess(res))
+            return res;
+
+        res = m_rights->VerifyNode(license, clientProvider, cryptoProvider);
+        if (!Status::IsSuccess(res))
+            return res;
+
+        return Status(StatusCode::ErrorCommonSuccess);
+#endif //ENABLE_GENERIC_JSON_NODE
     }
 
     Status RootLcpNode::DecryptNode(ILicense * license, IKeyProvider * keyProvider, ICryptoProvider * cryptoProvider)
     {
+#if ENABLE_GENERIC_JSON_NODE
         Status res = BaseLcpNode::DecryptNode(license, keyProvider, cryptoProvider);
         if (Status::IsSuccess(res))
         {
             m_decrypted = true;
         }
         return res;
+#else
+        Status res = m_crypto->DecryptNode(license, keyProvider, cryptoProvider);
+        if (!Status::IsSuccess(res))
+            return res;
+
+        res = m_links->DecryptNode(license, keyProvider, cryptoProvider);
+        if (!Status::IsSuccess(res))
+            return res;
+
+        res = m_user->DecryptNode(license, keyProvider, cryptoProvider);
+        if (!Status::IsSuccess(res))
+            return res;
+
+        res = m_rights->DecryptNode(license, keyProvider, cryptoProvider);
+        if (!Status::IsSuccess(res))
+            return res;
+
+        return Status(StatusCode::ErrorCommonSuccess);
+#endif //ENABLE_GENERIC_JSON_NODE
     }
 
     void RootLcpNode::ParseNode(const rapidjson::Value & parentObject, JsonValueReader * reader)
@@ -153,6 +201,13 @@ namespace lcp
         m_rootInfo.provider = reader->ReadStringCheck("provider", rootObject);
         m_rootInfo.updated = reader->ReadString("updated", rootObject);
 
+#if ENABLE_GENERIC_JSON_NODE
         BaseLcpNode::ParseNode(rootObject, reader);
+#else
+        m_crypto->ParseNode(rootObject, reader);
+        m_links->ParseNode(rootObject, reader);
+        m_user->ParseNode(rootObject, reader);
+        m_rights->ParseNode(rootObject, reader);
+#endif //ENABLE_GENERIC_JSON_NODE
     }
 }

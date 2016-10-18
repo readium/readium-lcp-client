@@ -49,8 +49,31 @@ namespace lcp
             }
         }
 
+#if ENABLE_GENERIC_JSON_NODE
         BaseLcpNode::ParseNode(linksObject, reader);
+#else
+        //child->ParseNode(linksObject, reader);
+#endif //ENABLE_GENERIC_JSON_NODE
     }
+
+#if ENABLE_GENERIC_JSON_NODE
+    // noop
+#else
+    Status LinksLcpNode::DecryptNode(ILicense * license, IKeyProvider * keyProvider, ICryptoProvider * cryptoProvider)
+    {
+        return Status(StatusCode::ErrorCommonSuccess);
+    }
+#endif //ENABLE_GENERIC_JSON_NODE
+
+#if ENABLE_GENERIC_JSON_NODE
+    // noop
+#else
+    Status LinksLcpNode::VerifyNode(ILicense * license, IClientProvider * clientProvider, ICryptoProvider * cryptoProvider)
+    {
+        return Status(StatusCode::ErrorCommonSuccess);
+    }
+#endif //ENABLE_GENERIC_JSON_NODE
+
 
     bool LinksLcpNode::GetLinks(const std::string & name, std::vector<Link> & links) const
     {

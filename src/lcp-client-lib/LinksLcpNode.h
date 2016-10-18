@@ -19,6 +19,8 @@ namespace lcp
     public:
         // ILcpNode
         virtual void ParseNode(const rapidjson::Value & parentObject, JsonValueReader * reader);
+        virtual Status VerifyNode(ILicense * license, IClientProvider * clientProvider, ICryptoProvider * cryptoProvider);
+        virtual Status DecryptNode(ILicense * license, IKeyProvider * keyProvider, ICryptoProvider * cryptoProvider);
 
     public:
         // ILinks

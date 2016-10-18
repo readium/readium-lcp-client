@@ -20,6 +20,7 @@ namespace lcp
 
     class BaseLcpNode : public ILcpNode, public NonCopyable
     {
+#if ENABLE_GENERIC_JSON_NODE
     private:
 
         template <class _Function>
@@ -106,6 +107,7 @@ namespace lcp
     protected:
         std::vector<std::unique_ptr<ILcpNode>> m_childs;
         mutable std::mutex m_childsSync;
+#endif //ENABLE_GENERIC_JSON_NODE
     };
 }
 

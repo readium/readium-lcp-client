@@ -34,8 +34,9 @@ namespace lcp
         explicit CryptoLcpNode(EncryptionProfilesManager * encryptionProfilesManager);
 
         // ILcpNode
-        void ParseNode(const rapidjson::Value & parentObject, JsonValueReader * reader);
-        Status VerifyNode(ILicense * license, IClientProvider * clientProvider, ICryptoProvider * cryptoProvider);
+        virtual void ParseNode(const rapidjson::Value & parentObject, JsonValueReader * reader);
+        virtual Status VerifyNode(ILicense * license, IClientProvider * clientProvider, ICryptoProvider * cryptoProvider);
+        virtual Status DecryptNode(ILicense * license, IKeyProvider * keyProvider, ICryptoProvider * cryptoProvider);
 
         // ICrypto
         std::string EncryptionProfile() const;

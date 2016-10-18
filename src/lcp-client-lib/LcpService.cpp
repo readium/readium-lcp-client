@@ -90,11 +90,12 @@ namespace lcp
                     userNode,
                     rightsNode)
                 );
-
+#if ENABLE_GENERIC_JSON_NODE
             rootNode->AddChildNode(static_cast<ILcpNode*>(cryptoNode));
             rootNode->AddChildNode(static_cast<ILcpNode*>(linksNode));
             rootNode->AddChildNode(static_cast<ILcpNode*>(userNode));
             rootNode->AddChildNode(static_cast<ILcpNode*>(rightsNode));
+#endif //ENABLE_GENERIC_JSON_NODE
 
             auto parentValue = rapidjson::Value(rapidjson::kNullType);
             rootNode->ParseNode(parentValue, m_jsonReader.get());
@@ -164,6 +165,7 @@ namespace lcp
 
     Status LcpService::CheckLicenseStatusDocument(ILicense* license)
     {
+        // TODO this is disabled only to debug the segfault issue, so that LSD can't possibly interfere.
         if (true || m_publicationPath.empty()) { // if a standalone LCPL, we wait until the linked EPUB is downloaded, then status doc will be checked.
             m_LicenseStatusDocumentThatStartedProcessing = nullptr; // just to ensure the state is clean
             return Status(StatusCode::ErrorCommonSuccess);

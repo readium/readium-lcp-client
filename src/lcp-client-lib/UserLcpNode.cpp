@@ -46,7 +46,16 @@ namespace lcp
     {
         return new MapIterator<std::string>(m_userInfo.valuesMap);
     }
-    
+
+#if ENABLE_GENERIC_JSON_NODE
+    // noop
+#else
+    Status UserLcpNode::VerifyNode(ILicense * license, IClientProvider * clientProvider, ICryptoProvider * cryptoProvider)
+    {
+        return Status(StatusCode::ErrorCommonSuccess);
+    }
+#endif //ENABLE_GENERIC_JSON_NODE
+
     Status UserLcpNode::DecryptNode(ILicense * license, IKeyProvider * keyProvider, ICryptoProvider * cryptoProvider)
     {
         for (auto it = m_userInfo.encrypted.begin(); it != m_userInfo.encrypted.end(); ++it)
@@ -63,7 +72,12 @@ namespace lcp
 
             this->FillRegisteredFields(valueIt->first, valueIt->second);
         }
+
+#if ENABLE_GENERIC_JSON_NODE
         return BaseLcpNode::DecryptNode(license, keyProvider, cryptoProvider);
+#else
+        return Status(StatusCode::ErrorCommonSuccess);
+#endif //ENABLE_GENERIC_JSON_NODE
     }
 
     void UserLcpNode::ParseNode(const rapidjson::Value & parentObject, JsonValueReader * reader)
@@ -103,7 +117,11 @@ namespace lcp
             }
         }
 
+#if ENABLE_GENERIC_JSON_NODE
         BaseLcpNode::ParseNode(userObject, reader);
+#else
+        //child->ParseNode(userObject, reader);
+#endif //ENABLE_GENERIC_JSON_NODE
     }
 
     void UserLcpNode::FillRegisteredFields(const std::string & name, const std::string & value)

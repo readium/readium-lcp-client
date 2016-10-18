@@ -25,8 +25,11 @@ namespace lcp
         virtual void ParseNode(const rapidjson::Value & parentObject, JsonValueReader * reader) = 0;
         virtual Status VerifyNode(ILicense * license, IClientProvider * clientProvider, ICryptoProvider * cryptoProvider) = 0;
         virtual Status DecryptNode(ILicense * license, IKeyProvider * keyProvider, ICryptoProvider * cryptoProvider) = 0;
+
+#if ENABLE_GENERIC_JSON_NODE
         virtual void AddChildNode(ILcpNode* child) = 0;
         virtual bool IsLeaf() const = 0;
+#endif //ENABLE_GENERIC_JSON_NODE
         virtual ~ILcpNode() {}
     };
 }
