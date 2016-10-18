@@ -30,8 +30,17 @@ namespace lcp {
         ePub3::string GetModuleName();
         void RegisterContentFilters();
         static void Register(ILcpService *const lcpService, ICredentialHandler * credentialHandler, IStatusDocumentHandler * statusDocumentHandler);
-        async_result<ContainerPtr> ProcessFile(const ePub3::string &path, ePub3::launch policy);
+
+#if FUTURE_ENABLED
+        async_result<ContainerPtr>
+#else
+        ContainerPtr
+#endif //FUTURE_ENABLED
+        ProcessFile(const ePub3::string &path, ePub3::launch policy);
+
+#if FUTURE_ENABLED
         async_result<bool> ApproveUserAction(const UserAction &action);
+#endif //FUTURE_ENABLED
 
     private:
         // initialized via LcpContentModule::Register(ILcpService *const service, ICredentialHandler * credentialHandler, IStatusDocumentHandler *lcpStatusDocumentHandler)

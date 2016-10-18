@@ -36,19 +36,33 @@ namespace lcp {
         }
         LcpContentFilter::Register(LcpContentModule::lcpService, LcpContentModule::lcpLicense);
     }
-
-    async_result<ContainerPtr> LcpContentModule::ProcessFile(const ePub3::string &path, ePub3::launch policy) {
+#if FUTURE_ENABLED
+    async_result<ContainerPtr>
+#else
+    ContainerPtr
+#endif //FUTURE_ENABLED
+    LcpContentModule::ProcessFile(const ePub3::string &path, ePub3::launch policy) {
         ContainerPtr container = Container::OpenContainerForContentModule(path);
 
         if(container == nullptr) {
-            // Unable to open container
+
+#if FUTURE_ENABLED
             return make_ready_future<ContainerPtr>(ContainerPtr(nullptr));
+#else
+            return nullptr;
+#endif //FUTURE_ENABLED
+
         }
 
         // Search for the lcpl file in META-INF
         bool licenseExists = container->FileExistsAtPath(LcpLicensePath);
         if (!licenseExists) {
+
+#if FUTURE_ENABLED
             return make_ready_future<ContainerPtr>(ContainerPtr(nullptr));
+#else
+            return nullptr;
+#endif //FUTURE_ENABLED
         }
 
         // Read lcpl JSON file
@@ -110,13 +124,19 @@ namespace lcp {
         // NOTE: LcpContentModule::RegisterContentFilters() needs LcpContentModule::lcpLicense to be set.
         LcpContentModule::lcpLicense = (*licensePTR);
 
-        return make_ready_future<ContainerPtr>(ContainerPtr(container));
+#if FUTURE_ENABLED
+        return make_ready_future<ContainerPtr>(container);
+#else
+        return container;
+#endif //FUTURE_ENABLED
     }
 
+#if FUTURE_ENABLED
     async_result<bool> LcpContentModule::ApproveUserAction(const UserAction &action) {
         async_result<bool> result;
         return result;
     }
+#endif //FUTURE_ENABLED
 
     // static
     ILicense *LcpContentModule::lcpLicense = NULL;
