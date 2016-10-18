@@ -91,10 +91,10 @@ namespace lcp
         IUser * m_user;
         IRights * m_rights;
 #else
-        CryptoLcpNode * m_crypto;
-        LinksLcpNode * m_links;
-        UserLcpNode * m_user;
-        RightsLcpNode * m_rights;
+        std::unique_ptr<CryptoLcpNode> m_crypto;
+        std::unique_ptr<LinksLcpNode> m_links;
+        std::unique_ptr<UserLcpNode> m_user;
+        std::unique_ptr<RightsLcpNode> m_rights;
 #endif //ENABLE_GENERIC_JSON_NODE
 
         bool m_decrypted;

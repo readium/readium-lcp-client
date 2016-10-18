@@ -31,10 +31,17 @@ namespace lcp
         RightsLcpNode * rights
 #endif //ENABLE_GENERIC_JSON_NODE
         )
+#if ENABLE_GENERIC_JSON_NODE
         : m_crypto(crypto)
         , m_links(links)
         , m_user(user)
         , m_rights(rights)
+#else
+            : m_crypto(std::move(std::unique_ptr<CryptoLcpNode>(crypto)))
+            , m_links(std::move(std::unique_ptr<LinksLcpNode>(links)))
+            , m_user(std::move(std::unique_ptr<UserLcpNode>(user)))
+            , m_rights(std::move(std::unique_ptr<RightsLcpNode>(rights)))
+#endif //ENABLE_GENERIC_JSON_NODE
         , m_decrypted(false)
     {
         m_rootInfo.content = licenseJson;
@@ -73,22 +80,38 @@ namespace lcp
 
     ICrypto * RootLcpNode::Crypto() const
     {
+#if ENABLE_GENERIC_JSON_NODE
         return m_crypto;
+#else
+        return m_crypto.get();
+#endif //ENABLE_GENERIC_JSON_NODE
     }
 
     ILinks * RootLcpNode::Links() const
     {
+#if ENABLE_GENERIC_JSON_NODE
         return m_links;
+#else
+        return m_links.get();
+#endif //ENABLE_GENERIC_JSON_NODE
     }
 
     IUser * RootLcpNode::User() const
     {
+#if ENABLE_GENERIC_JSON_NODE
         return m_user;
+#else
+        return m_user.get();
+#endif //ENABLE_GENERIC_JSON_NODE
     }
 
     IRights * RootLcpNode::Rights() const
     {
+#if ENABLE_GENERIC_JSON_NODE
         return m_rights;
+#else
+        return m_rights.get();
+#endif //ENABLE_GENERIC_JSON_NODE
     }
 
     bool RootLcpNode::Decrypted() const
@@ -175,6 +198,7 @@ namespace lcp
         if (!Status::IsSuccess(res))
             return res;
 
+        m_decrypted = true;
         return Status(StatusCode::ErrorCommonSuccess);
 #endif //ENABLE_GENERIC_JSON_NODE
     }

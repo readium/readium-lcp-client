@@ -19,9 +19,11 @@
 #include "public/IStorageProvider.h"
 #include "Acquisition.h"
 #include "RightsService.h"
+
+#if !DISABLE_LSD
 #include "LsdProcessor.h"
 #include "StatusDocumentProcessing.h"
-
+#endif //!DISABLE_LSD
 
 namespace lcp
 {
@@ -236,6 +238,27 @@ namespace lcp
         {
             return Status(StatusCode::ErrorCommonSuccess); // any LSD problem, noop
             //return ex.ResultStatus();
+        }
+    }
+
+    Status LcpService::CreatePublicationStatusDocumentProcessing(
+            const std::string & publicationPath,
+            ILicense * license,
+            IStatusDocumentProcessing ** statusDocumentProcessing
+    )
+    {
+        try
+        {
+            if (statusDocumentProcessing == nullptr)
+            {
+                throw std::invalid_argument("statusDocumentProcessing is nullptr");
+            }
+            *statusDocumentProcessing = new StatusDocumentProcessing();
+            return Status(StatusCode::ErrorCommonSuccess);
+        }
+        catch (const StatusException & ex)
+        {
+            return ex.ResultStatus();
         }
     }
 
@@ -534,27 +557,6 @@ namespace lcp
                     m_cryptoProvider.get(),
                     publicationPath
             );
-            return Status(StatusCode::ErrorCommonSuccess);
-        }
-        catch (const StatusException & ex)
-        {
-            return ex.ResultStatus();
-        }
-    }
-
-    Status LcpService::CreatePublicationStatusDocumentProcessing(
-            const std::string & publicationPath,
-            ILicense * license,
-            IStatusDocumentProcessing ** statusDocumentProcessing
-    )
-    {
-        try
-        {
-            if (statusDocumentProcessing == nullptr)
-            {
-                throw std::invalid_argument("statusDocumentProcessing is nullptr");
-            }
-            *statusDocumentProcessing = new StatusDocumentProcessing();
             return Status(StatusCode::ErrorCommonSuccess);
         }
         catch (const StatusException & ex)
