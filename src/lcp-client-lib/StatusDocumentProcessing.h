@@ -14,14 +14,14 @@ namespace lcp
     class StatusDocumentProcessing : public IStatusDocumentProcessing, public NonCopyable
     {
     public:
-        StatusDocumentProcessing(
-            );
+        StatusDocumentProcessing();
 
         virtual Status Start(IStatusDocumentProcessingCallback * callback);
         virtual Status Cancel();
     private:
         mutable std::mutex m_sync;
         IStatusDocumentProcessingCallback * m_callback;
+        bool m_cancelled;
     };
 }
 

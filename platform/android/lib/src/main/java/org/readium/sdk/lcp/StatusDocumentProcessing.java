@@ -7,23 +7,30 @@ public class StatusDocumentProcessing {
      */
     private final long nativePtr;
 
-    public interface Listener {
+    public interface IListener {
         void onStatusDocumentProcessingComplete();
+        //void onStatusDocumentProcessingComplete_(StatusDocumentProcessing sdp);
     }
 
     private StatusDocumentProcessing(long nativePtr) {
         this.nativePtr = nativePtr;
     }
 
+    private boolean m_wasCancelled = false;
+    public boolean wasCancelled() {
+        return m_wasCancelled;
+    }
+
     public void cancel() {
+        m_wasCancelled = true;
         this.nativeCancel(this.nativePtr);
     }
 
-    public void start(Listener listener) {
+    public void start(IListener listener) {
         this.nativeStart(listener, this.nativePtr);
     }
 
-    private native void nativeStart(Listener listener, long nativePtr);
+    private native void nativeStart(IListener listener, long nativePtr);
     private native void nativeCancel(long nativePtr);
 
 }

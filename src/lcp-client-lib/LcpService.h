@@ -40,6 +40,10 @@ namespace lcp
             const std::string & defaultCrlUrl
             );
 
+#if !DISABLE_LSD
+        virtual void SetLicenseStatusDocumentProcessingCancelled();
+#endif //!DISABLE_LSD
+
         // ILcpService
         virtual Status OpenLicense(
                 const ePub3::string & publicationPath,

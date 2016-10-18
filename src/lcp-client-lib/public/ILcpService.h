@@ -75,6 +75,10 @@ namespace lcp
                 const std::string & licenseJson,
                 ILicense** license) = 0;
 
+#if !DISABLE_LSD
+        virtual void SetLicenseStatusDocumentProcessingCancelled() = 0;
+#endif //!DISABLE_LSD
+
         //
         // Decrypts the License Document using the given User Passphrase.
         // If the resulting User Key is valid, it will be permanently 

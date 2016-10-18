@@ -72,9 +72,7 @@ namespace lcp {
         ILicense** licensePTR = &license;
 
         Status status = LcpContentModule::lcpService->OpenLicense(
-#if !DISABLE_LSD
                 path,
-#endif //!DISABLE_LSD
                 licenseJson, licensePTR);
 
         if ((status.Code != StatusCode::ErrorCommonSuccess)

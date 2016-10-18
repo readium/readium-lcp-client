@@ -10,7 +10,7 @@
 #include <ePub3/utilities/utfstring.h>
 
 JNIEXPORT jobject JNICALL Java_org_readium_sdk_lcp_Service_nativeOpenLicense(
-         JNIEnv *env, jobject obj, jlong servicePtr, jstring jLicenseJson) {
+        JNIEnv *env, jobject obj, jlong servicePtr, jstring jLicenseJson) {
      const char * cLicenseJson = env->GetStringUTFChars(jLicenseJson, 0);
      std::string licenseJson(cLicenseJson);
      lcp::ILcpService * service = (lcp::ILcpService *) servicePtr;
@@ -28,4 +28,12 @@ JNIEXPORT jobject JNICALL Java_org_readium_sdk_lcp_Service_nativeOpenLicense(
      jclass cls = env->FindClass("org/readium/sdk/lcp/License");
      jmethodID methodId = env->GetMethodID(cls, "<init>", "(JJ)V");
      return env->NewObject(cls, methodId, (jlong) (*licensePTR), (jlong) service);
- }
+}
+
+JNIEXPORT void JNICALL Java_org_readium_sdk_lcp_Service_nativeSetLicenseStatusDocumentProcessingCancelled(
+        JNIEnv *env, jobject obj, jlong servicePtr) {
+
+     lcp::ILcpService * service = (lcp::ILcpService *) servicePtr;
+     service->SetLicenseStatusDocumentProcessingCancelled();
+}
+

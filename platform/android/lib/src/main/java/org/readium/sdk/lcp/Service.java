@@ -31,9 +31,16 @@ public class Service {
          return this.openLicense(licenseContent);
      }
 
-     public License openLicense(String licenseContent) {
-         return this.nativeOpenLicense(this.nativePtr, licenseContent);
-     }
+    public License openLicense(String licenseContent) {
+        return this.nativeOpenLicense(this.nativePtr, licenseContent);
+    }
+
+
+    public void SetLicenseStatusDocumentProcessingCancelled() {
+        this.nativeSetLicenseStatusDocumentProcessingCancelled(this.nativePtr);
+    }
+
+
 
     /**
      * Returns the native Container pointer.
@@ -45,4 +52,6 @@ public class Service {
     }
 
     private native License nativeOpenLicense(long nativePtr, String licenseContent);
+
+    private native void nativeSetLicenseStatusDocumentProcessingCancelled(long nativePtr);
 }

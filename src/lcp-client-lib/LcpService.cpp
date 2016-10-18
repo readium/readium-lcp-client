@@ -67,7 +67,6 @@ namespace lcp
                 Status res = Status(StatusCode::ErrorCommonSuccess);
 
                 if (!(*licensePTR)->Decrypted()) {
-                    // THIS SHOULD NEVER HAPPEN! (because the LCP license is only added to the cache when it is succesfully decrypted)
                     res = this->CheckDecrypted((*licensePTR));
                 }
 
@@ -78,23 +77,24 @@ namespace lcp
                 return res;
             }
 
-            std::unique_ptr<CryptoLcpNode> cryptoNode(new CryptoLcpNode(m_encryptionProfilesManager.get()));
-            std::unique_ptr<LinksLcpNode> linksNode(new LinksLcpNode());
-            std::unique_ptr<UserLcpNode> userNode(new UserLcpNode());
-            std::unique_ptr<RightsLcpNode> rightsNode(new RightsLcpNode());
+            CryptoLcpNode* cryptoNode = new CryptoLcpNode(m_encryptionProfilesManager.get());
+            LinksLcpNode* linksNode = new LinksLcpNode();
+            UserLcpNode* userNode = new UserLcpNode();
+            RightsLcpNode* rightsNode = new RightsLcpNode();
+
             std::unique_ptr<RootLcpNode> rootNode(new RootLcpNode(
                 licenseJson,
                 canonicalJson,
-                cryptoNode.get(),
-                linksNode.get(),
-                userNode.get(),
-                rightsNode.get())
+                    cryptoNode,
+                    linksNode,
+                    userNode,
+                    rightsNode)
                 );
 
-            rootNode->AddChildNode(std::move(cryptoNode));
-            rootNode->AddChildNode(std::move(linksNode));
-            rootNode->AddChildNode(std::move(userNode));
-            rootNode->AddChildNode(std::move(rightsNode));
+            rootNode->AddChildNode(static_cast<ILcpNode*>(cryptoNode));
+            rootNode->AddChildNode(static_cast<ILcpNode*>(linksNode));
+            rootNode->AddChildNode(static_cast<ILcpNode*>(userNode));
+            rootNode->AddChildNode(static_cast<ILcpNode*>(rightsNode));
 
             auto parentValue = rapidjson::Value(rapidjson::kNullType);
             rootNode->ParseNode(parentValue, m_jsonReader.get());
@@ -158,8 +158,17 @@ namespace lcp
 
 #if !DISABLE_LSD
 
+    void LcpService::SetLicenseStatusDocumentProcessingCancelled() {
+        m_LicenseStatusDocumentThatStartedProcessing = nullptr;
+    }
+
     Status LcpService::CheckLicenseStatusDocument(ILicense* license)
     {
+        if (true || m_publicationPath.empty()) { // if a standalone LCPL, we wait until the linked EPUB is downloaded, then status doc will be checked.
+            m_LicenseStatusDocumentThatStartedProcessing = nullptr; // just to ensure the state is clean
+            return Status(StatusCode::ErrorCommonSuccess);
+        }
+
         try
         {
             if (license == nullptr)
@@ -217,6 +226,7 @@ namespace lcp
             }
 
             m_LicenseStatusDocumentThatStartedProcessing = license;
+
             // There is a link ... async process must start to attempt the HTTP request, LSD parse, license update, etc.
             return Status(StatusCode::LicenseStatusDocumentStartProcessing);
         }
