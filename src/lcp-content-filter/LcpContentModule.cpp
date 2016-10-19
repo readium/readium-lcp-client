@@ -14,6 +14,7 @@ READIUM_INCLUDE_START
 #include <ePub3/content_module_exception.h>
 #include <ePub3/content_module_manager.h>
 #include <ePub3/utilities/byte_stream.h>
+#include <ePub3/utilities/utfstring.h>
 READIUM_INCLUDE_END
 
 #if DEBUG
@@ -158,8 +159,11 @@ namespace lcp {
         LcpContentModule::lcpService = service;
         LcpContentModule::lcpCredentialHandler = credentialHandler;
         LcpContentModule::lcpStatusDocumentHandler = statusDocumentHandler;
-        auto contentModule = std::make_shared<LcpContentModule>();
-        ContentModuleManager::Instance()->RegisterContentModule(contentModule, "LcpContentModule");
+
+        //std::shared_ptr<LcpContentModule> contentModule = std::make_shared<LcpContentModule>();
+        LcpContentModule* contentModule = new LcpContentModule();
+
+        ContentModuleManager::Instance()->RegisterContentModule(contentModule, ePub3::string("LcpContentModule")); //_NOEXCEPT
     }
 }
 
