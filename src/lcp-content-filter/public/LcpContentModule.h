@@ -36,7 +36,11 @@ namespace lcp {
 #else
         ContainerPtr
 #endif //FUTURE_ENABLED
-        ProcessFile(const ePub3::string &path, ePub3::launch policy);
+        ProcessFile(const ePub3::string &path
+#if FUTURE_ENABLED
+                , ePub3::launch policy
+#endif //FUTURE_ENABLED
+        );
 
 #if FUTURE_ENABLED
         async_result<bool> ApproveUserAction(const UserAction &action);

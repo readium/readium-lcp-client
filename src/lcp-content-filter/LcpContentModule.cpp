@@ -41,7 +41,11 @@ namespace lcp {
 #else
     ContainerPtr
 #endif //FUTURE_ENABLED
-    LcpContentModule::ProcessFile(const ePub3::string &path, ePub3::launch policy) {
+    LcpContentModule::ProcessFile(const ePub3::string &path
+#if FUTURE_ENABLED
+            , ePub3::launch policy
+#endif //FUTURE_ENABLED
+                                  ) {
         ContainerPtr container = Container::OpenContainerForContentModule(path);
 
         if(container == nullptr) {
