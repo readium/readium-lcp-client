@@ -17,7 +17,7 @@ READIUM_INCLUDE_START
 #include <ePub3/container.h>
 #include <ePub3/filter_manager.h>
 #include <ePub3/media-overlays_smil_utils.h>
-#include <cmath>
+//#include <cmath>
 #include <ePub3/package.h>
 #include <ePub3/utilities/byte_stream.h>
 #include <zlib.h>
