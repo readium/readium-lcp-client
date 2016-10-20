@@ -47,7 +47,7 @@ namespace lcp {
             , ePub3::launch policy
 #endif //FUTURE_ENABLED
                                   ) {
-        ContainerPtr container = Container::OpenContainerForContentModule(path);
+        ContainerPtr container = Container::OpenContainerForContentModule(path, true);
 
         if(container == nullptr) {
 
