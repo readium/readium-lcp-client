@@ -10,6 +10,7 @@
 #include <vector>
 #include <memory>
 #include <mutex>
+#include <algorithm>
 #include "ILcpNode.h"
 #include "NonCopyable.h"
 
@@ -19,11 +20,23 @@ namespace lcp
 
     class BaseLcpNode : public ILcpNode, public NonCopyable
     {
+#if ENABLE_GENERIC_JSON_NODE
+    private:
+
+        template <class _Function>
+        inline //FORCE_INLINE
+                _Function           ForEachChild(_Function __f) const
+        {
+            return std::for_each(m_childs.begin(), m_childs.end(), __f);
+        }
+
     public:
-        virtual void AddChildNode(std::unique_ptr<ILcpNode> child)
+
+        virtual void AddChildNode(ILcpNode* child)
         {
             std::unique_lock<std::mutex> locker(m_childsSync);
-            m_childs.push_back(std::move(child));
+            std::unique_ptr<ILcpNode> uptr(child);
+            m_childs.push_back(std::move(uptr));
         }
 
         virtual bool IsLeaf() const
@@ -38,10 +51,24 @@ namespace lcp
             {
                 std::unique_lock<std::mutex> locker(m_childsSync);
 
-                for (auto it = m_childs.begin(); it != m_childs.end(); ++it)
+                int v = m_childs.size();
+
+                for (std::vector<std::unique_ptr<ILcpNode>>::const_iterator it = m_childs.begin(); it != m_childs.end(); ++it)
                 {
-                    (*it)->ParseNode(parentObject, reader);
+                    //std::unique_ptr<ILcpNode> child = *it;
+                    ILcpNode* child = (*it).get();
+                    child->ParseNode(parentObject, reader);
                 }
+//
+//                ForEachChild([&parentObject, reader](const std::unique_ptr<ILcpNode> & child)
+//                             {
+//                                 child->ParseNode(parentObject, reader);
+//                             });
+//
+//                std::for_each(m_childs.begin(), m_childs.end(), [] (auto const& child) {
+//                    bool breakpoint = true;
+//                });
+
             }
         }
 
@@ -78,8 +105,9 @@ namespace lcp
         }
 
     protected:
-        std::vector<std::unique_ptr<ILcpNode> > m_childs;
+        std::vector<std::unique_ptr<ILcpNode>> m_childs;
         mutable std::mutex m_childsSync;
+#endif //ENABLE_GENERIC_JSON_NODE
     };
 }
 

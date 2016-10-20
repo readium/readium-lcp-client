@@ -23,6 +23,14 @@ namespace lcp
 
     class LcpService : public ILcpService, public NonCopyable
     {
+    private:
+        ePub3::string m_publicationPath;
+        Status CheckDecrypted(ILicense* license);
+#if !DISABLE_LSD
+        ILicense* m_LicenseStatusDocumentThatStartedProcessing;
+        Status CheckLicenseStatusDocument(ILicense* license);
+#endif //!DISABLE_LSD
+
     public:
         LcpService(
             const std::string & rootCertificate,
@@ -32,8 +40,15 @@ namespace lcp
             const std::string & defaultCrlUrl
             );
 
+#if !DISABLE_LSD
+        virtual void SetLicenseStatusDocumentProcessingCancelled();
+#endif //!DISABLE_LSD
+
         // ILcpService
-        virtual Status OpenLicense(const std::string & licenseJson, ILicense ** license);
+        virtual Status OpenLicense(
+                const ePub3::string & publicationPath,
+                const std::string & licenseJson,
+                ILicense** licensePTR);
 
         virtual Status DecryptLicense(ILicense * license, const std::string & userPassphrase);
 
@@ -67,10 +82,16 @@ namespace lcp
             );
 
         virtual Status CreatePublicationAcquisition(
-            const std::string & publicationPath,
-            ILicense * license,
-            IAcquisition ** acquisition
-            );
+                const std::string & publicationPath,
+                ILicense * license,
+                IAcquisition ** acquisition
+        );
+
+        virtual Status CreatePublicationStatusDocumentProcessing(
+                const std::string & publicationPath,
+                ILicense * license,
+                IStatusDocumentProcessing ** statusDocumentProcessing
+        );
 
         virtual IRightsService * GetRightsService() const;
 
@@ -78,7 +99,7 @@ namespace lcp
         virtual INetProvider * NetProvider() const;
         virtual IStorageProvider * StorageProvider() const;
         virtual IFileSystemProvider * FileSystemProvider() const;
-        
+
     private:
         bool FindLicense(const std::string & canonicalJson, ILicense ** license);
         
@@ -110,6 +131,7 @@ namespace lcp
         std::mutex m_licensesSync;
 
     private:
+
         static std::string UnknownProvider;
         static std::string UnknownUserId;
     };

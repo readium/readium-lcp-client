@@ -3,7 +3,7 @@ apply plugin: 'com.android.model.native'
 
 model {
     android {
-        compileSdkVersion = 23
+        compileSdkVersion = 24
 
         sources {
             main {
@@ -38,6 +38,7 @@ model {
                     "-frtti",
                     "-fpic",
                     "-DFEATURES_READIUM",
+                    "-DDISABLE_LSD_",
                     "-I" + project(':epub3').projectDir +  "/include",
                     "-I${file("../../../src/lcp-client-lib")}".toString(),
                     "-I${file("../../../src/lcp-client-lib/public")}".toString(),

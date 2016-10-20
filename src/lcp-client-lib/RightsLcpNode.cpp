@@ -37,7 +37,11 @@ namespace lcp
         
         locker.unlock();
 
+#if ENABLE_GENERIC_JSON_NODE
         BaseLcpNode::ParseNode(rightsObject, reader);
+#else
+        //child->ParseNode(rightsObject, reader);
+#endif //ENABLE_GENERIC_JSON_NODE
     }
 
     Status RightsLcpNode::VerifyNode(ILicense * license, IClientProvider * clientProvider, ICryptoProvider * cryptoProvider)
@@ -55,8 +59,21 @@ namespace lcp
 
         locker.unlock();
 
+#if ENABLE_GENERIC_JSON_NODE
         return BaseLcpNode::VerifyNode(license, clientProvider, cryptoProvider);
+#else
+        return Status(StatusCode::ErrorCommonSuccess);
+#endif //ENABLE_GENERIC_JSON_NODE
     }
+
+#if ENABLE_GENERIC_JSON_NODE
+    // noop
+#else
+    Status RightsLcpNode::DecryptNode(ILicense * license, IKeyProvider * keyProvider, ICryptoProvider * cryptoProvider)
+    {
+        return Status(StatusCode::ErrorCommonSuccess);
+    }
+#endif //ENABLE_GENERIC_JSON_NODE
 
     KvStringsIterator * RightsLcpNode::Enumerate() const
     {

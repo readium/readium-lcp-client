@@ -5,6 +5,7 @@ import com.koushikdutta.ion.ProgressCallback;
 
 import java.io.File;
 import java.util.concurrent.CancellationException;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Created by clebeaupin on 15/03/16.
@@ -19,6 +20,7 @@ public class NetProviderCallback  implements ProgressCallback, FutureCallback<Fi
 
     // Set to true if the download has started
     private boolean hasStarted = false;
+    private boolean hasEnded = false;
 
     NetProviderCallback(long nativePtr, long requestPtr) {
         this.nativePtr = nativePtr;
@@ -35,18 +37,39 @@ public class NetProviderCallback  implements ProgressCallback, FutureCallback<Fi
     @Override
     public void onCompleted(Exception e, File result) {
         this.checkStart();
+        if (hasEnded) {
+            return;
+        }
+        hasEnded = true;
         if (e instanceof CancellationException) {
             // Request has been canceled
             this.nativeOnRequestCanceled(this.nativePtr, this.requestPtr);
-        } else {
+        } else if (e instanceof TimeoutException) {
+            // Request timeout
+            this.nativeOnRequestCanceled(this.nativePtr, this.requestPtr);
+        } else if (e == null && result != null) {
             this.nativeOnRequestEnded(this.nativePtr, this.requestPtr);
+        } else {
+            // Other errors
+            this.nativeOnRequestCanceled(this.nativePtr, this.requestPtr);
         }
     }
 
     @Override
     public void onProgress(long downloaded, long total) {
         this.checkStart();
-        this.nativeOnRequestProgressed(this.nativePtr, this.requestPtr, ((float)downloaded/total));
+
+        // total is -1 when HTTP content-length header is not set.
+        if (total < downloaded) {
+            total = downloaded*2;
+        }
+        float val = (downloaded/(float)total);
+        this.nativeOnRequestProgressed(this.nativePtr, this.requestPtr, val);
+//
+//        if (total == downloaded) {
+//            hasEnded = true;
+//            this.nativeOnRequestEnded(this.nativePtr, this.requestPtr);
+//        }
     }
 
     private native void nativeOnRequestStarted(long nativePtr, long requestPtr);

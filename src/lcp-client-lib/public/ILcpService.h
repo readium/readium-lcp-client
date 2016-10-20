@@ -9,6 +9,11 @@
 
 #include <string>
 #include "LcpStatus.h"
+#include "IStatusDocumentProcessing.h"
+
+#if !DISABLE_LSD
+#include <ePub3/utilities/utfstring.h>
+#endif //!DISABLE_LSD
 
 namespace lcp
 {
@@ -65,7 +70,14 @@ namespace lcp
         // The License will be automatically decrypted if a valid User Key can
         // be found in the storage provider.
         //
-        virtual Status OpenLicense(const std::string & licenseJson, ILicense ** license) = 0;
+        virtual Status OpenLicense(
+                const ePub3::string & publicationPath,
+                const std::string & licenseJson,
+                ILicense** license) = 0;
+
+#if !DISABLE_LSD
+        virtual void SetLicenseStatusDocumentProcessingCancelled() = 0;
+#endif //!DISABLE_LSD
 
         //
         // Decrypts the License Document using the given User Passphrase.
@@ -135,10 +147,17 @@ namespace lcp
         // download explicitely with IAcquisition::Start().
         //
         virtual Status CreatePublicationAcquisition(
-            const std::string & publicationPath,
-            ILicense * license,
-            IAcquisition ** acquisition
-            ) = 0;
+                const std::string & publicationPath,
+                ILicense * license,
+                IAcquisition ** acquisition
+        ) = 0;
+
+        virtual Status CreatePublicationStatusDocumentProcessing(
+                const std::string & publicationPath,
+                ILicense * license,
+                IStatusDocumentProcessing ** statusDocumentProcessing
+        ) = 0;
+
 
         //
         // Returns the rights service, exposing the public License rights API.

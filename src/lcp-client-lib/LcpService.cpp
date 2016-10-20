@@ -17,9 +17,13 @@
 #include "CryptoppCryptoProvider.h"
 #include "SimpleKeyProvider.h"
 #include "public/IStorageProvider.h"
-#include "public/INetProvider.h"
 #include "Acquisition.h"
 #include "RightsService.h"
+
+#if !DISABLE_LSD
+#include "LsdProcessor.h"
+#include "StatusDocumentProcessing.h"
+#endif //!DISABLE_LSD
 
 namespace lcp
 {
@@ -41,62 +45,214 @@ namespace lcp
         , m_jsonReader(new JsonValueReader())
         , m_encryptionProfilesManager(new EncryptionProfilesManager())
         , m_cryptoProvider(new CryptoppCryptoProvider(m_encryptionProfilesManager.get(), m_netProvider, defaultCrlUrl))
+#if !DISABLE_LSD
+        , m_LicenseStatusDocumentThatStartedProcessing(nullptr)
+#endif //!DISABLE_LSD
     {
     }
 
-    Status LcpService::OpenLicense(const std::string & licenseJson, ILicense ** license)
+
+    Status LcpService::OpenLicense(
+            const ePub3::string & publicationPath,
+            const std::string & licenseJson,
+            ILicense** licensePTR)
     {
+        // When no EPUB path is provided, this means the LCPL file is opened directly (client needs "publication" link to acquire / download the EPUB)
+        m_publicationPath = publicationPath;
+
         try
         {
-            if (license == nullptr)
-            {
-                throw std::invalid_argument("license is nullptr");
-            }
-
             std::string canonicalJson = this->CalculateCanonicalForm(licenseJson);
-            if (this->FindLicense(canonicalJson, license))
-            {
-                return Status(Status(StatusCode::ErrorCommonSuccess));
+
+            bool foundLicense = this->FindLicense(canonicalJson, licensePTR);
+            if (foundLicense) {
+                Status res = Status(StatusCode::ErrorCommonSuccess);
+
+                if (!(*licensePTR)->Decrypted()) {
+                    res = this->CheckDecrypted((*licensePTR));
+                }
+
+#if !DISABLE_LSD
+                res = this->CheckLicenseStatusDocument((*licensePTR));
+#endif //!DISABLE_LSD
+
+                return res;
             }
 
-            std::unique_ptr<CryptoLcpNode> cryptoNode(new CryptoLcpNode(m_encryptionProfilesManager.get()));
-            std::unique_ptr<LinksLcpNode> linksNode(new LinksLcpNode());
-            std::unique_ptr<UserLcpNode> userNode(new UserLcpNode());
-            std::unique_ptr<RightsLcpNode> rightsNode(new RightsLcpNode());
+            CryptoLcpNode* cryptoNode = new CryptoLcpNode(m_encryptionProfilesManager.get());
+            LinksLcpNode* linksNode = new LinksLcpNode();
+            UserLcpNode* userNode = new UserLcpNode();
+            RightsLcpNode* rightsNode = new RightsLcpNode();
+
             std::unique_ptr<RootLcpNode> rootNode(new RootLcpNode(
                 licenseJson,
                 canonicalJson,
-                cryptoNode.get(),
-                linksNode.get(),
-                userNode.get(),
-                rightsNode.get())
+                    cryptoNode,
+                    linksNode,
+                    userNode,
+                    rightsNode)
                 );
-
-            rootNode->AddChildNode(std::move(cryptoNode));
-            rootNode->AddChildNode(std::move(linksNode));
-            rootNode->AddChildNode(std::move(userNode));
-            rootNode->AddChildNode(std::move(rightsNode));
+#if ENABLE_GENERIC_JSON_NODE
+            rootNode->AddChildNode(static_cast<ILcpNode*>(cryptoNode));
+            rootNode->AddChildNode(static_cast<ILcpNode*>(linksNode));
+            rootNode->AddChildNode(static_cast<ILcpNode*>(userNode));
+            rootNode->AddChildNode(static_cast<ILcpNode*>(rightsNode));
+#endif //ENABLE_GENERIC_JSON_NODE
 
             auto parentValue = rapidjson::Value(rapidjson::kNullType);
             rootNode->ParseNode(parentValue, m_jsonReader.get());
 
             Status res = rootNode->VerifyNode(rootNode.get(), this, m_cryptoProvider.get());
-            if (!Status::IsSuccess(res))
+            if (!Status::IsSuccess(res)) {
                 return res;
+            }
 
             std::unique_lock<std::mutex> locker(m_licensesSync);
-            auto insertRes = m_licenses.insert(std::make_pair(std::move(canonicalJson), std::move(rootNode)));
-            if (!insertRes.second)
-            {
-                return Status(StatusCode::ErrorOpeningDuplicateLicenseInstance, "Two License instances with the same canonical form");
+            auto insertRes = m_licenses.insert(
+                    std::make_pair(std::move(canonicalJson), std::move(rootNode)));
+            if (!insertRes.second) {
+                return Status(StatusCode::ErrorOpeningDuplicateLicenseInstance,
+                              "Two License instances with the same canonical form");
             }
-            *license = insertRes.first->second.get();
+            (*licensePTR) = insertRes.first->second.get();
             locker.unlock();
 
-            if (!(*license)->Decrypted())
-            {
-                return this->DecryptLicenseOnOpening(*license);
+            Status result = Status(StatusCode::ErrorCommonSuccess);
+
+            result = this->CheckDecrypted((*licensePTR));
+
+#if !DISABLE_LSD
+            result = this->CheckLicenseStatusDocument((*licensePTR));
+#endif //!DISABLE_LSD
+
+            return result;
+        }
+        catch (const StatusException & ex)
+        {
+            return ex.ResultStatus();
+        }
+    }
+
+    Status LcpService::CheckDecrypted(ILicense* license) {
+
+        Status result = Status(StatusCode::ErrorCommonSuccess);
+
+        if (!license->Decrypted())
+        {
+            result = this->DecryptLicenseOnOpening(license);
+            
+            if (result.Code == StatusCode::ErrorDecryptionLicenseEncrypted) {
+                //ASSERT (!license->Decrypted())
+
+                // failure to decrypt using stored user key, we need user passphrase input
+                result = Status(StatusCode::ErrorCommonSuccess);
+                    
+                // Execution flow: on the client side of the LcpService::OpenLicense() API (i.e. LCP Content Module), LICENSE->Decrypted() boolean is checked, and if false then ePub3::ContentModuleExceptionDecryptFlow is raised, then captured quietly where ePub3::Container::OpenContainer() is invoked. Meanwhile, the LCP Crendential Handler triggers asynchronous user action (passphrase input), and this is then followed with another attempt from scratch to "open" the license (see this->DecryptLicense(lic, pass)), and if successful then ePub3::Container::OpenContainer() is invoked all over again (total inversion of control, 2 separate phases).
+
+            } else if (Status::IsSuccess(result)) {
+                //ASSERT (license->Decrypted())
+
+                result = Status(StatusCode::ErrorCommonSuccess);
             }
+        }
+
+        return result;
+    }
+
+#if !DISABLE_LSD
+
+    void LcpService::SetLicenseStatusDocumentProcessingCancelled() {
+        m_LicenseStatusDocumentThatStartedProcessing = nullptr;
+    }
+
+    Status LcpService::CheckLicenseStatusDocument(ILicense* license)
+    {
+        if (m_publicationPath.empty()) { // if a standalone LCPL, we wait until the linked EPUB is downloaded, then status doc will be checked.
+            m_LicenseStatusDocumentThatStartedProcessing = nullptr; // just to ensure the state is clean
+            return Status(StatusCode::ErrorCommonSuccess);
+        }
+
+        try
+        {
+            if (license == nullptr)
+            {
+                throw std::invalid_argument("license pointer is nullptr");
+            }
+
+            // if (!license->Decrypted())
+            // {
+            //     return Status(StatusCode::ErrorDecryptionLicenseEncrypted);
+            // }
+
+            // RootLcpNode * rootNode = dynamic_cast<RootLcpNode *>(license);
+            // if (rootNode == nullptr)
+            // {
+            //     throw std::logic_error("Can not cast ILicense to ILcpNode / RootLcpNode");
+            // }
+            
+            ILinks* links = license->Links();
+
+            //bool foundLink = links->GetLink(Status, lsdLink);
+            //if (!foundLink) {
+            if (!links->Has(StatusDocument))
+            {
+                return Status(StatusCode::ErrorCommonSuccess); // no LSD, noop
+                //return Status(StatusCode::ErrorStatusDocumentNoStatusLink);
+            }
+
+            lcp::Link lsdLink;
+            links->GetLink(StatusDocument, lsdLink);
+            if (lsdLink.type != LsdProcessor::StatusType)
+            {
+                return Status(StatusCode::ErrorCommonSuccess); // bogus LSD link, noop
+                //return Status(StatusCode::ErrorStatusDocumentWrongType);
+            }
+
+            if (!lsdLink.href.length())
+            {
+                return Status(StatusCode::ErrorCommonSuccess); // bogus LSD link, noop
+                //return Status(StatusCode::ErrorStatusDocumentInvalidUri);
+            }
+
+            if (m_LicenseStatusDocumentThatStartedProcessing != nullptr) {
+                // should be equal to license! (but we check anyway)
+                if (m_LicenseStatusDocumentThatStartedProcessing == license) {
+
+                    // The LSD was checked at the last round, so now the EPUB is opening without LSD check.
+                    m_LicenseStatusDocumentThatStartedProcessing = nullptr;
+                    return Status(StatusCode::ErrorCommonSuccess);
+                } else {
+
+                    // different license from previous round?!
+                    bool breakpoint = true; // TODO
+                }
+            }
+
+            m_LicenseStatusDocumentThatStartedProcessing = license;
+
+            // There is a link ... async process must start to attempt the HTTP request, LSD parse, license update, etc.
+            return Status(StatusCode::LicenseStatusDocumentStartProcessing);
+        }
+        catch (const StatusException & ex)
+        {
+            return Status(StatusCode::ErrorCommonSuccess); // any LSD problem, noop
+            //return ex.ResultStatus();
+        }
+    }
+
+    Status LcpService::CreatePublicationStatusDocumentProcessing(
+            const std::string & publicationPath,
+            ILicense * license,
+            IStatusDocumentProcessing ** statusDocumentProcessing
+    )
+    {
+        try
+        {
+            if (statusDocumentProcessing == nullptr)
+            {
+                throw std::invalid_argument("statusDocumentProcessing is nullptr");
+            }
+            *statusDocumentProcessing = new StatusDocumentProcessing();
             return Status(StatusCode::ErrorCommonSuccess);
         }
         catch (const StatusException & ex)
@@ -104,6 +260,8 @@ namespace lcp
             return ex.ResultStatus();
         }
     }
+
+#endif //!DISABLE_LSD
 
     Status LcpService::DecryptLicense(ILicense * license, const std::string & userPassphrase)
     {
@@ -164,8 +322,8 @@ namespace lcp
         {
             m_rightsService->SyncRightsFromStorage(license);
         }
-        if (Status::IsSuccess(res) || res.Code == StatusCode::ErrorDecryptionLicenseEncrypted)
-            return Status(StatusCode::ErrorCommonSuccess);
+        // if (Status::IsSuccess(res) || res.Code == StatusCode::ErrorDecryptionLicenseEncrypted)
+        //     return Status(StatusCode::ErrorCommonSuccess);
         return res;
     }
 
@@ -376,10 +534,10 @@ namespace lcp
     }
 
     Status LcpService::CreatePublicationAcquisition(
-        const std::string & publicationPath,
-        ILicense * license,
-        IAcquisition ** acquisition
-        )
+            const std::string & publicationPath,
+            ILicense * license,
+            IAcquisition ** acquisition
+    )
     {
         try
         {
@@ -392,12 +550,12 @@ namespace lcp
                 return Status(StatusCode::ErrorCommonNoNetProvider);
             }
             *acquisition = new Acquisition(
-                license,
-                m_fileSystemProvider,
-                m_netProvider,
-                m_cryptoProvider.get(),
-                publicationPath
-                );
+                    license,
+                    m_fileSystemProvider,
+                    m_netProvider,
+                    m_cryptoProvider.get(),
+                    publicationPath
+            );
             return Status(StatusCode::ErrorCommonSuccess);
         }
         catch (const StatusException & ex)

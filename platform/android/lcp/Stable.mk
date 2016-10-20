@@ -68,8 +68,8 @@ include $(PREBUILT_SHARED_LIBRARY)
 include $(CLEAR_VARS)
 LOCAL_MODULE := lcp
 
-LOCAL_CPPFLAGS := -std=gnu++11
-LOCAL_CXXFLAGS := -std=gnu++11 -fpermissive -DFEATURES_READIUM
+LOCAL_CPPFLAGS := -std=gnu++11 -DDISABLE_LSD_
+LOCAL_CXXFLAGS := -std=gnu++11 -fpermissive -DFEATURES_READIUM -DDISABLE_LSD_
 LOCAL_CPP_FEATURES += exceptions rtti
 LOCAL_STATIC_LIBRARIES := cryptopp ziplib
 LOCAL_SHARED_LIBRARIES := epub3

@@ -99,6 +99,11 @@ namespace lcp
             ErrorNetworkingRequestNotFound,
             // Any other network error
             ErrorNetworkingRequestFailed
+
+#if !DISABLE_LSD
+            ,
+            LicenseStatusDocumentStartProcessing
+#endif //!DISABLE_LSD
         };
     };
 

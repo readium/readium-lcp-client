@@ -64,6 +64,15 @@ namespace lcp
         return m_cryptoInfo.signatureCertificate;
     }
 
+#if ENABLE_GENERIC_JSON_NODE
+    // noop
+#else
+    Status CryptoLcpNode::DecryptNode(ILicense * license, IKeyProvider * keyProvider, ICryptoProvider * cryptoProvider)
+    {
+        return Status(StatusCode::ErrorCommonSuccess);
+    }
+#endif //ENABLE_GENERIC_JSON_NODE
+
     Status CryptoLcpNode::VerifyNode(ILicense * license, IClientProvider * clientProvider, ICryptoProvider * cryptoProvider)
     {
         m_encryptionProfile = m_encryptionProfilesManager->GetProfile(m_cryptoInfo.encryptionProfile);
@@ -84,7 +93,12 @@ namespace lcp
         {
             return Status(StatusCode::ErrorCommonAlgorithmMismatch, "signature algorithm mismatch");
         }
+
+#if ENABLE_GENERIC_JSON_NODE
         return BaseLcpNode::VerifyNode(license, clientProvider, cryptoProvider);
+#else
+        return Status(StatusCode::ErrorCommonSuccess);
+#endif //ENABLE_GENERIC_JSON_NODE
     }
 
     void CryptoLcpNode::ParseNode(const rapidjson::Value & parentObject, JsonValueReader * reader)
@@ -111,6 +125,10 @@ namespace lcp
         m_cryptoInfo.signatureCertificate = reader->ReadStringCheck("certificate", signatureObject);
         m_cryptoInfo.signature = reader->ReadStringCheck("value", signatureObject);
 
+#if ENABLE_GENERIC_JSON_NODE
         BaseLcpNode::ParseNode(encryptionObject, reader);
+#else
+        //child->ParseNode(encryptionObject, reader);
+#endif //ENABLE_GENERIC_JSON_NODE
     }
 }

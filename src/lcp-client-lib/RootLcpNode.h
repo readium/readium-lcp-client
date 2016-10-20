@@ -11,6 +11,17 @@
 #include "public/ILicense.h"
 #include "IKeyProvider.h"
 
+#if ENABLE_GENERIC_JSON_NODE
+// noop
+#else
+
+#include "CryptoLcpNode.h"
+#include "LinksLcpNode.h"
+#include "UserLcpNode.h"
+#include "RightsLcpNode.h"
+
+#endif //ENABLE_GENERIC_JSON_NODE
+
 namespace lcp
 {
     struct RootInfo
@@ -29,10 +40,18 @@ namespace lcp
         RootLcpNode(
             const std::string & licenseJson,
             const std::string & canonicalJson,
+
+#if ENABLE_GENERIC_JSON_NODE
             ICrypto * crypto,
             ILinks * links,
             IUser * user,
             IRights * rights
+#else
+            CryptoLcpNode * crypto,
+            LinksLcpNode * links,
+            UserLcpNode * user,
+            RightsLcpNode * rights
+#endif //ENABLE_GENERIC_JSON_NODE
             );
 
         void SetKeyProvider(std::unique_ptr<IKeyProvider> keyProvider);
@@ -65,10 +84,19 @@ namespace lcp
 
     private:
         RootInfo m_rootInfo;
+
+#if ENABLE_GENERIC_JSON_NODE
         ICrypto * m_crypto;
         ILinks * m_links;
         IUser * m_user;
         IRights * m_rights;
+#else
+        std::unique_ptr<CryptoLcpNode> m_crypto;
+        std::unique_ptr<LinksLcpNode> m_links;
+        std::unique_ptr<UserLcpNode> m_user;
+        std::unique_ptr<RightsLcpNode> m_rights;
+#endif //ENABLE_GENERIC_JSON_NODE
+
         bool m_decrypted;
         std::unique_ptr<IKeyProvider> m_keyProvider;
     };

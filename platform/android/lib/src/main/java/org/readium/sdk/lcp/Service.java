@@ -14,26 +14,33 @@ public class Service {
         this.nativePtr = nativePtr;
     }
 
-    public License openLicense(InputStream licenseInputStream) {
-        // Read the license input stream
-        String licenseContent = "";
+     public License openLicense(InputStream licenseInputStream) {
+         // Read the license input stream
+         String licenseContent = "";
 
-        try {
-            byte[] data = new byte[licenseInputStream.available()];
-            licenseInputStream.read(data);
-            licenseInputStream.close();
-            licenseContent = new String(data, "UTF-8");
-        } catch (IOException e) {
-            // Unable to open license
-            return null;
-        }
+         try {
+             byte[] data = new byte[licenseInputStream.available()];
+             licenseInputStream.read(data);
+             licenseInputStream.close();
+             licenseContent = new String(data, "UTF-8");
+         } catch (IOException e) {
+             // Unable to open license
+             return null;
+         }
 
-        return this.openLicense(licenseContent);
-    }
+         return this.openLicense(licenseContent);
+     }
 
     public License openLicense(String licenseContent) {
         return this.nativeOpenLicense(this.nativePtr, licenseContent);
     }
+
+
+    public void SetLicenseStatusDocumentProcessingCancelled() {
+        this.nativeSetLicenseStatusDocumentProcessingCancelled(this.nativePtr);
+    }
+
+
 
     /**
      * Returns the native Container pointer.
@@ -45,4 +52,6 @@ public class Service {
     }
 
     private native License nativeOpenLicense(long nativePtr, String licenseContent);
+
+    private native void nativeSetLicenseStatusDocumentProcessingCancelled(long nativePtr);
 }
