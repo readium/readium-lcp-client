@@ -35,6 +35,26 @@ namespace lcp
         return result;
     }
 
+    const rapidjson::Value & JsonValueReader::ReadArray(const std::string & name, const rapidjson::Value & jsonValue)
+    {
+        auto it = jsonValue.FindMember(name.c_str());
+        if (it != jsonValue.MemberEnd() && it->value.IsArray())
+        {
+            return it->value;
+        }
+        return rapidjson::Value(rapidjson::kNullType).Move();
+    }
+
+    const rapidjson::Value & JsonValueReader::ReadArrayCheck(const std::string & name, const rapidjson::Value & jsonValue)
+    {
+        auto it = jsonValue.FindMember(name.c_str());
+        if (it == jsonValue.MemberEnd() || !it->value.IsArray())
+        {
+            throw StatusException(Status(StatusCode::ErrorOpeningLicenseNotValid, name + " array is not valid"));
+        }
+        return it->value;
+    }
+
     const rapidjson::Value & JsonValueReader::ReadObject(const std::string & name, const rapidjson::Value & jsonValue)
     {
         auto it = jsonValue.FindMember(name.c_str());

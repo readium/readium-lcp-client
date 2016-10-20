@@ -26,6 +26,9 @@ namespace lcp
         const rapidjson::Value & ReadObject(const std::string & name, const rapidjson::Value & jsonValue);
         const rapidjson::Value & ReadObjectCheck(const std::string & name, const rapidjson::Value & jsonValue);
 
+        const rapidjson::Value & ReadArray(const std::string & name, const rapidjson::Value & jsonValue);
+        const rapidjson::Value & ReadArrayCheck(const std::string & name, const rapidjson::Value & jsonValue);
+
         static Status CreateRapidJsonError(rapidjson::ParseErrorCode errorCode, size_t offset = InvalidOffset);
 
     private:
