@@ -4,6 +4,8 @@
 //
 //
 
+#if ENABLE_NET_PROVIDER
+
 #include "public/ILicense.h"
 #include "Acquisition.h"
 #include "DownloadInFileRequest.h"
@@ -188,3 +190,5 @@ namespace lcp
         }
     }
 }
+
+#endif //ENABLE_NET_PROVIDER

@@ -2,6 +2,8 @@
 // Created by clebeaupin on 29/01/16.
 //
 
+#if ENABLE_NET_PROVIDER
+
 #include "NetProvider.h"
 #include "Util.h"
 
@@ -66,3 +68,5 @@ JNIEXPORT void JNICALL Java_org_readium_sdk_lcp_NetProviderCallback_nativeOnRequ
     lcp::IDownloadRequest * request = (lcp::IDownloadRequest *) requestPtr;
     callback->OnRequestProgressed(request, progress);
 }
+
+#endif //ENABLE_NET_PROVIDER

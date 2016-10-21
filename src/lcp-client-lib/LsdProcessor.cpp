@@ -19,7 +19,9 @@
 #include "CryptoppCryptoProvider.h"
 #include "SimpleKeyProvider.h"
 #include "public/IStorageProvider.h"
+#if ENABLE_NET_PROVIDER
 #include "Acquisition.h"
+#endif //ENABLE_NET_PROVIDER
 #include "RightsService.h"
 
 
@@ -52,11 +54,21 @@ namespace lcp
     m_publicationPath(publicationPath),
     m_jsonReader(new JsonValueReader()),
     m_encryptionProfilesManager(new EncryptionProfilesManager()),
-    m_cryptoProvider(new CryptoppCryptoProvider(m_encryptionProfilesManager.get(), m_lcpService->NetProvider(), std::string())),
+    m_cryptoProvider(new CryptoppCryptoProvider(m_encryptionProfilesManager.get()
+#if ENABLE_NET_PROVIDER
+            , m_lcpService->NetProvider()
+
+            , std::string()
+#endif //ENABLE_NET_PROVIDER
+    ))
+#if ENABLE_NET_PROVIDER
+            ,
     m_lsdRequestStatus(Status(StatusCode::ErrorCommonSuccess))
+#endif //ENABLE_NET_PROVIDER
     {
     }
 
+#if ENABLE_NET_PROVIDER
     // INetProviderCallback
     void LsdProcessor::OnRequestStarted(INetRequest * request)
     {
@@ -254,6 +266,7 @@ namespace lcp
             //m_lsdRequestStatus = this->CheckDecrypted((*m_lsdOriginalLicensePTR));
         }
     }
+#endif //ENABLE_NET_PROVIDER
 
     Status LsdProcessor::CheckStatusDocumentHash(IReadableStream* stream)
     {
@@ -345,6 +358,7 @@ namespace lcp
                 url = this->ResolveTemplatedURL(m_license, url);
             }
 
+#if ENABLE_NET_PROVIDER
             if (m_lcpService->NetProvider() == nullptr)
             {
                 return Status(StatusCode::ErrorCommonNoNetProvider);
@@ -379,6 +393,7 @@ namespace lcp
 //            }
 
             //m_lsdRequestStatus = this->CheckDecrypted(newLicense);
+#endif //ENABLE_NET_PROVIDER
 
             return Status(StatusCode::LicenseStatusDocumentStartProcessing);
         }

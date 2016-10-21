@@ -2,6 +2,8 @@
 // Created by clebeaupin on 15/03/16.
 //
 
+#if ENABLE_NET_PROVIDER
+
 #include <public/IAcquistion.h>
 #include <public/IAcquistionCallback.h>
 #include "Acquisition.h"
@@ -26,3 +28,5 @@ JNIEXPORT void JNICALL Java_org_readium_sdk_lcp_Acquisition_nativeCancel(
 
     acquisition->Cancel();
 }
+
+#endif //ENABLE_NET_PROVIDER

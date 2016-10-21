@@ -14,20 +14,25 @@
 
 namespace lcp
 {
-    class EncryptionProfilesManager;
+#if ENABLE_NET_PROVIDER
     class INetProvider;
-    class ICertificate;
-    class ICertificateRevocationList;
     class CrlUpdater;
     class ThreadTimer;
+#endif //ENABLE_NET_PROVIDER
+    class EncryptionProfilesManager;
+    class ICertificate;
+    class ICertificateRevocationList;
 
     class CryptoppCryptoProvider : public ICryptoProvider, public NonCopyable
     {
     public:
         CryptoppCryptoProvider(
-            EncryptionProfilesManager * encryptionProfilesManager,
+            EncryptionProfilesManager * encryptionProfilesManager
+#if ENABLE_NET_PROVIDER
+        ,
             INetProvider * netProvider,
             const std::string & defaultCrlUrl
+#endif //ENABLE_NET_PROVIDER
             );
         ~CryptoppCryptoProvider();
 
@@ -92,9 +97,11 @@ namespace lcp
         Status ProcessRevokation(ICertificate * rootCertificate, ICertificate * providerCertificate);
 
     private:
+#if ENABLE_NET_PROVIDER
         std::unique_ptr<ICertificateRevocationList> m_revocationList;
         std::unique_ptr<ThreadTimer> m_threadTimer;
         std::unique_ptr<CrlUpdater> m_crlUpdater;
+#endif //ENABLE_NET_PROVIDER
         std::mutex m_processRevocationSync;
         EncryptionProfilesManager * m_encryptionProfilesManager;
     };

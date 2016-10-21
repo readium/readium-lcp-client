@@ -7,6 +7,8 @@
 #ifndef __I_NET_PROVIDER_H__
 #define __I_NET_PROVIDER_H__
 
+#if ENABLE_NET_PROVIDER
+
 #include <string>
 #include "LcpStatus.h"
 
@@ -105,5 +107,7 @@ namespace lcp
         virtual void SetSuggestedFileName(const std::string & fileName) = 0;
     };
 }
+
+#endif //ENABLE_NET_PROVIDER
 
 #endif //__I_NET_PROVIDER_H__

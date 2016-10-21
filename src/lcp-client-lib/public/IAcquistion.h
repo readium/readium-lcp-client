@@ -7,6 +7,8 @@
 #ifndef __I_ACQUISITION_H__
 #define __I_ACQUISITION_H__
 
+#if ENABLE_NET_PROVIDER
+
 #include <string>
 #include "LcpStatus.h"
 
@@ -51,5 +53,7 @@ namespace lcp
         virtual ~IAcquisition() {}
     };
 }
+
+#endif //ENABLE_NET_PROVIDER
 
 #endif //__I_ACQUISITION_H__

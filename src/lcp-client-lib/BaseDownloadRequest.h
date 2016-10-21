@@ -7,6 +7,8 @@
 #ifndef __BASE_DOWNLOAD_REQUEST_H__
 #define __BASE_DOWNLOAD_REQUEST_H__
 
+#if ENABLE_NET_PROVIDER
+
 #include <atomic>
 #include <mutex>
 #include "public/INetProvider.h"
@@ -58,5 +60,7 @@ namespace lcp
         mutable std::mutex m_suggestedNameSync;
     };
 }
+
+#endif //ENABLE_NET_PROVIDER
 
 #endif //__BASE_DOWNLOAD_REQUEST_H__

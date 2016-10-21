@@ -7,6 +7,8 @@
 #ifndef __DOWNLOAD_IN_MEMORY_REQUEST_H__
 #define __DOWNLOAD_IN_MEMORY_REQUEST_H__
 
+#if ENABLE_NET_PROVIDER
+
 #include "BaseDownloadRequest.h"
 
 namespace lcp
@@ -39,5 +41,7 @@ namespace lcp
         IWritableStream * m_stream;
     };
 }
+
+#endif //ENABLE_NET_PROVIDER
 
 #endif //__DOWNLOAD_IN_MEMORY_REQUEST_H__

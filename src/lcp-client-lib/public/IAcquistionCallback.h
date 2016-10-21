@@ -7,6 +7,8 @@
 #ifndef __I_ACQUISTION_CALLBACK_H__
 #define __I_ACQUISTION_CALLBACK_H__
 
+#if ENABLE_NET_PROVIDER
+
 #include "LcpStatus.h"
 
 namespace lcp
@@ -47,5 +49,7 @@ namespace lcp
         virtual ~IAcquisitionCallback() {}
     };
 }
+
+#endif //ENABLE_NET_PROVIDER
 
 #endif //__I_ACQUISTION_CALLBACK_H__

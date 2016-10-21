@@ -34,10 +34,15 @@ namespace lcp
     public:
         LcpService(
             const std::string & rootCertificate,
+#if ENABLE_NET_PROVIDER
             INetProvider * netProvider,
+#endif //ENABLE_NET_PROVIDER
             IStorageProvider * storageProvider,
-            IFileSystemProvider * fileSystemProvider,
+            IFileSystemProvider * fileSystemProvider
+#if ENABLE_NET_PROVIDER
+                ,
             const std::string & defaultCrlUrl
+#endif //ENABLE_NET_PROVIDER
             );
 
 #if !DISABLE_LSD
@@ -80,13 +85,13 @@ namespace lcp
             const std::string & providerId,
             const std::string & licenseId
             );
-
+#if ENABLE_NET_PROVIDER
         virtual Status CreatePublicationAcquisition(
                 const std::string & publicationPath,
                 ILicense * license,
                 IAcquisition ** acquisition
         );
-
+#endif //ENABLE_NET_PROVIDER
         virtual Status CreatePublicationStatusDocumentProcessing(
                 const std::string & publicationPath,
                 ILicense * license,
@@ -96,7 +101,9 @@ namespace lcp
         virtual IRightsService * GetRightsService() const;
 
         virtual std::string RootCertificate() const;
+#if ENABLE_NET_PROVIDER
         virtual INetProvider * NetProvider() const;
+#endif //ENABLE_NET_PROVIDER
         virtual IStorageProvider * StorageProvider() const;
         virtual IFileSystemProvider * FileSystemProvider() const;
 
@@ -119,7 +126,9 @@ namespace lcp
 
     private:
         std::string m_rootCertificate;
+#if ENABLE_NET_PROVIDER
         INetProvider * m_netProvider;
+#endif //ENABLE_NET_PROVIDER
         IStorageProvider * m_storageProvider;
         IFileSystemProvider * m_fileSystemProvider;
 

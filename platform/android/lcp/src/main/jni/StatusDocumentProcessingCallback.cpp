@@ -16,7 +16,7 @@ namespace lcp {
         env->DeleteGlobalRef(this->jStatusDocumentProcessingCallback);
     }
 
-    void StatusDocumentProcessingCallback::OnStatusDocumentProcessingComplete(IStatusDocumentProcessing* acquisition) {
+    void StatusDocumentProcessingCallback::OnStatusDocumentProcessingComplete(IStatusDocumentProcessing* sdp) {
         JNIEnv * env = getJNIEnv();
         env->CallVoidMethod(
                 this->jStatusDocumentProcessingCallback, jOnStatusDocumentProcessingCompleteMethodId);

@@ -11,7 +11,7 @@ namespace lcp
     class IStatusDocumentProcessingCallback
     {
     public:
-        virtual void OnStatusDocumentProcessingComplete(IStatusDocumentProcessing * acquisition) = 0;
+        virtual void OnStatusDocumentProcessingComplete(IStatusDocumentProcessing * sdp) = 0;
 
         virtual ~IStatusDocumentProcessingCallback() {}
     };

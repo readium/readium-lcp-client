@@ -7,6 +7,8 @@
 #ifndef __I_DOWNLOAD_REQUEST_CREATOR_H__
 #define __I_DOWNLOAD_REQUEST_CREATOR_H__
 
+#if ENABLE_NET_PROVIDER
+
 #include "public/LcpStatus.h"
 
 namespace lcp
@@ -25,5 +27,7 @@ namespace lcp
         virtual ~IDownloadRequestCreator() {}
     };
 }
+
+#endif //ENABLE_NET_PROVIDER
 
 #endif //__I_DOWNLOAD_REQUEST_CREATOR_H__

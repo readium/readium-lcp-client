@@ -25,6 +25,7 @@ JNIEXPORT void JNICALL Java_org_readium_sdk_lcp_License_nativeDecrypt(
     lcp::Status status = service->DecryptLicense(license, passphrase);
 }
 
+#if ENABLE_NET_PROVIDER
 JNIEXPORT jobject JNICALL Java_org_readium_sdk_lcp_License_nativeCreateAcquisition(
         JNIEnv *env, jobject obj, jlong licensePtr, jlong servicePtr, jstring jDstPath) {
     const char * cDstPath = env->GetStringUTFChars(jDstPath, 0);
@@ -42,6 +43,7 @@ JNIEXPORT jobject JNICALL Java_org_readium_sdk_lcp_License_nativeCreateAcquisiti
     jmethodID methodId = env->GetMethodID(cls, "<init>", "(J)V");
     return env->NewObject(cls, methodId, (jlong) acquisition);
 }
+#endif //ENABLE_NET_PROVIDER
 
 JNIEXPORT jobject JNICALL Java_org_readium_sdk_lcp_License_nativeCreateStatusDocumentProcessing(
         JNIEnv *env, jobject obj, jlong licensePtr, jlong servicePtr, jstring jDstPath) {

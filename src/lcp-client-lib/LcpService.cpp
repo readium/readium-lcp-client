@@ -32,19 +32,31 @@ namespace lcp
 
     LcpService::LcpService(
         const std::string & rootCertificate,
+#if ENABLE_NET_PROVIDER
         INetProvider * netProvider,
+#endif //ENABLE_NET_PROVIDER
         IStorageProvider * storageProvider,
-        IFileSystemProvider * fileSystemProvider,
+        IFileSystemProvider * fileSystemProvider
+#if ENABLE_NET_PROVIDER
+    ,
         const std::string & defaultCrlUrl
+#endif //ENABLE_NET_PROVIDER
         )
         : m_rootCertificate(rootCertificate)
+#if ENABLE_NET_PROVIDER
         , m_netProvider(netProvider)
+#endif //ENABLE_NET_PROVIDER
         , m_storageProvider(storageProvider)
         , m_fileSystemProvider(fileSystemProvider)
         , m_rightsService(new RightsService(m_storageProvider, UnknownUserId))
         , m_jsonReader(new JsonValueReader())
         , m_encryptionProfilesManager(new EncryptionProfilesManager())
-        , m_cryptoProvider(new CryptoppCryptoProvider(m_encryptionProfilesManager.get(), m_netProvider, defaultCrlUrl))
+        , m_cryptoProvider(new CryptoppCryptoProvider(m_encryptionProfilesManager.get()
+#if ENABLE_NET_PROVIDER
+                    , m_netProvider
+                    , defaultCrlUrl
+#endif //ENABLE_NET_PROVIDER
+            ))
 #if !DISABLE_LSD
         , m_LicenseStatusDocumentThatStartedProcessing(nullptr)
 #endif //!DISABLE_LSD
@@ -533,6 +545,8 @@ namespace lcp
         }
     }
 
+#if ENABLE_NET_PROVIDER
+
     Status LcpService::CreatePublicationAcquisition(
             const std::string & publicationPath,
             ILicense * license,
@@ -563,6 +577,7 @@ namespace lcp
             return ex.ResultStatus();
         }
     }
+#endif //ENABLE_NET_PROVIDER
 
     IRightsService * LcpService::GetRightsService() const
     {
@@ -574,10 +589,12 @@ namespace lcp
         return m_rootCertificate;
     }
 
+#if ENABLE_NET_PROVIDER
     INetProvider * LcpService::NetProvider() const
     {
         return m_netProvider;
     }
+#endif //ENABLE_NET_PROVIDER
 
     IStorageProvider * LcpService::StorageProvider() const
     {

@@ -38,14 +38,20 @@ namespace lcp
     // https://docs.google.com/document/d/1ErBf0Gl32jNH-QVKWpGPfZDMWMeQP7dH9YY5g7agguQ
     // https://docs.google.com/document/d/1VKkAG9aKbKLQYnSjSa5-_cOgnVFsgU9a7bHO0-IkRgk
     // https://docs.google.com/document/d/1oNfXQZRSGqwpexLrhw0-0a2taEvVDXS9cPs8oBKLb0U
-    class LsdProcessor : public NonCopyable, public INetProviderCallback
+    class LsdProcessor : public NonCopyable
+#if ENABLE_NET_PROVIDER
+            , public INetProviderCallback
+#endif //ENABLE_NET_PROVIDER
     {
+#if ENABLE_NET_PROVIDER
     public:
         // INetProviderCallback
         virtual void OnRequestStarted(INetRequest * request);
         virtual void OnRequestProgressed(INetRequest * request, float progress);
         virtual void OnRequestCanceled(INetRequest * request);
         virtual void OnRequestEnded(INetRequest * request, Status result);
+#endif //ENABLE_NET_PROVIDER
+
     public:
         static std::string StatusType;
     public:
@@ -69,11 +75,14 @@ namespace lcp
 
         mutable std::mutex m_lsdSync;
         lcp::Link m_lsdLink;
+#if ENABLE_NET_PROVIDER
         std::unique_ptr<IDownloadRequest> m_lsdRequest;
+#endif //ENABLE_NET_PROVIDER
         std::string m_lsdNewLcpLicenseString;
-
+#if ENABLE_NET_PROVIDER
         bool m_lsdRequestRunning;
         lcp::Status m_lsdRequestStatus;
+#endif //ENABLE_NET_PROVIDER
         //std::condition_variable m_lsdCondition;
         //std::string m_lsdPath;
         //std::unique_ptr<IFile> m_lsdFile;

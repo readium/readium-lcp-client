@@ -14,8 +14,11 @@
 namespace lcp {
     ILcpService * ServiceFactory::build(
             const std::string &certContent,
-            StorageProvider* storageProvider,
+            StorageProvider* storageProvider
+#if ENABLE_NET_PROVIDER
+            ,
         NetProvider* netProvider
+#endif //ENABLE_NET_PROVIDER
     ) {
         DefaultFileSystemProvider * fileSystemProvider = new DefaultFileSystemProvider();
         LcpServiceCreator serviceCreator;
@@ -23,7 +26,9 @@ namespace lcp {
 
         serviceCreator.CreateLcpService(
                 certContent,
+#if ENABLE_NET_PROVIDER
                 netProvider,
+#endif //ENABLE_NET_PROVIDER
                 storageProvider,
                 fileSystemProvider,
                 &service);
@@ -33,7 +38,10 @@ namespace lcp {
 
 JNIEXPORT jobject JNICALL Java_org_readium_sdk_lcp_ServiceFactory_nativeBuild(
         JNIEnv *env, jobject obj, jstring jCertContent,
-        jobject jStorageProvider, jobject jNetProvider,
+        jobject jStorageProvider,
+#if ENABLE_NET_PROVIDER
+        jobject jNetProvider,
+#endif //ENABLE_NET_PROVIDER
         jobject jCredentialHandler, jobject jStatusDocumentHandler
     ) {
     // Initialize jvm
@@ -42,8 +50,14 @@ JNIEXPORT jobject JNICALL Java_org_readium_sdk_lcp_ServiceFactory_nativeBuild(
     std::string certContent(cCertContent);
     lcp::ServiceFactory serviceFactory;
     lcp::StorageProvider * storageProvider = new lcp::StorageProvider(jStorageProvider);
+#if ENABLE_NET_PROVIDER
     lcp::NetProvider * netProvider = new lcp::NetProvider(jNetProvider);
-    lcp::ILcpService * service = serviceFactory.build(certContent, storageProvider, netProvider);
+#endif //ENABLE_NET_PROVIDER
+    lcp::ILcpService * service = serviceFactory.build(certContent, storageProvider
+#if ENABLE_NET_PROVIDER
+            , netProvider
+#endif //ENABLE_NET_PROVIDER
+    );
     lcp::ICredentialHandler * credentialHandler = new lcp::CredentialHandler(jCredentialHandler, service);
     lcp::IStatusDocumentHandler * statusDocumentHandler = new lcp::StatusDocumentHandler(jStatusDocumentHandler, service);
     lcp::LcpContentModule::Register(service, credentialHandler, statusDocumentHandler);

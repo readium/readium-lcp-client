@@ -7,6 +7,8 @@
 #ifndef __CRL_REVOCATION_LIST_UPDATER_H__
 #define __CRL_REVOCATION_LIST_UPDATER_H__
 
+#if ENABLE_NET_PROVIDER
+
 #include <memory>
 #include <mutex>
 #include <condition_variable>
@@ -66,5 +68,7 @@ namespace lcp
         std::condition_variable m_conditionDownload;
     };
 }
+
+#endif //ENABLE_NET_PROVIDER
 
 #endif //__CRL_REVOCATION_LIST_UPDATER_H__

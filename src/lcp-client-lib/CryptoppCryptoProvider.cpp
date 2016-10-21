@@ -25,14 +25,19 @@
 namespace lcp
 {
     CryptoppCryptoProvider::CryptoppCryptoProvider(
-        EncryptionProfilesManager * encryptionProfilesManager,
+        EncryptionProfilesManager * encryptionProfilesManager
+#if ENABLE_NET_PROVIDER
+    ,
         INetProvider * netProvider,
         const std::string & defaultCrlUrl
+#endif //ENABLE_NET_PROVIDER
         )
         : m_encryptionProfilesManager(encryptionProfilesManager)
     {
+#if ENABLE_NET_PROVIDER
         m_revocationList.reset(new CertificateRevocationList());
         m_threadTimer.reset(new ThreadTimer());
+
         m_crlUpdater.reset(new CrlUpdater(netProvider, m_revocationList.get(), m_threadTimer.get(), defaultCrlUrl));
 
         m_threadTimer->SetHandler(std::bind(&CrlUpdater::Update, m_crlUpdater.get()));
@@ -44,10 +49,12 @@ namespace lcp
             m_threadTimer->SetDuration(ThreadTimer::DurationType(ThreadTimer::DurationType::zero()));
             m_threadTimer->Start();
         }
+#endif //ENABLE_NET_PROVIDER
     }
 
     CryptoppCryptoProvider::~CryptoppCryptoProvider()
     {
+#if ENABLE_NET_PROVIDER
         try
         {
             m_crlUpdater->Cancel();
@@ -56,6 +63,7 @@ namespace lcp
         catch (...)
         {
         }
+#endif //ENABLE_NET_PROVIDER
     }
 
     Status CryptoppCryptoProvider::VerifyLicense(
@@ -101,11 +109,13 @@ namespace lcp
                 return Status(StatusCode::ErrorOpeningContentProviderCertificateNotVerified);
             }
 
+#if ENABLE_NET_PROVIDER
             Status res = this->ProcessRevokation(rootCertificate.get(), providerCertificate.get());
             if (!Status::IsSuccess(res))
             {
                 return res;
             }
+#endif //ENABLE_NET_PROVIDER
 
             if (!providerCertificate->VerifyMessage(license->CanonicalContent(), license->Crypto()->Signature()))
             {
@@ -356,6 +366,7 @@ namespace lcp
         }
     }
 
+#if ENABLE_NET_PROVIDER
     Status CryptoppCryptoProvider::ProcessRevokation(ICertificate * rootCertificate, ICertificate * providerCertificate)
     {
         m_crlUpdater->UpdateCrlUrls(rootCertificate->DistributionPoints());
@@ -394,4 +405,5 @@ namespace lcp
         }
         return Status(StatusCode::ErrorCommonSuccess);
     }
+#endif //ENABLE_NET_PROVIDER
 }

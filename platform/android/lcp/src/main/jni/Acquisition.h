@@ -5,6 +5,8 @@
 #ifndef LCP_ANDROID_ACQUISITION_H
 #define LCP_ANDROID_ACQUISITION_H
 
+#if ENABLE_NET_PROVIDER
+
 #include <jni.h>
 
 #ifdef __cplusplus
@@ -20,5 +22,7 @@ JNIEXPORT void JNICALL Java_org_readium_sdk_lcp_Acquisition_nativeCancel(
 #ifdef __cplusplus
 }
 #endif
+
+#endif //ENABLE_NET_PROVIDER
 
 #endif //LCP_ANDROID_ACQUISITION_H

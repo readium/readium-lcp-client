@@ -7,6 +7,8 @@
 #ifndef __DOWNLOAD_IN_FILE_REQUEST_H__
 #define __DOWNLOAD_IN_FILE_REQUEST_H__
 
+#if ENABLE_NET_PROVIDER
+
 #include <string>
 #include "BaseDownloadRequest.h"
 #include "public/IFileSystemProvider.h"
@@ -41,5 +43,7 @@ namespace lcp
         IFile * m_file;
     };
 }
+
+#endif //ENABLE_NET_PROVIDER
 
 #endif //__DOWNLOAD_IN_FILE_REQUEST_H__

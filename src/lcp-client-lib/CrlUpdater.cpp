@@ -4,6 +4,8 @@
 //
 //
 
+#if ENABLE_NET_PROVIDER
+
 #include <algorithm>
 #include <iterator>
 #include <thread>
@@ -158,3 +160,5 @@ namespace lcp
         m_threadTimer->SetAutoReset(true);
     }
 }
+
+#endif //ENABLE_NET_PROVIDER

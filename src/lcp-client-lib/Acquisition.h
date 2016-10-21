@@ -7,6 +7,8 @@
 #ifndef __LCP_ACQUISITION_H__
 #define __LCP_ACQUISITION_H__
 
+#if ENABLE_NET_PROVIDER
+
 #include <string>
 #include <mutex>
 #include <memory>
@@ -65,5 +67,7 @@ namespace lcp
         std::unique_ptr<IDownloadRequest> m_request;
     };
 }
+
+#endif //ENABLE_NET_PROVIDER
 
 #endif //__LCP_ACQUISITION_H__

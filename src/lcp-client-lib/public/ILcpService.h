@@ -18,11 +18,15 @@
 namespace lcp
 {
     class ILicense;
+#if ENABLE_NET_PROVIDER
     class INetProvider;
+#endif //ENABLE_NET_PROVIDER
     class IStorageProvider;
     class IFileSystemProvider;
+#if ENABLE_NET_PROVIDER
     class IAcquisition;
     class IAcquisitionCallback;
+#endif //ENABLE_NET_PROVIDER
     class IRightsService;
     class IReadableStream;
     class IEncryptedStream;
@@ -37,11 +41,13 @@ namespace lcp
         //
         virtual std::string RootCertificate() const = 0;
 
+#if ENABLE_NET_PROVIDER
         //
         // Shared implementation of the net provider, used for any network
         // call from the library.
         //
         virtual INetProvider * NetProvider() const = 0;
+#endif //ENABLE_NET_PROVIDER
 
         //
         // Shared implementation of the secure storage provider, used to store
@@ -138,6 +144,7 @@ namespace lcp
             const std::string & licenseId
             ) = 0;
 
+#if ENABLE_NET_PROVIDER
         //
         // Creates a new instance of IAcquisition to download the publication
         // of the given License from its Content Provider. The License Document
@@ -151,6 +158,7 @@ namespace lcp
                 ILicense * license,
                 IAcquisition ** acquisition
         ) = 0;
+#endif //ENABLE_NET_PROVIDER
 
         virtual Status CreatePublicationStatusDocumentProcessing(
                 const std::string & publicationPath,
