@@ -20,6 +20,13 @@ namespace lcp {
 JNIEXPORT jboolean JNICALL Java_org_readium_sdk_lcp_License_nativeIsDecrypted(
         JNIEnv *env, jobject obj, jlong licensePtr);
 
+JNIEXPORT jstring JNICALL Java_org_readium_sdk_lcp_License_nativeGetLinkPublication(
+        JNIEnv *env, jobject obj, jlong licensePtr);
+
+JNIEXPORT jstring JNICALL Java_org_readium_sdk_lcp_License_nativeGetLinkStatus(
+        JNIEnv *env, jobject obj, jlong licensePtr);
+
+
 JNIEXPORT void JNICALL Java_org_readium_sdk_lcp_License_nativeDecrypt(
         JNIEnv *env, jobject obj, jlong licensePtr, jlong servicePtr, jstring jPassphrase);
 

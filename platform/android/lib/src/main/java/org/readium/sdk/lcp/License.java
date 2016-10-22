@@ -21,6 +21,13 @@ public class License {
         return this.nativeIsDecrypted(this.nativePtr);
     }
 
+    public String getLink_Publication() {
+        return this.nativeGetLinkPublication(this.nativePtr);
+    }
+    public String getLink_Status() {
+        return this.nativeGetLinkStatus(this.nativePtr);
+    }
+
 
     //#if ENABLE_NET_PROVIDER
 //    public Acquisition createAcquisition(String dstPath) {
@@ -44,6 +51,10 @@ public class License {
     }
 
     private native boolean nativeIsDecrypted(long nativePtr);
+
+    private native String nativeGetLinkPublication(long nativePtr);
+    private native String nativeGetLinkStatus(long nativePtr);
+
     private native void nativeDecrypt(long nativePtr, long servicePtr, String passphrase);
     //#if ENABLE_NET_PROVIDER
     //private native Acquisition nativeCreateAcquisition(long nativePtr, long servicePtr, String dstPath);
