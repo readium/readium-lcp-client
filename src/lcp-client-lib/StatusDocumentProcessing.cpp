@@ -10,8 +10,10 @@ ZIPLIB_INCLUDE_START
 #include "ziplib/Source/ZipLib/ZipFile.h"
 ZIPLIB_INCLUDE_END
 
+#if FUTURE_ENABLED
 #include <thread>
 #include <chrono>
+#endif //FUTURE_ENABLED
 
 namespace lcp
 {
@@ -24,13 +26,14 @@ namespace lcp
         m_callback = callback;
 
         // TODO: remove this (this is just to emulate latency, and see if the app UI does not block, as expected)
-        std::this_thread::sleep_for(std::chrono::seconds(6));
+//        std::this_thread::sleep_for(std::chrono::seconds(6));
 
         if (m_cancelled) {
             return Status(StatusCode::ErrorCommonSuccess);
         }
-
+#if FUTURE_ENABLED
         std::unique_lock<std::mutex> locker(m_sync);
+#endif //FUTURE_ENABLED
         if (m_callback != nullptr)
         {
             m_callback->OnStatusDocumentProcessingComplete(this);

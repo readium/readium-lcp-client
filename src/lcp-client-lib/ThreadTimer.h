@@ -7,6 +7,8 @@
 #ifndef __THREAD_TIMER_H__
 #define __THREAD_TIMER_H__
 
+#if FUTURE_ENABLED
+
 #include <chrono>
 #include <thread>
 #include <mutex>
@@ -74,5 +76,7 @@ namespace lcp
         UsageTypeEnum m_usageType;
     };
 }
+
+#endif //FUTURE_ENABLED
 
 #endif //__THREAD_TIMER_H__

@@ -4,6 +4,8 @@
 //
 //
 
+#if FUTURE_ENABLED
+
 #include "ThreadTimer.h"
 
 namespace lcp
@@ -161,3 +163,5 @@ namespace lcp
         }
     }
 }
+
+#endif //FUTURE_ENABLED
