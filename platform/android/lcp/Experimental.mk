@@ -22,8 +22,14 @@ THIRD_PARTY_PATH := $(LOCAL_PATH)/../../../src/third-parties
 include $(CLEAR_VARS)
 LOCAL_MODULE := cryptopp
 
+ifeq ($(READIUM_CLANG),true)
+LOCAL_CPPFLAGS := -std=c++11 -fpermissive
+LOCAL_CXXFLAGS := -std=c++11 -fpermissive
+else
 LOCAL_CPPFLAGS := -std=gnu++11 -fpermissive
 LOCAL_CXXFLAGS := -std=gnu++11 -fpermissive
+endif
+
 LOCAL_CPP_FEATURES += exceptions rtti
 
 LOCAL_C_INCLUDES := $(THIRD_PARTY_PATH)/cryptopp
@@ -37,8 +43,15 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := ziplib
 
 LOCAL_CFLAGS := -std=gnu11
+
+ifeq ($(READIUM_CLANG),true)
+LOCAL_CPPFLAGS := -std=c++11
+LOCAL_CXXFLAGS := -std=c++11
+else
 LOCAL_CPPFLAGS := -std=gnu++11
 LOCAL_CXXFLAGS := -std=gnu++11
+endif
+
 LOCAL_CPP_FEATURES += exceptions rtti
 
 LOCAL_C_INCLUDES := $(THIRD_PARTY_PATH)/Source/ZipLib

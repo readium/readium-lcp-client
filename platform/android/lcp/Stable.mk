@@ -24,9 +24,18 @@ THIRD_PARTY_PATH := $(SRC_PATH)/third-parties
 # cryptopp
 include $(CLEAR_VARS)
 LOCAL_MODULE := cryptopp
+#APP_ABI := armeabi-v7a
+#x86
+#APP_PLATFORM := android-24
 
+ifeq ($(READIUM_CLANG),true)
+LOCAL_CPPFLAGS := -std=c++11 -fpermissive
+LOCAL_CXXFLAGS := -std=c++11 -fpermissive
+else
 LOCAL_CPPFLAGS := -std=gnu++11 -fpermissive
 LOCAL_CXXFLAGS := -std=gnu++11 -fpermissive
+endif
+
 LOCAL_CPP_FEATURES += exceptions rtti
 
 LOCAL_C_INCLUDES := $(THIRD_PARTY_PATH)/cryptopp
@@ -40,8 +49,15 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := ziplib
 
 LOCAL_CFLAGS := -std=gnu11
+
+ifeq ($(READIUM_CLANG),true)
+LOCAL_CPPFLAGS := -std=c++11
+LOCAL_CXXFLAGS := -std=c++11
+else
 LOCAL_CPPFLAGS := -std=gnu++11
 LOCAL_CXXFLAGS := -std=gnu++11
+endif
+
 LOCAL_CPP_FEATURES += exceptions rtti
 
 LOCAL_C_INCLUDES := $(THIRD_PARTY_PATH)/Source/ZipLib
@@ -68,9 +84,16 @@ include $(PREBUILT_SHARED_LIBRARY)
 include $(CLEAR_VARS)
 LOCAL_MODULE := lcp
 
+ifeq ($(READIUM_CLANG),true)
+LOCAL_CPPFLAGS := -std=c++11 -DDISABLE_LSD_
+LOCAL_CXXFLAGS := -std=c++11 -fpermissive -DFEATURES_READIUM -DDISABLE_LSD_
+else
 LOCAL_CPPFLAGS := -std=gnu++11 -DDISABLE_LSD_
 LOCAL_CXXFLAGS := -std=gnu++11 -fpermissive -DFEATURES_READIUM -DDISABLE_LSD_
+endif
+
 LOCAL_CPP_FEATURES += exceptions rtti
+
 LOCAL_STATIC_LIBRARIES := cryptopp ziplib
 LOCAL_SHARED_LIBRARIES := epub3
 LOCAL_LDLIBS := -lz -landroid -llog

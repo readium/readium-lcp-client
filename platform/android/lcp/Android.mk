@@ -14,6 +14,8 @@
 #  received a copy of the GNU Affero General Public License along with this program.  If not,
 #  see <http://www.gnu.org/licenses/>.
 
+NOPE.
+
 LOCAL_PATH := $(call my-dir)
 THIRD_PARTY := $(LOCAL_PATH)/../../../src/third-parties
 
