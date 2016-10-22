@@ -34,7 +34,7 @@ model {
         ndk {
             moduleName = "lcp"
 
-            toolchain = ndk_clang ? "clang" : "4.9"
+            toolchain = ndk_clang ? "clang" : "gcc"
             stl = ndk_clang ? "c++_shared" : "gnustl_shared"
 
             cppFlags.addAll([
