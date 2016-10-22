@@ -29,9 +29,9 @@ model {
         ndk {
             moduleName = "lcp"
 
-            toolchain "clang"
-            stl = "c++_shared"
-            //stl = "gnustl_shared"
+//            toolchain "clang"
+//            stl = "c++_shared"
+            stl = "gnustl_shared"
 
             cppFlags.addAll([
                     "-std=gnu++11",
