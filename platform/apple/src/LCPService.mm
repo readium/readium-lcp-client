@@ -12,10 +12,14 @@
 #import "IRights.h"
 #import "IRightsService.h"
 #import "LcpServiceCreator.h"
+#if ENABLE_NET_PROVIDER
 #import "LCPAcquisition.h"
+#endif //ENABLE_NET_PROVIDER
 #import "LCPError.h"
 #import "LCPLicense.h"
+#if ENABLE_NET_PROVIDER
 #import "LCPiOSNetProvider.h"
+#endif //ENABLE_NET_PROVIDER
 #import "LCPiOSStorageProvider.h"
 #import <iostream>
 
@@ -62,11 +66,17 @@ NSString *const LCPRightEnd = @(EndRight);
     
 #if true //TARGET_OS_IPHONE (WORKS FINE FOR BOTH iOS and OSX)
     storageProvider = new iOSStorageProvider();
+#if ENABLE_NET_PROVIDER
     netProvider = new iOSNetProvider();
+#endif //ENABLE_NET_PROVIDER
     fileSystemProvider = new DefaultFileSystemProvider();
 #endif
     
-    Status status = factory.CreateLcpService([rootCertificate UTF8String], netProvider, storageProvider, fileSystemProvider, &service);
+    Status status = factory.CreateLcpService([rootCertificate UTF8String],
+#if ENABLE_NET_PROVIDER
+                                             netProvider,
+#endif //ENABLE_NET_PROVIDER
+                                             storageProvider, fileSystemProvider, &service);
     
     if (![self checkStatus:status error:error]) {
         return nil;
@@ -117,6 +127,7 @@ NSString *const LCPRightEnd = @(EndRight);
     return [self checkStatus:status error:error];
 }
 
+#if ENABLE_NET_PROVIDER
 - (LCPAcquisition *)createAcquisition:(LCPLicense *)license publicationPath:(NSString *)publicationPath error:(NSError **)error
 {
     LCPAcquisition *acquisition;
@@ -129,6 +140,7 @@ NSString *const LCPRightEnd = @(EndRight);
     
     return acquisition;
 }
+#endif //ENABLE_NET_PROVIDER
 
 - (BOOL)checkStatus:(Status)status error:(NSError **)error
 {

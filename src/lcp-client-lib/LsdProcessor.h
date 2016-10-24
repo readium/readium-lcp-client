@@ -18,14 +18,16 @@
 //#include <condition_variable>
 //#include <public/lcp.h>
 #include "public/ILinks.h"
+#if ENABLE_NET_PROVIDER
 #include "public/INetProvider.h"
+#endif //ENABLE_NET_PROVIDER
 #include "ICryptoProvider.h"
 #include "EncryptionProfilesManager.h"
 
 #if USE_MEMORY_NOT_FILE
     #include "SimpleMemoryWritableStream.h"
 #else
-    #include <public/IFileSystemProvider.h>
+    #include "public/IFileSystemProvider.h"
 #endif //USE_MEMORY_NOT_FILE
 
 

@@ -4,6 +4,8 @@
 //
 //
 
+#if ENABLE_NET_PROVIDER
+
 #import "../../../src/lcp-client-lib/public/INetProvider.h"
 #import <Foundation/Foundation.h>
 
@@ -22,3 +24,5 @@ namespace lcp
         LCPiOSNetProvider *m_provider;
     };
 }
+
+#endif //ENABLE_NET_PROVIDER

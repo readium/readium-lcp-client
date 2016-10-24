@@ -4,6 +4,8 @@
 //
 //
 
+#if ENABLE_NET_PROVIDER
+
 #import <Foundation/Foundation.h>
 
 #ifdef __cplusplus
@@ -41,3 +43,5 @@ namespace lcp {
 - (void)cancel;
 
 @end
+
+#endif //ENABLE_NET_PROVIDER

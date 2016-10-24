@@ -4,6 +4,8 @@
 //
 //
 
+#if ENABLE_NET_PROVIDER
+
 #import "LCPiOSNetProvider.h"
 
 #import "../../../src/lcp-client-lib/public/lcp.h"
@@ -149,3 +151,5 @@ namespace lcp
         [m_provider startDownloadRequest:request callback:callback];
     }
 }
+
+#endif //ENABLE_NET_PROVIDER

@@ -10,6 +10,8 @@
 #import "IAcquistionCallback.h"
 #import "LCPError.h"
 
+#if ENABLE_NET_PROVIDER
+
 namespace lcp
 {
     class AppleAcquisitionCallback : public IAcquisitionCallback
@@ -119,3 +121,5 @@ namespace lcp
 }
 
 @end
+
+#endif //ENABLE_NET_PROVIDER
