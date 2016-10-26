@@ -40,6 +40,10 @@ tasks.whenTaskAdded { task ->
     def taskName = task.name
 
     if (taskName.startsWith("compile")) {
-        task.dependsOn "buildMk"
+        if (ndk_debug) {
+            println "${project.name} - ${taskName}: Use gradle experimental, no need to invoke NDK build"
+        } else {
+            task.dependsOn "buildMk"
+        }
     }
 }

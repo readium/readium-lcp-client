@@ -18,8 +18,13 @@ model {
                                 './src/main/jni',
                                 '../../../src/lcp-client-lib',
                                 '../../../src/lcp-content-filter',
-                                '../../../src/third-parties/time64'
+                                '../../../src/third-parties/time64',
+                                '../../../src/third-parties/cryptopp',
+                                '../../../src/third-parties/ziplib'
                         ]
+
+                        excludes.add('Source/Sample/*.*')
+                        excludes.add('Source/ZipLib/extlibs/lzma/*.c')
                     }
                     exportedHeaders {
                         srcDir "./src/main/jni"
@@ -37,8 +42,7 @@ model {
             toolchain = ndk_clang ? "clang" : "gcc"
             stl = ndk_clang ? "c++_shared" : "gnustl_shared"
 
-            cppFlags.addAll([
-                    "-std=gnu++11",
+            def arrayFlags = [
                     "-fpermissive",
                     "-fexceptions",
                     "-frtti",
@@ -52,8 +56,20 @@ model {
                     "-I${file("../../../src/lcp-content-filter")}".toString(),
                     "-I${file("../../../src/lcp-content-filter/public")}".toString(),
                     "-I${file("../../../src/third-parties")}".toString()
+            ]
+
+            cppFlags.addAll(arrayFlags)
+            cppFlags.add(ndk_clang ? "-std=c++11" : "-std=gnu++11")
+
+            CFlags.addAll(arrayFlags)
+            CFlags.add(ndk_clang ? "-std=c11" : "-std=gnu11")
+
+            ldLibs.addAll(['z',
+                           'android',
+                           'log'
+//                           'cryptopp',
+//                           'ziplib'
             ])
-            ldLibs.addAll(['z', 'android', 'log', 'cryptopp', 'ziplib'])
         }
 
         buildTypes {
@@ -68,6 +84,7 @@ model {
         }
 
         productFlavors {
+            if (!ndk_skipARM)
             create("arm") {
                 ndk.with {
                     abiFilters.add("armeabi-v7a")

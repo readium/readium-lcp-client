@@ -14,52 +14,53 @@
 #  received a copy of the GNU Affero General Public License along with this program.  If not,
 #  see <http://www.gnu.org/licenses/>.
 
-LOCAL_PATH := $(call my-dir)
-THIRD_PARTY_PATH := $(LOCAL_PATH)/../../../src/third-parties
-
+#LOCAL_PATH := $(call my-dir)
+#THIRD_PARTY_PATH := $(LOCAL_PATH)/../../../src/third-parties
+#
 ###########################################################
 # cryptopp
-include $(CLEAR_VARS)
-LOCAL_MODULE := cryptopp
-
-ifeq ($(READIUM_CLANG),true)
-LOCAL_CPPFLAGS := -std=c++11 -fpermissive
-LOCAL_CXXFLAGS := -std=c++11 -fpermissive
-else
-LOCAL_CPPFLAGS := -std=gnu++11 -fpermissive
-LOCAL_CXXFLAGS := -std=gnu++11 -fpermissive
-endif
-
-LOCAL_CPP_FEATURES += exceptions rtti
-
-LOCAL_C_INCLUDES := $(THIRD_PARTY_PATH)/cryptopp
-LOCAL_SRC_FILES := $(wildcard $(THIRD_PARTY_PATH)/cryptopp/*.cpp)
-
-include $(BUILD_STATIC_LIBRARY)
-
+#include $(CLEAR_VARS)
+#LOCAL_MODULE := cryptopp
+#
+#ifeq ($(READIUM_CLANG),true)
+#LOCAL_CPPFLAGS := -std=c++11 -fpermissive
+#LOCAL_CXXFLAGS := -std=c++11 -fpermissive
+#else
+#LOCAL_CPPFLAGS := -std=gnu++11 -fpermissive
+#LOCAL_CXXFLAGS := -std=gnu++11 -fpermissive
+#endif
+#
+#LOCAL_CPP_FEATURES += exceptions rtti
+#
+#LOCAL_C_INCLUDES := $(THIRD_PARTY_PATH)/cryptopp
+#LOCAL_SRC_FILES := $(wildcard $(THIRD_PARTY_PATH)/cryptopp/*.cpp)
+#
+#include $(BUILD_STATIC_LIBRARY)
+#
 ###########################################################
 # ZipLib
-include $(CLEAR_VARS)
-LOCAL_MODULE := ziplib
-
-LOCAL_CFLAGS := -std=gnu11
-
-ifeq ($(READIUM_CLANG),true)
-LOCAL_CPPFLAGS := -std=c++11
-LOCAL_CXXFLAGS := -std=c++11
-else
-LOCAL_CPPFLAGS := -std=gnu++11
-LOCAL_CXXFLAGS := -std=gnu++11
-endif
-
-LOCAL_CPP_FEATURES += exceptions rtti
-
-LOCAL_C_INCLUDES := $(THIRD_PARTY_PATH)/Source/ZipLib
-LOCAL_SRC_FILES := \
-    $(wildcard $(THIRD_PARTY_PATH)/ziplib/Source/ZipLib/extlibs/zlib/*.c) \
-    $(wildcard $(THIRD_PARTY_PATH)/ziplib/Source/ZipLib/extlibs/lzma/unix/*.c) \
-    $(wildcard $(THIRD_PARTY_PATH)/ziplib/Source/ZipLib/extlibs/bzip2/*.c) \
-    $(wildcard $(THIRD_PARTY_PATH)/ziplib/Source/ZipLib/detail/*.cpp) \
-    $(wildcard $(THIRD_PARTY_PATH)/ziplib/Source/ZipLib/*.cpp)
-
-include $(BUILD_STATIC_LIBRARY)
+#include $(CLEAR_VARS)
+#LOCAL_MODULE := ziplib
+#
+#LOCAL_CFLAGS := -std=gnu11
+#
+#ifeq ($(READIUM_CLANG),true)
+#LOCAL_CPPFLAGS := -std=c++11
+#LOCAL_CXXFLAGS := -std=c++11
+#else
+#LOCAL_CPPFLAGS := -std=gnu++11
+#LOCAL_CXXFLAGS := -std=gnu++11
+#endif
+#
+#LOCAL_CPP_FEATURES += exceptions rtti
+#
+#LOCAL_C_INCLUDES := $(THIRD_PARTY_PATH)/Source/ZipLib
+#LOCAL_SRC_FILES := \
+#    $(wildcard $(THIRD_PARTY_PATH)/ziplib/Source/ZipLib/extlibs/zlib/*.c) \
+#    $(wildcard $(THIRD_PARTY_PATH)/ziplib/Source/ZipLib/extlibs/lzma/unix/*.c) \
+#    $(wildcard $(THIRD_PARTY_PATH)/ziplib/Source/ZipLib/extlibs/bzip2/*.c) \
+#    $(wildcard $(THIRD_PARTY_PATH)/ziplib/Source/ZipLib/detail/*.cpp) \
+#    $(wildcard $(THIRD_PARTY_PATH)/ziplib/Source/ZipLib/*.cpp)
+#
+#include $(BUILD_STATIC_LIBRARY)
+#

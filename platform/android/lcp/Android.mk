@@ -14,41 +14,39 @@
 #  received a copy of the GNU Affero General Public License along with this program.  If not,
 #  see <http://www.gnu.org/licenses/>.
 
-NOPE.
-
-LOCAL_PATH := $(call my-dir)
-THIRD_PARTY := $(LOCAL_PATH)/../../../src/third-parties
-
+#LOCAL_PATH := $(call my-dir)
+#THIRD_PARTY := $(LOCAL_PATH)/../../../src/third-parties
+#
 ###########################################################
 # cryptopp
-include $(CLEAR_VARS)
-LOCAL_MODULE := cryptopp
-
-LOCAL_CPPFLAGS := -std=gnu++11 -fpermissive
-LOCAL_CXXFLAGS := -std=gnu++11 -fpermissive
-LOCAL_CPP_FEATURES += exceptions rtti
-
-LOCAL_C_INCLUDES := $(THIRD_PARTY)/cryptopp
-LOCAL_SRC_FILES := $(wildcard $(THIRD_PARTY)/cryptopp/*.cpp)
-
-include $(BUILD_STATIC_LIBRARY)
+#include $(CLEAR_VARS)
+#LOCAL_MODULE := cryptopp
+#
+#LOCAL_CPPFLAGS := -std=gnu++11 -fpermissive
+#LOCAL_CXXFLAGS := -std=gnu++11 -fpermissive
+#LOCAL_CPP_FEATURES += exceptions rtti
+#
+#LOCAL_C_INCLUDES := $(THIRD_PARTY)/cryptopp
+#LOCAL_SRC_FILES := $(wildcard $(THIRD_PARTY)/cryptopp/*.cpp)
+#
+#include $(BUILD_STATIC_LIBRARY)
 
 ###########################################################
 # ZipLib
-include $(CLEAR_VARS)
-LOCAL_MODULE := ziplib
-
-LOCAL_CFLAGS := -std=gnu11
-LOCAL_CPPFLAGS := -std=gnu++11
-LOCAL_CXXFLAGS := -std=gnu++11
-LOCAL_CPP_FEATURES += exceptions rtti
-
-LOCAL_C_INCLUDES := $(THIRD_PARTY)/Source/ZipLib
-LOCAL_SRC_FILES := \
-    $(wildcard $(THIRD_PARTY)/ziplib/Source/ZipLib/extlibs/zlib/*.c) \
-    $(wildcard $(THIRD_PARTY)/ziplib/Source/ZipLib/extlibs/lzma/unix/*.c) \
-    $(wildcard $(THIRD_PARTY)/ziplib/Source/ZipLib/extlibs/bzip2/*.c) \
-    $(wildcard $(THIRD_PARTY)/ziplib/Source/ZipLib/detail/*.cpp) \
-    $(wildcard $(THIRD_PARTY)/ziplib/Source/ZipLib/*.cpp)
-
-include $(BUILD_STATIC_LIBRARY)
+#include $(CLEAR_VARS)
+#LOCAL_MODULE := ziplib
+#
+#LOCAL_CFLAGS := -std=gnu11
+#LOCAL_CPPFLAGS := -std=gnu++11
+#LOCAL_CXXFLAGS := -std=gnu++11
+#LOCAL_CPP_FEATURES += exceptions rtti
+#
+#LOCAL_C_INCLUDES := $(THIRD_PARTY)/Source/ZipLib
+#LOCAL_SRC_FILES := \
+#    $(wildcard $(THIRD_PARTY)/ziplib/Source/ZipLib/extlibs/zlib/*.c) \
+#    $(wildcard $(THIRD_PARTY)/ziplib/Source/ZipLib/extlibs/lzma/unix/*.c) \
+#    $(wildcard $(THIRD_PARTY)/ziplib/Source/ZipLib/extlibs/bzip2/*.c) \
+#    $(wildcard $(THIRD_PARTY)/ziplib/Source/ZipLib/detail/*.cpp) \
+#    $(wildcard $(THIRD_PARTY)/ziplib/Source/ZipLib/*.cpp)
+#
+#include $(BUILD_STATIC_LIBRARY)
