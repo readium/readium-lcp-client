@@ -25,6 +25,7 @@ model {
 
                         excludes.add('Source/Sample/*.*')
                         excludes.add('Source/ZipLib/extlibs/lzma/*.c')
+                        excludes.add('Source/ZipLib/extlibs/lzma/**/*.c')
                     }
                     exportedHeaders {
                         srcDir "./src/main/jni"
@@ -49,6 +50,7 @@ model {
                     "-fpic",
                     "-DFEATURES_READIUM",
                     "-DDISABLE_LSD_",
+                    "-DZLIB_ONLY",
                     ndk_clang ? "-D_LIBCPP_INLINE_VISIBILITY_EXCEPT_GCC49=_LIBCPP_INLINE_VISIBILITY" : "-DREADIUM_GCC",
                     "-I" + project(':epub3').projectDir +  "/include",
                     "-I${file("../../../src/lcp-client-lib")}".toString(),
