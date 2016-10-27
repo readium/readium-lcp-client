@@ -24,19 +24,22 @@ THIRD_PARTY_PATH := $(SRC_PATH)/third-parties
 # cryptopp
 include $(CLEAR_VARS)
 LOCAL_MODULE := cryptopp
-#APP_ABI := armeabi-v7a
-#x86
-#APP_PLATFORM := android-24
 
 ifeq ($(READIUM_CLANG),true)
 LOCAL_CPPFLAGS := -std=c++11 -fpermissive
 LOCAL_CXXFLAGS := -std=c++11 -fpermissive
+LOCAL_CFLAGS := -std=c11
 else
 LOCAL_CPPFLAGS := -std=gnu++11 -fpermissive
 LOCAL_CXXFLAGS := -std=gnu++11 -fpermissive
+LOCAL_CFLAGS := -std=gnu11
 endif
 
 LOCAL_CPP_FEATURES += exceptions rtti
+
+ifeq ($(TARGET_ARCH_ABI),x86)
+    LOCAL_CFLAGS += -mtune=atom -mssse3 -mfpmath=sse
+endif
 
 LOCAL_C_INCLUDES := $(THIRD_PARTY_PATH)/cryptopp
 LOCAL_SRC_FILES := $(wildcard $(THIRD_PARTY_PATH)/cryptopp/*.cpp)
@@ -48,17 +51,21 @@ include $(BUILD_STATIC_LIBRARY)
 include $(CLEAR_VARS)
 LOCAL_MODULE := ziplib
 
-LOCAL_CFLAGS := -std=gnu11
-
 ifeq ($(READIUM_CLANG),true)
-LOCAL_CPPFLAGS := -std=c++11
-LOCAL_CXXFLAGS := -std=c++11
+LOCAL_CPPFLAGS := -std=c++11 -fpermissive -DZLIB_ONLY
+LOCAL_CXXFLAGS := -std=c++11 -fpermissive -DZLIB_ONLY
+LOCAL_CFLAGS := -std=c11 -DZLIB_ONLY
 else
-LOCAL_CPPFLAGS := -std=gnu++11
-LOCAL_CXXFLAGS := -std=gnu++11
+LOCAL_CPPFLAGS := -std=gnu++11 -fpermissive -DZLIB_ONLY
+LOCAL_CXXFLAGS := -std=gnu++11 -fpermissive -DZLIB_ONLY
+LOCAL_CFLAGS := -std=gnu11 -DZLIB_ONLY
 endif
 
 LOCAL_CPP_FEATURES += exceptions rtti
+
+ifeq ($(TARGET_ARCH_ABI),x86)
+    LOCAL_CFLAGS += -mtune=atom -mssse3 -mfpmath=sse
+endif
 
 LOCAL_C_INCLUDES := $(THIRD_PARTY_PATH)/Source/ZipLib
 LOCAL_SRC_FILES := \
@@ -85,14 +92,20 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := lcp
 
 ifeq ($(READIUM_CLANG),true)
-LOCAL_CPPFLAGS := -std=c++11 -DDISABLE_LSD_
+LOCAL_CPPFLAGS := -std=c++11 -fpermissive -DDISABLE_LSD_
 LOCAL_CXXFLAGS := -std=c++11 -fpermissive -DFEATURES_READIUM -DDISABLE_LSD_
+LOCAL_CFLAGS := -std=c11
 else
-LOCAL_CPPFLAGS := -std=gnu++11 -DDISABLE_LSD_
+LOCAL_CPPFLAGS := -std=gnu++11 -fpermissive -DDISABLE_LSD_
 LOCAL_CXXFLAGS := -std=gnu++11 -fpermissive -DFEATURES_READIUM -DDISABLE_LSD_
+LOCAL_CFLAGS := -std=gnu11
 endif
 
 LOCAL_CPP_FEATURES += exceptions rtti
+
+ifeq ($(TARGET_ARCH_ABI),x86)
+    LOCAL_CFLAGS += -mtune=atom -mssse3 -mfpmath=sse
+endif
 
 LOCAL_STATIC_LIBRARIES := cryptopp ziplib
 LOCAL_SHARED_LIBRARIES := epub3
