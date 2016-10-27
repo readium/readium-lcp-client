@@ -4,6 +4,8 @@
 //
 //
 
+#include "IncludeMacros.h"
+
 #include "LcpService.h"
 #include "CryptoLcpNode.h"
 #include "LinksLcpNode.h"
@@ -17,13 +19,22 @@
 #include "CryptoppCryptoProvider.h"
 #include "SimpleKeyProvider.h"
 #include "public/IStorageProvider.h"
-#include "Acquisition.h"
 #include "RightsService.h"
+
+#if ENABLE_NET_PROVIDER
+#include "Acquisition.h"
+#endif //ENABLE_NET_PROVIDER
+
+ZIPLIB_INCLUDE_START
+#include "ziplib/Source/ZipLib/ZipFile.h"
+ZIPLIB_INCLUDE_END
 
 #if !DISABLE_LSD
 #include "LsdProcessor.h"
 #include "StatusDocumentProcessing.h"
 #endif //!DISABLE_LSD
+
+static std::string const LcpLicensePath = "META-INF/license.lcpl";
 
 namespace lcp
 {
@@ -63,6 +74,29 @@ namespace lcp
     {
     }
 
+    Status LcpService::InjectLicense(
+            const std::string & publicationPath,
+            const std::string & licenseJson) {
+        try
+        {
+            std::stringstream licenseStream(licenseJson);
+            ZipFile::AddFile(publicationPath, licenseStream, LcpLicensePath);
+            return Status(StatusCode::ErrorCommonSuccess);
+        }
+        catch (const StatusException & ex)
+        {
+            return ex.ResultStatus();
+        }
+        catch (const std::exception & ex) {
+            return Status(StatusCode::ErrorLicenseFailToInject);
+        }
+    }
+
+    Status LcpService::InjectLicense(
+            const std::string & publicationPath,
+            ILicense* license) {
+        return this->InjectLicense(publicationPath, license->OriginalContent());
+    }
 
     Status LcpService::OpenLicense(
             const ePub3::string & publicationPath,

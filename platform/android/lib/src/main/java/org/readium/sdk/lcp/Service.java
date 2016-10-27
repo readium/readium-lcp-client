@@ -14,27 +14,17 @@ public class Service {
         this.nativePtr = nativePtr;
     }
 
-     public License openLicense(InputStream licenseInputStream) {
-         // Read the license input stream
-         String licenseContent = "";
-
-         try {
-             byte[] data = new byte[licenseInputStream.available()];
-             licenseInputStream.read(data);
-             licenseInputStream.close();
-             licenseContent = new String(data, "UTF-8");
-         } catch (IOException e) {
-             // Unable to open license
-             return null;
-         }
-
-         return this.openLicense(licenseContent);
-     }
-
     public License openLicense(String licenseContent) {
         return this.nativeOpenLicense(this.nativePtr, licenseContent);
     }
 
+    public void injectLicense(String epubPath, String licenseContent) {
+        this.nativeInjectLicense(this.nativePtr, epubPath, licenseContent);
+    }
+
+    public void injectLicense(String epubPath, License license) {
+        this.nativeInjectLicense(this.nativePtr, epubPath, license.getOriginalContent());
+    }
 
     public void SetLicenseStatusDocumentProcessingCancelled() {
         this.nativeSetLicenseStatusDocumentProcessingCancelled(this.nativePtr);
@@ -52,6 +42,9 @@ public class Service {
     }
 
     private native License nativeOpenLicense(long nativePtr, String licenseContent);
+
+    private native void nativeInjectLicense(long nativePtr, String epubPath, String licenseContent);
+//    private native void nativeInjectLicense(long nativePtr, String epubPath, License license);
 
     private native void nativeSetLicenseStatusDocumentProcessingCancelled(long nativePtr);
 }

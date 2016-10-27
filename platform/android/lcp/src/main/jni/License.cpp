@@ -18,6 +18,15 @@ JNIEXPORT jboolean JNICALL Java_org_readium_sdk_lcp_License_nativeIsDecrypted(
     return (license->Decrypted()) ? JNI_TRUE : JNI_FALSE;
 }
 
+JNIEXPORT jstring JNICALL Java_org_readium_sdk_lcp_License_nativeGetOriginalContent(
+        JNIEnv *env, jobject obj, jlong licensePtr) {
+    lcp::ILicense * license = (lcp::ILicense *) licensePtr;
+    std::string c = license->OriginalContent();
+    jstring res = env->NewStringUTF(c.c_str());
+    //jstring res = toJstring(env, link.href.c_str(), false);
+    return res;
+}
+
 JNIEXPORT jstring JNICALL Java_org_readium_sdk_lcp_License_nativeGetLinkPublication(
         JNIEnv *env, jobject obj, jlong licensePtr) {
     lcp::ILicense * license = (lcp::ILicense *) licensePtr;

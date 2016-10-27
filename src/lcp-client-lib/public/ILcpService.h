@@ -81,6 +81,14 @@ namespace lcp
                 const std::string & licenseJson,
                 ILicense** license) = 0;
 
+        virtual Status InjectLicense(
+                const std::string & publicationPath,
+                const std::string & licenseJson) = 0;
+
+        virtual Status InjectLicense(
+                const std::string & publicationPath,
+                ILicense * license) = 0;
+
 #if !DISABLE_LSD
         virtual void SetLicenseStatusDocumentProcessingCancelled() = 0;
 #endif //!DISABLE_LSD

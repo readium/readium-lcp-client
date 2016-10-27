@@ -55,6 +55,14 @@ namespace lcp
                 const std::string & licenseJson,
                 ILicense** licensePTR);
 
+        virtual Status InjectLicense(
+                const std::string & publicationPath,
+                const std::string & licenseJson);
+
+        virtual Status InjectLicense(
+                const std::string & publicationPath,
+                ILicense * license);
+
         virtual Status DecryptLicense(ILicense * license, const std::string & userPassphrase);
 
         virtual Status DecryptData(

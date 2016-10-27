@@ -13,6 +13,10 @@ public class License {
         this.servicePtr = servicePtr;
     }
 
+    public String getOriginalContent() {
+        return this.nativeGetOriginalContent(this.nativePtr);
+    }
+
     public void decrypt(String passphrase) {
         this.nativeDecrypt(this.nativePtr, this.servicePtr, passphrase);
     }
@@ -51,6 +55,8 @@ public class License {
     }
 
     private native boolean nativeIsDecrypted(long nativePtr);
+
+    private native String nativeGetOriginalContent(long nativePtr);
 
     private native String nativeGetLinkPublication(long nativePtr);
     private native String nativeGetLinkStatus(long nativePtr);
