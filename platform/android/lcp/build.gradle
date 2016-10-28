@@ -26,16 +26,17 @@ task buildMk(type: Exec) {
     environment 'EPUB3_PATH', project(':epub3').projectDir
 
     if (ndk_skipX86) environment 'READIUM_SKIPX86', 'true'
-    if (ndk_skipARM) environment 'READIUM_SKIPXARM', 'true'
+    if (ndk_skipARM) environment 'READIUM_SKIPARM', 'true'
     if (ndk_clang) environment 'READIUM_CLANG', 'true'
     if (ndk_experimental) environment 'READIUM_DEBUG', 'true'
 
     commandLine "$ndkDir/ndk-build${ndkBuildExt}",
-            "-j", "4",
+            "-j", "4", //Runtime.runtime.availableProcessors()
             '-C', projectPath,
             'NDK_APPLICATION_MK=Application.mk',
             "APP_BUILD_SCRIPT=${buildScript}",
-            "NDK_PROJECT_PATH=${projectPath}"
+            "NDK_PROJECT_PATH=${projectPath}",
+            "NDK_DEBUG=1"
 }
 
 tasks.whenTaskAdded { task ->
