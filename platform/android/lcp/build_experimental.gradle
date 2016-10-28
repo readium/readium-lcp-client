@@ -46,7 +46,12 @@ model {
             toolchain = ndk_clang ? "clang" : "gcc"
             toolchainVersion = ndk_clang ? "" : "4.9" //https://github.com/android-ndk/ndk/issues/229
 
-            stl = ndk_clang ? "c++_shared" : "gnustl_shared"
+            def clangWithGnuStl = false
+
+            if (!ndk_clang || clangWithGnuStl)
+                stl = "gnustl_shared"
+            else
+                stl = "c++_shared"
 
             def arrayFlags = [
                     "-fexceptions",
@@ -70,12 +75,13 @@ model {
 
             cppFlags.addAll(arrayFlags)
             cppFlags.addAll(arrayFlagsCPP)
-            cppFlags.add(ndk_clang ? "-std=c++11" : "-std=gnu++11")
+            cppFlags.add((!ndk_clang || clangWithGnuStl) ? "-std=gnu++11" : "-std=c++11")
 
             CFlags.addAll(arrayFlags)
-            CFlags.add(ndk_clang ? "-std=c11" : "-std=gnu11")
+            CFlags.add((!ndk_clang || clangWithGnuStl) ? "-std=gnu11" : "-std=c11")
 
             ldLibs.addAll(['z', 'android', 'log'])
+            if (ndk_clang) ldLibs.addAll(['atomic'])
         } //ndk
 
         buildTypes {
