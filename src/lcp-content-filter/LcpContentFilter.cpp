@@ -252,7 +252,7 @@ namespace lcp {
     ContentFilterPtr LcpContentFilter::Factory(ConstPackagePtr package)
     {
         if (LcpContentFilter::lcpLicense != NULL) {
-            return New(LcpContentFilter::lcpLicense);
+            return std::make_shared<LcpContentFilter>(LcpContentFilter::lcpLicense); //New(LcpContentFilter::lcpLicense);
         }
         return nullptr;
     }
