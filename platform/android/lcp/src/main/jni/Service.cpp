@@ -64,6 +64,8 @@ JNIEXPORT jobject JNICALL Java_org_readium_sdk_lcp_Service_nativeOpenLicense(
      return env->NewObject(cls, methodId, (jlong) (*licensePTR), (jlong) service);
 }
 
+#if !DISABLE_LSD
+
 JNIEXPORT void JNICALL Java_org_readium_sdk_lcp_Service_nativeSetLicenseStatusDocumentProcessingCancelled(
         JNIEnv *env, jobject obj, jlong servicePtr) {
 
@@ -71,3 +73,4 @@ JNIEXPORT void JNICALL Java_org_readium_sdk_lcp_Service_nativeSetLicenseStatusDo
      service->SetLicenseStatusDocumentProcessingCancelled();
 }
 
+#endif //!DISABLE_LSD

@@ -183,7 +183,9 @@ namespace lcp
 
         Status result = Status(StatusCode::ErrorCommonSuccess);
 
-        if (!license->Decrypted())
+        if (
+                false && // TODO comment this! => skips the decryption attempt (from stored passphrase) at first-time load, to test the user prompt
+                !license->Decrypted())
         {
             result = this->DecryptLicenseOnOpening(license);
             

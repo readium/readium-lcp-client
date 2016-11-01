@@ -26,6 +26,7 @@ public class Service {
         this.nativeInjectLicense(this.nativePtr, epubPath, license.getOriginalContent());
     }
 
+    //#if !DISABLE_LSD
     public void SetLicenseStatusDocumentProcessingCancelled() {
         this.nativeSetLicenseStatusDocumentProcessingCancelled(this.nativePtr);
     }
@@ -46,5 +47,6 @@ public class Service {
     private native void nativeInjectLicense(long nativePtr, String epubPath, String licenseContent);
 //    private native void nativeInjectLicense(long nativePtr, String epubPath, License license);
 
+    //#if !DISABLE_LSD
     private native void nativeSetLicenseStatusDocumentProcessingCancelled(long nativePtr);
 }

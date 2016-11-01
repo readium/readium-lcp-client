@@ -1,5 +1,10 @@
 package org.readium.sdk.lcp;
 
+
+import java.util.Timer;
+import java.util.TimerTask;
+
+//#if !DISABLE_LSD
 public class StatusDocumentProcessing {
     /**
      * Native Container Pointer.
@@ -10,6 +15,25 @@ public class StatusDocumentProcessing {
     public interface IListener {
         void onStatusDocumentProcessingComplete();
         //void onStatusDocumentProcessingComplete_(StatusDocumentProcessing sdp);
+    }
+
+    public static abstract class Listener implements IListener {
+        final private StatusDocumentProcessing m_StatusDocumentProcessing;
+        public Listener(StatusDocumentProcessing sdp) {
+            m_StatusDocumentProcessing = sdp;
+        }
+        public void onStatusDocumentProcessingComplete() {
+
+            // TODO: comment this! Just to simulate lengthy operation (testing cancellable dialog)
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    Listener.this.onStatusDocumentProcessingComplete_(m_StatusDocumentProcessing);
+                }
+            }, 1000);
+        }
+        public abstract void onStatusDocumentProcessingComplete_(StatusDocumentProcessing sdp);
     }
 
     private StatusDocumentProcessing(long nativePtr) {

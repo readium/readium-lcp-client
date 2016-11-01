@@ -33,11 +33,12 @@ public class License {
     }
 
 
-    //#if ENABLE_NET_PROVIDER
+//#if ENABLE_NET_PROVIDER
 //    public Acquisition createAcquisition(String dstPath) {
 //        return this.nativeCreateAcquisition(this.nativePtr, this.servicePtr, dstPath);
 //    }
 
+    ////#if !DISABLE_LSD
     public StatusDocumentProcessing createStatusDocumentProcessing(String dstPath) {
         return this.nativeCreateStatusDocumentProcessing(this.nativePtr, this.servicePtr, dstPath);
     }
@@ -62,7 +63,10 @@ public class License {
     private native String nativeGetLinkStatus(long nativePtr);
 
     private native void nativeDecrypt(long nativePtr, long servicePtr, String passphrase);
+
     //#if ENABLE_NET_PROVIDER
     //private native Acquisition nativeCreateAcquisition(long nativePtr, long servicePtr, String dstPath);
+
+    //#if !DISABLE_LSD
     private native StatusDocumentProcessing nativeCreateStatusDocumentProcessing(long nativePtr, long servicePtr, String dstPath);
 }
