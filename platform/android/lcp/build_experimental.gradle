@@ -16,14 +16,20 @@ model {
                                 './src/main/jni',
                                 '../../../src/lcp-client-lib',
                                 '../../../src/lcp-content-filter',
-                                '../../../src/third-parties/time64',
-                                '../../../src/third-parties/cryptopp',
-                                '../../../src/third-parties/ziplib'
+                                '../../../src/third-parties'
                         ]
 
-                        excludes.add('Source/Sample/*.*')
-                        excludes.add('Source/ZipLib/extlibs/lzma/*.c')
-                        excludes.add('Source/ZipLib/extlibs/lzma/**/*.c')
+                        excludes.add('curl/**/*.*')
+                        excludes.add('gtest/**/*.*')
+                        excludes.add('rapidjson/**/*.*')
+                        excludes.add('utf8-cpp/**/*.*')
+                        excludes.add('cryptopp/*test.cpp')
+                        excludes.add('cryptopp/bench*.cpp')
+                        excludes.add('cryptopp/validat*.cpp')
+                        excludes.add('cryptopp/adhoc.cpp')
+                        excludes.add('ziplib/Source/Sample/*.*')
+                        excludes.add('ziplib/Source/ZipLib/extlibs/lzma/*.c')
+                        excludes.add('ziplib/Source/ZipLib/extlibs/lzma/**/*.c')
                     } //source
 
                     exportedHeaders {
