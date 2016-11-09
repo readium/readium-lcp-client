@@ -5,6 +5,7 @@
 #include "Service.h"
 #include <public/ILicense.h>
 #include <public/LcpStatus.h>
+#include <LcpUtils.h>
 #include <public/ILcpService.h>
 
 #include <ePub3/utilities/utfstring.h>
@@ -54,10 +55,21 @@ JNIEXPORT jobject JNICALL Java_org_readium_sdk_lcp_Service_nativeOpenLicense(
 
      const ePub3::string epubPath("");
 
-     lcp::Status status = service->OpenLicense(
-             epubPath,
-             licenseJson,
-             licensePTR);
+     try {
+          lcp::Status status = service->OpenLicense(
+                  epubPath,
+                  licenseJson,
+                  licensePTR);
+
+          if (!lcp::Status::IsSuccess(status)) {
+               // An error has occured
+               // TODO: catch error in a handler
+               return nullptr;
+          }
+     } catch (lcp::StatusException &ex) {
+          // TODO: catch error in a handler
+          return nullptr;
+     }
 
      jclass cls = env->FindClass("org/readium/sdk/lcp/License");
      jmethodID methodId = env->GetMethodID(cls, "<init>", "(JJ)V");
