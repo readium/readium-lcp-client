@@ -11,10 +11,6 @@
 #include "LcpStatus.h"
 #include "IStatusDocumentProcessing.h"
 
-#if !DISABLE_LSD
-#include <ePub3/utilities/utfstring.h>
-#endif //!DISABLE_LSD
-
 namespace lcp
 {
     class ILicense;
@@ -77,7 +73,7 @@ namespace lcp
         // be found in the storage provider.
         //
         virtual Status OpenLicense(
-                const ePub3::string & publicationPath,
+                const std::string & publicationPath,
                 const std::string & licenseJson,
                 ILicense** license) = 0;
 

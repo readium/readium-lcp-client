@@ -99,7 +99,7 @@ namespace lcp
     }
 
     Status LcpService::OpenLicense(
-            const ePub3::string & publicationPath,
+            const std::string & publicationPath,
             const std::string & licenseJson,
             ILicense** licensePTR)
     {

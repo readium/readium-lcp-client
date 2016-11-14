@@ -53,7 +53,7 @@ JNIEXPORT jobject JNICALL Java_org_readium_sdk_lcp_Service_nativeOpenLicense(
      lcp::ILicense* license = nullptr;
      lcp::ILicense** licensePTR = &license;
 
-     const ePub3::string epubPath("");
+     const std::string epubPath("");
 
      try {
           lcp::Status status = service->OpenLicense(

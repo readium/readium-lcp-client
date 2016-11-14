@@ -24,7 +24,7 @@ namespace lcp
     class LcpService : public ILcpService, public NonCopyable
     {
     private:
-        ePub3::string m_publicationPath;
+        std::string m_publicationPath;
         Status CheckDecrypted(ILicense* license);
 #if !DISABLE_LSD
         ILicense* m_LicenseStatusDocumentThatStartedProcessing;
@@ -51,7 +51,7 @@ namespace lcp
 
         // ILcpService
         virtual Status OpenLicense(
-                const ePub3::string & publicationPath,
+                const std::string & publicationPath,
                 const std::string & licenseJson,
                 ILicense** licensePTR);
 

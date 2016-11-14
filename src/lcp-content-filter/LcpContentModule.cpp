@@ -91,7 +91,7 @@ namespace lcp {
         ILicense** licensePTR = &license;
 
         Status status = LcpContentModule::lcpService->OpenLicense(
-                path,
+                path.stl_str(),
                 licenseJson, licensePTR);
 
         if ((status.Code != StatusCode::ErrorCommonSuccess)
