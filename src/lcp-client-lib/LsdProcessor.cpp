@@ -298,12 +298,12 @@ namespace lcp
             return url;
         }
 
-        REGEX_NS::regex re(strLicenseID);
+        std::regex re(strLicenseID);
         std::stringstream ss;
 //        if ( ss.tellp() > 0 )
 //            ss << ' ';
 
-        ss << REGEX_NS::regex_replace(url.c_str(), re, license->Id());
+        ss << std::regex_replace(url.c_str(), re, license->Id());
 
         auto url_ = ss.str();
         return url_;
