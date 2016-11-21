@@ -27,7 +27,6 @@ namespace lcp
         std::string m_publicationPath;
         Status CheckDecrypted(ILicense* license);
 #if !DISABLE_LSD
-        ILicense* m_LicenseStatusDocumentThatStartedProcessing;
         Status CheckLicenseStatusDocument(ILicense* license);
 #endif //!DISABLE_LSD
 
@@ -45,10 +44,6 @@ namespace lcp
 #endif //ENABLE_NET_PROVIDER
             );
 
-#if !DISABLE_LSD
-        virtual void SetLicenseStatusDocumentProcessingCancelled();
-#endif //!DISABLE_LSD
-
         // ILcpService
         virtual Status OpenLicense(
                 const std::string & publicationPath,
@@ -62,6 +57,8 @@ namespace lcp
         virtual Status InjectLicense(
                 const std::string & publicationPath,
                 ILicense * license);
+
+        virtual int TimeStampCompare(const std::string & t1, const std::string & t2);
 
         virtual Status DecryptLicense(ILicense * license, const std::string & userPassphrase);
 
@@ -100,11 +97,14 @@ namespace lcp
                 IAcquisition ** acquisition
         );
 #endif //ENABLE_NET_PROVIDER
-        virtual Status CreatePublicationStatusDocumentProcessing(
-                const std::string & publicationPath,
-                ILicense * license,
-                IStatusDocumentProcessing ** statusDocumentProcessing
-        );
+
+//#if !DISABLE_LSD
+//        virtual Status CreatePublicationStatusDocumentProcessing(
+//                const std::string & publicationPath,
+//                ILicense * license,
+//                IStatusDocumentProcessing ** statusDocumentProcessing
+//        );
+//#endif //!DISABLE_LSD
 
         virtual IRightsService * GetRightsService() const;
 

@@ -21,6 +21,8 @@
 #include "public/IStorageProvider.h"
 #include "RightsService.h"
 
+#include "DateTime.h"
+
 #if ENABLE_NET_PROVIDER
 #include "Acquisition.h"
 #endif //ENABLE_NET_PROVIDER
@@ -29,10 +31,10 @@ ZIPLIB_INCLUDE_START
 #include "ziplib/Source/ZipLib/ZipFile.h"
 ZIPLIB_INCLUDE_END
 
-#if !DISABLE_LSD
-#include "LsdProcessor.h"
-#include "StatusDocumentProcessing.h"
-#endif //!DISABLE_LSD
+//#if !DISABLE_LSD
+//#include "LsdProcessor.h"
+//#include "StatusDocumentProcessing.h"
+//#endif //!DISABLE_LSD
 
 static std::string const LcpLicensePath = "META-INF/license.lcpl";
 
@@ -68,9 +70,6 @@ namespace lcp
                     , defaultCrlUrl
 #endif //ENABLE_NET_PROVIDER
             ))
-#if !DISABLE_LSD
-        , m_LicenseStatusDocumentThatStartedProcessing(nullptr)
-#endif //!DISABLE_LSD
     {
     }
 
@@ -97,6 +96,24 @@ namespace lcp
             ILicense* license) {
         return this->InjectLicense(publicationPath, license->OriginalContent());
     }
+
+    int LcpService::TimeStampCompare(const std::string & t1, const std::string & t2) {
+
+        //DateTime now = DateTime::Now();
+        DateTime time1(t1);
+        DateTime time2(t2);
+        if (time1 < time2) {
+            return -1;
+        } else if (time1 == time2) {
+            return 0;
+        } else if (time1 > time2) {
+            return 1;
+        } else {
+            // What?!
+            return 0;
+        }
+    }
+
 
     Status LcpService::OpenLicense(
             const std::string & publicationPath,
@@ -209,24 +226,20 @@ namespace lcp
 
 #if !DISABLE_LSD
 
-    void LcpService::SetLicenseStatusDocumentProcessingCancelled() {
-        m_LicenseStatusDocumentThatStartedProcessing = nullptr;
-    }
-
     Status LcpService::CheckLicenseStatusDocument(ILicense* license)
     {
+        if (license == nullptr)
+        {
+            return Status(StatusCode::ErrorCommonSuccess);
+            //throw std::invalid_argument("license pointer is nullptr");
+        }
+
         if (m_publicationPath.empty()) { // if a standalone LCPL, we wait until the linked EPUB is downloaded, then status doc will be checked.
-            m_LicenseStatusDocumentThatStartedProcessing = nullptr; // just to ensure the state is clean
             return Status(StatusCode::ErrorCommonSuccess);
         }
 
         try
         {
-            if (license == nullptr)
-            {
-                throw std::invalid_argument("license pointer is nullptr");
-            }
-
             // if (!license->Decrypted())
             // {
             //     return Status(StatusCode::ErrorDecryptionLicenseEncrypted);
@@ -250,7 +263,9 @@ namespace lcp
 
             lcp::Link lsdLink;
             links->GetLink(StatusDocument, lsdLink);
-            if (lsdLink.type != LsdProcessor::StatusType)
+
+            std::string StatusType = "application/vnd.readium.license.status.v1.0+json";
+            if (lsdLink.type != StatusType)
             {
                 return Status(StatusCode::ErrorCommonSuccess); // bogus LSD link, noop
                 //return Status(StatusCode::ErrorStatusDocumentWrongType);
@@ -262,23 +277,23 @@ namespace lcp
                 //return Status(StatusCode::ErrorStatusDocumentInvalidUri);
             }
 
-            if (m_LicenseStatusDocumentThatStartedProcessing != nullptr) {
-                // should be equal to license! (but we check anyway)
-                if (m_LicenseStatusDocumentThatStartedProcessing == license) {
+            // Note that if the LCP license was updated following an LSD check
+            // (any change that results in different canonical JSON string),
+            // this "license" instance will be another one, even though they are associated with the same EPUB
+            // (remember: m_licenses map keys are canonical JSON strings),
+            // in which case another LSD check will be performed.
+            if (license->getStatusDocumentProcessingFlag()) {
+                license->setStatusDocumentProcessingFlag(false);
 
-                    // The LSD was checked at the last round, so now the EPUB is opening without LSD check.
-                    m_LicenseStatusDocumentThatStartedProcessing = nullptr;
-                    return Status(StatusCode::ErrorCommonSuccess);
-                } else {
-
-                    // different license from previous round?!
-                    bool breakpoint = true; // TODO
-                }
+                // The LSD was checked at the last round, so now the LCP-EPUB is opening without LSD check.
+                return Status(StatusCode::ErrorCommonSuccess);
             }
 
-            m_LicenseStatusDocumentThatStartedProcessing = license;
+            // The LCP-EPUB will be loaded once again later, after LSD checks,
+            // at which time we will need to bypass yet another LSD check,
+            // to avoid infinite looping (see above "break")
+            license->setStatusDocumentProcessingFlag(true);
 
-            // There is a link ... async process must start to attempt the HTTP request, LSD parse, license update, etc.
             return Status(StatusCode::LicenseStatusDocumentStartProcessing);
         }
         catch (const StatusException & ex)
@@ -286,28 +301,33 @@ namespace lcp
             return Status(StatusCode::ErrorCommonSuccess); // any LSD problem, noop
             //return ex.ResultStatus();
         }
+        catch (const std::exception & ex)
+        {
+            return Status(StatusCode::ErrorCommonSuccess); // any LSD problem, noop
+            // ex.what();
+        }
     }
 
-    Status LcpService::CreatePublicationStatusDocumentProcessing(
-            const std::string & publicationPath,
-            ILicense * license,
-            IStatusDocumentProcessing ** statusDocumentProcessing
-    )
-    {
-        try
-        {
-            if (statusDocumentProcessing == nullptr)
-            {
-                throw std::invalid_argument("statusDocumentProcessing is nullptr");
-            }
-            *statusDocumentProcessing = new StatusDocumentProcessing();
-            return Status(StatusCode::ErrorCommonSuccess);
-        }
-        catch (const StatusException & ex)
-        {
-            return ex.ResultStatus();
-        }
-    }
+//    Status LcpService::CreatePublicationStatusDocumentProcessing(
+//            const std::string & publicationPath,
+//            ILicense * license,
+//            IStatusDocumentProcessing ** statusDocumentProcessing
+//    )
+//    {
+//        try
+//        {
+//            if (statusDocumentProcessing == nullptr)
+//            {
+//                throw std::invalid_argument("statusDocumentProcessing is nullptr");
+//            }
+//            *statusDocumentProcessing = new StatusDocumentProcessing();
+//            return Status(StatusCode::ErrorCommonSuccess);
+//        }
+//        catch (const StatusException & ex)
+//        {
+//            return ex.ResultStatus();
+//        }
+//    }
 
 #endif //!DISABLE_LSD
 

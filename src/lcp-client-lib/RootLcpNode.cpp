@@ -37,13 +37,17 @@ namespace lcp
         , m_user(user)
         , m_rights(rights)
 #else
-            : m_crypto(std::move(std::unique_ptr<CryptoLcpNode>(crypto)))
-            , m_links(std::move(std::unique_ptr<LinksLcpNode>(links)))
-            , m_user(std::move(std::unique_ptr<UserLcpNode>(user)))
-            , m_rights(std::move(std::unique_ptr<RightsLcpNode>(rights)))
+        : m_crypto(std::move(std::unique_ptr<CryptoLcpNode>(crypto)))
+        , m_links(std::move(std::unique_ptr<LinksLcpNode>(links)))
+        , m_user(std::move(std::unique_ptr<UserLcpNode>(user)))
+        , m_rights(std::move(std::unique_ptr<RightsLcpNode>(rights)))
 #endif //ENABLE_GENERIC_JSON_NODE
         , m_decrypted(false)
-    {
+
+#if !DISABLE_LSD
+        , m_statusDocumentProcessingFlag(false)
+#endif //!DISABLE_LSD
+{
         m_rootInfo.content = licenseJson;
         m_rootInfo.canonicalContent = canonicalJson;
     }
@@ -113,6 +117,18 @@ namespace lcp
         return m_rights.get();
 #endif //ENABLE_GENERIC_JSON_NODE
     }
+
+#if !DISABLE_LSD
+    // false by default (see constructor init)
+    bool RootLcpNode::getStatusDocumentProcessingFlag() const
+    {
+        return m_statusDocumentProcessingFlag;
+    }
+    void RootLcpNode::setStatusDocumentProcessingFlag(bool flag)
+    {
+        m_statusDocumentProcessingFlag = flag;
+    }
+#endif //!DISABLE_LSD
 
     bool RootLcpNode::Decrypted() const
     {

@@ -7,7 +7,12 @@
 #include <public/ILicense.h>
 #include <public/IAcquistion.h>
 #include <public/ILcpService.h>
-#include <public/IStatusDocumentProcessing.h>
+
+//
+//#if !DISABLE_LSD
+//#include <public/IStatusDocumentProcessing.h>
+//#endif //!DISABLE_LSD
+
 //#include <ePub3/epub3.h>
 //#include "epub3.h"
 #include <public/lcp.h>
@@ -77,6 +82,36 @@ JNIEXPORT void JNICALL Java_org_readium_sdk_lcp_License_nativeDecrypt(
     lcp::Status status = service->DecryptLicense(license, passphrase);
 }
 
+JNIEXPORT jboolean JNICALL Java_org_readium_sdk_lcp_License_nativeIsOlderThan(
+        JNIEnv *env, jobject obj, jlong licensePtr, jlong servicePtr, jstring jTimestamp) {
+
+    const char * cTimestamp = env->GetStringUTFChars(jTimestamp, 0);
+    std::string t2(cTimestamp);
+
+    lcp::ILicense * license = (lcp::ILicense *) licensePtr;
+    lcp::ILcpService * service = (lcp::ILcpService *) servicePtr;
+
+    std::string t1 = license->Updated();
+    if (t1.length() == 0){
+        t1 = license->Issued();
+    }
+    int compared = service->TimeStampCompare(t1, t2);
+
+    return ((compared < 0) ? JNI_TRUE : JNI_FALSE);
+}
+
+#if !DISABLE_LSD
+
+JNIEXPORT void JNICALL Java_org_readium_sdk_lcp_License_nativeSetStatusDocumentProcessingFlag(
+        JNIEnv *env, jobject obj, jlong licensePtr, jboolean jFlag) {
+
+    lcp::ILicense * license = (lcp::ILicense *) licensePtr;
+    bool flag = (jFlag == JNI_TRUE ? true : false);
+    license->setStatusDocumentProcessingFlag(flag);
+}
+
+#endif //!DISABLE_LSD
+
 #if ENABLE_NET_PROVIDER
 JNIEXPORT jobject JNICALL Java_org_readium_sdk_lcp_License_nativeCreateAcquisition(
         JNIEnv *env, jobject obj, jlong licensePtr, jlong servicePtr, jstring jDstPath) {
@@ -97,20 +132,22 @@ JNIEXPORT jobject JNICALL Java_org_readium_sdk_lcp_License_nativeCreateAcquisiti
 }
 #endif //ENABLE_NET_PROVIDER
 
-JNIEXPORT jobject JNICALL Java_org_readium_sdk_lcp_License_nativeCreateStatusDocumentProcessing(
-        JNIEnv *env, jobject obj, jlong licensePtr, jlong servicePtr, jstring jDstPath) {
-    const char * cDstPath = env->GetStringUTFChars(jDstPath, 0);
-    std::string dstPath(cDstPath);
-    lcp::ILicense * license = (lcp::ILicense *) licensePtr;
-    lcp::ILcpService * service = (lcp::ILcpService *) servicePtr;
-    lcp::IStatusDocumentProcessing * statusDocumentProcessing;
-    lcp::Status status = service->CreatePublicationStatusDocumentProcessing(dstPath, license, &statusDocumentProcessing);
-
-    if (status.Code  != lcp::StatusCode::ErrorCommonSuccess) {
-        return nullptr;
-    }
-
-    jclass cls = env->FindClass("org/readium/sdk/lcp/StatusDocumentProcessing");
-    jmethodID methodId = env->GetMethodID(cls, "<init>", "(J)V");
-    return env->NewObject(cls, methodId, (jlong) statusDocumentProcessing);
-}
+//#if !DISABLE_LSD
+//JNIEXPORT jobject JNICALL Java_org_readium_sdk_lcp_License_nativeCreateStatusDocumentProcessing(
+//        JNIEnv *env, jobject obj, jlong licensePtr, jlong servicePtr, jstring jDstPath) {
+//    const char * cDstPath = env->GetStringUTFChars(jDstPath, 0);
+//    std::string dstPath(cDstPath);
+//    lcp::ILicense * license = (lcp::ILicense *) licensePtr;
+//    lcp::ILcpService * service = (lcp::ILcpService *) servicePtr;
+//    lcp::IStatusDocumentProcessing * statusDocumentProcessing;
+//    lcp::Status status = service->CreatePublicationStatusDocumentProcessing(dstPath, license, &statusDocumentProcessing);
+//
+//    if (status.Code  != lcp::StatusCode::ErrorCommonSuccess) {
+//        return nullptr;
+//    }
+//
+//    jclass cls = env->FindClass("org/readium/sdk/lcp/StatusDocumentProcessing");
+//    jmethodID methodId = env->GetMethodID(cls, "<init>", "(J)V");
+//    return env->NewObject(cls, methodId, (jlong) statusDocumentProcessing);
+//}
+//#endif //!DISABLE_LSD

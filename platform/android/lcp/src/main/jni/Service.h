@@ -26,13 +26,13 @@ JNIEXPORT void JNICALL Java_org_readium_sdk_lcp_Service_nativeInjectLicense(
 //JNIEXPORT void JNICALL Java_org_readium_sdk_lcp_Service_nativeInjectLicense(
 //        JNIEnv *env, jobject obj, jlong servicePtr, jstring jEpubPath, jobject jLicense);
 
-
-#if !DISABLE_LSD
-
-JNIEXPORT void JNICALL Java_org_readium_sdk_lcp_Service_nativeSetLicenseStatusDocumentProcessingCancelled(
-        JNIEnv *env, jobject obj, jlong servicePtr);
-
-#endif //!DISABLE_LSD
+//
+//#if !DISABLE_LSD
+//
+//JNIEXPORT void JNICALL Java_org_readium_sdk_lcp_Service_nativeNotifyLicenseStatusDocumentProcessingCancelled(
+//        JNIEnv *env, jobject obj, jlong servicePtr);
+//
+//#endif //!DISABLE_LSD
 
 #ifdef __cplusplus
 }

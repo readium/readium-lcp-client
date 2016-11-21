@@ -26,8 +26,9 @@ public class ServiceFactory {
 //NetProvider netProvider,
                                 CredentialHandler credentialHandler,
 
-                                //#if !DISABLE_LSD
-                                StatusDocumentHandler statusDocumentHandler) {
+//#if !DISABLE_LSD
+                                StatusDocumentHandler statusDocumentHandler
+    ) {
         certContent = certContent.replaceAll("-*BEGIN CERTIFICATE-*", "");
         certContent = certContent.replaceAll("-*END CERTIFICATE-*", "");
         certContent = certContent.replaceAll("[\r\n]*", "");
@@ -37,8 +38,9 @@ public class ServiceFactory {
 
                 credentialHandler,
 
-                //#if !DISABLE_LSD
-                statusDocumentHandler);
+//#if !DISABLE_LSD
+                statusDocumentHandler
+        );
     }
 
     private native static Service nativeBuild(
@@ -48,6 +50,7 @@ public class ServiceFactory {
 
             CredentialHandler credentialHandler,
 
-            //#if !DISABLE_LSD
-            StatusDocumentHandler statusDocumentHandler);
+//#if !DISABLE_LSD
+            StatusDocumentHandler statusDocumentHandler
+    );
 }

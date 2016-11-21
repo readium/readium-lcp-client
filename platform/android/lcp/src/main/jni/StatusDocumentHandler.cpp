@@ -1,3 +1,4 @@
+#if !DISABLE_LSD
 
 #include "StatusDocumentHandler.h"
 #include "Util.h"
@@ -25,3 +26,5 @@ namespace lcp {
         env->CallVoidMethod(this->jStatusDocumentHandler, this->jProcessMethodId, jLicense);
     }
 }
+
+#endif //!DISABLE_LSD

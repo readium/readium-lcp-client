@@ -21,6 +21,10 @@ public class License {
         this.nativeDecrypt(this.nativePtr, this.servicePtr, passphrase);
     }
 
+    public boolean isOlderThan(String timestamp) {
+        return this.nativeIsOlderThan(this.nativePtr, this.servicePtr, timestamp);
+    }
+
     public boolean isDecrypted() {
         return this.nativeIsDecrypted(this.nativePtr);
     }
@@ -32,18 +36,16 @@ public class License {
         return this.nativeGetLinkStatus(this.nativePtr);
     }
 
+//#if !DISABLE_LSD
+    public void setStatusDocumentProcessingFlag(boolean flag)
+    {
+        this.nativeSetStatusDocumentProcessingFlag(this.nativePtr, flag);
+    }
 
 //#if ENABLE_NET_PROVIDER
 //    public Acquisition createAcquisition(String dstPath) {
 //        return this.nativeCreateAcquisition(this.nativePtr, this.servicePtr, dstPath);
 //    }
-
-    ////#if !DISABLE_LSD
-    public StatusDocumentProcessing createStatusDocumentProcessing(String dstPath) {
-        return this.nativeCreateStatusDocumentProcessing(this.nativePtr, this.servicePtr, dstPath);
-    }
-
-
 
 
     /**
@@ -64,9 +66,12 @@ public class License {
 
     private native void nativeDecrypt(long nativePtr, long servicePtr, String passphrase);
 
-    //#if ENABLE_NET_PROVIDER
+    private native boolean nativeIsOlderThan(long nativePtr, long servicePtr, String timestamp);
+
+//#if !DISABLE_LSD
+    private native void nativeSetStatusDocumentProcessingFlag(long nativePtr, boolean flag);
+
+//#if ENABLE_NET_PROVIDER
     //private native Acquisition nativeCreateAcquisition(long nativePtr, long servicePtr, String dstPath);
 
-    //#if !DISABLE_LSD
-    private native StatusDocumentProcessing nativeCreateStatusDocumentProcessing(long nativePtr, long servicePtr, String dstPath);
 }

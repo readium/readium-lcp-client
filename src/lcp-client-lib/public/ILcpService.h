@@ -9,7 +9,10 @@
 
 #include <string>
 #include "LcpStatus.h"
-#include "IStatusDocumentProcessing.h"
+
+//#if !DISABLE_LSD
+//#include "IStatusDocumentProcessing.h"
+//#endif //!DISABLE_LSD
 
 namespace lcp
 {
@@ -85,9 +88,7 @@ namespace lcp
                 const std::string & publicationPath,
                 ILicense * license) = 0;
 
-#if !DISABLE_LSD
-        virtual void SetLicenseStatusDocumentProcessingCancelled() = 0;
-#endif //!DISABLE_LSD
+        virtual int TimeStampCompare(const std::string & t1, const std::string & t2) = 0;
 
         //
         // Decrypts the License Document using the given User Passphrase.
@@ -164,11 +165,14 @@ namespace lcp
         ) = 0;
 #endif //ENABLE_NET_PROVIDER
 
-        virtual Status CreatePublicationStatusDocumentProcessing(
-                const std::string & publicationPath,
-                ILicense * license,
-                IStatusDocumentProcessing ** statusDocumentProcessing
-        ) = 0;
+
+//#if !DISABLE_LSD
+//        virtual Status CreatePublicationStatusDocumentProcessing(
+//                const std::string & publicationPath,
+//                ILicense * license,
+//                IStatusDocumentProcessing ** statusDocumentProcessing
+//        ) = 0;
+//#endif //!DISABLE_LSD
 
 
         //

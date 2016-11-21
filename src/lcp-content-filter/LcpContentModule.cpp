@@ -106,6 +106,15 @@ namespace lcp {
             throw ePub3::ContentModuleException("Unable to get LCPL license");
         }
 
+        if (!(*licensePTR)->Decrypted()) {
+
+            // Should be non-blocking, to ensure that the exception below is captured on the app side and the main thread resumes activity to process the next events in the queue
+            LcpContentModule::lcpCredentialHandler->decrypt((*licensePTR));
+
+            // the caller gracefully degrades by interrupting the EPUB opening process (the call to credentialHandler->decrypt() above will attempt again).
+            throw ePub3::ContentModuleExceptionDecryptFlow("LCPL license decrypt needs user passphrase input...");
+        }
+
 #if !DISABLE_LSD
         if (status.Code == StatusCode::LicenseStatusDocumentStartProcessing) {
 
@@ -116,15 +125,6 @@ namespace lcp {
             throw ePub3::ContentModuleExceptionDecryptFlow("LCPL license status document processing...");
         }
 #endif //!DISABLE_LSD
-
-        if (!(*licensePTR)->Decrypted()) {
-
-            // Should be non-blocking, to ensure that the exception below is captured on the app side and the main thread resumes activity to process the next events in the queue
-            LcpContentModule::lcpCredentialHandler->decrypt((*licensePTR));
-
-            // the caller gracefully degrades by interrupting the EPUB opening process (the call to credentialHandler->decrypt() above will attempt again).
-            throw ePub3::ContentModuleExceptionDecryptFlow("LCPL license decrypt needs user passphrase input...");
-        }
 
         // NOTE: LcpContentModule::RegisterContentFilters() needs LcpContentModule::lcpLicense to be set.
         LcpContentModule::lcpLicense = (*licensePTR);
