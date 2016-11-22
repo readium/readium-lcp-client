@@ -73,7 +73,7 @@ public class NetProvider {
 //
 //
 //        Future<InputStream> request = Ion.with(this.context)
-//                .load(url)
+//                .load("GET", url)
 //                .setLogging("Ion", Log.VERBOSE)
 //                .progress(callback) // not UI thread
 //                //.progressHandler(callback) // UI thread

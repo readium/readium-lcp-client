@@ -108,6 +108,8 @@ namespace lcp {
 
         if (!(*licensePTR)->Decrypted()) {
 
+            (*licensePTR)->setStatusDocumentProcessingFlag(false); // ensure reset of LicenseStatusDocumentStartProcessing (see below)
+
             // Should be non-blocking, to ensure that the exception below is captured on the app side and the main thread resumes activity to process the next events in the queue
             LcpContentModule::lcpCredentialHandler->decrypt((*licensePTR));
 

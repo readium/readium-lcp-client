@@ -2,7 +2,9 @@ package org.readium.sdk.lcp;
 
 
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.net.wifi.WifiManager;
 import android.os.Build;
@@ -73,6 +75,60 @@ public class StatusDocumentProcessing {
         mLicense.setStatusDocumentProcessingFlag(false);
     }
 
+    public AlertDialog showStatusDocumentDialog_RETURN_RENEW(String msgType, final DoneCallback doneCallback) {
+//        Toast.makeText(ContainerList.this, "", Toast.LENGTH_SHORT)
+//                .show();
+
+        AlertDialog.Builder alertBuilder  = new AlertDialog.Builder(m_context);
+
+        alertBuilder.setTitle("LCP EPUB => LSD ["+msgType+"]?");
+        alertBuilder.setMessage("License Status Document ["+msgType+"] LCP EPUB?");
+
+        alertBuilder.setOnCancelListener(
+                new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        doneCallback.Done(false);
+                    }
+                }
+        );
+
+        alertBuilder.setOnDismissListener(
+                new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                    }
+                }
+        );
+
+        alertBuilder.setPositiveButton("Yes",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+
+                        doneCallback.Done(true);
+                    }
+                }
+        );
+        alertBuilder.setNegativeButton("No",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                }
+        );
+
+        alertBuilder.setCancelable(true);
+        AlertDialog alert = alertBuilder.create();
+        alert.setCanceledOnTouchOutside(true);
+
+        alert.show(); //async!
+
+        return alert;
+    }
+
     final protected class StatusDocumentLink {
         public final String m_rel;
         public final String m_href;
@@ -101,10 +157,10 @@ public class StatusDocumentProcessing {
     private StatusDocumentLink m_statusDocument_LINK_RENEW = null;
     private String m_statusDocument_POTENTIAL_RIGHTS_END = ""; // ISO 8601 time and date
 
-    private void fetchAndInjectUpdatedLicense() {
+    private void fetchAndInjectUpdatedLicense(final DoneCallback doneCallback) {
 
         if (m_statusDocument_LINK_LICENSE == null) {
-            m_statusDocumentProcessingListener.onStatusDocumentProcessingComplete();
+            doneCallback.Done(false);
             return;
         }
 
@@ -135,7 +191,7 @@ public class StatusDocumentProcessing {
                 langCode = langCode + ",en-US;q=0.7,en;q=0.5";
 
                 Future<Response<InputStream>> request = Ion.with(m_context)
-                        .load(url)
+                        .load("GET", url)
                         .setLogging("Readium Ion", Log.VERBOSE)
 //                        .progress(new ProgressCallback() {
 //                            @Override
@@ -171,7 +227,7 @@ public class StatusDocumentProcessing {
                                 if (e != null || inputStream == null
                                         || httpResponseCode < 200 || httpResponseCode >= 300) {
 
-                                    m_statusDocumentProcessingListener.onStatusDocumentProcessingComplete();
+                                    doneCallback.Done(false);
                                     return;
                                 }
 
@@ -183,8 +239,11 @@ public class StatusDocumentProcessing {
                                     // new LCP license
                                     mLcpService.injectLicense(mBookPath, json);
 
+                                    doneCallback.Done(true);
+
                                 } catch (Exception ex) {
                                     ex.printStackTrace();
+                                    doneCallback.Done(false);
                                 } finally {
                                     try {
                                         inputStream.close();
@@ -192,8 +251,6 @@ public class StatusDocumentProcessing {
                                         ex.printStackTrace();
                                         // ignore
                                     }
-
-                                    m_statusDocumentProcessingListener.onStatusDocumentProcessingComplete();
                                 }
                             }
                         })
@@ -208,9 +265,13 @@ public class StatusDocumentProcessing {
         }, 500);
     }
 
-    private void registerDevice() {
+    protected abstract class DoneCallback {
+        public abstract void Done(boolean done);
+    }
 
-        final String deviceNAME = "Android";
+    private final String deviceNAME = "Android";
+
+    private void registerDevice(final DoneCallback doneCallback) {
 
         String id = UUID.randomUUID().toString();
 
@@ -255,10 +316,8 @@ public class StatusDocumentProcessing {
             }
         }
 
-        doRegister = true;
-
         if (!doRegister) {
-            m_statusDocumentProcessingListener.onStatusDocumentProcessingComplete();
+            doneCallback.Done(false);
             return;
         }
 
@@ -292,7 +351,7 @@ public class StatusDocumentProcessing {
                 langCode = langCode + ",en-US;q=0.7,en;q=0.5";
 
                 Future<Response<InputStream>> request = Ion.with(m_context)
-                        .load(url)
+                        .load("POST", url)
                         .setLogging("Readium Ion", Log.VERBOSE)
 //                        .progress(new ProgressCallback() {
 //                            @Override
@@ -331,7 +390,7 @@ public class StatusDocumentProcessing {
                                 if (e != null || inputStream == null
                                         || httpResponseCode < 200 || httpResponseCode >= 300) {
 
-                                    m_statusDocumentProcessingListener.onStatusDocumentProcessingComplete();
+                                    doneCallback.Done(false);
                                     return;
                                 }
 
@@ -356,11 +415,11 @@ public class StatusDocumentProcessing {
                                         editor.commit();
                                     }
 
-                                    m_statusDocumentProcessingListener.onStatusDocumentProcessingComplete();
+                                    doneCallback.Done(true);
 
                                 } catch (Exception ex) {
                                     ex.printStackTrace();
-                                    m_statusDocumentProcessingListener.onStatusDocumentProcessingComplete();
+                                    doneCallback.Done(false);
                                 } finally {
                                     try {
                                         inputStream.close();
@@ -382,12 +441,310 @@ public class StatusDocumentProcessing {
         }, 500);
     }
 
+    private boolean checkLink_RENEW() {
+
+        // LSD server denies RENEW for non-active license, but we emit the HTTP PUT request anyway to test...
+//        if (m_statusDocument_STATUS.equals("ready") || m_statusDocument_STATUS.equals("active")) {
+//            return false;
+//        }
+
+        SharedPreferences sharedPrefs_DEVICEID = m_context.getSharedPreferences(
+                "DEVICE_ID", Context.MODE_PRIVATE);
+        String pref_DEVICEID = sharedPrefs_DEVICEID.getString("DEVICE_ID", null);
+        if (pref_DEVICEID == null) {
+            return false;
+        }
+        final String deviceID = pref_DEVICEID;
+
+        if (m_statusDocument_LINK_RENEW != null) {
+            showStatusDocumentDialog_RETURN_RENEW("renew", new DoneCallback() {
+                @Override
+                public void Done(boolean done) {
+                    if (done) {
+
+                        String url_ = m_statusDocument_LINK_RENEW.m_href;
+                        if (m_statusDocument_LINK_RENEW.m_templated.equals("true")) {
+                            url_ = url_.replace("{?end,id,name}", ""); // TODO: smarter regexp?
+                        }
+                        final String url = url_;
+
+//        final AsyncHttpRequestFactory current = Ion.getDefault(context).configure().getAsyncHttpRequestFactory();
+//        Ion.getDefault(context).configure().setAsyncHttpRequestFactory(new AsyncHttpRequestFactory() {
+//            @Override
+//            public AsyncHttpRequest createAsyncHttpRequest(Uri uri, String method, Headers headers) {
+//                AsyncHttpRequest ret = current.createAsyncHttpRequest(uri, method, headers);
+//                ret.setTimeout(1000);
+//                return ret;
+//            }
+//        });
+
+                        Timer timer = new Timer();
+                        timer.schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+
+                                Locale currentLocale = getCurrentLocale();
+                                String langCode = currentLocale.toString().replace('_', '-');
+                                langCode = langCode + ",en-US;q=0.7,en;q=0.5";
+
+                                Future<Response<InputStream>> request = Ion.with(m_context)
+                                        .load("PUT", url)
+                                        .setLogging("Readium Ion", Log.VERBOSE)
+//                        .progress(new ProgressCallback() {
+//                            @Override
+//                            public void onProgress(long downloaded, long total) {
+//
+//                                // total is -1 when HTTP content-length header is not set.
+//                                if (total < downloaded) {
+//                                    total = downloaded*2;
+//                                }
+//                                float value = (downloaded / (float)total);
+//
+//                                //noop
+//                            }
+//                        }) // not UI thread
+                                        //.progressHandler(callback) // UI thread
+                                        //.setTimeout(AsyncHttpRequest.DEFAULT_TIMEOUT) //30000
+                                        .setTimeout(6000)
+
+                                        // TODO: comment this in production! (this is only for testing a local HTTP server)
+                                        //.setHeader("X-Add-Delay", "2s")
+
+                                        // LCP / LSD server with message localization
+                                        .setHeader("Accept-Language", langCode)
+
+                                        .setBodyParameter("id", deviceID)
+                                        .setBodyParameter("name", deviceNAME)
+
+                                        //.setBodyParameter("end", "") //ISO 8601 timestamp (date in future)
+
+                                        .asInputStream()
+                                        .withResponse()
+                                        .setCallback(new FutureCallback<Response<InputStream>>() {
+                                            @Override
+                                            public void onCompleted(Exception e, Response<InputStream> response) {
+
+                                                InputStream inputStream = response != null ? response.getResult() : null;
+                                                int httpResponseCode = response != null ? response.getHeaders().code() : 0;
+                                                if (e != null || inputStream == null
+                                                        || httpResponseCode < 200 || httpResponseCode >= 300) {
+
+                                                    m_statusDocumentProcessingListener.onStatusDocumentProcessingComplete();
+                                                    return;
+                                                }
+
+                                                try {
+//
+//                                                    StringWriter writer = new StringWriter();
+//                                                    IOUtils.copy(inputStream, writer, "UTF-8");
+//                                                    String json = writer.toString().trim();
+
+                                                    // forces re-check of LSD, now with updated LCP timestamp
+                                                    mLicense.setStatusDocumentProcessingFlag(false);
+
+                                                    m_statusDocumentProcessingListener.onStatusDocumentProcessingComplete();
+
+                                                } catch (Exception ex) {
+                                                    ex.printStackTrace();
+                                                    m_statusDocumentProcessingListener.onStatusDocumentProcessingComplete();
+                                                } finally {
+                                                    try {
+                                                        inputStream.close();
+                                                    } catch (IOException ex) {
+                                                        ex.printStackTrace();
+                                                        // ignore
+                                                    }
+                                                }
+                                            }
+                                        })
+//                .write(new File(dstPath))
+//                .setCallback(callback)
+                                        ;
+
+
+//            }
+//        });
+                            }
+                        }, 500);
+                    } else {
+                        m_statusDocumentProcessingListener.onStatusDocumentProcessingComplete();
+                    }
+                }
+            });
+
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean checkLink_REGISTER() {
+
+        if (m_statusDocument_LINK_REGISTER != null) {
+            registerDevice(new DoneCallback() {
+                @Override
+                public void Done(boolean done) {
+                    checkLink_RETURN();
+                }
+            });
+            return true;
+        }
+
+        return false;
+    }
+
+    private void checkLink_RETURN() {
+
+        if (!m_statusDocument_STATUS.equals("active")) {
+            m_statusDocumentProcessingListener.onStatusDocumentProcessingComplete();
+            return;
+        }
+
+        SharedPreferences sharedPrefs_DEVICEID = m_context.getSharedPreferences(
+                "DEVICE_ID", Context.MODE_PRIVATE);
+        String pref_DEVICEID = sharedPrefs_DEVICEID.getString("DEVICE_ID", null);
+        if (pref_DEVICEID == null) {
+            m_statusDocumentProcessingListener.onStatusDocumentProcessingComplete();
+            return;
+        }
+        final String deviceID = pref_DEVICEID;
+
+        if (m_statusDocument_LINK_RETURN != null) {
+            showStatusDocumentDialog_RETURN_RENEW("return", new DoneCallback() {
+                @Override
+                public void Done(boolean done) {
+                    if (done) {
+
+                        String url_ = m_statusDocument_LINK_RETURN.m_href;
+                        if (m_statusDocument_LINK_RETURN.m_templated.equals("true")) {
+                            url_ = url_.replace("{?id,name}", ""); // TODO: smarter regexp?
+                        }
+                        final String url = url_;
+
+//        final AsyncHttpRequestFactory current = Ion.getDefault(context).configure().getAsyncHttpRequestFactory();
+//        Ion.getDefault(context).configure().setAsyncHttpRequestFactory(new AsyncHttpRequestFactory() {
+//            @Override
+//            public AsyncHttpRequest createAsyncHttpRequest(Uri uri, String method, Headers headers) {
+//                AsyncHttpRequest ret = current.createAsyncHttpRequest(uri, method, headers);
+//                ret.setTimeout(1000);
+//                return ret;
+//            }
+//        });
+
+                        Timer timer = new Timer();
+                        timer.schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+
+                                Locale currentLocale = getCurrentLocale();
+                                String langCode = currentLocale.toString().replace('_', '-');
+                                langCode = langCode + ",en-US;q=0.7,en;q=0.5";
+
+                                Future<Response<InputStream>> request = Ion.with(m_context)
+                                        .load("PUT", url)
+                                        .setLogging("Readium Ion", Log.VERBOSE)
+//                        .progress(new ProgressCallback() {
+//                            @Override
+//                            public void onProgress(long downloaded, long total) {
+//
+//                                // total is -1 when HTTP content-length header is not set.
+//                                if (total < downloaded) {
+//                                    total = downloaded*2;
+//                                }
+//                                float value = (downloaded / (float)total);
+//
+//                                //noop
+//                            }
+//                        }) // not UI thread
+                                        //.progressHandler(callback) // UI thread
+                                        //.setTimeout(AsyncHttpRequest.DEFAULT_TIMEOUT) //30000
+                                        .setTimeout(6000)
+
+                                        // TODO: comment this in production! (this is only for testing a local HTTP server)
+                                        //.setHeader("X-Add-Delay", "2s")
+
+                                        // LCP / LSD server with message localization
+                                        .setHeader("Accept-Language", langCode)
+
+                                        .setBodyParameter("id", deviceID)
+                                        .setBodyParameter("name", deviceNAME)
+
+                                        .asInputStream()
+                                        .withResponse()
+                                        .setCallback(new FutureCallback<Response<InputStream>>() {
+                                            @Override
+                                            public void onCompleted(Exception e, Response<InputStream> response) {
+
+                                                InputStream inputStream = response != null ? response.getResult() : null;
+                                                int httpResponseCode = response != null ? response.getHeaders().code() : 0;
+                                                if (e != null || inputStream == null
+                                                        || httpResponseCode < 200 || httpResponseCode >= 300) {
+
+                                                    m_statusDocumentProcessingListener.onStatusDocumentProcessingComplete();
+                                                    return;
+                                                }
+
+                                                try {
+//
+//                                                    StringWriter writer = new StringWriter();
+//                                                    IOUtils.copy(inputStream, writer, "UTF-8");
+//                                                    String json = writer.toString().trim();
+
+                                                    // forces re-check of LSD, now with updated LCP timestamp
+                                                    mLicense.setStatusDocumentProcessingFlag(false);
+
+                                                    m_statusDocumentProcessingListener.onStatusDocumentProcessingComplete();
+
+                                                } catch (Exception ex) {
+                                                    ex.printStackTrace();
+                                                    m_statusDocumentProcessingListener.onStatusDocumentProcessingComplete();
+                                                } finally {
+                                                    try {
+                                                        inputStream.close();
+                                                    } catch (IOException ex) {
+                                                        ex.printStackTrace();
+                                                        // ignore
+                                                    }
+                                                }
+                                            }
+                                        })
+//                .write(new File(dstPath))
+//                .setCallback(callback)
+                                        ;
+
+
+//            }
+//        });
+                            }
+                        }, 500);
+                    } else {
+                        m_statusDocumentProcessingListener.onStatusDocumentProcessingComplete();
+                    }
+                }
+            });
+        } else {
+            m_statusDocumentProcessingListener.onStatusDocumentProcessingComplete();
+        }
+    }
+
     private void processStatusDocument() {
         boolean licenseNeedsUpdating = mLicense.isOlderThan(m_statusDocument_UPDATED_LICENSE);
-        if (false && // TODO: fix the server LCP license HTTP GET ("front end" provider)
-                licenseNeedsUpdating) {
-            fetchAndInjectUpdatedLicense();
-            return;
+        if (licenseNeedsUpdating) {
+            if (false) { // TODO: fix the server LCP license HTTP GET ("front end" provider)
+                fetchAndInjectUpdatedLicense(new DoneCallback() {
+                    @Override
+                    public void Done(boolean done) {
+                        m_statusDocumentProcessingListener.onStatusDocumentProcessingComplete();
+                    }
+                });
+                return;
+            }
         }
 
         if (m_statusDocument_STATUS.equals("revoked")
@@ -397,16 +754,18 @@ public class StatusDocumentProcessing {
             ) {
             // TODO prevent EPUB load? This should not happen,
             // because in this case(s) the LCP license should not even pass validation due to timestamp
+
+            boolean doRenew = checkLink_RENEW();
+            if (!doRenew) {
+                m_statusDocumentProcessingListener.onStatusDocumentProcessingComplete();
+            }
+            return;
+        }
+
+        boolean doRegister = checkLink_REGISTER();
+        if (!doRegister) {
             m_statusDocumentProcessingListener.onStatusDocumentProcessingComplete();
-            return;
         }
-
-        if (m_statusDocument_LINK_REGISTER != null) {
-            registerDevice();
-            return;
-        }
-
-        m_statusDocumentProcessingListener.onStatusDocumentProcessingComplete();
     }
 
     //   https://docs.google.com/document/d/1ErBf0Gl32jNH-QVKWpGPfZDMWMeQP7dH9YY5g7agguQ
@@ -511,7 +870,7 @@ public class StatusDocumentProcessing {
                 langCode = langCode + ",en-US;q=0.7,en;q=0.5";
 
                 Future<Response<InputStream>> request = Ion.with(m_context)
-                        .load(url)
+                        .load("GET", url)
                         .setLogging("Readium Ion", Log.VERBOSE)
 //                        .progress(new ProgressCallback() {
 //                            @Override
