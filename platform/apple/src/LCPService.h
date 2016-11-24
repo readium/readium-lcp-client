@@ -38,6 +38,7 @@ extern NSString *const LCPRightEnd;
 - (lcp::ILcpService *)nativeService;
 #endif
 
+- (void)injectLicense:(NSString *)epubPath licenseJSON:(NSString *)licenseJSON;
 - (LCPLicense *)openLicense:(NSString *)path licenseJSON:(NSString *)licenseJSON error:(NSError **)error;
 - (BOOL)decryptLicense:(LCPLicense *)license passphrase:(NSString *)passphrase error:(NSError **)error;
 

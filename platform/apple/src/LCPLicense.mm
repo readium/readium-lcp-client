@@ -9,6 +9,8 @@
 #import "ICrypto.h"
 #import "ILicense.h"
 
+#import "ILinks.h"
+
 @interface LCPLicense ()
 @property (nonatomic) lcp::ILicense *nativeLicense;
 
@@ -35,6 +37,19 @@
 - (NSString *)identifier
 {
     return [NSString stringWithUTF8String:_nativeLicense->Id().c_str()];
+}
+
+- (NSString *)linkPublication
+{
+    std::string pubStr("publication");
+    if (!_nativeLicense->Links()->Has(pubStr)) {
+        return @"";
+    }
+    
+    lcp::Link link;
+    _nativeLicense->Links()->GetLink(pubStr, link);
+    
+    return [NSString stringWithUTF8String:link.href.c_str()];
 }
 
 - (BOOL)isDecrypted

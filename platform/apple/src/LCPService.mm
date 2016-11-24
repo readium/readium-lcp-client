@@ -97,6 +97,11 @@ NSString *const LCPRightEnd = @(EndRight);
     return _nativeService ? _nativeService.get() : nullptr;
 }
 
+- (void)injectLicense:(NSString *)epubPath licenseJSON:(NSString *)licenseJSON
+{
+    _nativeService->InjectLicense(std::string([epubPath UTF8String]), std::string([licenseJSON UTF8String]));
+}
+
 - (LCPLicense *)openLicense:(NSString *)path licenseJSON:(NSString *)licenseJSON error:(NSError **)error
  {
      if (!licenseJSON)

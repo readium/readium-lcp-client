@@ -16,6 +16,7 @@ namespace lcp {
 @interface LCPLicense : NSObject
 
 @property (readonly, nonatomic) NSString *identifier;
+@property (readonly, nonatomic) NSString *linkPublication;
 @property (readonly, nonatomic) BOOL isDecrypted;
 
 @property (readonly, nonatomic) NSString *userHint;
