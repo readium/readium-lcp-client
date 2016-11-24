@@ -9,12 +9,17 @@
 #ifdef __cplusplus
 namespace lcp {
     class ILcpService;
+#if ENABLE_NET_PROVIDER
     class INetProvider;
+#endif //ENABLE_NET_PROVIDER
     class IStorageProvider;
 }
 #endif
 
+#if ENABLE_NET_PROVIDER
 @class LCPAcquisition;
+#endif //ENABLE_NET_PROVIDER
+
 @class LCPLicense;
 
 extern NSString *const LCPRightPrint;
@@ -33,10 +38,12 @@ extern NSString *const LCPRightEnd;
 - (lcp::ILcpService *)nativeService;
 #endif
 
-- (LCPLicense *)openLicense:(NSString *)licenseJSON error:(NSError **)error;
+- (LCPLicense *)openLicense:(NSString *)path licenseJSON:(NSString *)licenseJSON error:(NSError **)error;
 - (BOOL)decryptLicense:(LCPLicense *)license passphrase:(NSString *)passphrase error:(NSError **)error;
 
+#if ENABLE_NET_PROVIDER
 - (LCPAcquisition *)createAcquisition:(LCPLicense *)license publicationPath:(NSString *)publicationPath error:(NSError **)error;
+#endif //ENABLE_NET_PROVIDER
 
 
 - (BOOL)canUseRight:(NSString *)rightIdentifier license:(LCPLicense *)license;
