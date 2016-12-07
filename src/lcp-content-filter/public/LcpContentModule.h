@@ -29,7 +29,11 @@ namespace lcp {
     public:
         ePub3::string GetModuleName();
         void RegisterContentFilters();
-        static void Register(ILcpService *const lcpService, ICredentialHandler * credentialHandler, IStatusDocumentHandler * statusDocumentHandler);
+        static void Register(ILcpService *const lcpService, ICredentialHandler * credentialHandler
+#if !DISABLE_LSD
+                , IStatusDocumentHandler * statusDocumentHandler
+#endif //!DISABLE_LSD
+        );
 
 #if FUTURE_ENABLED
         async_result<ContainerPtr>

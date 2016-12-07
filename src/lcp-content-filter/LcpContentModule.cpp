@@ -107,9 +107,9 @@ namespace lcp {
         }
 
         if (!(*licensePTR)->Decrypted()) {
-
+#if !DISABLE_LSD
             (*licensePTR)->setStatusDocumentProcessingFlag(false); // ensure reset of LicenseStatusDocumentStartProcessing (see below)
-
+#endif //!DISABLE_LSD
             // Should be non-blocking, to ensure that the exception below is captured on the app side and the main thread resumes activity to process the next events in the queue
             LcpContentModule::lcpCredentialHandler->decrypt((*licensePTR));
 
@@ -156,11 +156,16 @@ namespace lcp {
     IStatusDocumentHandler *LcpContentModule::lcpStatusDocumentHandler = NULL;
 
     void LcpContentModule::Register(ILcpService *const service,
-                                    ICredentialHandler * credentialHandler,
-                                    IStatusDocumentHandler * statusDocumentHandler) {
+                                    ICredentialHandler * credentialHandler
+#if !DISABLE_LSD
+                                    ,IStatusDocumentHandler * statusDocumentHandler
+#endif //!DISABLE_LSD
+    ) {
         LcpContentModule::lcpService = service;
         LcpContentModule::lcpCredentialHandler = credentialHandler;
+#if !DISABLE_LSD
         LcpContentModule::lcpStatusDocumentHandler = statusDocumentHandler;
+#endif //!DISABLE_LSD
 
         //std::shared_ptr<LcpContentModule> contentModule = std::make_shared<LcpContentModule>();
         LcpContentModule* contentModule = new LcpContentModule();
