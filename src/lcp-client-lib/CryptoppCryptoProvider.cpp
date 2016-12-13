@@ -191,7 +191,7 @@ namespace lcp
 
             //"http://www.w3.org/2009/xmlenc11#aes256-gcm"
             //"http://www.w3.org/2001/04/xmlenc#aes256-cbc"
-            const std::string & algorithm = "http://www.w3.org/2009/xmlenc11#aes256-cbc";
+            const std::string algorithm = "http://www.w3.org/2001/04/xmlenc#aes256-cbc";
 
             std::unique_ptr<ISymmetricAlgorithm> contentKeyAlgorithm(profile->CreateContentKeyAlgorithm(userKey, algorithm));
             std::string id = contentKeyAlgorithm->Decrypt(license->Crypto()->UserKeyCheck());
@@ -223,7 +223,7 @@ namespace lcp
 
             //"http://www.w3.org/2009/xmlenc11#aes256-gcm"
             //"http://www.w3.org/2001/04/xmlenc#aes256-cbc"
-            const std::string & algorithm = license->Crypto()->ContentKeyAlgorithm();
+            const std::string algorithm = license->Crypto()->ContentKeyAlgorithm();
 
             std::unique_ptr<ISymmetricAlgorithm> contentKeyAlgorithm(profile->CreateContentKeyAlgorithm(userKey, algorithm));
             std::string decryptedContentKey = contentKeyAlgorithm->Decrypt(license->Crypto()->ContentKey());
@@ -330,7 +330,7 @@ namespace lcp
 
             //"http://www.w3.org/2009/xmlenc11#aes256-gcm"
             //"http://www.w3.org/2001/04/xmlenc#aes256-cbc"
-            const std::string & algorithm = "http://www.w3.org/2009/xmlenc11#aes256-cbc";
+            const std::string algorithm = "http://www.w3.org/2001/04/xmlenc#aes256-cbc";
 
             std::unique_ptr<ISymmetricAlgorithm> contentKeyAlgorithm(profile->CreateContentKeyAlgorithm(keyProvider->UserKey(), algorithm));
             decrypted = contentKeyAlgorithm->Decrypt(dataBase64);
