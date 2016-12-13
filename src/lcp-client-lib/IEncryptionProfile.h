@@ -43,12 +43,14 @@ namespace lcp
     public:
         virtual std::string Name() const = 0;
         virtual std::string UserKeyAlgorithm() const = 0;
-        virtual std::string PublicationAlgorithm() const = 0;
-        virtual std::string ContentKeyAlgorithm() const = 0;
+        virtual std::string PublicationAlgorithmGCM() const = 0;
+        virtual std::string PublicationAlgorithmCBC() const = 0;
+        virtual std::string ContentKeyAlgorithmGCM() const = 0;
+        virtual std::string ContentKeyAlgorithmCBC() const = 0;
         virtual std::string SignatureAlgorithm() const = 0;
         virtual IHashAlgorithm * CreateUserKeyAlgorithm() const = 0;
-        virtual ISymmetricAlgorithm * CreatePublicationAlgorithm(const KeyType & symmetricKey) const = 0;
-        virtual ISymmetricAlgorithm * CreateContentKeyAlgorithm(const KeyType & symmetricKey) const = 0;
+        virtual ISymmetricAlgorithm * CreatePublicationAlgorithm(const KeyType & symmetricKey, const std::string & algorithm) const = 0;
+        virtual ISymmetricAlgorithm * CreateContentKeyAlgorithm(const KeyType & symmetricKey, const std::string & algorithm) const = 0;
         virtual ISignatureAlgorithm * CreateSignatureAlgorithm(const KeyType & publicKey) const = 0;
         virtual ~IEncryptionProfile() {}
     };

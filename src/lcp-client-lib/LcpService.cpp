@@ -486,7 +486,7 @@ namespace lcp
             {
                 return Status(StatusCode::ErrorCommonEncryptionProfileNotFound);
             }
-            if (algorithm != profile->PublicationAlgorithm())
+            if (algorithm != profile->PublicationAlgorithmGCM() && algorithm != profile->PublicationAlgorithmCBC())
             {
                 return Status(StatusCode::ErrorCommonAlgorithmMismatch);
             }
@@ -503,7 +503,8 @@ namespace lcp
                 data,
                 dataLength,
                 decryptedData,
-                decryptedDataLength
+                decryptedDataLength,
+                algorithm
                 );
         }
         catch (const StatusException & ex)
@@ -536,7 +537,8 @@ namespace lcp
             {
                 return Status(StatusCode::ErrorCommonEncryptionProfileNotFound);
             }
-            if (algorithm != profile->PublicationAlgorithm())
+
+            if (algorithm != profile->PublicationAlgorithmGCM() && algorithm != profile->PublicationAlgorithmCBC())
             {
                 return Status(StatusCode::ErrorCommonAlgorithmMismatch);
             }
@@ -551,7 +553,8 @@ namespace lcp
                 license,
                 keyProvider,
                 stream,
-                encStream
+                encStream,
+                algorithm
                 );
         }
         catch (const StatusException & ex)

@@ -102,7 +102,7 @@ namespace lcp
             return Status(StatusCode::ErrorCommonEncryptionProfileNotFound);
         }
 
-        if (m_encryptionProfile->ContentKeyAlgorithm() != m_cryptoInfo.contentKeyAlgorithm)
+        if (m_encryptionProfile->ContentKeyAlgorithmCBC() != m_cryptoInfo.contentKeyAlgorithm && m_encryptionProfile->ContentKeyAlgorithmGCM() != m_cryptoInfo.contentKeyAlgorithm)
         {
             return Status(StatusCode::ErrorCommonAlgorithmMismatch, "content key algorithm mismatch");
         }
