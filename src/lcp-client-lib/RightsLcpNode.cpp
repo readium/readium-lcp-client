@@ -71,11 +71,11 @@ namespace lcp
 
         if (!this->DoesLicenseStart())
         {
-            return Status(StatusCode::ErrorOpeningLicenseNotStarted);
+            return Status(StatusCode::ErrorOpeningLicenseNotStarted, "ErrorOpeningLicenseNotStarted");
         }
         if (this->DoesLicenseExpired())
         {
-            return Status(StatusCode::ErrorOpeningLicenseExpired);
+            return Status(StatusCode::ErrorOpeningLicenseExpired, "ErrorOpeningLicenseExpired");
         }
 
         locker.unlock();

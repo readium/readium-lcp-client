@@ -99,20 +99,20 @@ namespace lcp
         m_encryptionProfile = m_encryptionProfilesManager->GetProfile(m_cryptoInfo.encryptionProfile);
         if (m_encryptionProfile == nullptr)
         {
-            return Status(StatusCode::ErrorCommonEncryptionProfileNotFound);
+            return Status(StatusCode::ErrorCommonEncryptionProfileNotFound, "ErrorCommonEncryptionProfileNotFound");
         }
 
         if (m_encryptionProfile->ContentKeyAlgorithm() != m_cryptoInfo.contentKeyAlgorithm)
         {
-            return Status(StatusCode::ErrorCommonAlgorithmMismatch, "content key algorithm mismatch");
+            return Status(StatusCode::ErrorCommonAlgorithmMismatch, "ErrorCommonAlgorithmMismatch: content key algorithm mismatch");
         }
         if (m_encryptionProfile->UserKeyAlgorithm() != m_cryptoInfo.userKeyAlgorithm)
         {
-            return Status(StatusCode::ErrorCommonAlgorithmMismatch, "user key algorithm mismatch");
+            return Status(StatusCode::ErrorCommonAlgorithmMismatch, "ErrorCommonAlgorithmMismatch: user key algorithm mismatch");
         }
         if (m_encryptionProfile->SignatureAlgorithm() != m_cryptoInfo.signatureAlgorithm)
         {
-            return Status(StatusCode::ErrorCommonAlgorithmMismatch, "signature algorithm mismatch");
+            return Status(StatusCode::ErrorCommonAlgorithmMismatch, "ErrorCommonAlgorithmMismatch: signature algorithm mismatch");
         }
 
 #if ENABLE_GENERIC_JSON_NODE

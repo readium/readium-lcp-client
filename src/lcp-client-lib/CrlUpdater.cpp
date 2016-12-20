@@ -91,7 +91,7 @@ namespace lcp
         
         // If the list will be changed, it won't affect current update
         StringsList curUrls = m_crlUrls;
-        m_currentRequestStatus = Status(StatusCode::ErrorNetworkingRequestFailed);
+        m_currentRequestStatus = Status(StatusCode::ErrorNetworkingRequestFailed, "ErrorNetworkingRequestFailed");
 
         for (auto const & url : curUrls)
         {
@@ -153,7 +153,7 @@ namespace lcp
         }
         catch (const std::exception & ex)
         {
-            m_currentRequestStatus = Status(StatusCode::ErrorNetworkingRequestFailed, ex.what());
+            m_currentRequestStatus = Status(StatusCode::ErrorNetworkingRequestFailed, "ErrorNetworkingRequestFailed: " + ex.what());
         }
     }
 

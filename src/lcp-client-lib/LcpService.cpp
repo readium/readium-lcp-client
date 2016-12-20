@@ -108,7 +108,7 @@ namespace lcp
             return ex.ResultStatus();
         }
         catch (const std::exception & ex) {
-            return Status(StatusCode::ErrorLicenseFailToInject);
+            return Status(StatusCode::ErrorLicenseFailToInject, "ErrorLicenseFailToInject");
         }
     }
 
@@ -196,7 +196,7 @@ namespace lcp
                     std::make_pair(std::move(canonicalJson), std::move(rootNode)));
             if (!insertRes.second) {
                 return Status(StatusCode::ErrorOpeningDuplicateLicenseInstance,
-                              "Two License instances with the same canonical form");
+                              "ErrorOpeningDuplicateLicenseInstance: Two License instances with the same canonical form");
             }
             (*licensePTR) = insertRes.first->second.get();
             locker.unlock();
@@ -263,7 +263,7 @@ namespace lcp
         {
             // if (!license->Decrypted())
             // {
-            //     return Status(StatusCode::ErrorDecryptionLicenseEncrypted);
+            //     return Status(StatusCode::ErrorDecryptionLicenseEncrypted, "ErrorDecryptionLicenseEncrypted");
             // }
 
             // RootLcpNode * rootNode = dynamic_cast<RootLcpNode *>(license);
@@ -279,7 +279,7 @@ namespace lcp
             if (!links->Has(StatusDocument))
             {
                 return Status(StatusCode::ErrorCommonSuccess); // no LSD, noop
-                //return Status(StatusCode::ErrorStatusDocumentNoStatusLink);
+                //return Status(StatusCode::ErrorStatusDocumentNoStatusLink, "ErrorStatusDocumentNoStatusLink");
             }
 
             lcp::Link lsdLink;
@@ -289,13 +289,13 @@ namespace lcp
             if (lsdLink.type != StatusType)
             {
                 return Status(StatusCode::ErrorCommonSuccess); // bogus LSD link, noop
-                //return Status(StatusCode::ErrorStatusDocumentWrongType);
+                //return Status(StatusCode::ErrorStatusDocumentWrongType, "ErrorStatusDocumentWrongType");
             }
 
             if (!lsdLink.href.length())
             {
                 return Status(StatusCode::ErrorCommonSuccess); // bogus LSD link, noop
-                //return Status(StatusCode::ErrorStatusDocumentInvalidUri);
+                //return Status(StatusCode::ErrorStatusDocumentInvalidUri, "ErrorStatusDocumentInvalidUri");
             }
 
             // Note that if the LCP license was updated following an LSD check
@@ -315,7 +315,7 @@ namespace lcp
             // to avoid infinite looping (see above "break")
             license->setStatusDocumentProcessingFlag(true);
 
-            return Status(StatusCode::LicenseStatusDocumentStartProcessing);
+            return Status(StatusCode::LicenseStatusDocumentStartProcessing, "LicenseStatusDocumentStartProcessing");
         }
         catch (const StatusException & ex)
         {
@@ -435,7 +435,7 @@ namespace lcp
     {
         if (m_storageProvider == nullptr)
         {
-            return Status(StatusCode::ErrorCommonNoStorageProvider);
+            return Status(StatusCode::ErrorCommonNoStorageProvider, "ErrorCommonNoStorageProvider");
         }
 
         std::string userKeyHex = m_storageProvider->GetValue(
@@ -457,7 +457,7 @@ namespace lcp
             if (Status::IsSuccess(res))
                 return res;
         }
-        return Status(StatusCode::ErrorDecryptionLicenseEncrypted);
+        return Status(StatusCode::ErrorDecryptionLicenseEncrypted, "ErrorDecryptionLicenseEncrypted");
     }
 
     Status LcpService::DecryptData(
@@ -478,17 +478,17 @@ namespace lcp
 
             if (!license->Decrypted())
             {
-                return Status(StatusCode::ErrorDecryptionLicenseEncrypted);
+                return Status(StatusCode::ErrorDecryptionLicenseEncrypted, "ErrorDecryptionLicenseEncrypted");
             }
             
             IEncryptionProfile * profile = m_encryptionProfilesManager->GetProfile(license->Crypto()->EncryptionProfile());
             if (profile == nullptr)
             {
-                return Status(StatusCode::ErrorCommonEncryptionProfileNotFound);
+                return Status(StatusCode::ErrorCommonEncryptionProfileNotFound, "ErrorCommonEncryptionProfileNotFound");
             }
             if (algorithm != profile->PublicationAlgorithm())
             {
-                return Status(StatusCode::ErrorCommonAlgorithmMismatch);
+                return Status(StatusCode::ErrorCommonAlgorithmMismatch, "ErrorCommonAlgorithmMismatch");
             }
 
             IKeyProvider * keyProvider = dynamic_cast<IKeyProvider *>(license);
@@ -528,17 +528,17 @@ namespace lcp
 
             if (!license->Decrypted())
             {
-                return Status(StatusCode::ErrorDecryptionLicenseEncrypted);
+                return Status(StatusCode::ErrorDecryptionLicenseEncrypted, "ErrorDecryptionLicenseEncrypted");
             }
 
             IEncryptionProfile * profile = m_encryptionProfilesManager->GetProfile(license->Crypto()->EncryptionProfile());
             if (profile == nullptr)
             {
-                return Status(StatusCode::ErrorCommonEncryptionProfileNotFound);
+                return Status(StatusCode::ErrorCommonEncryptionProfileNotFound, "ErrorCommonEncryptionProfileNotFound");
             }
             if (algorithm != profile->PublicationAlgorithm())
             {
-                return Status(StatusCode::ErrorCommonAlgorithmMismatch);
+                return Status(StatusCode::ErrorCommonAlgorithmMismatch, "ErrorCommonAlgorithmMismatch");
             }
 
             IKeyProvider * keyProvider = dynamic_cast<IKeyProvider *>(license);
@@ -605,7 +605,7 @@ namespace lcp
         {
             if (m_storageProvider == nullptr)
             {
-                return Status(StatusCode::ErrorCommonNoStorageProvider);
+                return Status(StatusCode::ErrorCommonNoStorageProvider, "ErrorCommonNoStorageProvider");
             }
 
             m_storageProvider->SetValue(
@@ -638,7 +638,7 @@ namespace lcp
             }
             if (m_netProvider == nullptr)
             {
-                return Status(StatusCode::ErrorCommonNoNetProvider);
+                return Status(StatusCode::ErrorCommonNoNetProvider, "ErrorCommonNoNetProvider");
             }
             *acquisition = new Acquisition(
                     license,

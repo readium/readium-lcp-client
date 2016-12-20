@@ -45,13 +45,13 @@ namespace lcp
         auto it = jsonValue.FindMember(name.c_str());
         if (it == jsonValue.MemberEnd() || !it->value.IsString())
         {
-            throw StatusException(Status(StatusCode::ErrorOpeningLicenseNotValid, name + " object is not valid"));
+            throw StatusException(Status(StatusCode::ErrorOpeningLicenseNotValid, "ErrorOpeningLicenseNotValid: " + name + " object is not valid"));
         }
 
         std::string result(it->value.GetString(), it->value.GetStringLength());
         if (result.empty())
         {
-            throw StatusException(Status(StatusCode::ErrorOpeningLicenseNotValid, name + " object is not valid"));
+            throw StatusException(Status(StatusCode::ErrorOpeningLicenseNotValid, "ErrorOpeningLicenseNotValid: " + name + " object is not valid"));
         }
         return result;
     }
@@ -71,7 +71,7 @@ namespace lcp
         auto it = jsonValue.FindMember(name.c_str());
         if (it == jsonValue.MemberEnd() || !it->value.IsArray())
         {
-            throw StatusException(Status(StatusCode::ErrorOpeningLicenseNotValid, name + " array is not valid"));
+            throw StatusException(Status(StatusCode::ErrorOpeningLicenseNotValid, "ErrorOpeningLicenseNotValid: " + name + " array is not valid"));
         }
         return it->value;
     }
@@ -91,7 +91,7 @@ namespace lcp
         auto it = jsonValue.FindMember(name.c_str());
         if (it == jsonValue.MemberEnd() || !it->value.IsObject())
         {
-            throw StatusException(Status(StatusCode::ErrorOpeningLicenseNotValid, name + " object is not valid"));
+            throw StatusException(Status(StatusCode::ErrorOpeningLicenseNotValid, "ErrorOpeningLicenseNotValid: " + name + " object is not valid"));
         }
         return it->value;
     }
