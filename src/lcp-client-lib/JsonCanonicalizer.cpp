@@ -64,7 +64,7 @@ namespace lcp
         }
         else
         {
-            throw StatusException(Status(StatusCode::ErrorOpeningLicenseNotValid, "signature is not found"));
+            throw StatusException(Status(StatusCode::ErrorOpeningLicenseNotValid, "ErrorOpeningLicenseNotValid: signature is not found"));
         }
     }
 

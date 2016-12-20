@@ -142,10 +142,29 @@ namespace lcp
             : Code(code)
             , Extension(extension)
         {
+            if (code != StatusCode::ErrorCommonSuccess && extension.length() == 0) {
+                bool debugBreakpointHere = true;
+            }
         }
 
         StatusCode::StatusCodeEnum Code;
         std::string Extension;
+
+        static std::string ToString(const Status & status)
+        {
+            std::string msg;
+            if (status.Extension.length() > 0) {
+                msg += " [";
+                msg += status.Extension;
+                msg += "]";
+            }
+
+            msg += " (";
+            msg += "x"; //status.Code; // ??
+            msg += ")";
+
+            return msg;
+        }
 
         static bool IsSuccess(const Status & status)
         {

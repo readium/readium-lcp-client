@@ -99,7 +99,18 @@ namespace lcp {
             && (status.Code != StatusCode::LicenseStatusDocumentStartProcessing)
 #endif //!DISABLE_LSD
                 ) {
-            throw ePub3::ContentModuleException("Unable to initialize LCPL license");
+            std::string msg("LCP license problem: ");
+            msg += Status::ToString(status);
+//            if (status.Extension.length() > 0) {
+//                msg += " [";
+//                msg += status.Extension;
+//                msg += "]";
+//            }
+//            msg += " (";
+//            msg += status.Code;
+//            msg += ")";
+
+            throw ePub3::ContentModuleException(msg);
         }
 
         if ((*licensePTR) == nullptr) {
