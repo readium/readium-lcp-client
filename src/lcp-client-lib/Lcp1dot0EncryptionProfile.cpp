@@ -51,7 +51,7 @@ namespace lcp
             return new AesCbcSymmetricAlgorithm(symmetricKey, AesCbcSymmetricAlgorithm::Key256);
         }
 
-        throw StatusException(Status(StatusCode::ErrorCommonAlgorithmMismatch));
+        throw StatusException(Status(StatusCode::ErrorCommonAlgorithmMismatch, "ErrorCommonAlgorithmMismatch"));
     }
 
     ISymmetricAlgorithm * Lcp1dot0EncryptionProfile::CreateContentKeyAlgorithm(
@@ -66,7 +66,7 @@ namespace lcp
             return new AesCbcSymmetricAlgorithm(symmetricKey, AesCbcSymmetricAlgorithm::Key256);
         }
 
-        throw StatusException(Status(StatusCode::ErrorCommonAlgorithmMismatch));
+        throw StatusException(Status(StatusCode::ErrorCommonAlgorithmMismatch, "ErrorCommonAlgorithmMismatch"));
     }
 
     IHashAlgorithm * Lcp1dot0EncryptionProfile::CreateUserKeyAlgorithm() const
