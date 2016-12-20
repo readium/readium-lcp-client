@@ -736,15 +736,13 @@ public class StatusDocumentProcessing {
     private void processStatusDocument() {
         boolean licenseNeedsUpdating = mLicense.isOlderThan(m_statusDocument_UPDATED_LICENSE);
         if (licenseNeedsUpdating) {
-            if (false) { // TODO: fix the server LCP license HTTP GET ("front end" provider)
-                fetchAndInjectUpdatedLicense(new DoneCallback() {
-                    @Override
-                    public void Done(boolean done) {
-                        m_statusDocumentProcessingListener.onStatusDocumentProcessingComplete();
-                    }
-                });
-                return;
-            }
+            fetchAndInjectUpdatedLicense(new DoneCallback() {
+                @Override
+                public void Done(boolean done) {
+                    m_statusDocumentProcessingListener.onStatusDocumentProcessingComplete();
+                }
+            });
+            return;
         }
 
         if (m_statusDocument_STATUS.equals("revoked")
