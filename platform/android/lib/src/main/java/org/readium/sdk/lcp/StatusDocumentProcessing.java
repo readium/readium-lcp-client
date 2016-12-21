@@ -592,6 +592,10 @@ public class StatusDocumentProcessing {
                 checkLink_RENEW(new DoneCallback() {
                     @Override
                     public void Done(final boolean done_checkLink_RENEW) {
+                        if (done_checkLink_RENEW) {
+                            doneCallback_checkLink_REGISTER.Done(done_registerDevice);
+                            return;
+                        }
                         checkLink_RETURN(new DoneCallback() {
                             @Override
                             public void Done(final boolean done_checkLink_RETURN) {
