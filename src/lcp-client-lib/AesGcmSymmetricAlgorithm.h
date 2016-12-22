@@ -85,8 +85,7 @@ namespace lcp
             const unsigned char * data,
             size_t dataLength,
             unsigned char * decryptedData,
-            size_t decryptedDataLength,
-            CryptoPP::BlockPaddingSchemeDef::BlockPaddingScheme padding
+            size_t decryptedDataLength
             );
 
         KeyType BuildIV(
@@ -100,8 +99,6 @@ namespace lcp
         KeySize m_keySize;
         KeyType m_key;
 
-        // TODO CryptoPP GCM
-        // https://www.cryptopp.com/wiki/GCM_Mode
         CryptoPP::GCM<CryptoPP::AES>::Decryption m_decryptor;
     };
 }

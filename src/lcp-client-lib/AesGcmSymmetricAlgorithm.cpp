@@ -32,6 +32,13 @@
 
 namespace lcp
 {
+    // https://www.cryptopp.com/wiki/GCM_Mode
+    // https://www.cryptopp.com/wiki/AuthenticatedDecryptionFilter
+    //Nonce-IV 12 bytes
+    //tag size / overhead 16 bytes
+    //total addon to plain text stream is therefore 28 bytes
+    //key 32 bytes (AES 256)
+    //https://play.golang.org/p/UT-1lnubdP
     AesGcmSymmetricAlgorithm::AesGcmSymmetricAlgorithm(
         const KeyType & key,
         KeySize keySize
@@ -39,6 +46,15 @@ namespace lcp
         : m_key(key)
         , m_keySize(keySize)
     {
+//        AutoSeededRandomPool prng;
+//
+//        SecByteBlock key( AES::DEFAULT_KEYLENGTH );
+//        prng.GenerateBlock( key, key.size() );
+//
+//        //byte iv[ AES::BLOCKSIZE * 16 ];
+//        SecByteBlock iv(AES::BLOCKSIZE);
+//        prng.GenerateBlock( iv, sizeof(iv) );
+
         KeyType emptyIv(CryptoPP::AES::BLOCKSIZE);
         m_decryptor.SetKeyWithIV(&key.at(0), key.size(), &emptyIv.at(0));
     }
@@ -76,8 +92,12 @@ namespace lcp
 
         CryptoPP::ArraySource source(
             cipherData, cipherSize, true,
-            new CryptoPP::AuthenticatedDecryptionFilter(m_decryptor,
-                new CryptoPP::StringSink(decryptedDataStr)
+            new CryptoPP::AuthenticatedDecryptionFilter(
+                    m_decryptor, //AuthenticatedSymmetricCipher &c
+                    new CryptoPP::StringSink(decryptedDataStr), //BufferedTransformation *attachment NULL
+                    CryptoPP::AuthenticatedDecryptionFilter::MAC_AT_END | CryptoPP::AuthenticatedDecryptionFilter::THROW_EXCEPTION, //AuthenticatedDecryptionFilter::DEFAULT_FLAGS, //word32 flags DEFAULT_FLAGS
+                    16, // int truncatedDigestSize -1
+                    CryptoPP::AuthenticatedDecryptionFilter::DEFAULT_PADDING // BlockPaddingScheme padding DEFAULT_PADDING
                 )
             );
 
@@ -95,35 +115,15 @@ namespace lcp
             data,
             dataLength,
             decryptedData,
-            decryptedDataLength,
-            BlockPaddingSchemeDef::DEFAULT_PADDING
+            decryptedDataLength
             );
     }
 
     size_t AesGcmSymmetricAlgorithm::PlainTextSize(IReadableStream * stream)
     {
-        if (stream->Size() < CryptoPP::AES::BLOCKSIZE + CryptoPP::AES::BLOCKSIZE)
-        {
-            throw std::out_of_range("Invalid encrypted file, size is out of range");
-        }
-
-        size_t readPosition = static_cast<size_t>(stream->Size()) - (CryptoPP::AES::BLOCKSIZE + CryptoPP::AES::BLOCKSIZE);
-        stream->SetReadPosition(readPosition);
-        std::vector<unsigned char> inBuffer(CryptoPP::AES::BLOCKSIZE + CryptoPP::AES::BLOCKSIZE);
-        std::vector<unsigned char> outBuffer(inBuffer.size());
-        stream->Read(&inBuffer.at(0), inBuffer.size());
-
-        size_t outSize = this->InnerDecrypt(
-            &inBuffer.at(0),
-            inBuffer.size(),
-            &outBuffer.at(0),
-            outBuffer.size(),
-            BlockPaddingSchemeDef::DEFAULT_PADDING
-            );
-
         return static_cast<size_t>(stream->Size())
-            - CryptoPP::AES::BLOCKSIZE // minus IV or previous block
-            - (CryptoPP::AES::BLOCKSIZE - outSize) % CryptoPP::AES::BLOCKSIZE; // minus padding part
+            - 12 // Nonce-IV
+            - 16; // tag size / overhead
     }
 
     void AesGcmSymmetricAlgorithm::Decrypt(
@@ -140,42 +140,51 @@ namespace lcp
             throw std::out_of_range("params to decrypt out of range");
         }
 
-        // Get offset result offset in the block
-        size_t blockOffset = rangeInfo.position % CryptoPP::AES::BLOCKSIZE;
-        // For beginning of the cipher text, IV used for XOR
-        // For cipher text in the middle, previous block used for XOR
-        size_t readPosition = rangeInfo.position - blockOffset;
-
-        // Count blocks to read
-        // First block for IV or previous block to perform XOR
-        size_t blocksCount = 1;
-        size_t bytesInFirstBlock = (CryptoPP::AES::BLOCKSIZE - blockOffset) % CryptoPP::AES::BLOCKSIZE;
-        if (rangeInfo.length < bytesInFirstBlock)
-        {
-            bytesInFirstBlock = 0;
-        }
-        if (bytesInFirstBlock > 0)
-        {
-            blocksCount++;
+        bool full = false;
+        if (rangeInfo.position == 0 && rangeInfo.length == plainTextSize && plainTextSize == decryptedDataLength) {
+            full = true;
         }
 
-        blocksCount += (rangeInfo.length - bytesInFirstBlock) / CryptoPP::AES::BLOCKSIZE;
-        if ((rangeInfo.length - bytesInFirstBlock) % CryptoPP::AES::BLOCKSIZE != 0)
-        {
-            blocksCount++;
-        }
+        size_t readPosition = 0;
+        size_t readLength = 0;
+        size_t blockOffset = 0;
+        if (full) {
+            readPosition = 0;
+            readLength = stream->Size();
+            blockOffset = 0;
+        } else {
 
-        // Figure out what padding scheme to use 
-        BlockPaddingSchemeDef::BlockPaddingScheme padding = BlockPaddingSchemeDef::NO_PADDING;
-        size_t sizeWithoutPaddedBlock = plainTextSize - (plainTextSize % CryptoPP::AES::BLOCKSIZE);
-        if (rangeInfo.position + rangeInfo.length > sizeWithoutPaddedBlock)
-        {
-            padding = BlockPaddingSchemeDef::DEFAULT_PADDING;
+            // Get offset result offset in the block
+            blockOffset = rangeInfo.position % CryptoPP::AES::BLOCKSIZE;
+            // For beginning of the cipher text, IV used for XOR
+            // For cipher text in the middle, previous block used for XOR
+            readPosition = rangeInfo.position - blockOffset;
+
+            // Count blocks to read
+            // First block for IV or previous block to perform XOR
+            size_t blocksCount = 1;
+            size_t bytesInFirstBlock = (CryptoPP::AES::BLOCKSIZE - blockOffset) % CryptoPP::AES::BLOCKSIZE;
+            if (rangeInfo.length < bytesInFirstBlock)
+            {
+                bytesInFirstBlock = 0;
+            }
+            if (bytesInFirstBlock > 0)
+            {
+                blocksCount++;
+            }
+
+            blocksCount += (rangeInfo.length - bytesInFirstBlock) / CryptoPP::AES::BLOCKSIZE;
+            if ((rangeInfo.length - bytesInFirstBlock) % CryptoPP::AES::BLOCKSIZE != 0)
+            {
+                blocksCount++;
+            }
+
+            readLength = blocksCount * CryptoPP::AES::BLOCKSIZE;
         }
 
         // Read data from the stream
         stream->SetReadPosition(readPosition);
-        std::vector<unsigned char> inBuffer(blocksCount * CryptoPP::AES::BLOCKSIZE);
+        std::vector<unsigned char> inBuffer(readLength);
         std::vector<unsigned char> outBuffer(inBuffer.size());
         if (readPosition + inBuffer.size() > stream->Size())
         {
@@ -188,8 +197,7 @@ namespace lcp
             &inBuffer.at(0),
             inBuffer.size(),
             &outBuffer.at(0),
-            outBuffer.size(),
-            padding
+            outBuffer.size()
             );
 
         if (outSize < rangeInfo.length)
@@ -205,8 +213,7 @@ namespace lcp
         const unsigned char * data,
         size_t dataLength,
         unsigned char * decryptedData,
-        size_t decryptedDataLength,
-        CryptoPP::BlockPaddingSchemeDef::BlockPaddingScheme padding
+        size_t decryptedDataLength
         )
     {
         const unsigned char * cipherData = data;
@@ -215,7 +222,13 @@ namespace lcp
         KeyType iv = this->BuildIV(data, dataLength, &cipherData, &cipherSize);
         m_decryptor.SetKeyWithIV(&m_key.at(0), m_key.size(), &iv.at(0));
 
-        CryptoPP::AuthenticatedDecryptionFilter filter(m_decryptor, NULL, padding);
+        CryptoPP::AuthenticatedDecryptionFilter filter(
+                m_decryptor, //AuthenticatedSymmetricCipher &c
+                NULL, //BufferedTransformation *attachment NULL
+                CryptoPP::AuthenticatedDecryptionFilter::MAC_AT_END | CryptoPP::AuthenticatedDecryptionFilter::THROW_EXCEPTION, //AuthenticatedDecryptionFilter::DEFAULT_FLAGS, //word32 flags DEFAULT_FLAGS
+                16, // int truncatedDigestSize -1
+                CryptoPP::AuthenticatedDecryptionFilter::DEFAULT_PADDING // BlockPaddingScheme padding DEFAULT_PADDING
+        );
         filter.Put(cipherData, cipherSize);
 
         filter.MessageEnd();
@@ -238,11 +251,11 @@ namespace lcp
         )
     {
         // Length of block equals to length of IV
-        size_t blockAndIvSize = CryptoPP::AES::BLOCKSIZE;
+        size_t blockAndIvSize = 12; //CryptoPP::AES::BLOCKSIZE; 16
         KeyType iv;
         iv.resize(blockAndIvSize);
 
-        if (dataLength < blockAndIvSize + blockAndIvSize)
+        if (dataLength < blockAndIvSize + CryptoPP::AES::BLOCKSIZE) //blockAndIvSize
         {
             throw std::invalid_argument("input data to decrypt is too small");
         }
