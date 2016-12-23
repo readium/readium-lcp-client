@@ -10,6 +10,8 @@
 
 #include <ePub3/utilities/utfstring.h>
 
+#include <epub3.h>
+
 JNIEXPORT void JNICALL Java_org_readium_sdk_lcp_Service_nativeInjectLicense(
         JNIEnv *env, jobject obj, jlong servicePtr, jstring jEpubPath, jstring jLicenseJson) {
 
@@ -62,12 +64,19 @@ JNIEXPORT jobject JNICALL Java_org_readium_sdk_lcp_Service_nativeOpenLicense(
                   licensePTR);
 
           if (!lcp::Status::IsSuccess(status)) {
-               // An error has occured
-               // TODO: catch error in a handler
+
+               jstring jmessage = env->NewStringUTF(lcp::Status::ToString(status).c_str());
+               jboolean b = javaEPub3_handleSdkError(env, jmessage, (jboolean)true);
+               env->DeleteLocalRef(jmessage);
+
                return nullptr;
           }
      } catch (lcp::StatusException &ex) {
-          // TODO: catch error in a handler
+
+          jstring jmessage = env->NewStringUTF(ex.what());
+          jboolean b = javaEPub3_handleSdkError(env, jmessage, (jboolean)true);
+          env->DeleteLocalRef(jmessage);
+
           return nullptr;
      }
 
