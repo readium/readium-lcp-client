@@ -90,11 +90,14 @@ namespace lcp
 
         std::string decryptedDataStr;
 
-        CryptoPP::ArraySource source(
-            cipherData, cipherSize, true,
-            new CryptoPP::AuthenticatedDecryptionFilter(
+        CryptoPP::ArraySource source( // really, a StringSource
+            cipherData, //const byte *string
+            cipherSize, //size_t length
+            true, //bool pumpAll
+            new CryptoPP::AuthenticatedDecryptionFilter( //BufferedTransformation *attachment = NULL
                     m_decryptor, //AuthenticatedSymmetricCipher &c
                     new CryptoPP::StringSink(decryptedDataStr), //BufferedTransformation *attachment NULL
+                    //new CryptoPP::ArraySink(...) // alternatively, could also construct std::string manually via ArraySink
                     CryptoPP::AuthenticatedDecryptionFilter::MAC_AT_END | CryptoPP::AuthenticatedDecryptionFilter::THROW_EXCEPTION, //AuthenticatedDecryptionFilter::DEFAULT_FLAGS, //word32 flags DEFAULT_FLAGS
                     16, // int truncatedDigestSize -1
                     CryptoPP::AuthenticatedDecryptionFilter::DEFAULT_PADDING // BlockPaddingScheme padding DEFAULT_PADDING
@@ -222,7 +225,7 @@ namespace lcp
         KeyType iv = this->BuildIV(data, dataLength, &cipherData, &cipherSize);
         m_decryptor.SetKeyWithIV(&m_key.at(0), m_key.size(), &iv.at(0));
 
-        CryptoPP::AuthenticatedDecryptionFilter filter(
+        CryptoPP::AuthenticatedDecryptionFilter filter( //BufferedTransformation*
                 m_decryptor, //AuthenticatedSymmetricCipher &c
                 NULL, //BufferedTransformation *attachment NULL
                 CryptoPP::AuthenticatedDecryptionFilter::MAC_AT_END | CryptoPP::AuthenticatedDecryptionFilter::THROW_EXCEPTION, //AuthenticatedDecryptionFilter::DEFAULT_FLAGS, //word32 flags DEFAULT_FLAGS
@@ -230,6 +233,8 @@ namespace lcp
                 CryptoPP::AuthenticatedDecryptionFilter::DEFAULT_PADDING // BlockPaddingScheme padding DEFAULT_PADDING
         );
         filter.Put(cipherData, cipherSize);
+//https://www.cryptopp.com/docs/ref/class_buffered_transformation.html#a0c25529ded99db20ad35ccef3f7234e6
+//        filter.Skip()
 
         filter.MessageEnd();
         size_t resultSize = static_cast<size_t>(filter.MaxRetrievable());
