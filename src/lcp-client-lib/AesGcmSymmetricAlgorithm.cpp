@@ -34,11 +34,6 @@ namespace lcp
 {
     // https://www.cryptopp.com/wiki/GCM_Mode
     // https://www.cryptopp.com/wiki/AuthenticatedDecryptionFilter
-    //Nonce-IV 12 bytes
-    //tag size / overhead 16 bytes
-    //total addon to plain text stream is therefore 28 bytes
-    //key 32 bytes (AES 256)
-    //https://play.golang.org/p/UT-1lnubdP
     AesGcmSymmetricAlgorithm::AesGcmSymmetricAlgorithm(
         const KeyType & key,
         KeySize keySize
@@ -46,15 +41,6 @@ namespace lcp
         : m_key(key)
         , m_keySize(keySize)
     {
-//        AutoSeededRandomPool prng;
-//
-//        SecByteBlock key( AES::DEFAULT_KEYLENGTH );
-//        prng.GenerateBlock( key, key.size() );
-//
-//        //byte iv[ AES::BLOCKSIZE * 16 ];
-//        SecByteBlock iv(AES::BLOCKSIZE);
-//        prng.GenerateBlock( iv, sizeof(iv) );
-
         KeyType emptyIv(CryptoPP::AES::BLOCKSIZE);
         m_decryptor.SetKeyWithIV(&key.at(0), key.size(), &emptyIv.at(0));
     }
@@ -132,8 +118,8 @@ namespace lcp
     size_t AesGcmSymmetricAlgorithm::PlainTextSize(IReadableStream * stream)
     {
         return static_cast<size_t>(stream->Size())
-            - 12 // Nonce-IV
-            - 16; // tag size / overhead
+            - 12 // Nonce-IV (prefix)
+            - 16; // Authentication tag / overhead for integrity verification of whole cipher (suffix)
     }
 
     void AesGcmSymmetricAlgorithm::Decrypt(
@@ -155,28 +141,17 @@ namespace lcp
             full = true;
         }
 
-        size_t readPosition = 0;
-        size_t readLength = 0;
-        size_t blockOffset = 0;
         if (full) {
-            readPosition = 0;
-            readLength = stream->Size();
-            blockOffset = 0;
+            stream->SetReadPosition(0);
+            size_t streamSize = stream->Size();
 
+            std::vector<unsigned char> inBuffer(streamSize);
+            std::vector<unsigned char> outBuffer(streamSize);
 
-
-
-            stream->SetReadPosition(readPosition);
-            std::vector<unsigned char> inBuffer(readLength);
-            std::vector<unsigned char> outBuffer(inBuffer.size());
-            if (readPosition + inBuffer.size() > stream->Size())
-            {
-                throw std::out_of_range("encrypted stream is out of range");
-            }
-            stream->Read(&inBuffer.at(0), inBuffer.size());
+            stream->Read(&inBuffer.at(0), streamSize);
 
             const unsigned char * cipherData = &inBuffer.at(0);
-            size_t cipherSize = inBuffer.size();
+            size_t cipherSize = streamSize;
 
             KeyType iv = this->BuildIV(&inBuffer.at(0), inBuffer.size(), &cipherData, &cipherSize);
             m_decryptor.SetKeyWithIV(&m_key.at(0), m_key.size(), &iv.at(0));
@@ -185,7 +160,7 @@ namespace lcp
                     cipherData,
                     cipherSize,
                     &outBuffer.at(0),
-                    outBuffer.size(),
+                    streamSize,
                     full
             );
 
@@ -195,13 +170,14 @@ namespace lcp
             }
 
             outBuffer.resize(outSize);
-            memcpy_s(decryptedData, decryptedDataLength, &outBuffer.at(blockOffset), rangeInfo.length);
+            memcpy_s(decryptedData, decryptedDataLength, &outBuffer.at(0), rangeInfo.length);
         } else {
 
             size_t ivSize = 12;
             std::vector<unsigned char> ivBuffer(ivSize);
 
             stream->SetReadPosition(0);
+            size_t streamSize = stream->Size();
             stream->Read(&ivBuffer.at(0), ivBuffer.size());
 
             KeyType iv;
@@ -213,45 +189,51 @@ namespace lcp
 
 
 
-            // Get offset result offset in the block
-            blockOffset = rangeInfo.position % CryptoPP::AES::BLOCKSIZE;
-            // For beginning of the cipher text, IV used for XOR
-            // For cipher text in the middle, previous block used for XOR
-            readPosition = ivSize + (rangeInfo.position - blockOffset);
 
-            // Count blocks to read
-            // First block for IV or previous block to perform XOR
-            size_t blocksCount = 1;
-            size_t bytesInFirstBlock = (CryptoPP::AES::BLOCKSIZE - blockOffset) % CryptoPP::AES::BLOCKSIZE;
-            if (rangeInfo.length < bytesInFirstBlock)
+            size_t rangePos_nWholeBlocksToSkip = rangeInfo.position / CryptoPP::AES::BLOCKSIZE;
+
+            size_t rangePos_nBytesAfterWholeBlocksToSkip = rangeInfo.position % CryptoPP::AES::BLOCKSIZE;
+
+            size_t rangeLength_nBytesInFirstBlock =
+                    (rangePos_nBytesAfterWholeBlocksToSkip == 0) ?
+                    0 :
+                    (CryptoPP::AES::BLOCKSIZE - rangePos_nBytesAfterWholeBlocksToSkip);
+
+            size_t rangeLength_nWholeBlocks = 1;
+
+            if (rangeInfo.length > rangeLength_nBytesInFirstBlock)
             {
-                bytesInFirstBlock = 0;
-            }
-            if (bytesInFirstBlock > 0)
-            {
-                blocksCount++;
-            }
+                size_t rangeLength_nBytesAfterFirstBlock = rangeInfo.length - rangeLength_nBytesInFirstBlock;
 
-            blocksCount += (rangeInfo.length - bytesInFirstBlock) / CryptoPP::AES::BLOCKSIZE;
-            if ((rangeInfo.length - bytesInFirstBlock) % CryptoPP::AES::BLOCKSIZE != 0)
-            {
-                blocksCount++;
+                rangeLength_nWholeBlocks += rangeLength_nBytesAfterFirstBlock / CryptoPP::AES::BLOCKSIZE;
+
+                size_t rangeLength_nBytesInLastBlock = rangeLength_nBytesAfterFirstBlock % CryptoPP::AES::BLOCKSIZE;
+                if (rangeLength_nBytesInLastBlock > 0)
+                {
+                    rangeLength_nWholeBlocks++;
+                }
             }
 
-            readLength = blocksCount * CryptoPP::AES::BLOCKSIZE;
+
+            size_t readLength = rangeLength_nWholeBlocks * CryptoPP::AES::BLOCKSIZE;
 
 
 
 
-            stream->SetReadPosition(readPosition);
-            std::vector<unsigned char> inBuffer(readLength);
-            std::vector<unsigned char> outBuffer(readLength);
+            // adjusted for 12 bytes init. vector prefix
+            size_t readPosition = ivSize + (rangeInfo.position - rangePos_nBytesAfterWholeBlocksToSkip);
+
             size_t endPos = readPosition + readLength;
-            size_t streamSize = stream->Size();
             if (endPos > streamSize)
             {
                 throw std::out_of_range("encrypted stream is out of range");
             }
+
+            std::vector<unsigned char> inBuffer(readLength);
+            std::vector<unsigned char> outBuffer(readLength);
+
+            stream->SetReadPosition(readPosition);
+
             stream->Read(&inBuffer.at(0), readLength);
 
             size_t outSize = this->InnerDecrypt(
@@ -268,7 +250,7 @@ namespace lcp
             }
 
             outBuffer.resize(outSize);
-            memcpy_s(decryptedData, decryptedDataLength, &outBuffer.at(blockOffset), rangeInfo.length);
+            memcpy_s(decryptedData, decryptedDataLength, &outBuffer.at(rangePos_nBytesAfterWholeBlocksToSkip), rangeInfo.length);
         }
     }
 
