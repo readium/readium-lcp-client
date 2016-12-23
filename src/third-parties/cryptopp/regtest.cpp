@@ -1,6 +1,9 @@
-#include "factory.h"
+// regtest.cpp - written and placed in the public domain by Wei Dai
 
 #define CRYPTOPP_ENABLE_NAMESPACE_WEAK 1
+
+#include "cryptlib.h"
+#include "factory.h"
 #include "modes.h"
 #include "dh.h"
 #include "esign.h"
@@ -20,6 +23,7 @@
 #include "pssr.h"
 #include "aes.h"
 #include "salsa.h"
+#include "chacha.h"
 #include "vmac.h"
 #include "tiger.h"
 #include "md5.h"
@@ -46,7 +50,19 @@
 #include "seal.h"
 #include "crc.h"
 #include "adler32.h"
+#include "keccak.h"
 #include "sha3.h"
+#include "blake2.h"
+#include "hkdf.h"
+
+// Aggressive stack checking with VS2005 SP1 and above.
+#if (CRYPTOPP_MSC_VERSION >= 1410)
+# pragma strict_gs_check (on)
+#endif
+
+#if CRYPTOPP_GCC_DIAGNOSTIC_AVAILABLE
+# pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
 
 USING_NAMESPACE(CryptoPP)
 
@@ -58,6 +74,7 @@ void RegisterFactories()
 
 	RegisterDefaultFactoryFor<SimpleKeyAgreementDomain, DH>();
 	RegisterDefaultFactoryFor<HashTransformation, CRC32>();
+	RegisterDefaultFactoryFor<HashTransformation, CRC32C>();
 	RegisterDefaultFactoryFor<HashTransformation, Adler32>();
 	RegisterDefaultFactoryFor<HashTransformation, Weak::MD5>();
 	RegisterDefaultFactoryFor<HashTransformation, SHA1>();
@@ -73,10 +90,16 @@ void RegisterFactories()
 	RegisterDefaultFactoryFor<HashTransformation, RIPEMD256>();
 	RegisterDefaultFactoryFor<HashTransformation, Weak::PanamaHash<LittleEndian> >();
 	RegisterDefaultFactoryFor<HashTransformation, Weak::PanamaHash<BigEndian> >();
+	RegisterDefaultFactoryFor<HashTransformation, Keccak_224>();
+	RegisterDefaultFactoryFor<HashTransformation, Keccak_256>();
+	RegisterDefaultFactoryFor<HashTransformation, Keccak_384>();
+	RegisterDefaultFactoryFor<HashTransformation, Keccak_512>();
 	RegisterDefaultFactoryFor<HashTransformation, SHA3_224>();
 	RegisterDefaultFactoryFor<HashTransformation, SHA3_256>();
 	RegisterDefaultFactoryFor<HashTransformation, SHA3_384>();
 	RegisterDefaultFactoryFor<HashTransformation, SHA3_512>();
+	RegisterDefaultFactoryFor<HashTransformation, BLAKE2s>();
+	RegisterDefaultFactoryFor<HashTransformation, BLAKE2b>();
 	RegisterDefaultFactoryFor<MessageAuthenticationCode, HMAC<Weak::MD5> >();
 	RegisterDefaultFactoryFor<MessageAuthenticationCode, HMAC<SHA1> >();
 	RegisterDefaultFactoryFor<MessageAuthenticationCode, HMAC<RIPEMD160> >();
@@ -92,6 +115,8 @@ void RegisterFactories()
 	RegisterDefaultFactoryFor<MessageAuthenticationCode, CMAC<AES> >();
 	RegisterDefaultFactoryFor<MessageAuthenticationCode, DMAC<AES> >();
 	RegisterDefaultFactoryFor<MessageAuthenticationCode, CMAC<DES_EDE3> >();
+	RegisterDefaultFactoryFor<MessageAuthenticationCode, BLAKE2s>();
+	RegisterDefaultFactoryFor<MessageAuthenticationCode, BLAKE2b>();
 	RegisterAsymmetricCipherDefaultFactories<RSAES<OAEP<SHA1> > >("RSA/OAEP-MGF1(SHA-1)");
 	RegisterAsymmetricCipherDefaultFactories<DLIES<> >("DLIES(NoCofactorMultiplication, KDF2(SHA-1), XOR, HMAC(SHA-1), DHAES)");
 	RegisterSignatureSchemeDefaultFactories<DSA>();
@@ -120,6 +145,9 @@ void RegisterFactories()
 	RegisterSymmetricCipherDefaultFactories<CTR_Mode<AES> >();
 	RegisterSymmetricCipherDefaultFactories<Salsa20>();
 	RegisterSymmetricCipherDefaultFactories<XSalsa20>();
+	RegisterSymmetricCipherDefaultFactories<ChaCha8>();
+	RegisterSymmetricCipherDefaultFactories<ChaCha12>();
+	RegisterSymmetricCipherDefaultFactories<ChaCha20>();
 	RegisterSymmetricCipherDefaultFactories<Sosemanuk>();
 	RegisterSymmetricCipherDefaultFactories<Weak::MARC4>();
 	RegisterSymmetricCipherDefaultFactories<WAKE_OFB<LittleEndian> >();
@@ -148,6 +176,10 @@ void RegisterFactories()
 	RegisterSymmetricCipherDefaultFactories<CTR_Mode<Blowfish> >();
 	RegisterSymmetricCipherDefaultFactories<ECB_Mode<SEED> >();
 	RegisterSymmetricCipherDefaultFactories<CTR_Mode<SEED> >();
+	RegisterDefaultFactoryFor<KeyDerivationFunction, HKDF<SHA1> >();
+	RegisterDefaultFactoryFor<KeyDerivationFunction, HKDF<SHA256> >();
+	RegisterDefaultFactoryFor<KeyDerivationFunction, HKDF<SHA512> >();
+	RegisterDefaultFactoryFor<KeyDerivationFunction, HKDF<Whirlpool> >();
 
 	s_registered = true;
 }

@@ -2,11 +2,11 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Source Files">
-      <UniqueIdentifier>{18a72eea-7d99-4cf3-9375-d1835a5b593a}</UniqueIdentifier>
+      <UniqueIdentifier>{82666edd-7baf-4a5a-922c-a06edc2198bd}</UniqueIdentifier>
       <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
     </Filter>
     <Filter Include="Header Files">
-      <UniqueIdentifier>{ee0eb34b-e9eb-4020-a52a-0768b190c893}</UniqueIdentifier>
+      <UniqueIdentifier>{2029b271-c489-4b4c-9ce5-261b4cfe2d78}</UniqueIdentifier>
       <Extensions>.h</Extensions>
     </Filter>
   </ItemGroup>
@@ -271,6 +271,9 @@
     <ClInclude Include="hex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="hkdf.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="hmac.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -365,6 +368,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="strciphr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="trap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="trdlocal.h">
