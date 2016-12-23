@@ -42,7 +42,10 @@ namespace lcp
 #endif //ENABLE_NET_PROVIDER
     class EncryptionProfilesManager;
     class ICertificate;
-    class ICertificateRevocationList;
+
+#if ENABLE_NET_PROVIDER
+class ICertificateRevocationList;
+#endif //ENABLE_NET_PROVIDER
 
     class CryptoppCryptoProvider : public ICryptoProvider, public NonCopyable
     {

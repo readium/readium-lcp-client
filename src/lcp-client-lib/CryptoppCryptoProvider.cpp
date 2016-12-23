@@ -32,9 +32,13 @@
 #include "public/ILicense.h"
 #include "public/ICrypto.h"
 #include "Certificate.h"
+
+#if ENABLE_NET_PROVIDER
 #include "CertificateRevocationList.h"
 #include "CrlUpdater.h"
 #include "ThreadTimer.h"
+#endif //ENABLE_NET_PROVIDER
+
 #include "DateTime.h"
 #include "LcpUtils.h"
 #include "IKeyProvider.h"

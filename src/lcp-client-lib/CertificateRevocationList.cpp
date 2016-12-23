@@ -25,6 +25,8 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
+#if ENABLE_NET_PROVIDER
+
 #include "CertificateRevocationList.h"
 #include "CryptoppUtils.h"
 #include "IncludeMacros.h"
@@ -65,14 +67,14 @@ namespace lcp
                 // issuer
                 CryptoppUtils::Cert::SkipNextSequence(toBeSignedCertList);
                 // this update
-                BERDecodeTime(toBeSignedCertList, m_thisUpdate);
+                CryptoppUtils::Cert::BERDecodeTime(toBeSignedCertList, m_thisUpdate);
                 // next update
                 if (!toBeSignedCertList.EndReached())
                 {
                     byte nextId = toBeSignedCertList.PeekByte();
                     if (nextId == UTC_TIME || nextId == GENERALIZED_TIME)
                     {
-                        BERDecodeTime(toBeSignedCertList, m_nextUpdate);
+                        CryptoppUtils::Cert::BERDecodeTime(toBeSignedCertList, m_nextUpdate);
                     }
                 }
 
@@ -132,3 +134,5 @@ namespace lcp
         return m_revokedSerialNumbers;
     }
 }
+
+#endif //ENABLE_NET_PROVIDER

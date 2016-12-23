@@ -65,6 +65,7 @@ namespace lcp
                 std::string & notBefore,
                 std::string & notAfter
                 );
+            static void BERDecodeTime(CryptoPP::BufferedTransformation& bt, std::string& time);
 
             static void PullToBeSignedData(const SecByteBlock & rawCertificate, SecByteBlock & result);
 
