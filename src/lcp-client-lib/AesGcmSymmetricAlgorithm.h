@@ -85,7 +85,8 @@ namespace lcp
             const unsigned char * data,
             size_t dataLength,
             unsigned char * decryptedData,
-            size_t decryptedDataLength
+            size_t decryptedDataLength,
+            bool verifyIntegrityAuthenticatedEncryption
             );
 
         KeyType BuildIV(

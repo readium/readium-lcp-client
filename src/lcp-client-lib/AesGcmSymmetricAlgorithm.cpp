@@ -114,11 +114,18 @@ namespace lcp
         size_t decryptedDataLength
         )
     {
+        const unsigned char * cipherData = data;
+        size_t cipherSize = dataLength;
+
+        KeyType iv = this->BuildIV(data, dataLength, &cipherData, &cipherSize);
+        m_decryptor.SetKeyWithIV(&m_key.at(0), m_key.size(), &iv.at(0));
+
         return this->InnerDecrypt(
-            data,
-            dataLength,
+                cipherData,
+                cipherSize,
             decryptedData,
-            decryptedDataLength
+            decryptedDataLength,
+            true
             );
     }
 
@@ -155,13 +162,62 @@ namespace lcp
             readPosition = 0;
             readLength = stream->Size();
             blockOffset = 0;
+
+
+
+
+            stream->SetReadPosition(readPosition);
+            std::vector<unsigned char> inBuffer(readLength);
+            std::vector<unsigned char> outBuffer(inBuffer.size());
+            if (readPosition + inBuffer.size() > stream->Size())
+            {
+                throw std::out_of_range("encrypted stream is out of range");
+            }
+            stream->Read(&inBuffer.at(0), inBuffer.size());
+
+            const unsigned char * cipherData = &inBuffer.at(0);
+            size_t cipherSize = inBuffer.size();
+
+            KeyType iv = this->BuildIV(&inBuffer.at(0), inBuffer.size(), &cipherData, &cipherSize);
+            m_decryptor.SetKeyWithIV(&m_key.at(0), m_key.size(), &iv.at(0));
+
+            size_t outSize = this->InnerDecrypt(
+                    cipherData,
+                    cipherSize,
+                    &outBuffer.at(0),
+                    outBuffer.size(),
+                    full
+            );
+
+            if (outSize < rangeInfo.length)
+            {
+                throw std::out_of_range("range length is out of range");
+            }
+
+            outBuffer.resize(outSize);
+            memcpy_s(decryptedData, decryptedDataLength, &outBuffer.at(blockOffset), rangeInfo.length);
         } else {
+
+            size_t ivSize = 12;
+            std::vector<unsigned char> ivBuffer(ivSize);
+
+            stream->SetReadPosition(0);
+            stream->Read(&ivBuffer.at(0), ivBuffer.size());
+
+            KeyType iv;
+            iv.resize(ivBuffer.size());
+            iv.assign(&ivBuffer.at(0), &ivBuffer.at(0) + ivBuffer.size());
+
+            m_decryptor.SetKeyWithIV(&m_key.at(0), m_key.size(), &iv.at(0));
+
+
+
 
             // Get offset result offset in the block
             blockOffset = rangeInfo.position % CryptoPP::AES::BLOCKSIZE;
             // For beginning of the cipher text, IV used for XOR
             // For cipher text in the middle, previous block used for XOR
-            readPosition = rangeInfo.position - blockOffset;
+            readPosition = ivSize + (rangeInfo.position - blockOffset);
 
             // Count blocks to read
             // First block for IV or previous block to perform XOR
@@ -183,52 +239,54 @@ namespace lcp
             }
 
             readLength = blocksCount * CryptoPP::AES::BLOCKSIZE;
-        }
 
-        // Read data from the stream
-        stream->SetReadPosition(readPosition);
-        std::vector<unsigned char> inBuffer(readLength);
-        std::vector<unsigned char> outBuffer(inBuffer.size());
-        if (readPosition + inBuffer.size() > stream->Size())
-        {
-            throw std::out_of_range("encrypted stream is out of range");
-        }
-        stream->Read(&inBuffer.at(0), inBuffer.size());
 
-        // Decrypt and copy necessary data
-        size_t outSize = this->InnerDecrypt(
-            &inBuffer.at(0),
-            inBuffer.size(),
-            &outBuffer.at(0),
-            outBuffer.size()
+
+
+            stream->SetReadPosition(readPosition);
+            std::vector<unsigned char> inBuffer(readLength);
+            std::vector<unsigned char> outBuffer(readLength);
+            size_t endPos = readPosition + readLength;
+            size_t streamSize = stream->Size();
+            if (endPos > streamSize)
+            {
+                throw std::out_of_range("encrypted stream is out of range");
+            }
+            stream->Read(&inBuffer.at(0), readLength);
+
+            size_t outSize = this->InnerDecrypt(
+                    &inBuffer.at(0),
+                    readLength,
+                    &outBuffer.at(0),
+                    readLength,
+                    full
             );
 
-        if (outSize < rangeInfo.length)
-        {
-            throw std::out_of_range("range length is out of range");
-        }
+            if (outSize < rangeInfo.length)
+            {
+                throw std::out_of_range("range length is out of range");
+            }
 
-        outBuffer.resize(outSize);
-        memcpy_s(decryptedData, decryptedDataLength, &outBuffer.at(blockOffset), rangeInfo.length);
+            outBuffer.resize(outSize);
+            memcpy_s(decryptedData, decryptedDataLength, &outBuffer.at(blockOffset), rangeInfo.length);
+        }
     }
 
     size_t AesGcmSymmetricAlgorithm::InnerDecrypt(
-        const unsigned char * data,
-        size_t dataLength,
+        const unsigned char * cipherData,
+        size_t cipherSize,
         unsigned char * decryptedData,
-        size_t decryptedDataLength
+        size_t decryptedDataLength,
+        bool verifyIntegrityAuthenticatedEncryption
         )
     {
-        const unsigned char * cipherData = data;
-        size_t cipherSize = dataLength;
-
-        KeyType iv = this->BuildIV(data, dataLength, &cipherData, &cipherSize);
-        m_decryptor.SetKeyWithIV(&m_key.at(0), m_key.size(), &iv.at(0));
-
         CryptoPP::AuthenticatedDecryptionFilter filter( //BufferedTransformation*
                 m_decryptor, //AuthenticatedSymmetricCipher &c
                 NULL, //BufferedTransformation *attachment NULL
-                CryptoPP::AuthenticatedDecryptionFilter::MAC_AT_END | CryptoPP::AuthenticatedDecryptionFilter::THROW_EXCEPTION, //AuthenticatedDecryptionFilter::DEFAULT_FLAGS, //word32 flags DEFAULT_FLAGS
+                    verifyIntegrityAuthenticatedEncryption ?
+                    (CryptoPP::AuthenticatedDecryptionFilter::MAC_AT_END | CryptoPP::AuthenticatedDecryptionFilter::THROW_EXCEPTION) :
+                    CryptoPP::AuthenticatedDecryptionFilter::MAC_AT_END,
+                            //AuthenticatedDecryptionFilter::DEFAULT_FLAGS, //word32 flags DEFAULT_FLAGS
                 16, // int truncatedDigestSize -1
                 CryptoPP::AuthenticatedDecryptionFilter::DEFAULT_PADDING // BlockPaddingScheme padding DEFAULT_PADDING
         );
