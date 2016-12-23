@@ -71,8 +71,12 @@ public class StatusDocumentProcessing {
     }
 
     public void cancel() {
+        if (m_wasCancelled) {
+            return;
+        }
         m_wasCancelled = true;
         mLicense.setStatusDocumentProcessingFlag(false);
+        m_statusDocumentProcessingListener.onStatusDocumentProcessingComplete();
     }
 
     public AlertDialog showStatusDocumentDialog_RETURN_RENEW(String msgType, final DoneCallback doneCallback_showStatusDocumentDialog_RETURN_RENEW) {
@@ -920,7 +924,9 @@ public class StatusDocumentProcessing {
                                 if (e != null || inputStream == null
                                         || httpResponseCode < 200 || httpResponseCode >= 300) {
 
-                                    m_statusDocumentProcessingListener.onStatusDocumentProcessingComplete();
+                                    if (!m_wasCancelled) {
+                                        m_statusDocumentProcessingListener.onStatusDocumentProcessingComplete();
+                                    }
                                     return;
                                 }
 
