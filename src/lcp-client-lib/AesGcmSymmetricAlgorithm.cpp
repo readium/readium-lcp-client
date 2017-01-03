@@ -224,7 +224,7 @@ namespace lcp
             size_t readPosition = ivSize + (rangeInfo.position - rangePos_nBytesAfterWholeBlocksToSkip);
 
             size_t endPos = readPosition + readLength;
-            if (endPos > streamSize)
+            if (endPos > (streamSize + ivSize))
             {
                 throw std::out_of_range("encrypted stream is out of range");
             }
@@ -269,7 +269,7 @@ namespace lcp
                     (CryptoPP::AuthenticatedDecryptionFilter::MAC_AT_END | CryptoPP::AuthenticatedDecryptionFilter::THROW_EXCEPTION) :
                     CryptoPP::AuthenticatedDecryptionFilter::MAC_AT_END,
                             //AuthenticatedDecryptionFilter::DEFAULT_FLAGS, //word32 flags DEFAULT_FLAGS
-                16, // int truncatedDigestSize -1
+                verifyIntegrityAuthenticatedEncryption ? 16 : 0, // int truncatedDigestSize -1
                 CryptoPP::AuthenticatedDecryptionFilter::DEFAULT_PADDING // BlockPaddingScheme padding DEFAULT_PADDING
         );
         filter.Put(cipherData, cipherSize);
