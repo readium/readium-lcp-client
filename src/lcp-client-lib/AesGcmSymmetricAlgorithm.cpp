@@ -172,20 +172,26 @@ namespace lcp
             outBuffer.resize(outSize);
             memcpy_s(decryptedData, decryptedDataLength, &outBuffer.at(0), rangeInfo.length);
         } else {
-
             size_t ivSize = 12;
-            std::vector<unsigned char> ivBuffer(ivSize);
-
             stream->SetReadPosition(0);
             size_t streamSize = stream->Size();
-            stream->Read(&ivBuffer.at(0), ivBuffer.size());
 
             KeyType iv;
-            iv.resize(ivBuffer.size());
-            iv.assign(&ivBuffer.at(0), &ivBuffer.at(0) + ivBuffer.size());
 
-            m_decryptor.SetKeyWithIV(&m_key.at(0), m_key.size(), &iv.at(0));
+            size_t ivLength = CryptoPP::AES::BLOCKSIZE;
+            if (rangeInfo.position == 0) {
+                ivLength = ivSize;
 
+
+                std::vector<unsigned char> ivBuffer(ivSize);
+                stream->Read(&ivBuffer.at(0), ivBuffer.size());
+
+
+                iv.resize(ivBuffer.size());
+                iv.assign(&ivBuffer.at(0), &ivBuffer.at(0) + ivBuffer.size());
+
+                m_decryptor.SetKeyWithIV(&m_key.at(0), m_key.size(), &iv.at(0));
+            }
 
 
 
@@ -232,17 +238,72 @@ namespace lcp
             std::vector<unsigned char> inBuffer(readLength);
             std::vector<unsigned char> outBuffer(readLength);
 
+            // CryptoPP::GCM<CryptoPP::AES>::Decryption
+            // does not appear to be allow random access ??
+            if (m_decryptor.IsRandomAccess()) {
+                m_decryptor.Seek(readPosition);
+            }
+
             stream->SetReadPosition(readPosition);
 
             stream->Read(&inBuffer.at(0), readLength);
 
+
+
+            unsigned char *inBufferStartOffset = &inBuffer.at(0);
+            if (rangeInfo.position != 0) {
+                inBufferStartOffset = &inBuffer.at(0) + ivLength;
+                readLength -= ivLength;
+
+                iv.resize(ivLength);
+                iv.assign(&inBuffer.at(0), inBufferStartOffset);
+
+                m_decryptor.SetKeyWithIV(&m_key.at(0), m_key.size(), &iv.at(0));
+            }
+
+
+#if USE_INNER_DECRYPT
+
             size_t outSize = this->InnerDecrypt(
-                    &inBuffer.at(0),
+                    inBufferStartOffset,
                     readLength,
                     &outBuffer.at(0),
                     readLength,
-                    full
+                    full // false
             );
+#else
+            const unsigned char * cipherData = inBufferStartOffset;
+            size_t cipherSize = readLength;
+            unsigned char * decryptedData_ = &outBuffer.at(0);
+            size_t decryptedDataLength_ = readLength;
+            bool verifyIntegrityAuthenticatedEncryption = full; // false
+
+            CryptoPP::AuthenticatedDecryptionFilter filter( //BufferedTransformation*
+                    m_decryptor, //AuthenticatedSymmetricCipher &c
+                    NULL, //BufferedTransformation *attachment NULL
+                    verifyIntegrityAuthenticatedEncryption ?
+                    (CryptoPP::AuthenticatedDecryptionFilter::MAC_AT_END | CryptoPP::AuthenticatedDecryptionFilter::THROW_EXCEPTION) :
+                    CryptoPP::AuthenticatedDecryptionFilter::MAC_AT_END,
+                    //AuthenticatedDecryptionFilter::DEFAULT_FLAGS, //word32 flags DEFAULT_FLAGS
+                    verifyIntegrityAuthenticatedEncryption ? 16 : 0, // int truncatedDigestSize -1
+                    CryptoPP::AuthenticatedDecryptionFilter::DEFAULT_PADDING // BlockPaddingScheme padding DEFAULT_PADDING
+            );
+            filter.Put(cipherData, cipherSize);
+//https://www.cryptopp.com/docs/ref/class_buffered_transformation.html#a0c25529ded99db20ad35ccef3f7234e6
+//        filter.Skip()
+
+            filter.MessageEnd();
+            size_t resultSize = static_cast<size_t>(filter.MaxRetrievable());
+
+            if (decryptedDataLength_ < resultSize)
+            {
+                throw std::invalid_argument("decrypted data buffer is too small");
+            }
+
+            filter.Get(decryptedData_, resultSize);
+
+            size_t outSize = resultSize;
+#endif // USE_INNER_DECRYPT
 
             if (outSize < rangeInfo.length)
             {
@@ -273,8 +334,6 @@ namespace lcp
                 CryptoPP::AuthenticatedDecryptionFilter::DEFAULT_PADDING // BlockPaddingScheme padding DEFAULT_PADDING
         );
         filter.Put(cipherData, cipherSize);
-//https://www.cryptopp.com/docs/ref/class_buffered_transformation.html#a0c25529ded99db20ad35ccef3f7234e6
-//        filter.Skip()
 
         filter.MessageEnd();
         size_t resultSize = static_cast<size_t>(filter.MaxRetrievable());
