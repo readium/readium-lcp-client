@@ -177,15 +177,11 @@ namespace lcp
             size_t streamSize = stream->Size();
 
             KeyType iv;
+            std::vector<unsigned char> ivBuffer(ivSize);
 
-            size_t ivLength = CryptoPP::AES::BLOCKSIZE;
             if (true || rangeInfo.position == 0) {
-                ivLength = ivSize;
 
-
-                std::vector<unsigned char> ivBuffer(ivSize);
                 stream->Read(&ivBuffer.at(0), ivBuffer.size());
-
 
                 iv.resize(ivBuffer.size());
                 iv.assign(&ivBuffer.at(0), &ivBuffer.at(0) + ivBuffer.size());
@@ -201,8 +197,8 @@ namespace lcp
             size_t rangePos_nBytesAfterWholeBlocksToSkip = rangeInfo.position % CryptoPP::AES::BLOCKSIZE;
 
             size_t rangeLength_nBytesInFirstBlock =
-                    (rangePos_nBytesAfterWholeBlocksToSkip == 0) ?
-                    0 :
+//                    (rangePos_nBytesAfterWholeBlocksToSkip == 0) ?
+//                    0 :
                     (CryptoPP::AES::BLOCKSIZE - rangePos_nBytesAfterWholeBlocksToSkip);
 
             size_t rangeLength_nWholeBlocks = 1;
@@ -243,16 +239,45 @@ namespace lcp
             stream->Read(&inBuffer.at(0), readLength);
 
             unsigned char *inBufferStartOffset = &inBuffer.at(0);
-//            if (rangeInfo.position != 0) {
-//                inBufferStartOffset = &inBuffer.at(0) + ivLength;
-//                readLength -= ivLength;
-//
-//                iv.resize(ivLength);
-//                iv.assign(&inBuffer.at(0), inBufferStartOffset);
-//
-//                m_decryptor.SetKeyWithIV(&m_key.at(0), m_key.size(), &iv.at(0));
-//            }
 
+            if (rangeInfo.position != 0) {
+
+                std::vector<unsigned char> ivBufferSeeked(ivSize);
+
+                //CTR_ModePolicy::SeekToIteration()
+                //AdditiveCipherTemplate<BASE>::Seek(lword position)
+
+                unsigned long long iterationCount = rangePos_nWholeBlocksToSkip;
+
+#if 1 // USE_CRYPTOPP_INCREMENTOR
+
+                // clone original IV
+                for (int i = 0; i < ivSize; i++) {
+                    ivBufferSeeked[i] = ivBuffer[i];
+                }
+
+                // increment
+                for (int i = 0; i < iterationCount; i++) {
+                    CryptoPP::IncrementCounterByOne(&ivBufferSeeked.at(0), ivSize);
+                }
+#else
+                int carry = 0;
+                for (int i = ivBuffer.size()-1; i >= 0; i--)
+                {
+                    unsigned int sum = ivBuffer[i] + byte(iterationCount) + carry;
+                    ivBufferSeeked[i] = (byte) sum;
+                    carry = sum >> 8;
+                    iterationCount >>= 8;
+                }
+#endif
+
+
+
+                iv.resize(ivBufferSeeked.size());
+                iv.assign(&ivBufferSeeked.at(0), &ivBufferSeeked.at(0) + ivBufferSeeked.size());
+
+                m_decryptor.SetKeyWithIV(&m_key.at(0), m_key.size(), &iv.at(0));
+            }
 
 #if USE_INNER_DECRYPT
 
@@ -329,8 +354,13 @@ namespace lcp
                 throw std::out_of_range("range length is out of range");
             }
 
-            outBuffer.resize(outSize);
-            memcpy_s(decryptedData, decryptedDataLength, &outBuffer.at(rangePos_nBytesAfterWholeBlocksToSkip), rangeInfo.length);
+            //outBuffer.resize(outSize);
+
+            memcpy_s(decryptedData,
+                     decryptedDataLength,
+                     decryptedData_ + rangePos_nBytesAfterWholeBlocksToSkip, //&outBuffer.at(rangePos_nBytesAfterWholeBlocksToSkip),
+                     rangeInfo.length
+            );
         }
     }
 
