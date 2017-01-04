@@ -46,6 +46,19 @@ NAMESPACE_BEGIN(CryptoPP)
 word16 GCM_Base::s_reductionTable[256];
 volatile bool GCM_Base::s_reductionTableInitialized = false;
 
+void GCM_Base::GCTR::SeekToIteration_(lword iterationCount)
+{
+	SeekToIteration(iterationCount);
+
+	m_counterArray = m_counterArray;
+}
+void GCM_Base::GCTR::IncrementCounterByOne_(lword iterationCount) {
+	for (int i = 0; i < iterationCount; i++) {
+		IncrementCounterByOne(m_counterArray+BlockSize()-4, 4);
+	}
+
+	m_counterArray = m_counterArray;
+}
 void GCM_Base::GCTR::IncrementCounterBy256()
 {
 	IncrementCounterByOne(m_counterArray+BlockSize()-4, 3);

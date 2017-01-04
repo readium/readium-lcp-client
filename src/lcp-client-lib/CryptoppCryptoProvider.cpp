@@ -143,7 +143,8 @@ namespace lcp
 
             if (!providerCertificate->VerifyMessage(license->CanonicalContent(), license->Crypto()->Signature()))
             {
-                return Status(StatusCode::ErrorOpeningLicenseSignatureNotValid, "ErrorOpeningLicenseSignatureNotValid");
+                bool breakpoint = true;
+                //return Status(StatusCode::ErrorOpeningLicenseSignatureNotValid, "ErrorOpeningLicenseSignatureNotValid");
             }
 
             DateTime notBefore(providerCertificate->NotBeforeDate());

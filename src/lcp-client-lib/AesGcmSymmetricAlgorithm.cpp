@@ -41,8 +41,8 @@ namespace lcp
         : m_key(key)
         , m_keySize(keySize)
     {
-        KeyType emptyIv(CryptoPP::AES::BLOCKSIZE);
-        m_decryptor.SetKeyWithIV(&key.at(0), key.size(), &emptyIv.at(0));
+        KeyType emptyIv(m_decryptor.IVSize()); // 12
+        m_decryptor.SetKeyWithIV(&key.at(0), key.size(), &emptyIv.at(0), emptyIv.size());
     }
 
     std::string AesGcmSymmetricAlgorithm::Name() const
@@ -71,7 +71,7 @@ namespace lcp
         size_t cipherSize = rawData.size();
 
         KeyType iv = this->BuildIV(rawData.data(), rawData.size(), &cipherData, &cipherSize);
-        m_decryptor.SetKeyWithIV(&m_key.at(0), m_key.size(), &iv.at(0));
+        m_decryptor.SetKeyWithIV(&m_key.at(0), m_key.size(), &iv.at(0), iv.size());
 
 
         std::string decryptedDataStr;
@@ -85,7 +85,7 @@ namespace lcp
                     new CryptoPP::StringSink(decryptedDataStr), //BufferedTransformation *attachment NULL
                     //new CryptoPP::ArraySink(...) // alternatively, could also construct std::string manually via ArraySink
                     CryptoPP::AuthenticatedDecryptionFilter::MAC_AT_END | CryptoPP::AuthenticatedDecryptionFilter::THROW_EXCEPTION, //AuthenticatedDecryptionFilter::DEFAULT_FLAGS, //word32 flags DEFAULT_FLAGS
-                    16, // int truncatedDigestSize -1
+                    m_decryptor.DigestSize(), // int truncatedDigestSize -1
                     CryptoPP::AuthenticatedDecryptionFilter::DEFAULT_PADDING // BlockPaddingScheme padding DEFAULT_PADDING
                 )
             );
@@ -104,7 +104,7 @@ namespace lcp
         size_t cipherSize = dataLength;
 
         KeyType iv = this->BuildIV(data, dataLength, &cipherData, &cipherSize);
-        m_decryptor.SetKeyWithIV(&m_key.at(0), m_key.size(), &iv.at(0));
+        m_decryptor.SetKeyWithIV(&m_key.at(0), m_key.size(), &iv.at(0), iv.size());
 
         return this->InnerDecrypt(
                 cipherData,
@@ -118,8 +118,13 @@ namespace lcp
     size_t AesGcmSymmetricAlgorithm::PlainTextSize(IReadableStream * stream)
     {
         return static_cast<size_t>(stream->Size())
-            - 12 // Nonce-IV (prefix)
-            - 16; // Authentication tag / overhead for integrity verification of whole cipher (suffix)
+            - m_decryptor.IVSize()
+            // Nonce-IV (prefix)
+            //m_decryptor.IVSize() == 12
+
+            - m_decryptor.DigestSize();
+            // Authentication tag / overhead for integrity verification of whole cipher (suffix)
+            // m_decryptor.DigestSize() == 16
     }
 
     void AesGcmSymmetricAlgorithm::Decrypt(
@@ -154,7 +159,7 @@ namespace lcp
             size_t cipherSize = streamSize;
 
             KeyType iv = this->BuildIV(&inBuffer.at(0), inBuffer.size(), &cipherData, &cipherSize);
-            m_decryptor.SetKeyWithIV(&m_key.at(0), m_key.size(), &iv.at(0));
+            m_decryptor.SetKeyWithIV(&m_key.at(0), m_key.size(), &iv.at(0), iv.size());
 
             size_t outSize = this->InnerDecrypt(
                     cipherData,
@@ -172,7 +177,7 @@ namespace lcp
             outBuffer.resize(outSize);
             memcpy_s(decryptedData, decryptedDataLength, &outBuffer.at(0), rangeInfo.length);
         } else {
-            size_t ivSize = 12;
+            size_t ivSize = m_decryptor.IVSize();
             stream->SetReadPosition(0);
             size_t streamSize = stream->Size();
 
@@ -186,7 +191,7 @@ namespace lcp
                 iv.resize(ivBuffer.size());
                 iv.assign(&ivBuffer.at(0), &ivBuffer.at(0) + ivBuffer.size());
 
-                m_decryptor.SetKeyWithIV(&m_key.at(0), m_key.size(), &iv.at(0));
+                m_decryptor.SetKeyWithIV(&m_key.at(0), m_key.size(), &iv.at(0), iv.size());
             }
 
 
@@ -222,7 +227,7 @@ namespace lcp
 
 
 
-            // adjusted for 12 bytes init. vector prefix
+            // adjusted for m_decryptor.IVSize() == 12 bytes init. vector prefix
             size_t readPosition = ivSize + (rangeInfo.position - rangePos_nBytesAfterWholeBlocksToSkip);
 
             size_t endPos = readPosition + readLength;
@@ -242,41 +247,45 @@ namespace lcp
 
             if (rangeInfo.position != 0) {
 
-                std::vector<unsigned char> ivBufferSeeked(ivSize);
-
-                //CTR_ModePolicy::SeekToIteration()
-                //AdditiveCipherTemplate<BASE>::Seek(lword position)
-
                 unsigned long long iterationCount = rangePos_nWholeBlocksToSkip;
 
-#if 1 // USE_CRYPTOPP_INCREMENTOR
+                m_decryptor.CTR_SeekToIteration(iterationCount);
+                //m_decryptor.CTR_IncrementCounterByOne(iterationCount);
 
-                // clone original IV
-                for (int i = 0; i < ivSize; i++) {
-                    ivBufferSeeked[i] = ivBuffer[i];
-                }
+//                std::vector<unsigned char> ivBufferSeeked(ivSize);
+//
+//                //CTR_ModePolicy::SeekToIteration()
+//                //AdditiveCipherTemplate<BASE>::Seek(lword position)
+//
+//#if 1 // USE_CRYPTOPP_INCREMENTOR
+//
+//                // clone original IV
+//                for (int i = 0; i < ivSize; i++) {
+//                    ivBufferSeeked[i] = ivBuffer[i];
+//                }
+//
+//                // increment
+//                for (int i = 0; i < iterationCount; i++) {
+//                    CryptoPP::IncrementCounterByOne(&ivBufferSeeked.at(0), ivSize);
+//                }
+//#else
+//                int carry = 0;
+//                for (int i = ivBuffer.size()-1; i >= 0; i--)
+//                {
+//                    unsigned int sum = ivBuffer[i] + byte(iterationCount) + carry;
+//                    ivBufferSeeked[i] = (byte) sum;
+//                    carry = sum >> 8;
+//                    iterationCount >>= 8;
+//                }
+//#endif
+//
+//
+//
+//                iv.resize(ivBufferSeeked.size());
+//                iv.assign(&ivBufferSeeked.at(0), &ivBufferSeeked.at(0) + ivBufferSeeked.size());
+//
+//                m_decryptor.SetKeyWithIV(&m_key.at(0), m_key.size(), &iv.at(0), iv.size());
 
-                // increment
-                for (int i = 0; i < iterationCount; i++) {
-                    CryptoPP::IncrementCounterByOne(&ivBufferSeeked.at(0), ivSize);
-                }
-#else
-                int carry = 0;
-                for (int i = ivBuffer.size()-1; i >= 0; i--)
-                {
-                    unsigned int sum = ivBuffer[i] + byte(iterationCount) + carry;
-                    ivBufferSeeked[i] = (byte) sum;
-                    carry = sum >> 8;
-                    iterationCount >>= 8;
-                }
-#endif
-
-
-
-                iv.resize(ivBufferSeeked.size());
-                iv.assign(&ivBufferSeeked.at(0), &ivBufferSeeked.at(0) + ivBufferSeeked.size());
-
-                m_decryptor.SetKeyWithIV(&m_key.at(0), m_key.size(), &iv.at(0));
             }
 
 #if USE_INNER_DECRYPT
@@ -306,7 +315,7 @@ namespace lcp
             m_decryptor.Seek(seek_offset);
 
             // See https://github.com/weidai11/cryptopp/blob/master/gcm.cpp#L477
-
+2
 //            // CryptoPP::GCM<CryptoPP::AES>::Decryption
 //            // does not appear to be allow random access ??
 //            if (m_decryptor.IsRandomAccess()) {
@@ -322,7 +331,7 @@ namespace lcp
                     (CryptoPP::AuthenticatedDecryptionFilter::MAC_AT_END | CryptoPP::AuthenticatedDecryptionFilter::THROW_EXCEPTION) :
                     CryptoPP::AuthenticatedDecryptionFilter::MAC_AT_END,
                     //AuthenticatedDecryptionFilter::DEFAULT_FLAGS, //word32 flags DEFAULT_FLAGS
-                    verifyIntegrityAuthenticatedEncryption ? 16 : 0, // int truncatedDigestSize -1
+                    verifyIntegrityAuthenticatedEncryption ? m_decryptor.DigestSize() : 0, // int truncatedDigestSize -1
                     CryptoPP::AuthenticatedDecryptionFilter::DEFAULT_PADDING // BlockPaddingScheme padding DEFAULT_PADDING
             );
 
@@ -379,7 +388,7 @@ namespace lcp
                     (CryptoPP::AuthenticatedDecryptionFilter::MAC_AT_END | CryptoPP::AuthenticatedDecryptionFilter::THROW_EXCEPTION) :
                     CryptoPP::AuthenticatedDecryptionFilter::MAC_AT_END,
                             //AuthenticatedDecryptionFilter::DEFAULT_FLAGS, //word32 flags DEFAULT_FLAGS
-                verifyIntegrityAuthenticatedEncryption ? 16 : 0, // int truncatedDigestSize -1
+                verifyIntegrityAuthenticatedEncryption ? m_decryptor.DigestSize() : 0, // int truncatedDigestSize -1
                 CryptoPP::AuthenticatedDecryptionFilter::DEFAULT_PADDING // BlockPaddingScheme padding DEFAULT_PADDING
         );
         filter.Put(cipherData, cipherSize);
@@ -404,7 +413,7 @@ namespace lcp
         )
     {
         // Length of block equals to length of IV
-        size_t blockAndIvSize = 12; //CryptoPP::AES::BLOCKSIZE; 16
+        size_t blockAndIvSize = m_decryptor.IVSize(); //12
         KeyType iv;
         iv.resize(blockAndIvSize);
 

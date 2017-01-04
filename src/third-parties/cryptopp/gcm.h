@@ -56,6 +56,13 @@ public:
 	lword MaxMessageLength() const
 		{return ((W64LIT(1)<<39)-256)/8;}
 
+	void CTR_SeekToIteration(lword iterationCount) {
+		m_ctr.SeekToIteration_(iterationCount);
+	}
+	void CTR_IncrementCounterByOne(lword iterationCount) {
+		m_ctr.IncrementCounterByOne_(iterationCount);
+	}
+
 protected:
 	// AuthenticatedSymmetricCipherBase
 	bool AuthenticationIsOnPlaintext() const
@@ -83,6 +90,9 @@ protected:
 	{
 	protected:
 		void IncrementCounterBy256();
+	public:
+		void SeekToIteration_(lword iterationCount);
+		void IncrementCounterByOne_(lword iterationCount);
 	};
 
 	GCTR m_ctr;

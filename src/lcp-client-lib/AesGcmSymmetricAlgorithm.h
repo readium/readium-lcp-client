@@ -101,6 +101,9 @@ namespace lcp
         KeyType m_key;
 
         CryptoPP::GCM<CryptoPP::AES>::Decryption m_decryptor;
+
+        // TODO: use for video/audio streaming, no authentication, just counter-type key / IV logic for random access into cypher byte stream
+        //CryptoPP::CTR_Mode<CryptoPP::AES>::Decryption m_decryptor_CTR;
     };
 }
 
