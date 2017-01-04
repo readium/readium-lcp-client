@@ -166,6 +166,33 @@ namespace lcp
         }
     }
 
+    void CryptoppUtils::Cert::BERDecodeTime(CryptoPP::BufferedTransformation& bt, std::string& time)
+    {
+        byte b;
+        if (!bt.Get(b) || (b != GENERALIZED_TIME && b != UTC_TIME))
+            BERDecodeError();
+
+        size_t bc;
+        if (!BERLengthDecode(bt, bc))
+            BERDecodeError();
+
+        SecByteBlock secBlockTime(bc);
+        if (bc != bt.Get(secBlockTime, bc))
+            BERDecodeError();
+
+        time.assign(secBlockTime.begin(), secBlockTime.end());
+        if (b == UTC_TIME)
+        {
+            int years = std::atoi(time.substr(0, 2).c_str());
+
+            if (years < 50)
+                time = "20" + time;
+            else
+                time = "19" + time;
+        }
+        time = time.substr(0, 8) + "T" + time.substr(8);
+    }
+
     void CryptoppUtils::Cert::ReadDateTimeSequence(
         BERSequenceDecoder & toBeSignedCertificate,
         std::string & notBefore,
@@ -174,8 +201,8 @@ namespace lcp
     {
         BERSequenceDecoder validity(toBeSignedCertificate);
         {
-            BERDecodeTime(validity, notBefore);
-            BERDecodeTime(validity, notAfter);
+            CryptoppUtils::Cert::BERDecodeTime(validity, notBefore);
+            CryptoppUtils::Cert::BERDecodeTime(validity, notAfter);
         }
         validity.MessageEnd();
     }

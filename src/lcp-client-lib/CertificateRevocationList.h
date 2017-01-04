@@ -28,6 +28,8 @@
 #ifndef __CERTIFICATE_REVOCATION_LIST_H__
 #define __CERTIFICATE_REVOCATION_LIST_H__
 
+#if ENABLE_NET_PROVIDER
+
 #include <mutex>
 #include "ICertificate.h"
 #include "NonCopyable.h"
@@ -56,5 +58,7 @@ namespace lcp
         StringsSet m_revokedSerialNumbers;
     };
 }
+
+#endif //ENABLE_NET_PROVIDER
 
 #endif //__CERTIFICATE_REVOCATION_LIST_H__

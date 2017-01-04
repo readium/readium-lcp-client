@@ -36,6 +36,7 @@ namespace lcp
     {
     public:
         static std::string AesCbc256Id;
+        static std::string AesGcm256Id;
         static std::string Sha256Id;
         static std::string RsaSha256Id;
     };

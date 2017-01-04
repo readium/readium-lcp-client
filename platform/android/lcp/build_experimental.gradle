@@ -24,6 +24,7 @@ model {
                         excludes.add('rapidjson/**/*.*')
                         excludes.add('utf8-cpp/**/*.*')
                         excludes.add('cryptopp/*test.cpp')
+                        excludes.add('cryptopp/TestScripts/*.*')
                         excludes.add('cryptopp/bench*.cpp')
                         excludes.add('cryptopp/validat*.cpp')
                         excludes.add('cryptopp/adhoc.cpp')

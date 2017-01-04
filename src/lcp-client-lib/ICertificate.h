@@ -62,6 +62,8 @@ namespace lcp
         virtual ~ICertificateExtension() {}
     };
 
+#if ENABLE_NET_PROVIDER
+
     class ICertificateRevocationList
     {
     public:
@@ -74,6 +76,8 @@ namespace lcp
         virtual const StringsSet & RevokedSerialNumbers() const = 0;
         virtual ~ICertificateRevocationList() {}
     };
+
+#endif //ENABLE_NET_PROVIDER
 
     struct CertificateVersion
     {

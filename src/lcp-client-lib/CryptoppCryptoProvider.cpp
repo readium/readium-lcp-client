@@ -32,9 +32,13 @@
 #include "public/ILicense.h"
 #include "public/ICrypto.h"
 #include "Certificate.h"
+
+#if ENABLE_NET_PROVIDER
 #include "CertificateRevocationList.h"
 #include "CrlUpdater.h"
 #include "ThreadTimer.h"
+#endif //ENABLE_NET_PROVIDER
+
 #include "DateTime.h"
 #include "LcpUtils.h"
 #include "IKeyProvider.h"
@@ -189,7 +193,11 @@ namespace lcp
             hashAlgorithm->UpdateHash(userPassphrase);
             userKey = hashAlgorithm->Hash();
 
-            std::unique_ptr<ISymmetricAlgorithm> contentKeyAlgorithm(profile->CreateContentKeyAlgorithm(userKey));
+            //"http://www.w3.org/2009/xmlenc11#aes256-gcm"
+            //"http://www.w3.org/2001/04/xmlenc#aes256-cbc"
+            const std::string algorithm = license->Crypto()->ContentKeyAlgorithm();
+
+            std::unique_ptr<ISymmetricAlgorithm> contentKeyAlgorithm(profile->CreateContentKeyAlgorithm(userKey, algorithm));
             std::string id = contentKeyAlgorithm->Decrypt(license->Crypto()->UserKeyCheck());
             if (!EqualsUtf8(id, license->Id()))
             {
@@ -217,7 +225,11 @@ namespace lcp
                 return Status(StatusCode::ErrorCommonEncryptionProfileNotFound, "ErrorCommonEncryptionProfileNotFound");
             }
 
-            std::unique_ptr<ISymmetricAlgorithm> contentKeyAlgorithm(profile->CreateContentKeyAlgorithm(userKey));
+            //"http://www.w3.org/2009/xmlenc11#aes256-gcm"
+            //"http://www.w3.org/2001/04/xmlenc#aes256-cbc"
+            const std::string algorithm = license->Crypto()->ContentKeyAlgorithm();
+
+            std::unique_ptr<ISymmetricAlgorithm> contentKeyAlgorithm(profile->CreateContentKeyAlgorithm(userKey, algorithm));
             std::string decryptedContentKey = contentKeyAlgorithm->Decrypt(license->Crypto()->ContentKey());
 
             contentKey.assign(decryptedContentKey.begin(), decryptedContentKey.end());
@@ -320,7 +332,11 @@ namespace lcp
                 return Status(StatusCode::ErrorCommonEncryptionProfileNotFound, "ErrorCommonEncryptionProfileNotFound");
             }
 
-            std::unique_ptr<ISymmetricAlgorithm> contentKeyAlgorithm(profile->CreateContentKeyAlgorithm(keyProvider->UserKey()));
+            //"http://www.w3.org/2009/xmlenc11#aes256-gcm"
+            //"http://www.w3.org/2001/04/xmlenc#aes256-cbc"
+            const std::string algorithm = license->Crypto()->ContentKeyAlgorithm();
+
+            std::unique_ptr<ISymmetricAlgorithm> contentKeyAlgorithm(profile->CreateContentKeyAlgorithm(keyProvider->UserKey(), algorithm));
             decrypted = contentKeyAlgorithm->Decrypt(dataBase64);
             return Status(StatusCode::ErrorCommonSuccess);
         }
@@ -336,7 +352,8 @@ namespace lcp
         const unsigned char * data,
         const size_t dataLength,
         unsigned char * decryptedData,
-        size_t * decryptedDataLength
+        size_t * decryptedDataLength,
+        const std::string & algorithm
         )
     {
         try
@@ -347,8 +364,8 @@ namespace lcp
                 return Status(StatusCode::ErrorCommonEncryptionProfileNotFound, "ErrorCommonEncryptionProfileNotFound");
             }
 
-            std::unique_ptr<ISymmetricAlgorithm> algorithm(profile->CreatePublicationAlgorithm(keyProvider->ContentKey()));
-            *decryptedDataLength = algorithm->Decrypt(
+            std::unique_ptr<ISymmetricAlgorithm> algo(profile->CreatePublicationAlgorithm(keyProvider->ContentKey(), algorithm));
+            *decryptedDataLength = algo->Decrypt(
                 data, dataLength, decryptedData, *decryptedDataLength
                 );
 
@@ -364,7 +381,8 @@ namespace lcp
         ILicense * license,
         IKeyProvider * keyProvider,
         IReadableStream * stream,
-        IEncryptedStream ** encStream
+        IEncryptedStream ** encStream,
+        const std::string & algorithm
         )
     {
         try
@@ -376,8 +394,8 @@ namespace lcp
             }
 
             Status res(StatusCode::ErrorCommonSuccess);
-            std::unique_ptr<ISymmetricAlgorithm> algorithm(profile->CreatePublicationAlgorithm(keyProvider->ContentKey()));
-            *encStream = new SymmetricAlgorithmEncryptedStream(stream, std::move(algorithm));
+            std::unique_ptr<ISymmetricAlgorithm> algo(profile->CreatePublicationAlgorithm(keyProvider->ContentKey(), algorithm));
+            *encStream = new SymmetricAlgorithmEncryptedStream(stream, std::move(algo));
             return res;
         }
         catch (const CryptoPP::Exception & ex)

@@ -29,22 +29,44 @@
 #include "EncryptionProfileNames.h"
 #include "AlgorithmNames.h"
 
+#include "LcpUtils.h"
+
 #include "Sha256HashAlgorithm.h"
 #include "AesCbcSymmetricAlgorithm.h"
+#include "AesGcmSymmetricAlgorithm.h"
 #include "RsaSha256SignatureAlgorithm.h"
+
 
 namespace lcp
 {
     ISymmetricAlgorithm * Lcp1dot0EncryptionProfile::CreatePublicationAlgorithm(
-        const KeyType & symmetricKey) const
+        const KeyType & symmetricKey,
+        const std::string & algorithm) const
     {
-        return new AesCbcSymmetricAlgorithm(symmetricKey, AesCbcSymmetricAlgorithm::Key256);
+        if (algorithm == "http://www.w3.org/2009/xmlenc11#aes256-gcm") {
+            return new AesGcmSymmetricAlgorithm(symmetricKey, AesGcmSymmetricAlgorithm::Key256);
+        }
+
+        if (algorithm == "http://www.w3.org/2001/04/xmlenc#aes256-cbc") {
+            return new AesCbcSymmetricAlgorithm(symmetricKey, AesCbcSymmetricAlgorithm::Key256);
+        }
+
+        throw StatusException(Status(StatusCode::ErrorCommonAlgorithmMismatch, "ErrorCommonAlgorithmMismatch"));
     }
 
     ISymmetricAlgorithm * Lcp1dot0EncryptionProfile::CreateContentKeyAlgorithm(
-        const KeyType & symmetricKey) const
+        const KeyType & symmetricKey,
+        const std::string & algorithm) const
     {
-        return new AesCbcSymmetricAlgorithm(symmetricKey, AesCbcSymmetricAlgorithm::Key256);
+        if (algorithm == "http://www.w3.org/2009/xmlenc11#aes256-gcm") {
+            return new AesGcmSymmetricAlgorithm(symmetricKey, AesGcmSymmetricAlgorithm::Key256);
+        }
+
+        if (algorithm == "http://www.w3.org/2001/04/xmlenc#aes256-cbc") {
+            return new AesCbcSymmetricAlgorithm(symmetricKey, AesCbcSymmetricAlgorithm::Key256);
+        }
+
+        throw StatusException(Status(StatusCode::ErrorCommonAlgorithmMismatch, "ErrorCommonAlgorithmMismatch"));
     }
 
     IHashAlgorithm * Lcp1dot0EncryptionProfile::CreateUserKeyAlgorithm() const
@@ -60,26 +82,43 @@ namespace lcp
 
     std::string Lcp1dot0EncryptionProfile::Name() const
     {
+        //http://readium.org/lcp/profile-1.0
         return EncryptionProfileNames::Lcp1dot0ProfileId;
     }
 
     std::string Lcp1dot0EncryptionProfile::UserKeyAlgorithm() const
     {
+        //http://www.w3.org/2001/04/xmlenc#sha256
         return AlgorithmNames::Sha256Id;
     }
 
-    std::string Lcp1dot0EncryptionProfile::PublicationAlgorithm() const
+    std::string Lcp1dot0EncryptionProfile::PublicationAlgorithmCBC() const
     {
+        //http://www.w3.org/2001/04/xmlenc#aes256-cbc
         return AlgorithmNames::AesCbc256Id;
     }
 
-    std::string Lcp1dot0EncryptionProfile::ContentKeyAlgorithm() const
+    std::string Lcp1dot0EncryptionProfile::PublicationAlgorithmGCM() const
     {
+        //http://www.w3.org/2009/xmlenc11#aes256-gcm
+        return AlgorithmNames::AesGcm256Id;
+    }
+
+    std::string Lcp1dot0EncryptionProfile::ContentKeyAlgorithmCBC() const
+    {
+        //http://www.w3.org/2001/04/xmlenc#aes256-cbc
         return AlgorithmNames::AesCbc256Id;
+    }
+
+    std::string Lcp1dot0EncryptionProfile::ContentKeyAlgorithmGCM() const
+    {
+        //http://www.w3.org/2009/xmlenc11#aes256-gcm
+        return AlgorithmNames::AesGcm256Id;
     }
 
     std::string Lcp1dot0EncryptionProfile::SignatureAlgorithm() const
     {
+        //http://www.w3.org/2001/04/xmldsig-more#rsa-sha256
         return AlgorithmNames::RsaSha256Id;
     }
 }
