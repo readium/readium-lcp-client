@@ -179,7 +179,7 @@ namespace lcp
             KeyType iv;
 
             size_t ivLength = CryptoPP::AES::BLOCKSIZE;
-            if (rangeInfo.position == 0) {
+            if (true || rangeInfo.position == 0) {
                 ivLength = ivSize;
 
 
@@ -238,28 +238,20 @@ namespace lcp
             std::vector<unsigned char> inBuffer(readLength);
             std::vector<unsigned char> outBuffer(readLength);
 
-            // CryptoPP::GCM<CryptoPP::AES>::Decryption
-            // does not appear to be allow random access ??
-            if (m_decryptor.IsRandomAccess()) {
-                m_decryptor.Seek(readPosition);
-            }
-
             stream->SetReadPosition(readPosition);
 
             stream->Read(&inBuffer.at(0), readLength);
 
-
-
             unsigned char *inBufferStartOffset = &inBuffer.at(0);
-            if (rangeInfo.position != 0) {
-                inBufferStartOffset = &inBuffer.at(0) + ivLength;
-                readLength -= ivLength;
-
-                iv.resize(ivLength);
-                iv.assign(&inBuffer.at(0), inBufferStartOffset);
-
-                m_decryptor.SetKeyWithIV(&m_key.at(0), m_key.size(), &iv.at(0));
-            }
+//            if (rangeInfo.position != 0) {
+//                inBufferStartOffset = &inBuffer.at(0) + ivLength;
+//                readLength -= ivLength;
+//
+//                iv.resize(ivLength);
+//                iv.assign(&inBuffer.at(0), inBufferStartOffset);
+//
+//                m_decryptor.SetKeyWithIV(&m_key.at(0), m_key.size(), &iv.at(0));
+//            }
 
 
 #if USE_INNER_DECRYPT
@@ -278,6 +270,26 @@ namespace lcp
             size_t decryptedDataLength_ = readLength;
             bool verifyIntegrityAuthenticatedEncryption = full; // false
 
+#if USE_CRYPTOPP_PUMP
+            size_t seek_offset = 0;
+            StringSource source(
+                    cipherData, //const byte *string
+                    cipherSize, // size_t length
+                    false, // bool pumpAll
+                    NULL); // BufferedTransformation *attachment = NULL
+            source.Pump(seek_offset);
+            m_decryptor.Seek(seek_offset);
+
+            // See https://github.com/weidai11/cryptopp/blob/master/gcm.cpp#L477
+
+//            // CryptoPP::GCM<CryptoPP::AES>::Decryption
+//            // does not appear to be allow random access ??
+//            if (m_decryptor.IsRandomAccess()) {
+//                m_decryptor.Seek(seek_offset);
+//            }
+
+#endif
+
             CryptoPP::AuthenticatedDecryptionFilter filter( //BufferedTransformation*
                     m_decryptor, //AuthenticatedSymmetricCipher &c
                     NULL, //BufferedTransformation *attachment NULL
@@ -288,9 +300,16 @@ namespace lcp
                     verifyIntegrityAuthenticatedEncryption ? 16 : 0, // int truncatedDigestSize -1
                     CryptoPP::AuthenticatedDecryptionFilter::DEFAULT_PADDING // BlockPaddingScheme padding DEFAULT_PADDING
             );
+
+#if USE_CRYPTOPP_PUMP
+            source.Attach(new Redirector(filter));
+            //source.PumpAll();
+            source.Pump(cipherSize - seek_offset);
+#else
             filter.Put(cipherData, cipherSize);
 //https://www.cryptopp.com/docs/ref/class_buffered_transformation.html#a0c25529ded99db20ad35ccef3f7234e6
 //        filter.Skip()
+#endif //USE_CRYPTOPP_PUMP
 
             filter.MessageEnd();
             size_t resultSize = static_cast<size_t>(filter.MaxRetrievable());
