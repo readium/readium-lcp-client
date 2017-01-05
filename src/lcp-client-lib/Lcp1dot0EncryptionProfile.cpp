@@ -35,6 +35,7 @@
 #include "AesCbcSymmetricAlgorithm.h"
 #include "AesGcmSymmetricAlgorithm.h"
 #include "RsaSha256SignatureAlgorithm.h"
+#include "EcdsaSha256SignatureAlgorithm.h"
 
 
 namespace lcp
@@ -43,11 +44,13 @@ namespace lcp
         const KeyType & symmetricKey,
         const std::string & algorithm) const
     {
-        if (algorithm == "http://www.w3.org/2009/xmlenc11#aes256-gcm") {
+        //http://www.w3.org/2009/xmlenc11#aes256-gcm
+        if (algorithm == AlgorithmNames::AesGcm256Id) {
             return new AesGcmSymmetricAlgorithm(symmetricKey, AesGcmSymmetricAlgorithm::Key256);
         }
 
-        if (algorithm == "http://www.w3.org/2001/04/xmlenc#aes256-cbc") {
+        //http://www.w3.org/2001/04/xmlenc#aes256-cbc
+        if (algorithm == AlgorithmNames::AesCbc256Id) {
             return new AesCbcSymmetricAlgorithm(symmetricKey, AesCbcSymmetricAlgorithm::Key256);
         }
 
@@ -58,11 +61,13 @@ namespace lcp
         const KeyType & symmetricKey,
         const std::string & algorithm) const
     {
-        if (algorithm == "http://www.w3.org/2009/xmlenc11#aes256-gcm") {
+        //http://www.w3.org/2009/xmlenc11#aes256-gcm
+        if (algorithm == AlgorithmNames::AesGcm256Id) {
             return new AesGcmSymmetricAlgorithm(symmetricKey, AesGcmSymmetricAlgorithm::Key256);
         }
 
-        if (algorithm == "http://www.w3.org/2001/04/xmlenc#aes256-cbc") {
+        //http://www.w3.org/2001/04/xmlenc#aes256-cbc
+        if (algorithm == AlgorithmNames::AesCbc256Id) {
             return new AesCbcSymmetricAlgorithm(symmetricKey, AesCbcSymmetricAlgorithm::Key256);
         }
 
@@ -75,9 +80,20 @@ namespace lcp
     }
 
     ISignatureAlgorithm * Lcp1dot0EncryptionProfile::CreateSignatureAlgorithm(
-        const KeyType & publicKey) const
+        const KeyType & publicKey,
+        const std::string & algorithm) const
     {
-        return new RsaSha256SignatureAlgorithm(publicKey);
+        //http://www.w3.org/2001/04/xmldsig-more#rsa-sha256
+        if (algorithm == AlgorithmNames::RsaSha256Id) {
+            return new RsaSha256SignatureAlgorithm(publicKey);
+        }
+
+        //http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256
+        if (algorithm == AlgorithmNames::EcdsaSha256Id) {
+            return new EcdsaSha256SignatureAlgorithm(publicKey);
+        }
+
+        throw StatusException(Status(StatusCode::ErrorCommonAlgorithmMismatch, "ErrorCommonAlgorithmMismatch"));
     }
 
     std::string Lcp1dot0EncryptionProfile::Name() const
@@ -116,9 +132,15 @@ namespace lcp
         return AlgorithmNames::AesGcm256Id;
     }
 
-    std::string Lcp1dot0EncryptionProfile::SignatureAlgorithm() const
+    std::string Lcp1dot0EncryptionProfile::SignatureAlgorithmRSA() const
     {
         //http://www.w3.org/2001/04/xmldsig-more#rsa-sha256
         return AlgorithmNames::RsaSha256Id;
+    }
+
+    std::string Lcp1dot0EncryptionProfile::SignatureAlgorithmECDSA() const
+    {
+        //http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256
+        return AlgorithmNames::EcdsaSha256Id;
     }
 }

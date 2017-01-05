@@ -110,7 +110,7 @@ namespace lcp
         {
             return Status(StatusCode::ErrorCommonAlgorithmMismatch, "ErrorCommonAlgorithmMismatch: user key algorithm mismatch");
         }
-        if (m_encryptionProfile->SignatureAlgorithm() != m_cryptoInfo.signatureAlgorithm)
+        if (m_encryptionProfile->SignatureAlgorithmRSA() != m_cryptoInfo.signatureAlgorithm && m_encryptionProfile->SignatureAlgorithmECDSA() != m_cryptoInfo.signatureAlgorithm)
         {
             return Status(StatusCode::ErrorCommonAlgorithmMismatch, "ErrorCommonAlgorithmMismatch: signature algorithm mismatch");
         }

@@ -47,11 +47,12 @@ namespace lcp
         virtual std::string PublicationAlgorithmCBC() const = 0;
         virtual std::string ContentKeyAlgorithmGCM() const = 0;
         virtual std::string ContentKeyAlgorithmCBC() const = 0;
-        virtual std::string SignatureAlgorithm() const = 0;
+        virtual std::string SignatureAlgorithmRSA() const = 0;
+        virtual std::string SignatureAlgorithmECDSA() const = 0;
         virtual IHashAlgorithm * CreateUserKeyAlgorithm() const = 0;
         virtual ISymmetricAlgorithm * CreatePublicationAlgorithm(const KeyType & symmetricKey, const std::string & algorithm) const = 0;
         virtual ISymmetricAlgorithm * CreateContentKeyAlgorithm(const KeyType & symmetricKey, const std::string & algorithm) const = 0;
-        virtual ISignatureAlgorithm * CreateSignatureAlgorithm(const KeyType & publicKey) const = 0;
+        virtual ISignatureAlgorithm * CreateSignatureAlgorithm(const KeyType & publicKey, const std::string & algorithm) const = 0;
         virtual ~IEncryptionProfile() {}
     };
 }
