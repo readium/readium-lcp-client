@@ -25,24 +25,55 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#ifndef __ALGORITHM_NAMES_H__
-#define __ALGORITHM_NAMES_H__
-
-#include <string>
+#include "EcdsaSha256SignatureAlgorithm.h"
+#include "AlgorithmNames.h"
+#include "CryptoppUtils.h"
 
 namespace lcp
 {
-    class AlgorithmNames
+    EcdsaSha256SignatureAlgorithm::EcdsaSha256SignatureAlgorithm(const KeyType & publicKey)
     {
-    public:
-        static std::string AesCbc256Id;
-        static std::string AesGcm256Id;
-        static std::string Sha256Id;
-        static std::string RsaMd5Id;
-        static std::string RsaSha1Id;
-        static std::string RsaSha256Id;
-        static std::string EcdsaSha256Id;
-    };
-}
+        ByteQueue publicKeyQueue;
+        KeyType rawPublicKey = publicKey;
+        publicKeyQueue.Put(&rawPublicKey.at(0), rawPublicKey.size());
+        publicKeyQueue.MessageEnd();
+        m_publicKey.BERDecode(publicKeyQueue);
+    }
 
-#endif //__ALGORITHM_NAMES_H__
+    std::string EcdsaSha256SignatureAlgorithm::Name() const
+    {
+        return AlgorithmNames::RsaSha256Id;
+    }
+
+    bool EcdsaSha256SignatureAlgorithm::VerifySignature(
+            const std::string & message,
+            const std::string & signatureBase64
+    )
+    {
+        CryptoPP::SecByteBlock rawSignature;
+        CryptoppUtils::Base64ToSecBlock(signatureBase64, rawSignature);
+
+        return this->VerifySignature(
+                reinterpret_cast<const byte *>(message.data()),
+                message.size(),
+                rawSignature.data(),
+                rawSignature.size()
+        );
+    }
+
+    bool EcdsaSha256SignatureAlgorithm::VerifySignature(
+            const unsigned char * message,
+            size_t messageLength,
+            const unsigned char * signature,
+            size_t signatureLength
+    )
+    {
+        ThisVerifier verifier(m_publicKey);
+        return verifier.VerifyMessage(
+                message,
+                messageLength,
+                signature,
+                signatureLength
+        );
+    }
+}

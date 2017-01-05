@@ -31,6 +31,7 @@
 #include "IncludeMacros.h"
 #include "IEncryptionProfile.h"
 #include "LcpUtils.h"
+#include "AlgorithmNames.h"
 
 CRYPTOPP_INCLUDE_START
 #include <cryptopp/cryptlib.h>
@@ -133,7 +134,20 @@ namespace lcp
         }
 
         CryptoppUtils::Cert::PullToBeSignedData(rawDecodedCert, m_toBeSignedData);
-        m_signatureAlgorithm.reset(m_encryptionProfile->CreateSignatureAlgorithm(this->PublicKey()));
+
+        std::string algo = AlgorithmNames::EcdsaSha256Id;
+
+        if (m_signatureAlgorithmId == sha256withRSAEncryption()) {
+            algo = AlgorithmNames::RsaSha256Id;
+
+        } else if (m_signatureAlgorithmId == sha1withRSAEncryption()) {
+            algo = AlgorithmNames::RsaSha1Id;
+
+        } else if (m_signatureAlgorithmId == md5withRSAEncryption()) {
+            algo = AlgorithmNames::RsaMd5Id;
+        }
+
+        m_signatureAlgorithm.reset(m_encryptionProfile->CreateSignatureAlgorithm(this->PublicKey(), algo));
     }
 
     KeyType Certificate::PublicKey() const

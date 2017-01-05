@@ -33,4 +33,7 @@ namespace lcp
     /*static*/ std::string AlgorithmNames::AesGcm256Id = "http://www.w3.org/2009/xmlenc11#aes256-gcm";
     /*static*/ std::string AlgorithmNames::Sha256Id = "http://www.w3.org/2001/04/xmlenc#sha256";
     /*static*/ std::string AlgorithmNames::RsaSha256Id = "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256";
+    /*static*/ std::string AlgorithmNames::RsaSha1Id = "http://www.w3.org/2000/09/xmldsig#rsa-sha1";
+    /*static*/ std::string AlgorithmNames::RsaMd5Id = "http://www.w3.org/2001/04/xmldsig-more#rsa-md5";
+    /*static*/ std::string AlgorithmNames::EcdsaSha256Id = "http://www.w3.org/2001/04/xmldsig-more#ecdsa-sha256";
 }

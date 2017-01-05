@@ -25,24 +25,42 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#ifndef __ALGORITHM_NAMES_H__
-#define __ALGORITHM_NAMES_H__
+#ifndef __ECDSA_SHA256_SIGNATURE_ALGORITHM_H__
+#define __ECDSA_SHA256_SIGNATURE_ALGORITHM_H__
 
-#include <string>
+#include "CryptoAlgorithmInterfaces.h"
+#include "IncludeMacros.h"
+#include "NonCopyable.h"
+
+CRYPTOPP_INCLUDE_START
+#include <cryptopp/eccrypto.h>
+CRYPTOPP_INCLUDE_END
 
 namespace lcp
 {
-    class AlgorithmNames
+    class EcdsaSha256SignatureAlgorithm : public ISignatureAlgorithm, public NonCopyable
     {
     public:
-        static std::string AesCbc256Id;
-        static std::string AesGcm256Id;
-        static std::string Sha256Id;
-        static std::string RsaMd5Id;
-        static std::string RsaSha1Id;
-        static std::string RsaSha256Id;
-        static std::string EcdsaSha256Id;
+        explicit EcdsaSha256SignatureAlgorithm(const KeyType & publicKey);
+
+        virtual std::string Name() const;
+
+        virtual bool VerifySignature(
+                const std::string & message,
+                const std::string & signatureBase64
+        );
+
+        virtual bool VerifySignature(
+                const unsigned char * message,
+                size_t messageLength,
+                const unsigned char * signature,
+                size_t signatureLength
+        );
+
+    private:
+        typedef CryptoPP::ECDSA<CryptoPP::ECP, CryptoPP::SHA256>::Verifier ThisVerifier;
+        CryptoPP::ECDSA<CryptoPP::ECP, CryptoPP::SHA256>::PublicKey m_publicKey;
     };
 }
 
-#endif //__ALGORITHM_NAMES_H__
+#endif //__ECDSA_SHA256_SIGNATURE_ALGORITHM_H__
