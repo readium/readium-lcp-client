@@ -5,6 +5,8 @@
 #ifndef LCP_ANDROID_NET_PROVIDER_H
 #define LCP_ANDROID_NET_PROVIDER_H
 
+#if ENABLE_NET_PROVIDER
+
 #include <public/INetProvider.h>
 #include <string>
 #include <jni.h>
@@ -48,5 +50,6 @@ JNIEXPORT void JNICALL Java_org_readium_sdk_lcp_NetProviderCallback_nativeOnRequ
 }
 #endif
 
+#endif //ENABLE_NET_PROVIDER
 
 #endif //LCP_ANDROID_NET_PROVIDER_H

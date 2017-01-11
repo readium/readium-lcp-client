@@ -5,6 +5,9 @@
 #include "ServiceFactory.h"
 #include "Util.h"
 #include "CredentialHandler.h"
+#if !DISABLE_LSD
+#include "StatusDocumentHandler.h"
+#endif //!DISABLE_LSD
 #include <public/DefaultFileSystemProvider.h>
 #include <public/LcpServiceCreator.h>
 #include <public/LcpContentFilter.h>
@@ -13,8 +16,11 @@
 namespace lcp {
     ILcpService * ServiceFactory::build(
             const std::string &certContent,
-            StorageProvider* storageProvider,
+            StorageProvider* storageProvider
+#if ENABLE_NET_PROVIDER
+            ,
         NetProvider* netProvider
+#endif //ENABLE_NET_PROVIDER
     ) {
         DefaultFileSystemProvider * fileSystemProvider = new DefaultFileSystemProvider();
         LcpServiceCreator serviceCreator;
@@ -22,7 +28,9 @@ namespace lcp {
 
         serviceCreator.CreateLcpService(
                 certContent,
+#if ENABLE_NET_PROVIDER
                 netProvider,
+#endif //ENABLE_NET_PROVIDER
                 storageProvider,
                 fileSystemProvider,
                 &service);
@@ -32,7 +40,14 @@ namespace lcp {
 
 JNIEXPORT jobject JNICALL Java_org_readium_sdk_lcp_ServiceFactory_nativeBuild(
         JNIEnv *env, jobject obj, jstring jCertContent,
-        jobject jStorageProvider, jobject jNetProvider, jobject jCredentialHandler
+        jobject jStorageProvider,
+#if ENABLE_NET_PROVIDER
+        jobject jNetProvider,
+#endif //ENABLE_NET_PROVIDER
+        jobject jCredentialHandler
+#if !DISABLE_LSD
+        , jobject jStatusDocumentHandler
+#endif //!DISABLE_LSD
     ) {
     // Initialize jvm
     lcp::initJvm(env);
@@ -40,10 +55,23 @@ JNIEXPORT jobject JNICALL Java_org_readium_sdk_lcp_ServiceFactory_nativeBuild(
     std::string certContent(cCertContent);
     lcp::ServiceFactory serviceFactory;
     lcp::StorageProvider * storageProvider = new lcp::StorageProvider(jStorageProvider);
+#if ENABLE_NET_PROVIDER
     lcp::NetProvider * netProvider = new lcp::NetProvider(jNetProvider);
-    lcp::ILcpService * service = serviceFactory.build(certContent, storageProvider, netProvider);
+#endif //ENABLE_NET_PROVIDER
+    lcp::ILcpService * service = serviceFactory.build(certContent, storageProvider
+#if ENABLE_NET_PROVIDER
+            , netProvider
+#endif //ENABLE_NET_PROVIDER
+    );
     lcp::ICredentialHandler * credentialHandler = new lcp::CredentialHandler(jCredentialHandler, service);
-    lcp::LcpContentModule::Register(service, credentialHandler);
+#if !DISABLE_LSD
+    lcp::IStatusDocumentHandler * statusDocumentHandler = new lcp::StatusDocumentHandler(jStatusDocumentHandler, service);
+#endif //!DISABLE_LSD
+    lcp::LcpContentModule::Register(service, credentialHandler
+#if !DISABLE_LSD
+            , statusDocumentHandler
+#endif //!DISABLE_LSD
+    );
     jclass cls = env->FindClass("org/readium/sdk/lcp/Service");
     jmethodID methodId = env->GetMethodID(cls, "<init>", "(J)V");
     return env->NewObject(cls, methodId, (jlong) service);

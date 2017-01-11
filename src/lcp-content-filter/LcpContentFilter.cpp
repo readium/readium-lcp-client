@@ -1,8 +1,28 @@
+// Copyright (c) 2016 Mantano
+// Licensed to the Readium Foundation under one or more contributor license agreements.
 //
-//  Created by Mickaël Menu on 24/11/15.
-//  Copyright (c) 2014 Readium Foundation and/or its licensees. All rights reserved.
+// Redistribution and use in source and binary forms, with or without modification,
+// are permitted provided that the following conditions are met:
 //
+// 1. Redistributions of source code must retain the above copyright notice, this
+//    list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright notice,
+//    this list of conditions and the following disclaimer in the documentation and/or
+//    other materials provided with the distribution.
+// 3. Neither the name of the organization nor the names of its contributors may be
+//    used to endorse or promote products derived from this software without specific
+//    prior written permission
 //
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+// WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+// DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+// ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+// (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+// LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+// ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #if FEATURES_READIUM
 
@@ -17,7 +37,7 @@ READIUM_INCLUDE_START
 #include <ePub3/container.h>
 #include <ePub3/filter_manager.h>
 #include <ePub3/media-overlays_smil_utils.h>
-#include <cmath>
+//#include <cmath>
 #include <ePub3/package.h>
 #include <ePub3/utilities/byte_stream.h>
 #include <zlib.h>
@@ -31,7 +51,7 @@ READIUM_INCLUDE_END
 #define LOG(msg)
 #endif
 
-static std::string const LcpLicensePath = "META-INF/license.lcpl";
+//static std::string const LcpLicensePath = "META-INF/license.lcpl";
 
 namespace lcp {
     bool LcpContentFilter::SniffLcpContent(ConstManifestItemPtr item)
@@ -147,7 +167,7 @@ namespace lcp {
             size_t bufferLen = len;
             uint8_t *buffer = new unsigned char[bufferLen];
 
-            Status res = lcpService->DecryptData(m_license, (const unsigned char *)data, len, buffer, &bufferLen, context->Algorithm());
+            Status res = LcpContentFilter::lcpService->DecryptData(m_license, (const unsigned char *)data, len, buffer, &bufferLen, context->Algorithm());
             if (!Status::IsSuccess(res)) {
                 delete [] buffer;
                 return nullptr;
@@ -173,7 +193,7 @@ namespace lcp {
             IReadableStream *readableStream = new SeekableByteStreamAdapter(byteStream);
 
             IEncryptedStream *encryptedStream;
-            Status status = lcpService->CreateEncryptedDataStream(m_license, readableStream, context->Algorithm(), &encryptedStream);
+            Status status = LcpContentFilter::lcpService->CreateEncryptedDataStream(m_license, readableStream, context->Algorithm(), &encryptedStream);
             if (!Status::IsSuccess(status)) {
                 LOG("Failed to create readable stream");
 
@@ -211,7 +231,7 @@ namespace lcp {
         if (context != nullptr) {
             SeekableByteStreamAdapter *readableStream = new SeekableByteStreamAdapter(byteStream);
             IEncryptedStream *encryptedStream;
-            Status status = lcpService->CreateEncryptedDataStream(m_license, readableStream, context->Algorithm(), &encryptedStream);
+            Status status = LcpContentFilter::lcpService->CreateEncryptedDataStream(m_license, readableStream, context->Algorithm(), &encryptedStream);
             
             if (Status::IsSuccess(status)) {
 
@@ -251,36 +271,22 @@ namespace lcp {
     
     ContentFilterPtr LcpContentFilter::Factory(ConstPackagePtr package)
     {
-        ContainerPtr container = package->GetContainer();
-        if (!container->FileExistsAtPath(LcpLicensePath)) {
-            return nullptr;
+        if (LcpContentFilter::lcpLicense != NULL) {
+            return std::make_shared<LcpContentFilter>(LcpContentFilter::lcpLicense); //New(LcpContentFilter::lcpLicense);
         }
-        
-        // read license.lcpl
-        std::unique_ptr<ePub3::ByteStream> stream = container->ReadStreamAtPath(LcpLicensePath);
-        void *buffer = nullptr;
-        size_t length = stream->ReadAllBytes(&buffer);
-        std::string licenseJSON((char *)buffer, length);
-        free (buffer);
-        
-        // create content filter
-        shared_ptr<LcpContentFilter> contentFilter = nullptr;
-        ILicense *license;
-        Status res = lcpService->OpenLicense(licenseJSON, &license);
-        if (Status::IsSuccess(res)) {
-            return New(license);
-        } else {
-            LOG("Failed to parse license <" << res.Code << ": " << res.Extension << ">");
-        }
-        
         return nullptr;
     }
-    
+
+    // static
+    ILicense *LcpContentFilter::lcpLicense = NULL;
+
+    // static
     ILcpService *LcpContentFilter::lcpService = NULL;
     
-    void LcpContentFilter::Register(ILcpService *const lcpService)
+    void LcpContentFilter::Register(ILcpService *const service, ILicense *const license)
     {
-        LcpContentFilter::lcpService = lcpService;
+        LcpContentFilter::lcpService = service;
+        LcpContentFilter::lcpLicense = license;
         FilterManager::Instance()->RegisterFilter("LcpFilter", MustAccessRawBytes, LcpContentFilter::Factory);
     }
 }

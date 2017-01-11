@@ -1,8 +1,28 @@
+// Copyright (c) 2016 Mantano
+// Licensed to the Readium Foundation under one or more contributor license agreements.
 //
-//  Created by Mickaël Menu, Artem Brazhnikov on 11/15.
-//  Copyright (c) 2014 Readium Foundation and/or its licensees. All rights reserved.
+// Redistribution and use in source and binary forms, with or without modification,
+// are permitted provided that the following conditions are met:
 //
+// 1. Redistributions of source code must retain the above copyright notice, this
+//    list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright notice,
+//    this list of conditions and the following disclaimer in the documentation and/or
+//    other materials provided with the distribution.
+// 3. Neither the name of the organization nor the names of its contributors may be
+//    used to endorse or promote products derived from this software without specific
+//    prior written permission
 //
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+// WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+// DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+// ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+// (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+// LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+// ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #ifndef __LCP_STATUS_H__
 #define __LCP_STATUS_H__
@@ -24,8 +44,10 @@ namespace lcp
             //
             // No Error
             ErrorCommonSuccess,
+#if ENABLE_NET_PROVIDER
             // No NetProvider implementation has been given.
             ErrorCommonNoNetProvider,
+#endif //ENABLE_NET_PROVIDER
             // No StorageProvider implementation has been given.
             ErrorCommonNoStorageProvider,
             // Implementation of the Encryption Profile from the
@@ -40,6 +62,8 @@ namespace lcp
             //
             // The given LCPL is not a valid License Document.
             ErrorOpeningLicenseNotValid,
+            //
+            ErrorLicenseFailToInject,
             // The license hasn't begun yet (right 'start'),
             ErrorOpeningLicenseNotStarted,
             // The license is expired (right 'end'),
@@ -68,6 +92,7 @@ namespace lcp
             // Trying to save duplicate license instance while opening
             ErrorOpeningDuplicateLicenseInstance,
 
+#if ENABLE_NET_PROVIDER
             //
             // Errors when acquiring a protected publication from a License.
             //
@@ -79,6 +104,7 @@ namespace lcp
             ErrorAcquisitionPublicationWrongType,
             // Cannot open file to write
             ErrorAcquisitionInvalidFilePath,
+#endif //ENABLE_NET_PROVIDER
 
             //
             // Errors when decrypting a License or data.
@@ -90,8 +116,10 @@ namespace lcp
             // The Publication is still encrypted and can't be used to decrypt data.
             ErrorDecryptionPublicationEncrypted,
             // Error of crypto library
-            ErrorDecryptionCommonError,
+            ErrorDecryptionCommonError
 
+#if ENABLE_NET_PROVIDER
+            ,
             //
             // Errors when doing HTTP network calls.
             //
@@ -99,6 +127,12 @@ namespace lcp
             ErrorNetworkingRequestNotFound,
             // Any other network error
             ErrorNetworkingRequestFailed
+#endif //ENABLE_NET_PROVIDER
+
+#if !DISABLE_LSD
+            ,
+            LicenseStatusDocumentStartProcessing
+#endif //!DISABLE_LSD
         };
     };
 
@@ -108,10 +142,29 @@ namespace lcp
             : Code(code)
             , Extension(extension)
         {
+            if (code != StatusCode::ErrorCommonSuccess && extension.length() == 0) {
+                bool debugBreakpointHere = true;
+            }
         }
 
         StatusCode::StatusCodeEnum Code;
         std::string Extension;
+
+        static std::string ToString(const Status & status)
+        {
+            std::string msg;
+            if (status.Extension.length() > 0) {
+                msg += " [";
+                msg += status.Extension;
+                msg += "]";
+            }
+
+            msg += " (";
+            msg += "x"; //status.Code; // ??
+            msg += ")";
+
+            return msg;
+        }
 
         static bool IsSuccess(const Status & status)
         {

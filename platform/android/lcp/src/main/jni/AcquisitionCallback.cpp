@@ -2,6 +2,8 @@
 // Created by clebeaupin on 15/03/16.
 //
 
+#if ENABLE_NET_PROVIDER
+
 #include "AcquisitionCallback.h"
 #include "Util.h"
 
@@ -49,3 +51,5 @@ namespace lcp {
                 this->jAcquisitionCallback, jOnAcquisitionEndedMethodId);
     }
 }
+
+#endif //ENABLE_NET_PROVIDER

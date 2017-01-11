@@ -20,11 +20,38 @@ namespace lcp {
 JNIEXPORT jboolean JNICALL Java_org_readium_sdk_lcp_License_nativeIsDecrypted(
         JNIEnv *env, jobject obj, jlong licensePtr);
 
+JNIEXPORT jstring JNICALL Java_org_readium_sdk_lcp_License_nativeGetOriginalContent(
+        JNIEnv *env, jobject obj, jlong licensePtr);
+
+JNIEXPORT jstring JNICALL Java_org_readium_sdk_lcp_License_nativeGetLinkPublication(
+        JNIEnv *env, jobject obj, jlong licensePtr);
+
+JNIEXPORT jstring JNICALL Java_org_readium_sdk_lcp_License_nativeGetLinkStatus(
+        JNIEnv *env, jobject obj, jlong licensePtr);
+
+
 JNIEXPORT void JNICALL Java_org_readium_sdk_lcp_License_nativeDecrypt(
         JNIEnv *env, jobject obj, jlong licensePtr, jlong servicePtr, jstring jPassphrase);
 
+JNIEXPORT jboolean JNICALL Java_org_readium_sdk_lcp_License_nativeIsOlderThan(
+        JNIEnv *env, jobject obj, jlong licensePtr, jlong servicePtr, jstring jTimestamp);
+
+#if !DISABLE_LSD
+
+JNIEXPORT void JNICALL Java_org_readium_sdk_lcp_License_nativeSetStatusDocumentProcessingFlag(
+        JNIEnv *env, jobject obj, jlong licensePtr, jboolean jFlag);
+
+#endif //!DISABLE_LSD
+
+#if ENABLE_NET_PROVIDER
 JNIEXPORT jobject JNICALL Java_org_readium_sdk_lcp_License_nativeCreateAcquisition(
         JNIEnv *env, jobject obj, jlong licensePtr, jlong servicePtr, jstring jDstPath);
+#endif //ENABLE_NET_PROVIDER
+
+//#if !DISABLE_LSD
+//JNIEXPORT jobject JNICALL Java_org_readium_sdk_lcp_License_nativeCreateStatusDocumentProcessing(
+//        JNIEnv *env, jobject obj, jlong licensePtr, jlong servicePtr, jstring jDstPath);
+//#endif //!DISABLE_LSD
 
 #ifdef __cplusplus
 }

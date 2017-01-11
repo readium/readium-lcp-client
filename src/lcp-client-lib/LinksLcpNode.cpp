@@ -1,8 +1,29 @@
+// Copyright (c) 2016 Mantano
+// Licensed to the Readium Foundation under one or more contributor license agreements.
 //
-//  Created by Artem Brazhnikov on 11/15.
-//  Copyright (c) 2014 Readium Foundation and/or its licensees. All rights reserved.
+// Redistribution and use in source and binary forms, with or without modification,
+// are permitted provided that the following conditions are met:
 //
+// 1. Redistributions of source code must retain the above copyright notice, this
+//    list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright notice,
+//    this list of conditions and the following disclaimer in the documentation and/or
+//    other materials provided with the distribution.
+// 3. Neither the name of the organization nor the names of its contributors may be
+//    used to endorse or promote products derived from this software without specific
+//    prior written permission
 //
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+// WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+// DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+// ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+// (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+// LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+// ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
 
 #include <algorithm>
 #include "rapidjson/document.h"
@@ -18,7 +39,7 @@ namespace lcp
         auto linksMember = parentObject.FindMember("links");
         if (linksMember == parentObject.MemberEnd())
         {
-            throw StatusException(Status(StatusCode::ErrorOpeningLicenseNotValid, "links object is not valid"));
+            throw StatusException(Status(StatusCode::ErrorOpeningLicenseNotValid, "ErrorOpeningLicenseNotValid: links object is not valid"));
         }
 
         // linksMember->name == "links"
@@ -31,7 +52,7 @@ namespace lcp
 //            rapidjson::Type type = linksArray.GetType();
 //            if (type != rapidjson::kArrayType) { // linksArray.isArray()
 //                throw StatusException(Status(StatusCode::ErrorOpeningLicenseNotValid,
-//                                             "links array is not valid type?!"));
+//                                             "ErrorOpeningLicenseNotValid: links array is not valid type?!"));
 //            }
 //            //...
 //        } else {
@@ -39,7 +60,7 @@ namespace lcp
 //            rapidjson::Type type = linksObject.GetType();
 //            if (type != rapidjson::kObjectType) { // linksObject.isObject()
 //                throw StatusException(Status(StatusCode::ErrorOpeningLicenseNotValid,
-//                                             "links object is not valid type?!"));
+//                                             "ErrorOpeningLicenseNotValid: links object is not valid type?!"));
 //            }
 //            //...
 //        }
@@ -48,10 +69,10 @@ namespace lcp
         if (linksMember->value.IsObject())
         {
             const rapidjson::Value & linksObject = linksMember->value; //reader->ReadObjectCheck("links", parentObject);
-
+            
             if (!linksObject.HasMember(Hint))
             {
-                throw StatusException(Status(StatusCode::ErrorOpeningLicenseNotValid, "links object does not contain HINT"));
+                throw StatusException(Status(StatusCode::ErrorOpeningLicenseNotValid, "ErrorOpeningLicenseNotValid: links object does not contain HINT"));
             }
 
             for (auto linksMember = linksObject.MemberBegin(); linksMember != linksObject.MemberEnd(); ++linksMember)
@@ -77,11 +98,15 @@ namespace lcp
                 }
                 else
                 {
-                    throw StatusException(Status(StatusCode::ErrorOpeningLicenseNotValid, "links object is not valid"));
+                    throw StatusException(Status(StatusCode::ErrorOpeningLicenseNotValid, "ErrorOpeningLicenseNotValid: links object is not valid"));
                 }
             }
 
+#if ENABLE_GENERIC_JSON_NODE
             BaseLcpNode::ParseNode(linksObject, reader);
+#else
+            //child->ParseNode(linksObject, reader);
+#endif //ENABLE_GENERIC_JSON_NODE
         }
         else if (linksMember->value.IsArray())
         {
@@ -93,23 +118,23 @@ namespace lcp
             {
                 if (!linkObject->IsObject())
                 {
-                    throw StatusException(Status(StatusCode::ErrorOpeningLicenseNotValid, "links object is not valid"));
+                    throw StatusException(Status(StatusCode::ErrorOpeningLicenseNotValid, "ErrorOpeningLicenseNotValid: links object is not valid"));
                 }
 
                 auto relItem = linkObject->FindMember("rel");
                 if (relItem == linkObject->MemberEnd())
                 {
-                    throw StatusException(Status(StatusCode::ErrorOpeningLicenseNotValid, "links object is not valid"));
+                    throw StatusException(Status(StatusCode::ErrorOpeningLicenseNotValid, "ErrorOpeningLicenseNotValid: links object is not valid"));
                 }
                 if (!relItem->value.IsString())
                 {
-                    throw StatusException(Status(StatusCode::ErrorOpeningLicenseNotValid, "links object is not valid"));
+                    throw StatusException(Status(StatusCode::ErrorOpeningLicenseNotValid, "ErrorOpeningLicenseNotValid: links object is not valid"));
                 }
-
+                
                 auto name = std::string(relItem->value.GetString(), relItem->value.GetStringLength());
                 if (name.empty())
                 {
-                    throw StatusException(Status(StatusCode::ErrorOpeningLicenseNotValid, "links object is not valid"));
+                    throw StatusException(Status(StatusCode::ErrorOpeningLicenseNotValid, "ErrorOpeningLicenseNotValid: links object is not valid"));
                 }
                 if (name == Hint)
                 {
@@ -122,16 +147,39 @@ namespace lcp
 
             if (!hintFound)
             {
-                throw StatusException(Status(StatusCode::ErrorOpeningLicenseNotValid, "links array does not contain HINT"));
+                throw StatusException(Status(StatusCode::ErrorOpeningLicenseNotValid, "ErrorOpeningLicenseNotValid: links array does not contain HINT"));
             }
 
+#if ENABLE_GENERIC_JSON_NODE
             BaseLcpNode::ParseNode(linksArray, reader);
+#else
+            //child->ParseNode(linksArray, reader);
+#endif //ENABLE_GENERIC_JSON_NODE
         }
         else
         {
-            throw StatusException(Status(StatusCode::ErrorOpeningLicenseNotValid, "links object is not valid"));
+            throw StatusException(Status(StatusCode::ErrorOpeningLicenseNotValid, "ErrorOpeningLicenseNotValid: links object is not valid"));
         }
     }
+
+#if ENABLE_GENERIC_JSON_NODE
+    // noop
+#else
+    Status LinksLcpNode::DecryptNode(ILicense * license, IKeyProvider * keyProvider, ICryptoProvider * cryptoProvider)
+    {
+        return Status(StatusCode::ErrorCommonSuccess);
+    }
+#endif //ENABLE_GENERIC_JSON_NODE
+
+#if ENABLE_GENERIC_JSON_NODE
+    // noop
+#else
+    Status LinksLcpNode::VerifyNode(ILicense * license, IClientProvider * clientProvider, ICryptoProvider * cryptoProvider)
+    {
+        return Status(StatusCode::ErrorCommonSuccess);
+    }
+#endif //ENABLE_GENERIC_JSON_NODE
+
 
     bool LinksLcpNode::GetLinks(const std::string & name, std::vector<Link> & links) const
     {

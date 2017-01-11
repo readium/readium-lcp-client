@@ -1,8 +1,29 @@
+// Copyright (c) 2016 Mantano
+// Licensed to the Readium Foundation under one or more contributor license agreements.
 //
-//  Created by Artem Brazhnikov on 11/15.
-//  Copyright (c) 2014 Readium Foundation and/or its licensees. All rights reserved.
+// Redistribution and use in source and binary forms, with or without modification,
+// are permitted provided that the following conditions are met:
 //
+// 1. Redistributions of source code must retain the above copyright notice, this
+//    list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright notice,
+//    this list of conditions and the following disclaimer in the documentation and/or
+//    other materials provided with the distribution.
+// 3. Neither the name of the organization nor the names of its contributors may be
+//    used to endorse or promote products derived from this software without specific
+//    prior written permission
 //
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+// WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+// DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+// ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+// (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+// LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+// ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
 
 #ifndef __LCP_SERVICE_H__
 #define __LCP_SERVICE_H__
@@ -23,17 +44,42 @@ namespace lcp
 
     class LcpService : public ILcpService, public NonCopyable
     {
+    private:
+        std::string m_publicationPath;
+        Status CheckDecrypted(ILicense* license);
+#if !DISABLE_LSD
+        Status CheckLicenseStatusDocument(ILicense* license);
+#endif //!DISABLE_LSD
+
     public:
         LcpService(
             const std::string & rootCertificate,
+#if ENABLE_NET_PROVIDER
             INetProvider * netProvider,
+#endif //ENABLE_NET_PROVIDER
             IStorageProvider * storageProvider,
-            IFileSystemProvider * fileSystemProvider,
+            IFileSystemProvider * fileSystemProvider
+#if ENABLE_NET_PROVIDER
+                ,
             const std::string & defaultCrlUrl
+#endif //ENABLE_NET_PROVIDER
             );
 
         // ILcpService
-        virtual Status OpenLicense(const std::string & licenseJson, ILicense ** license);
+        virtual Status OpenLicense(
+                const std::string & publicationPath,
+                const std::string & licenseJson,
+                ILicense** licensePTR);
+
+        virtual Status InjectLicense(
+                const std::string & publicationPath,
+                const std::string & licenseJson);
+
+        virtual Status InjectLicense(
+                const std::string & publicationPath,
+                ILicense * license);
+
+        virtual int TimeStampCompare(const std::string & t1, const std::string & t2);
 
         virtual Status DecryptLicense(ILicense * license, const std::string & userPassphrase);
 
@@ -65,20 +111,31 @@ namespace lcp
             const std::string & providerId,
             const std::string & licenseId
             );
-
+#if ENABLE_NET_PROVIDER
         virtual Status CreatePublicationAcquisition(
-            const std::string & publicationPath,
-            ILicense * license,
-            IAcquisition ** acquisition
-            );
+                const std::string & publicationPath,
+                ILicense * license,
+                IAcquisition ** acquisition
+        );
+#endif //ENABLE_NET_PROVIDER
+
+//#if !DISABLE_LSD
+//        virtual Status CreatePublicationStatusDocumentProcessing(
+//                const std::string & publicationPath,
+//                ILicense * license,
+//                IStatusDocumentProcessing ** statusDocumentProcessing
+//        );
+//#endif //!DISABLE_LSD
 
         virtual IRightsService * GetRightsService() const;
 
         virtual std::string RootCertificate() const;
+#if ENABLE_NET_PROVIDER
         virtual INetProvider * NetProvider() const;
+#endif //ENABLE_NET_PROVIDER
         virtual IStorageProvider * StorageProvider() const;
         virtual IFileSystemProvider * FileSystemProvider() const;
-        
+
     private:
         bool FindLicense(const std::string & canonicalJson, ILicense ** license);
         
@@ -98,7 +155,9 @@ namespace lcp
 
     private:
         std::string m_rootCertificate;
+#if ENABLE_NET_PROVIDER
         INetProvider * m_netProvider;
+#endif //ENABLE_NET_PROVIDER
         IStorageProvider * m_storageProvider;
         IFileSystemProvider * m_fileSystemProvider;
 
@@ -110,6 +169,7 @@ namespace lcp
         std::mutex m_licensesSync;
 
     private:
+
         static std::string UnknownProvider;
         static std::string UnknownUserId;
     };

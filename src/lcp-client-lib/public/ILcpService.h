@@ -1,8 +1,28 @@
+// Copyright (c) 2016 Mantano
+// Licensed to the Readium Foundation under one or more contributor license agreements.
 //
-//  Created by Mickaël Menu, Artem Brazhnikov on 11/15.
-//  Copyright (c) 2014 Readium Foundation and/or its licensees. All rights reserved.
+// Redistribution and use in source and binary forms, with or without modification,
+// are permitted provided that the following conditions are met:
 //
+// 1. Redistributions of source code must retain the above copyright notice, this
+//    list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright notice,
+//    this list of conditions and the following disclaimer in the documentation and/or
+//    other materials provided with the distribution.
+// 3. Neither the name of the organization nor the names of its contributors may be
+//    used to endorse or promote products derived from this software without specific
+//    prior written permission
 //
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+// WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+// DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+// ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+// (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+// LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+// ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #ifndef __I_LCP_SERVICE_H__
 #define __I_LCP_SERVICE_H__
@@ -10,14 +30,22 @@
 #include <string>
 #include "LcpStatus.h"
 
+//#if !DISABLE_LSD
+//#include "IStatusDocumentProcessing.h"
+//#endif //!DISABLE_LSD
+
 namespace lcp
 {
     class ILicense;
+#if ENABLE_NET_PROVIDER
     class INetProvider;
+#endif //ENABLE_NET_PROVIDER
     class IStorageProvider;
     class IFileSystemProvider;
+#if ENABLE_NET_PROVIDER
     class IAcquisition;
     class IAcquisitionCallback;
+#endif //ENABLE_NET_PROVIDER
     class IRightsService;
     class IReadableStream;
     class IEncryptedStream;
@@ -32,11 +60,13 @@ namespace lcp
         //
         virtual std::string RootCertificate() const = 0;
 
+#if ENABLE_NET_PROVIDER
         //
         // Shared implementation of the net provider, used for any network
         // call from the library.
         //
         virtual INetProvider * NetProvider() const = 0;
+#endif //ENABLE_NET_PROVIDER
 
         //
         // Shared implementation of the secure storage provider, used to store
@@ -65,7 +95,20 @@ namespace lcp
         // The License will be automatically decrypted if a valid User Key can
         // be found in the storage provider.
         //
-        virtual Status OpenLicense(const std::string & licenseJson, ILicense ** license) = 0;
+        virtual Status OpenLicense(
+                const std::string & publicationPath,
+                const std::string & licenseJson,
+                ILicense** license) = 0;
+
+        virtual Status InjectLicense(
+                const std::string & publicationPath,
+                const std::string & licenseJson) = 0;
+
+        virtual Status InjectLicense(
+                const std::string & publicationPath,
+                ILicense * license) = 0;
+
+        virtual int TimeStampCompare(const std::string & t1, const std::string & t2) = 0;
 
         //
         // Decrypts the License Document using the given User Passphrase.
@@ -126,6 +169,7 @@ namespace lcp
             const std::string & licenseId
             ) = 0;
 
+#if ENABLE_NET_PROVIDER
         //
         // Creates a new instance of IAcquisition to download the publication
         // of the given License from its Content Provider. The License Document
@@ -135,10 +179,21 @@ namespace lcp
         // download explicitely with IAcquisition::Start().
         //
         virtual Status CreatePublicationAcquisition(
-            const std::string & publicationPath,
-            ILicense * license,
-            IAcquisition ** acquisition
-            ) = 0;
+                const std::string & publicationPath,
+                ILicense * license,
+                IAcquisition ** acquisition
+        ) = 0;
+#endif //ENABLE_NET_PROVIDER
+
+
+//#if !DISABLE_LSD
+//        virtual Status CreatePublicationStatusDocumentProcessing(
+//                const std::string & publicationPath,
+//                ILicense * license,
+//                IStatusDocumentProcessing ** statusDocumentProcessing
+//        ) = 0;
+//#endif //!DISABLE_LSD
+
 
         //
         // Returns the rights service, exposing the public License rights API.
