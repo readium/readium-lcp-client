@@ -22,8 +22,10 @@ public class ServiceFactory {
 
 
     public static Service build(String certContent, StorageProvider storageProvider,
-//#if ENABLE_NET_PROVIDER
-//NetProvider netProvider,
+
+//#if !DISABLE_NET_PROVIDER
+                                NetProvider netProvider,
+
                                 CredentialHandler credentialHandler,
                                 StatusDocumentHandler statusDocumentHandler
     ) {
@@ -31,8 +33,9 @@ public class ServiceFactory {
         certContent = certContent.replaceAll("-*END CERTIFICATE-*", "");
         certContent = certContent.replaceAll("[\r\n]*", "");
         return ServiceFactory.nativeBuild(certContent, storageProvider,
-//#if ENABLE_NET_PROVIDER
-//netProvider,
+
+//#if !DISABLE_NET_PROVIDER
+                netProvider,
 
                 credentialHandler,
                 statusDocumentHandler
@@ -41,8 +44,9 @@ public class ServiceFactory {
 
     private native static Service nativeBuild(
             String certContent, StorageProvider storageProvider,
-//#if ENABLE_NET_PROVIDER
-//NetProvider netProvider,
+
+//#if !DISABLE_NET_PROVIDER
+            NetProvider netProvider,
 
             CredentialHandler credentialHandler,
             StatusDocumentHandler statusDocumentHandler

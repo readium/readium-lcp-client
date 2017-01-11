@@ -73,19 +73,19 @@ namespace lcp
             ILinks * links = m_license->Links();
             if (!links->Has(Publication))
             {
-                return Status(StatusCode::ErrorAcquisitionNoAcquisitionLink);
+                return Status(StatusCode::ErrorAcquisitionNoAcquisitionLink, "ErrorAcquisitionNoAcquisitionLink");
             }
             
             links->GetLink(Publication, m_publicationLink);
             if (m_publicationLink.type != PublicationType)
             {
-                return Status(StatusCode::ErrorAcquisitionPublicationWrongType);
+                return Status(StatusCode::ErrorAcquisitionPublicationWrongType, "ErrorAcquisitionPublicationWrongType");
             }
 
             m_file.reset(m_fileSystemProvider->GetFile(m_publicationPath));
             if (m_file.get() == nullptr)
             {
-                return Status(StatusCode::ErrorAcquisitionInvalidFilePath);
+                return Status(StatusCode::ErrorAcquisitionInvalidFilePath, "ErrorAcquisitionInvalidFilePath");
             }
             m_request.reset(new DownloadInFileRequest(m_publicationLink.href, m_file.get()));
 
@@ -117,7 +117,7 @@ namespace lcp
 
             if (hexHash != link.hash)
             {
-                return Status(StatusCode::ErrorAcquisitionPublicationCorrupted);
+                return Status(StatusCode::ErrorAcquisitionPublicationCorrupted, "ErrorAcquisitionPublicationCorrupted");
             }
         }
         return Status(StatusCode::ErrorCommonSuccess);
@@ -206,7 +206,7 @@ namespace lcp
         {
             if (m_callback != nullptr)
             {
-                m_callback->OnAcquisitionEnded(this, Status(StatusCode::ErrorNetworkingRequestFailed, ex.what()));
+                m_callback->OnAcquisitionEnded(this, Status(StatusCode::ErrorNetworkingRequestFailed, "ErrorNetworkingRequestFailed" + std::string(ex.what())));
             }
         }
     }

@@ -8,25 +8,25 @@ import android.content.Context;
 public class Lcp {
     private static StorageProvider storageProvider;
 
-    //#if ENABLE_NET_PROVIDER
-//    private static NetProvider netProvider;
+//#if !DISABLE_NET_PROVIDER
+    private static NetProvider netProvider;
 
     public static void initialize(StorageProvider storageProvider
-                                  //#if ENABLE_NET_PROVIDER
-//            , NetProvider netProvider
+//#if !DISABLE_NET_PROVIDER
+            , NetProvider netProvider
     ) {
         Lcp.storageProvider = storageProvider;
 
-        //#if ENABLE_NET_PROVIDER
-//        Lcp.netProvider = netProvider;
+//#if !DISABLE_NET_PROVIDER
+        Lcp.netProvider = netProvider;
     }
 
     public static StorageProvider getStorageProvider() {
         return Lcp.storageProvider;
     }
 
-    //#if ENABLE_NET_PROVIDER
-//    public static NetProvider getNetProvider() {
-//        return Lcp.netProvider;
-//    }
+//#if !DISABLE_NET_PROVIDER
+    public static NetProvider getNetProvider() {
+        return Lcp.netProvider;
+    }
 }

@@ -35,31 +35,33 @@
 #include <condition_variable>
 #include <public/lcp.h>
 #include "ICertificate.h"
+
+#if !DISABLE_NET_PROVIDER
 #include "SimpleMemoryWritableStream.h"
-#if ENABLE_NET_PROVIDER
 #include "public/INetProvider.h"
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_NET_PROVIDER
+
 #include "NonCopyable.h"
 
 namespace lcp
 {
     class ThreadTimer;
     class CrlDownloader;
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_NET_PROVIDER
     class IDownloadRequest;
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_NET_PROVIDER
 
     class CrlUpdater :
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_NET_PROVIDER
             public INetProviderCallback,
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_NET_PROVIDER
             public NonCopyable
     {
     public:
         CrlUpdater(
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_NET_PROVIDER
             INetProvider * netProvider,
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_NET_PROVIDER
             ICertificateRevocationList * revocationList,
             ThreadTimer * threadTimer,
             const std::string & defaultCrlUrl
@@ -72,13 +74,13 @@ namespace lcp
         bool ContainsUrl(const std::string & url);
         bool ContainsAnyUrl() const;
 
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_NET_PROVIDER
         // INetProviderCallback
         virtual void OnRequestStarted(INetRequest * request);
         virtual void OnRequestProgressed(INetRequest * request, float progress);
         virtual void OnRequestCanceled(INetRequest * request);
         virtual void OnRequestEnded(INetRequest * request, Status result);
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_NET_PROVIDER
 
     public:
         static const int TenMinutesPeriod;
@@ -89,16 +91,16 @@ namespace lcp
 
     private:
         StringsList m_crlUrls;
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_NET_PROVIDER
         INetProvider * m_netProvider;
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_NET_PROVIDER
         ICertificateRevocationList * m_revocationList;
         ThreadTimer * m_threadTimer;
 
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_NET_PROVIDER
         std::unique_ptr<SimpleMemoryWritableStream> m_crlStream;
         std::unique_ptr<IDownloadRequest> m_downloadRequest;
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_NET_PROVIDER
 
         Status m_currentRequestStatus;
 

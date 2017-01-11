@@ -35,9 +35,9 @@
 
 namespace lcp
 {
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_NET_PROVIDER
     class INetProvider;
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_NET_PROVIDER
 
 #if !DISABLE_CRL
     class CrlUpdater;
@@ -56,9 +56,9 @@ class ICertificateRevocationList;
     public:
         CryptoppCryptoProvider(
             EncryptionProfilesManager * encryptionProfilesManager
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_NET_PROVIDER
         , INetProvider * netProvider
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_NET_PROVIDER
 
 #if !DISABLE_CRL
         , const std::string & defaultCrlUrl

@@ -32,9 +32,9 @@
 namespace lcp
 {
     class ILcpService;
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_NET_PROVIDER
     class INetProvider;
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_NET_PROVIDER
     class IStorageProvider;
     class IFileSystemProvider;
 
@@ -46,9 +46,9 @@ namespace lcp
     public:
         Status CreateLcpService(
             const std::string & rootCertificate,
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_NET_PROVIDER
             INetProvider * netProvider,
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_NET_PROVIDER
             IStorageProvider * storageProvider,
             IFileSystemProvider * fileSystemProvider,
             ILcpService ** lcpService

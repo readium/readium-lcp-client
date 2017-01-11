@@ -31,8 +31,12 @@
 #include <iterator>
 #include <thread>
 #include "CrlUpdater.h"
+
+#if !DISABLE_NET_PROVIDER
 #include "SimpleMemoryWritableStream.h"
 #include "DownloadInMemoryRequest.h"
+#endif //!DISABLE_NET_PROVIDER
+
 #include "DateTime.h"
 #include "ThreadTimer.h"
 
@@ -41,17 +45,17 @@ namespace lcp
     const int CrlUpdater::TenMinutesPeriod = 1000 * 60 * 10;
     
     CrlUpdater::CrlUpdater(
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_NET_PROVIDER
         INetProvider * netProvider,
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_NET_PROVIDER
         ICertificateRevocationList * revocationList,
         ThreadTimer * threadTimer,
         const std::string & defaultCrlUrl
         )
         : m_requestRunning(false)
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_NET_PROVIDER
         , m_netProvider(netProvider)
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_NET_PROVIDER
         , m_revocationList(revocationList)
         , m_threadTimer(threadTimer)
         , m_currentRequestStatus(Status(StatusCode::ErrorCommonSuccess))
@@ -96,11 +100,11 @@ namespace lcp
         // If the list will be changed, it won't affect current update
         StringsList curUrls = m_crlUrls;
 
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_NET_PROVIDER
         m_currentRequestStatus = Status(StatusCode::ErrorNetworkingRequestFailed, "ErrorNetworkingRequestFailed");
 #else
         m_currentRequestStatus = Status(StatusCode::ErrorCommonSuccess);
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_NET_PROVIDER
 
         for (auto const & url : curUrls)
         {
@@ -108,9 +112,9 @@ namespace lcp
             m_conditionDownload.wait(locker, [&]() { return !m_requestRunning; });
 
             if (Status::IsSuccess(m_currentRequestStatus)
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_NET_PROVIDER
                 || m_downloadRequest->Canceled()
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_NET_PROVIDER
                     )
             {
                 break;
@@ -121,17 +125,17 @@ namespace lcp
     void CrlUpdater::Cancel()
     {
         std::unique_lock<std::mutex> locker(m_downloadSync);
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_NET_PROVIDER
         if (m_downloadRequest.get() != nullptr)
         {
             m_downloadRequest->SetCanceled(true);
         }
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_NET_PROVIDER
     }
 
     void CrlUpdater::Download(const std::string & url)
     {
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_NET_PROVIDER
         m_crlStream.reset(new SimpleMemoryWritableStream());
         m_downloadRequest.reset(new DownloadInMemoryRequest(url, m_crlStream.get()));
         m_netProvider->StartDownloadRequest(m_downloadRequest.get(), this);
@@ -140,10 +144,10 @@ namespace lcp
         m_currentRequestStatus = Status(StatusCode::ErrorCommonSuccess);
         m_requestRunning = false;
         m_conditionDownload.notify_one();
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_NET_PROVIDER
     }
 
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_NET_PROVIDER
     void CrlUpdater::OnRequestStarted(INetRequest * request)
     {
     }
@@ -175,10 +179,10 @@ namespace lcp
         }
         catch (const std::exception & ex)
         {
-            m_currentRequestStatus = Status(StatusCode::ErrorNetworkingRequestFailed, "ErrorNetworkingRequestFailed: " + ex.what());
+            m_currentRequestStatus = Status(StatusCode::ErrorNetworkingRequestFailed, "ErrorNetworkingRequestFailed: " + std::string(ex.what()));
         }
     }
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_NET_PROVIDER
 
     void CrlUpdater::ResetNextUpdate()
     {

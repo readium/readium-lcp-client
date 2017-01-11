@@ -28,7 +28,7 @@
 #ifndef __DOWNLOAD_IN_FILE_REQUEST_H__
 #define __DOWNLOAD_IN_FILE_REQUEST_H__
 
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_NET_PROVIDER
 
 #include <string>
 #include "BaseDownloadRequest.h"
@@ -65,6 +65,6 @@ namespace lcp
     };
 }
 
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_NET_PROVIDER
 
 #endif //__DOWNLOAD_IN_FILE_REQUEST_H__

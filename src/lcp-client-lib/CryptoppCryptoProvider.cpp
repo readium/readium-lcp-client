@@ -51,9 +51,9 @@ namespace lcp
     CryptoppCryptoProvider::CryptoppCryptoProvider(
         EncryptionProfilesManager * encryptionProfilesManager
 
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_NET_PROVIDER
     , INetProvider * netProvider
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_NET_PROVIDER
 
 #if !DISABLE_CRL
         , const std::string & defaultCrlUrl
@@ -66,9 +66,9 @@ namespace lcp
         m_threadTimer.reset(new ThreadTimer());
 
         m_crlUpdater.reset(new CrlUpdater(
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_NET_PROVIDER
                 netProvider,
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_NET_PROVIDER
                 m_revocationList.get(), m_threadTimer.get(), defaultCrlUrl));
 
         m_threadTimer->SetHandler(std::bind(&CrlUpdater::Update, m_crlUpdater.get()));

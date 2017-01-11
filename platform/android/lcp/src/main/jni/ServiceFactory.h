@@ -10,9 +10,9 @@
 #include <public/ILcpService.h>
 #include "StorageProvider.h"
 
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_NET_PROVIDER
 #include "NetProvider.h"
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_NET_PROVIDER
 
 #ifdef __cplusplus
 extern "C" {
@@ -22,10 +22,10 @@ namespace lcp {
     class ServiceFactory {
     public:
         ILcpService * build(const std::string &certPath, StorageProvider* storageProvider
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_NET_PROVIDER
                 ,
                             NetProvider *netProvider
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_NET_PROVIDER
                             );
 
     };
@@ -34,9 +34,9 @@ namespace lcp {
 JNIEXPORT jobject JNICALL Java_org_readium_sdk_lcp_ServiceFactory_nativeBuild(
         JNIEnv *env, jobject obj, jstring jCertContent,
         jobject jStorageProvider,
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_NET_PROVIDER
         jobject jNetProvider,
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_NET_PROVIDER
         jobject jCredentialHandler, jobject jStatusDocumentHandler
 );
 

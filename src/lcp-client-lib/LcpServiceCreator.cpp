@@ -36,9 +36,9 @@ namespace lcp
     //
     Status LcpServiceCreator::CreateLcpService(
         const std::string & rootCertificate,
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_NET_PROVIDER
         INetProvider * netProvider,
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_NET_PROVIDER
         IStorageProvider * storageProvider,
         IFileSystemProvider * fileSystemProvider,
         ILcpService ** lcpService
@@ -53,9 +53,9 @@ namespace lcp
         }
         auto status = Status(StatusCode::ErrorCommonSuccess);
         *lcpService = new LcpService(rootCertificate,
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_NET_PROVIDER
                                      netProvider,
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_NET_PROVIDER
                                      storageProvider, fileSystemProvider
 #if !DISABLE_CRL
         , defaultCrlUrl

@@ -51,16 +51,14 @@ namespace lcp
 //
 //            rapidjson::Type type = linksArray.GetType();
 //            if (type != rapidjson::kArrayType) { // linksArray.isArray()
-//                throw StatusException(Status(StatusCode::ErrorOpeningLicenseNotValid,
-//                                             "ErrorOpeningLicenseNotValid: links array is not valid type?!"));
+//                throw StatusException(Status(StatusCode::ErrorOpeningLicenseNotValid, "ErrorOpeningLicenseNotValid: links array is not valid type?!"));
 //            }
 //            //...
 //        } else {
 //
 //            rapidjson::Type type = linksObject.GetType();
 //            if (type != rapidjson::kObjectType) { // linksObject.isObject()
-//                throw StatusException(Status(StatusCode::ErrorOpeningLicenseNotValid,
-//                                             "ErrorOpeningLicenseNotValid: links object is not valid type?!"));
+//                throw StatusException(Status(StatusCode::ErrorOpeningLicenseNotValid, "ErrorOpeningLicenseNotValid: links object is not valid type?!"));
 //            }
 //            //...
 //        }

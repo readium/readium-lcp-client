@@ -61,9 +61,9 @@ namespace lcp
 
     LcpService::LcpService(
         const std::string & rootCertificate,
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_NET_PROVIDER
         INetProvider * netProvider,
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_NET_PROVIDER
         IStorageProvider * storageProvider,
         IFileSystemProvider * fileSystemProvider
 #if !DISABLE_CRL
@@ -71,18 +71,18 @@ namespace lcp
 #endif //!DISABLE_CRL
         )
         : m_rootCertificate(rootCertificate)
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_NET_PROVIDER
         , m_netProvider(netProvider)
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_NET_PROVIDER
         , m_storageProvider(storageProvider)
         , m_fileSystemProvider(fileSystemProvider)
         , m_rightsService(new RightsService(m_storageProvider, UnknownUserId))
         , m_jsonReader(new JsonValueReader())
         , m_encryptionProfilesManager(new EncryptionProfilesManager())
         , m_cryptoProvider(new CryptoppCryptoProvider(m_encryptionProfilesManager.get()
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_NET_PROVIDER
                     , m_netProvider
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_NET_PROVIDER
 
 #if !DISABLE_CRL
                     , defaultCrlUrl
@@ -190,8 +190,7 @@ namespace lcp
             auto insertRes = m_licenses.insert(
                     std::make_pair(std::move(canonicalJson), std::move(rootNode)));
             if (!insertRes.second) {
-                return Status(StatusCode::ErrorOpeningDuplicateLicenseInstance,
-                              "ErrorOpeningDuplicateLicenseInstance: Two License instances with the same canonical form");
+                return Status(StatusCode::ErrorOpeningDuplicateLicenseInstance, "ErrorOpeningDuplicateLicenseInstance: Two License instances with the same canonical form");
             }
             (*licensePTR) = insertRes.first->second.get();
             locker.unlock();
@@ -637,12 +636,12 @@ namespace lcp
         return m_rootCertificate;
     }
 
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_NET_PROVIDER
     INetProvider * LcpService::NetProvider() const
     {
         return m_netProvider;
     }
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_NET_PROVIDER
 
     IStorageProvider * LcpService::StorageProvider() const
     {

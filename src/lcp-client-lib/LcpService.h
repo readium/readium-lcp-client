@@ -53,9 +53,9 @@ namespace lcp
     public:
         LcpService(
             const std::string & rootCertificate,
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_NET_PROVIDER
             INetProvider * netProvider,
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_NET_PROVIDER
             IStorageProvider * storageProvider,
             IFileSystemProvider * fileSystemProvider
 #if !DISABLE_CRL
@@ -120,9 +120,9 @@ namespace lcp
         virtual IRightsService * GetRightsService() const;
 
         virtual std::string RootCertificate() const;
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_NET_PROVIDER
         virtual INetProvider * NetProvider() const;
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_NET_PROVIDER
         virtual IStorageProvider * StorageProvider() const;
         virtual IFileSystemProvider * FileSystemProvider() const;
 
@@ -145,9 +145,9 @@ namespace lcp
 
     private:
         std::string m_rootCertificate;
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_NET_PROVIDER
         INetProvider * m_netProvider;
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_NET_PROVIDER
         IStorageProvider * m_storageProvider;
         IFileSystemProvider * m_fileSystemProvider;
 

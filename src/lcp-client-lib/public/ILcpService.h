@@ -33,9 +33,9 @@
 namespace lcp
 {
     class ILicense;
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_NET_PROVIDER
     class INetProvider;
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_NET_PROVIDER
     class IStorageProvider;
     class IFileSystemProvider;
 #if ENABLE_NET_PROVIDER_ACQUISITION
@@ -56,13 +56,13 @@ namespace lcp
         //
         virtual std::string RootCertificate() const = 0;
 
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_NET_PROVIDER
         //
         // Shared implementation of the net provider, used for any network
         // call from the library.
         //
         virtual INetProvider * NetProvider() const = 0;
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_NET_PROVIDER
 
         //
         // Shared implementation of the secure storage provider, used to store

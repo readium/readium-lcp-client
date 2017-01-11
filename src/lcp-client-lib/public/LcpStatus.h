@@ -44,10 +44,10 @@ namespace lcp
             //
             // No Error
             ErrorCommonSuccess,
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_NET_PROVIDER
             // No NetProvider implementation has been given.
             ErrorCommonNoNetProvider,
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_NET_PROVIDER
             // No StorageProvider implementation has been given.
             ErrorCommonNoStorageProvider,
             // Implementation of the Encryption Profile from the
@@ -118,7 +118,7 @@ namespace lcp
             // Error of crypto library
             ErrorDecryptionCommonError
 
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_NET_PROVIDER
             ,
             //
             // Errors when doing HTTP network calls.
@@ -127,7 +127,7 @@ namespace lcp
             ErrorNetworkingRequestNotFound,
             // Any other network error
             ErrorNetworkingRequestFailed
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_NET_PROVIDER
             , LicenseStatusDocumentStartProcessing
         };
     };

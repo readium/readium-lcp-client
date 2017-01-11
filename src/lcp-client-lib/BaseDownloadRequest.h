@@ -28,7 +28,7 @@
 #ifndef __BASE_DOWNLOAD_REQUEST_H__
 #define __BASE_DOWNLOAD_REQUEST_H__
 
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_NET_PROVIDER
 
 #include <atomic>
 #include <mutex>
@@ -82,6 +82,6 @@ namespace lcp
     };
 }
 
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_NET_PROVIDER
 
 #endif //__BASE_DOWNLOAD_REQUEST_H__
