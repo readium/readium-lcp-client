@@ -95,9 +95,7 @@ namespace lcp {
                 licenseJson, licensePTR);
 
         if ((status.Code != StatusCode::ErrorCommonSuccess)
-#if !DISABLE_LSD
             && (status.Code != StatusCode::LicenseStatusDocumentStartProcessing)
-#endif //!DISABLE_LSD
                 ) {
             std::string msg("LCP license problem: ");
             msg += Status::ToString(status);
@@ -118,9 +116,8 @@ namespace lcp {
         }
 
         if (!(*licensePTR)->Decrypted()) {
-#if !DISABLE_LSD
             (*licensePTR)->setStatusDocumentProcessingFlag(false); // ensure reset of LicenseStatusDocumentStartProcessing (see below)
-#endif //!DISABLE_LSD
+
             // Should be non-blocking, to ensure that the exception below is captured on the app side and the main thread resumes activity to process the next events in the queue
             LcpContentModule::lcpCredentialHandler->decrypt((*licensePTR));
 
@@ -128,7 +125,6 @@ namespace lcp {
             throw ePub3::ContentModuleExceptionDecryptFlow("LCPL license decrypt needs user passphrase input...");
         }
 
-#if !DISABLE_LSD
         if (status.Code == StatusCode::LicenseStatusDocumentStartProcessing) {
 
             // Should be non-blocking, to ensure that the exception below is captured on the app side and the main thread resumes activity to process the next events in the queue
@@ -137,7 +133,6 @@ namespace lcp {
             // the caller gracefully degrades by interrupting the EPUB opening process (the call to lsdProcessingHandler->process() above will attempt again).
             throw ePub3::ContentModuleExceptionDecryptFlow("LCPL license status document processing...");
         }
-#endif //!DISABLE_LSD
 
         // NOTE: LcpContentModule::RegisterContentFilters() needs LcpContentModule::lcpLicense to be set.
         LcpContentModule::lcpLicense = (*licensePTR);
@@ -167,16 +162,12 @@ namespace lcp {
     IStatusDocumentHandler *LcpContentModule::lcpStatusDocumentHandler = NULL;
 
     void LcpContentModule::Register(ILcpService *const service,
-                                    ICredentialHandler * credentialHandler
-#if !DISABLE_LSD
-                                    ,IStatusDocumentHandler * statusDocumentHandler
-#endif //!DISABLE_LSD
+                                    ICredentialHandler * credentialHandler,
+                                    IStatusDocumentHandler * statusDocumentHandler
     ) {
         LcpContentModule::lcpService = service;
         LcpContentModule::lcpCredentialHandler = credentialHandler;
-#if !DISABLE_LSD
         LcpContentModule::lcpStatusDocumentHandler = statusDocumentHandler;
-#endif //!DISABLE_LSD
 
         //std::shared_ptr<LcpContentModule> contentModule = std::make_shared<LcpContentModule>();
         LcpContentModule* contentModule = new LcpContentModule();

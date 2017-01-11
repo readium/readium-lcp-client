@@ -36,7 +36,6 @@ public class License {
         return this.nativeGetLinkStatus(this.nativePtr);
     }
 
-//#if !DISABLE_LSD
     public void setStatusDocumentProcessingFlag(boolean flag)
     {
         this.nativeSetStatusDocumentProcessingFlag(this.nativePtr, flag);
@@ -68,7 +67,6 @@ public class License {
 
     private native boolean nativeIsOlderThan(long nativePtr, long servicePtr, String timestamp);
 
-//#if !DISABLE_LSD
     private native void nativeSetStatusDocumentProcessingFlag(long nativePtr, boolean flag);
 
 //#if ENABLE_NET_PROVIDER

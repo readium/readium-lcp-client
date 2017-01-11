@@ -37,10 +37,7 @@ JNIEXPORT jobject JNICALL Java_org_readium_sdk_lcp_ServiceFactory_nativeBuild(
 #if ENABLE_NET_PROVIDER
         jobject jNetProvider,
 #endif //ENABLE_NET_PROVIDER
-        jobject jCredentialHandler
-#if !DISABLE_LSD
-        , jobject jStatusDocumentHandler
-#endif //!DISABLE_LSD
+        jobject jCredentialHandler, jobject jStatusDocumentHandler
 );
 
 

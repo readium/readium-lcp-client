@@ -104,10 +104,8 @@ namespace lcp
 
         virtual ~ILicense() {};
 
-#if !DISABLE_LSD
         virtual bool getStatusDocumentProcessingFlag() const = 0;
         virtual void setStatusDocumentProcessingFlag(bool flag) = 0;
-#endif //!DISABLE_LSD
     };
 }
 

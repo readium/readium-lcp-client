@@ -128,11 +128,7 @@ namespace lcp
             // Any other network error
             ErrorNetworkingRequestFailed
 #endif //ENABLE_NET_PROVIDER
-
-#if !DISABLE_LSD
-            ,
-            LicenseStatusDocumentStartProcessing
-#endif //!DISABLE_LSD
+            , LicenseStatusDocumentStartProcessing
         };
     };
 

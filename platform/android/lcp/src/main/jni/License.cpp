@@ -8,11 +8,6 @@
 #include <public/IAcquistion.h>
 #include <public/ILcpService.h>
 
-//
-//#if !DISABLE_LSD
-//#include <public/IStatusDocumentProcessing.h>
-//#endif //!DISABLE_LSD
-
 //#include <ePub3/epub3.h>
 //#include "epub3.h"
 #include <public/lcp.h>
@@ -100,8 +95,6 @@ JNIEXPORT jboolean JNICALL Java_org_readium_sdk_lcp_License_nativeIsOlderThan(
     return ((compared < 0) ? JNI_TRUE : JNI_FALSE);
 }
 
-#if !DISABLE_LSD
-
 JNIEXPORT void JNICALL Java_org_readium_sdk_lcp_License_nativeSetStatusDocumentProcessingFlag(
         JNIEnv *env, jobject obj, jlong licensePtr, jboolean jFlag) {
 
@@ -109,8 +102,6 @@ JNIEXPORT void JNICALL Java_org_readium_sdk_lcp_License_nativeSetStatusDocumentP
     bool flag = (jFlag == JNI_TRUE ? true : false);
     license->setStatusDocumentProcessingFlag(flag);
 }
-
-#endif //!DISABLE_LSD
 
 #if ENABLE_NET_PROVIDER
 JNIEXPORT jobject JNICALL Java_org_readium_sdk_lcp_License_nativeCreateAcquisition(
@@ -131,23 +122,3 @@ JNIEXPORT jobject JNICALL Java_org_readium_sdk_lcp_License_nativeCreateAcquisiti
     return env->NewObject(cls, methodId, (jlong) acquisition);
 }
 #endif //ENABLE_NET_PROVIDER
-
-//#if !DISABLE_LSD
-//JNIEXPORT jobject JNICALL Java_org_readium_sdk_lcp_License_nativeCreateStatusDocumentProcessing(
-//        JNIEnv *env, jobject obj, jlong licensePtr, jlong servicePtr, jstring jDstPath) {
-//    const char * cDstPath = env->GetStringUTFChars(jDstPath, 0);
-//    std::string dstPath(cDstPath);
-//    lcp::ILicense * license = (lcp::ILicense *) licensePtr;
-//    lcp::ILcpService * service = (lcp::ILcpService *) servicePtr;
-//    lcp::IStatusDocumentProcessing * statusDocumentProcessing;
-//    lcp::Status status = service->CreatePublicationStatusDocumentProcessing(dstPath, license, &statusDocumentProcessing);
-//
-//    if (status.Code  != lcp::StatusCode::ErrorCommonSuccess) {
-//        return nullptr;
-//    }
-//
-//    jclass cls = env->FindClass("org/readium/sdk/lcp/StatusDocumentProcessing");
-//    jmethodID methodId = env->GetMethodID(cls, "<init>", "(J)V");
-//    return env->NewObject(cls, methodId, (jlong) statusDocumentProcessing);
-//}
-//#endif //!DISABLE_LSD

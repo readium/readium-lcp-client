@@ -2,8 +2,6 @@
 #ifndef LCP_ANDROID_LSD_HANDLER_H
 #define LCP_ANDROID_LSD_HANDLER_H
 
-#if !DISABLE_LSD
-
 #include <string>
 #include <jni.h>
 #include <public/LcpContentModule.h>
@@ -28,7 +26,5 @@ namespace lcp{
 #ifdef __cplusplus
 }
 #endif
-
-#endif //!DISABLE_LSD
 
 #endif // LCP_ANDROID_LSD_HANDLER_H

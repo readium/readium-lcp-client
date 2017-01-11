@@ -30,10 +30,6 @@
 #include <string>
 #include "LcpStatus.h"
 
-//#if !DISABLE_LSD
-//#include "IStatusDocumentProcessing.h"
-//#endif //!DISABLE_LSD
-
 namespace lcp
 {
     class ILicense;
@@ -184,16 +180,6 @@ namespace lcp
                 IAcquisition ** acquisition
         ) = 0;
 #endif //ENABLE_NET_PROVIDER
-
-
-//#if !DISABLE_LSD
-//        virtual Status CreatePublicationStatusDocumentProcessing(
-//                const std::string & publicationPath,
-//                ILicense * license,
-//                IStatusDocumentProcessing ** statusDocumentProcessing
-//        ) = 0;
-//#endif //!DISABLE_LSD
-
 
         //
         // Returns the rights service, exposing the public License rights API.
