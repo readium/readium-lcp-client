@@ -92,12 +92,12 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := lcp
 
 ifeq ($(READIUM_CLANG),true)
-LOCAL_CPPFLAGS := -std=c++11 -fpermissive -DDISABLE_LSD_
-LOCAL_CXXFLAGS := -std=c++11 -fpermissive -DFEATURES_READIUM -DDISABLE_LSD_
+LOCAL_CPPFLAGS := -std=c++11 -fpermissive
+LOCAL_CXXFLAGS := -std=c++11 -fpermissive -DFEATURES_READIUM
 LOCAL_CFLAGS := -std=c11
 else
-LOCAL_CPPFLAGS := -std=gnu++11 -fpermissive -DDISABLE_LSD_
-LOCAL_CXXFLAGS := -std=gnu++11 -fpermissive -DFEATURES_READIUM -DDISABLE_LSD_
+LOCAL_CPPFLAGS := -std=gnu++11 -fpermissive
+LOCAL_CXXFLAGS := -std=gnu++11 -fpermissive -DFEATURES_READIUM
 LOCAL_CFLAGS := -std=gnu11
 endif
 

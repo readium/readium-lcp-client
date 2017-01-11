@@ -32,7 +32,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
 
-//#if !DISABLE_LSD
 public class StatusDocumentProcessing {
 
     public interface IListener {

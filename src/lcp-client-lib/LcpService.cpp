@@ -52,11 +52,6 @@ ZIPLIB_INCLUDE_START
 #include "ziplib/Source/ZipLib/ZipFile.h"
 ZIPLIB_INCLUDE_END
 
-//#if !DISABLE_LSD
-//#include "LsdProcessor.h"
-//#include "StatusDocumentProcessing.h"
-//#endif //!DISABLE_LSD
-
 static std::string const LcpLicensePath = "META-INF/license.lcpl";
 
 namespace lcp
@@ -156,9 +151,7 @@ namespace lcp
                     res = this->CheckDecrypted((*licensePTR));
                 }
 
-#if !DISABLE_LSD
                 res = this->CheckLicenseStatusDocument((*licensePTR));
-#endif //!DISABLE_LSD
 
                 return res;
             }
@@ -205,9 +198,7 @@ namespace lcp
 
             result = this->CheckDecrypted((*licensePTR));
 
-#if !DISABLE_LSD
             result = this->CheckLicenseStatusDocument((*licensePTR));
-#endif //!DISABLE_LSD
 
             return result;
         }
@@ -244,8 +235,6 @@ namespace lcp
 
         return result;
     }
-
-#if !DISABLE_LSD
 
     Status LcpService::CheckLicenseStatusDocument(ILicense* license)
     {
@@ -328,29 +317,6 @@ namespace lcp
             // ex.what();
         }
     }
-
-//    Status LcpService::CreatePublicationStatusDocumentProcessing(
-//            const std::string & publicationPath,
-//            ILicense * license,
-//            IStatusDocumentProcessing ** statusDocumentProcessing
-//    )
-//    {
-//        try
-//        {
-//            if (statusDocumentProcessing == nullptr)
-//            {
-//                throw std::invalid_argument("statusDocumentProcessing is nullptr");
-//            }
-//            *statusDocumentProcessing = new StatusDocumentProcessing();
-//            return Status(StatusCode::ErrorCommonSuccess);
-//        }
-//        catch (const StatusException & ex)
-//        {
-//            return ex.ResultStatus();
-//        }
-//    }
-
-#endif //!DISABLE_LSD
 
     Status LcpService::DecryptLicense(ILicense * license, const std::string & userPassphrase)
     {

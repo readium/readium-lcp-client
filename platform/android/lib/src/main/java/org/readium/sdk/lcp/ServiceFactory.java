@@ -25,8 +25,6 @@ public class ServiceFactory {
 //#if ENABLE_NET_PROVIDER
 //NetProvider netProvider,
                                 CredentialHandler credentialHandler,
-
-//#if !DISABLE_LSD
                                 StatusDocumentHandler statusDocumentHandler
     ) {
         certContent = certContent.replaceAll("-*BEGIN CERTIFICATE-*", "");
@@ -37,8 +35,6 @@ public class ServiceFactory {
 //netProvider,
 
                 credentialHandler,
-
-//#if !DISABLE_LSD
                 statusDocumentHandler
         );
     }
@@ -49,8 +45,6 @@ public class ServiceFactory {
 //NetProvider netProvider,
 
             CredentialHandler credentialHandler,
-
-//#if !DISABLE_LSD
             StatusDocumentHandler statusDocumentHandler
     );
 }

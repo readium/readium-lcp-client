@@ -99,10 +99,9 @@ namespace lcp
 
         virtual bool Decrypted() const;
 
-#if !DISABLE_LSD
         virtual bool getStatusDocumentProcessingFlag() const;
         virtual void setStatusDocumentProcessingFlag(bool flag);
-#endif //!DISABLE_LSD
+
     public:
         virtual KeyType UserKey() const;
         virtual KeyType ContentKey() const;
@@ -124,9 +123,7 @@ namespace lcp
 
         bool m_decrypted;
 
-#if !DISABLE_LSD
         bool m_statusDocumentProcessingFlag;
-#endif //!DISABLE_LSD
 
         std::unique_ptr<IKeyProvider> m_keyProvider;
     };

@@ -47,9 +47,8 @@ namespace lcp
     private:
         std::string m_publicationPath;
         Status CheckDecrypted(ILicense* license);
-#if !DISABLE_LSD
+
         Status CheckLicenseStatusDocument(ILicense* license);
-#endif //!DISABLE_LSD
 
     public:
         LcpService(
@@ -118,14 +117,6 @@ namespace lcp
                 IAcquisition ** acquisition
         );
 #endif //ENABLE_NET_PROVIDER
-
-//#if !DISABLE_LSD
-//        virtual Status CreatePublicationStatusDocumentProcessing(
-//                const std::string & publicationPath,
-//                ILicense * license,
-//                IStatusDocumentProcessing ** statusDocumentProcessing
-//        );
-//#endif //!DISABLE_LSD
 
         virtual IRightsService * GetRightsService() const;
 
