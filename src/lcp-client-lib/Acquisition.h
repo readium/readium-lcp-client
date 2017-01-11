@@ -28,7 +28,7 @@
 #ifndef __LCP_ACQUISITION_H__
 #define __LCP_ACQUISITION_H__
 
-#if ENABLE_NET_PROVIDER
+#if ENABLE_NET_PROVIDER_ACQUISITION
 
 #include <string>
 #include <mutex>
@@ -89,6 +89,6 @@ namespace lcp
     };
 }
 
-#endif //ENABLE_NET_PROVIDER
+#endif //ENABLE_NET_PROVIDER_ACQUISITION
 
 #endif //__LCP_ACQUISITION_H__

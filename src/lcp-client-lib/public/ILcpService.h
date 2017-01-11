@@ -38,10 +38,10 @@ namespace lcp
 #endif //ENABLE_NET_PROVIDER
     class IStorageProvider;
     class IFileSystemProvider;
-#if ENABLE_NET_PROVIDER
+#if ENABLE_NET_PROVIDER_ACQUISITION
     class IAcquisition;
     class IAcquisitionCallback;
-#endif //ENABLE_NET_PROVIDER
+#endif //ENABLE_NET_PROVIDER_ACQUISITION
     class IRightsService;
     class IReadableStream;
     class IEncryptedStream;
@@ -165,7 +165,7 @@ namespace lcp
             const std::string & licenseId
             ) = 0;
 
-#if ENABLE_NET_PROVIDER
+#if ENABLE_NET_PROVIDER_ACQUISITION
         //
         // Creates a new instance of IAcquisition to download the publication
         // of the given License from its Content Provider. The License Document
@@ -179,7 +179,7 @@ namespace lcp
                 ILicense * license,
                 IAcquisition ** acquisition
         ) = 0;
-#endif //ENABLE_NET_PROVIDER
+#endif //ENABLE_NET_PROVIDER_ACQUISITION
 
         //
         // Returns the rights service, exposing the public License rights API.

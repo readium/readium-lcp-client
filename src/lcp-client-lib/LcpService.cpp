@@ -44,9 +44,9 @@
 
 #include "DateTime.h"
 
-#if ENABLE_NET_PROVIDER
+#if ENABLE_NET_PROVIDER_ACQUISITION
 #include "Acquisition.h"
-#endif //ENABLE_NET_PROVIDER
+#endif //ENABLE_NET_PROVIDER_ACQUISITION
 
 ZIPLIB_INCLUDE_START
 #include "ziplib/Source/ZipLib/ZipFile.h"
@@ -66,10 +66,9 @@ namespace lcp
 #endif //ENABLE_NET_PROVIDER
         IStorageProvider * storageProvider,
         IFileSystemProvider * fileSystemProvider
-#if ENABLE_NET_PROVIDER
-    ,
-        const std::string & defaultCrlUrl
-#endif //ENABLE_NET_PROVIDER
+#if !DISABLE_CRL
+        , const std::string & defaultCrlUrl
+#endif //!DISABLE_CRL
         )
         : m_rootCertificate(rootCertificate)
 #if ENABLE_NET_PROVIDER
@@ -83,8 +82,11 @@ namespace lcp
         , m_cryptoProvider(new CryptoppCryptoProvider(m_encryptionProfilesManager.get()
 #if ENABLE_NET_PROVIDER
                     , m_netProvider
-                    , defaultCrlUrl
 #endif //ENABLE_NET_PROVIDER
+
+#if !DISABLE_CRL
+                    , defaultCrlUrl
+#endif //!DISABLE_CRL
             ))
     {
     }
@@ -591,7 +593,7 @@ namespace lcp
         }
     }
 
-#if ENABLE_NET_PROVIDER
+#if ENABLE_NET_PROVIDER_ACQUISITION
 
     Status LcpService::CreatePublicationAcquisition(
             const std::string & publicationPath,
@@ -623,7 +625,7 @@ namespace lcp
             return ex.ResultStatus();
         }
     }
-#endif //ENABLE_NET_PROVIDER
+#endif //ENABLE_NET_PROVIDER_ACQUISITION
 
     IRightsService * LcpService::GetRightsService() const
     {

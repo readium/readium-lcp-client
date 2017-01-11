@@ -33,11 +33,11 @@
 #include "public/ICrypto.h"
 #include "Certificate.h"
 
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_CRL
 #include "CertificateRevocationList.h"
 #include "CrlUpdater.h"
 #include "ThreadTimer.h"
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_CRL
 
 #include "DateTime.h"
 #include "LcpUtils.h"
@@ -50,19 +50,26 @@ namespace lcp
 {
     CryptoppCryptoProvider::CryptoppCryptoProvider(
         EncryptionProfilesManager * encryptionProfilesManager
+
 #if ENABLE_NET_PROVIDER
-    ,
-        INetProvider * netProvider,
-        const std::string & defaultCrlUrl
+    , INetProvider * netProvider
 #endif //ENABLE_NET_PROVIDER
+
+#if !DISABLE_CRL
+        , const std::string & defaultCrlUrl
+#endif //!DISABLE_CRL
         )
         : m_encryptionProfilesManager(encryptionProfilesManager)
     {
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_CRL
         m_revocationList.reset(new CertificateRevocationList());
         m_threadTimer.reset(new ThreadTimer());
 
-        m_crlUpdater.reset(new CrlUpdater(netProvider, m_revocationList.get(), m_threadTimer.get(), defaultCrlUrl));
+        m_crlUpdater.reset(new CrlUpdater(
+#if ENABLE_NET_PROVIDER
+                netProvider,
+#endif //ENABLE_NET_PROVIDER
+                m_revocationList.get(), m_threadTimer.get(), defaultCrlUrl));
 
         m_threadTimer->SetHandler(std::bind(&CrlUpdater::Update, m_crlUpdater.get()));
         m_threadTimer->SetAutoReset(false);
@@ -73,12 +80,12 @@ namespace lcp
             m_threadTimer->SetDuration(ThreadTimer::DurationType(ThreadTimer::DurationType::zero()));
             m_threadTimer->Start();
         }
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_CRL
     }
 
     CryptoppCryptoProvider::~CryptoppCryptoProvider()
     {
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_CRL
         try
         {
             m_crlUpdater->Cancel();
@@ -87,7 +94,7 @@ namespace lcp
         catch (...)
         {
         }
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_CRL
     }
 
     Status CryptoppCryptoProvider::VerifyLicense(
@@ -133,13 +140,13 @@ namespace lcp
                 return Status(StatusCode::ErrorOpeningContentProviderCertificateNotVerified, "ErrorOpeningContentProviderCertificateNotVerified");
             }
 
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_CRL
             Status res = this->ProcessRevokation(rootCertificate.get(), providerCertificate.get());
             if (!Status::IsSuccess(res))
             {
                 return res;
             }
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_CRL
 
             if (!providerCertificate->VerifyMessage(license->CanonicalContent(), license->Crypto()->Signature()))
             {
@@ -405,7 +412,7 @@ namespace lcp
         }
     }
 
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_CRL
     Status CryptoppCryptoProvider::ProcessRevokation(ICertificate * rootCertificate, ICertificate * providerCertificate)
     {
         m_crlUpdater->UpdateCrlUrls(rootCertificate->DistributionPoints());
@@ -444,5 +451,5 @@ namespace lcp
         }
         return Status(StatusCode::ErrorCommonSuccess);
     }
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_CRL
 }

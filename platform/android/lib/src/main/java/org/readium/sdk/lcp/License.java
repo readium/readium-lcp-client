@@ -41,7 +41,7 @@ public class License {
         this.nativeSetStatusDocumentProcessingFlag(this.nativePtr, flag);
     }
 
-//#if ENABLE_NET_PROVIDER
+//#if ENABLE_NET_PROVIDER_ACQUISITION
 //    public Acquisition createAcquisition(String dstPath) {
 //        return this.nativeCreateAcquisition(this.nativePtr, this.servicePtr, dstPath);
 //    }
@@ -69,7 +69,7 @@ public class License {
 
     private native void nativeSetStatusDocumentProcessingFlag(long nativePtr, boolean flag);
 
-//#if ENABLE_NET_PROVIDER
+//#if ENABLE_NET_PROVIDER_ACQUISITION
     //private native Acquisition nativeCreateAcquisition(long nativePtr, long servicePtr, String dstPath);
 
 }

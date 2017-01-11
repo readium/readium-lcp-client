@@ -62,7 +62,7 @@ namespace lcp
         virtual ~ICertificateExtension() {}
     };
 
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_CRL
 
     class ICertificateRevocationList
     {
@@ -77,7 +77,7 @@ namespace lcp
         virtual ~ICertificateRevocationList() {}
     };
 
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_CRL
 
     struct CertificateVersion
     {

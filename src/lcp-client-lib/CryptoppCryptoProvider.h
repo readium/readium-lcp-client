@@ -37,15 +37,19 @@ namespace lcp
 {
 #if ENABLE_NET_PROVIDER
     class INetProvider;
+#endif //ENABLE_NET_PROVIDER
+
+#if !DISABLE_CRL
     class CrlUpdater;
     class ThreadTimer;
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_CRL
+
     class EncryptionProfilesManager;
     class ICertificate;
 
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_CRL
 class ICertificateRevocationList;
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_CRL
 
     class CryptoppCryptoProvider : public ICryptoProvider, public NonCopyable
     {
@@ -53,10 +57,12 @@ class ICertificateRevocationList;
         CryptoppCryptoProvider(
             EncryptionProfilesManager * encryptionProfilesManager
 #if ENABLE_NET_PROVIDER
-        ,
-            INetProvider * netProvider,
-            const std::string & defaultCrlUrl
+        , INetProvider * netProvider
 #endif //ENABLE_NET_PROVIDER
+
+#if !DISABLE_CRL
+        , const std::string & defaultCrlUrl
+#endif //!DISABLE_CRL
             );
         ~CryptoppCryptoProvider();
 
@@ -123,11 +129,11 @@ class ICertificateRevocationList;
         Status ProcessRevokation(ICertificate * rootCertificate, ICertificate * providerCertificate);
 
     private:
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_CRL
         std::unique_ptr<ICertificateRevocationList> m_revocationList;
         std::unique_ptr<ThreadTimer> m_threadTimer;
         std::unique_ptr<CrlUpdater> m_crlUpdater;
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_CRL
         std::mutex m_processRevocationSync;
         EncryptionProfilesManager * m_encryptionProfilesManager;
     };

@@ -1,7 +1,7 @@
 package org.readium.sdk.lcp;
 
 public class Acquisition {
-    //#if ENABLE_NET_PROVIDER
+    //#if ENABLE_NET_PROVIDER_ACQUISITION
 //    /**
 //     * Native Container Pointer.
 //     * DO NOT USE FROM JAVA SIDE!

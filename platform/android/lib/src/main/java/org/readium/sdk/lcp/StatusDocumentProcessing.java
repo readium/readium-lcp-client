@@ -167,8 +167,6 @@ public class StatusDocumentProcessing {
             return;
         }
 
-        //#if !ENABLE_NET_PROVIDER
-
         final String url = m_statusDocument_LINK_LICENSE.m_href;
 
 //        final AsyncHttpRequestFactory current = Ion.getDefault(context).configure().getAsyncHttpRequestFactory();
@@ -858,8 +856,6 @@ public class StatusDocumentProcessing {
     public void start(IListener statusDocumentProcessingListener) {
 
         m_statusDocumentProcessingListener = statusDocumentProcessingListener;
-
-        //#if !ENABLE_NET_PROVIDER
 
         final String url = mLicense.getLink_Status();
 

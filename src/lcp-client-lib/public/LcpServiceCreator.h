@@ -52,10 +52,9 @@ namespace lcp
             IStorageProvider * storageProvider,
             IFileSystemProvider * fileSystemProvider,
             ILcpService ** lcpService
-#if ENABLE_NET_PROVIDER
-                ,
-            const std::string & defaultCrlUrl = std::string()
-#endif //ENABLE_NET_PROVIDER
+#if !DISABLE_CRL
+            , const std::string & defaultCrlUrl = std::string()
+#endif //!DISABLE_CRL
             );
     };
 }

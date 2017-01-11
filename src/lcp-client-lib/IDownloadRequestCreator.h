@@ -28,7 +28,7 @@
 #ifndef __I_DOWNLOAD_REQUEST_CREATOR_H__
 #define __I_DOWNLOAD_REQUEST_CREATOR_H__
 
-#if ENABLE_NET_PROVIDER
+#if ENABLE_NET_PROVIDER_ACQUISITION
 
 #include "public/LcpStatus.h"
 
@@ -49,6 +49,6 @@ namespace lcp
     };
 }
 
-#endif //ENABLE_NET_PROVIDER
+#endif //ENABLE_NET_PROVIDER_ACQUISITION
 
 #endif //__I_DOWNLOAD_REQUEST_CREATOR_H__

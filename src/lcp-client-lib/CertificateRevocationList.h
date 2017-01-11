@@ -28,7 +28,7 @@
 #ifndef __CERTIFICATE_REVOCATION_LIST_H__
 #define __CERTIFICATE_REVOCATION_LIST_H__
 
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_CRL
 
 #include <mutex>
 #include "ICertificate.h"
@@ -59,6 +59,6 @@ namespace lcp
     };
 }
 
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_CRL
 
 #endif //__CERTIFICATE_REVOCATION_LIST_H__

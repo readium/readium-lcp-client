@@ -2,7 +2,7 @@
 // Created by clebeaupin on 15/03/16.
 //
 
-#if ENABLE_NET_PROVIDER
+#if ENABLE_NET_PROVIDER_ACQUISITION
 
 #include "AcquisitionCallback.h"
 #include "Util.h"
@@ -52,4 +52,4 @@ namespace lcp {
     }
 }
 
-#endif //ENABLE_NET_PROVIDER
+#endif //ENABLE_NET_PROVIDER_ACQUISITION

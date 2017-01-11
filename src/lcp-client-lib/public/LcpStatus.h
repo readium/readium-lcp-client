@@ -92,7 +92,7 @@ namespace lcp
             // Trying to save duplicate license instance while opening
             ErrorOpeningDuplicateLicenseInstance,
 
-#if ENABLE_NET_PROVIDER
+#if ENABLE_NET_PROVIDER_ACQUISITION
             //
             // Errors when acquiring a protected publication from a License.
             //
@@ -104,7 +104,7 @@ namespace lcp
             ErrorAcquisitionPublicationWrongType,
             // Cannot open file to write
             ErrorAcquisitionInvalidFilePath,
-#endif //ENABLE_NET_PROVIDER
+#endif //ENABLE_NET_PROVIDER_ACQUISITION
 
             //
             // Errors when decrypting a License or data.

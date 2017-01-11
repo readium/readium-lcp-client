@@ -27,7 +27,7 @@
 #ifndef __THREAD_TIMER_H__
 #define __THREAD_TIMER_H__
 
-#if FUTURE_ENABLED
+#if !DISABLE_CRL
 
 #include <chrono>
 #include <thread>
@@ -97,6 +97,6 @@ namespace lcp
     };
 }
 
-#endif //FUTURE_ENABLED
+#endif //!DISABLE_CRL
 
 #endif //__THREAD_TIMER_H__

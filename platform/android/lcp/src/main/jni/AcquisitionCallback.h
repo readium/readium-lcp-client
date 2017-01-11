@@ -5,7 +5,7 @@
 #ifndef LCP_ANDROID_ACQUISITION_CALLBACK_H
 #define LCP_ANDROID_ACQUISITION_CALLBACK_H
 
-#if ENABLE_NET_PROVIDER
+#if ENABLE_NET_PROVIDER_ACQUISITION
 
 #include <jni.h>
 #include <public/IAcquistionCallback.h>
@@ -36,6 +36,6 @@ namespace lcp {
 }
 #endif
 
-#endif //ENABLE_NET_PROVIDER
+#endif //ENABLE_NET_PROVIDER_ACQUISITION
 
 #endif //LCP_ANDROID_ACQUISITION_CALLBACK_H

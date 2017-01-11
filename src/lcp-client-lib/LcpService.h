@@ -58,10 +58,9 @@ namespace lcp
 #endif //ENABLE_NET_PROVIDER
             IStorageProvider * storageProvider,
             IFileSystemProvider * fileSystemProvider
-#if ENABLE_NET_PROVIDER
-                ,
-            const std::string & defaultCrlUrl
-#endif //ENABLE_NET_PROVIDER
+#if !DISABLE_CRL
+            , const std::string & defaultCrlUrl
+#endif //!DISABLE_CRL
             );
 
         // ILcpService
@@ -110,13 +109,13 @@ namespace lcp
             const std::string & providerId,
             const std::string & licenseId
             );
-#if ENABLE_NET_PROVIDER
+#if ENABLE_NET_PROVIDER_ACQUISITION
         virtual Status CreatePublicationAcquisition(
                 const std::string & publicationPath,
                 ILicense * license,
                 IAcquisition ** acquisition
         );
-#endif //ENABLE_NET_PROVIDER
+#endif //ENABLE_NET_PROVIDER_ACQUISITION
 
         virtual IRightsService * GetRightsService() const;
 

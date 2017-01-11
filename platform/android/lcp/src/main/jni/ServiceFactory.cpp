@@ -18,8 +18,7 @@ namespace lcp {
             const std::string &certContent,
             StorageProvider* storageProvider
 #if ENABLE_NET_PROVIDER
-            ,
-        NetProvider* netProvider
+            , NetProvider* netProvider
 #endif //ENABLE_NET_PROVIDER
     ) {
         DefaultFileSystemProvider * fileSystemProvider = new DefaultFileSystemProvider();
