@@ -96,7 +96,7 @@ namespace lcp
             dataLength,
             decryptedData,
             decryptedDataLength,
-            BlockPaddingSchemeDef::DEFAULT_PADDING
+            BlockPaddingSchemeDef::DEFAULT_PADDING // == PKCS_PADDING => PKCS#7 (AES CBC Block Size > 8)
             );
     }
 
@@ -118,7 +118,7 @@ namespace lcp
             inBuffer.size(),
             &outBuffer.at(0),
             outBuffer.size(),
-            BlockPaddingSchemeDef::DEFAULT_PADDING
+            BlockPaddingSchemeDef::DEFAULT_PADDING // == PKCS_PADDING => PKCS#7 (AES CBC Block Size > 8)
             );
 
         return static_cast<size_t>(stream->Size())
@@ -170,7 +170,7 @@ namespace lcp
         size_t sizeWithoutPaddedBlock = plainTextSize - (plainTextSize % CryptoPP::AES::BLOCKSIZE);
         if (rangeInfo.position + rangeInfo.length > sizeWithoutPaddedBlock)
         {
-            padding = BlockPaddingSchemeDef::DEFAULT_PADDING;
+            padding = BlockPaddingSchemeDef::DEFAULT_PADDING; // == PKCS_PADDING => PKCS#7 (AES CBC Block Size > 8)
         }
 
         // Read data from the stream
