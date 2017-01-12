@@ -79,7 +79,8 @@ namespace lcp
             links->GetLink(Publication, m_publicationLink);
             if (m_publicationLink.type != PublicationType)
             {
-                return Status(StatusCode::ErrorAcquisitionPublicationWrongType, "ErrorAcquisitionPublicationWrongType");
+                // See https://github.com/readium/readium-lcp-client/issues/15
+                //return Status(StatusCode::ErrorAcquisitionPublicationWrongType, "ErrorAcquisitionPublicationWrongType");
             }
 
             m_file.reset(m_fileSystemProvider->GetFile(m_publicationPath));
