@@ -42,13 +42,11 @@ namespace lcp
         RightsInfo()
             : print(IRightsService::UNLIMITED)
             , copy(IRightsService::UNLIMITED)
-            , tts(true)
         {
         }
 
         int print;
         int copy;
-        bool tts;
         std::string start;
         std::string end;
         StringsMap valuesMap;

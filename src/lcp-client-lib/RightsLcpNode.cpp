@@ -133,10 +133,6 @@ namespace lcp
         {
             m_rights.copy = StringToInt(value);
         }
-        else if (name == TtsRight)
-        {
-            m_rights.tts = StringToBool(value);
-        }
 
         this->SetRightValueInMap(name, value);
     }
@@ -192,10 +188,6 @@ namespace lcp
         {
             return m_rights.copy == IRightsService::UNLIMITED || m_rights.copy > 0;
         }
-        else if (name == TtsRight)
-        {
-            return m_rights.tts;
-        }
         else if (name == StartRight)
         {
             return this->DoesLicenseStart();
@@ -219,10 +211,6 @@ namespace lcp
         if (m_rights.valuesMap.find(CopyRight) == m_rights.valuesMap.end())
         {
             this->SetRightValueInMap(CopyRight, ToString(m_rights.copy));
-        }
-        if (m_rights.valuesMap.find(TtsRight) == m_rights.valuesMap.end())
-        {
-            this->SetRightValueInMap(CopyRight, BoolToString(m_rights.tts));
         }
     }
 
@@ -276,10 +264,6 @@ namespace lcp
         else if (name == CopyRight)
         {
             m_rights.copy = value.GetInt();
-        }
-        else if (name == TtsRight)
-        {
-            m_rights.tts = value.GetBool();
         }
         else if (name == StartRight)
         {

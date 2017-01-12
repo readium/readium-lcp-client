@@ -65,8 +65,7 @@ namespace lcp
     // Maximum number of characters that can be copied to the clipboard over
     // the lifetime of the license.
     static const char * CopyRight = "copy";
-    // Indication whether the Publication can be read in audio via text-to-speech.
-    static const char * TtsRight = "tts";
+
     // Date when the license begins.
     static const char * StartRight = "start";
     // Date when the license ends.
