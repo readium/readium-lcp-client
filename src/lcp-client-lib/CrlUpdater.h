@@ -33,7 +33,7 @@
 #include <memory>
 #include <mutex>
 #include <condition_variable>
-#include <public/lcp.h>
+#include "public/lcp.h"
 #include "ICertificate.h"
 
 #if !DISABLE_NET_PROVIDER
