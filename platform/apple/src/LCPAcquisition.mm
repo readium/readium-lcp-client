@@ -29,7 +29,7 @@
 #import "IAcquistionCallback.h"
 #import "LCPError.h"
 
-#if ENABLE_NET_PROVIDER
+#if ENABLE_NET_PROVIDER_ACQUISITION
 
 namespace lcp
 {
@@ -141,4 +141,4 @@ namespace lcp
 
 @end
 
-#endif //ENABLE_NET_PROVIDER
+#endif //ENABLE_NET_PROVIDER_ACQUISITION

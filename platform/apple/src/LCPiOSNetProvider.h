@@ -25,7 +25,7 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_NET_PROVIDER
 
 #import "../../../src/lcp-client-lib/public/INetProvider.h"
 #import <Foundation/Foundation.h>
@@ -46,4 +46,4 @@ namespace lcp
     };
 }
 
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_NET_PROVIDER

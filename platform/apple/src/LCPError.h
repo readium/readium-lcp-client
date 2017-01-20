@@ -49,16 +49,22 @@ extern NSInteger const LCPErrorOpeningContentProviderCertificateRevoked;
 extern NSInteger const LCPErrorOpeningContentProviderCertificateNotStarted;
 extern NSInteger const LCPErrorOpeningContentProviderCertificateExpired;
 extern NSInteger const LCPErrorOpeningDuplicateLicenseInstance;
-extern NSInteger const LCPErrorAcquisitionNoAcquisitionLink;
-extern NSInteger const LCPErrorAcquisitionPublicationCorrupted;
-extern NSInteger const LCPErrorAcquisitionPublicationWrongType;
-extern NSInteger const LCPErrorAcquisitionInvalidFilePath;
 extern NSInteger const LCPErrorDecryptionUserPassphraseNotValid;
 extern NSInteger const LCPErrorDecryptionLicenseEncrypted;
 extern NSInteger const LCPErrorDecryptionPublicationEncrypted;
 extern NSInteger const LCPErrorDecryptionCommonError;
 extern NSInteger const LCPErrorNetworkingRequestNotFound;
 extern NSInteger const LCPErrorNetworkingRequestFailed;
+
+#if ENABLE_NET_PROVIDER_ACQUISITION
+extern NSInteger const LCPErrorAcquisitionNoAcquisitionLink;
+
+extern NSInteger const LCPErrorAcquisitionPublicationCorrupted;
+
+extern NSInteger const LCPErrorAcquisitionPublicationWrongType;
+
+extern NSInteger const LCPErrorAcquisitionInvalidFilePath;
+#endif //ENABLE_NET_PROVIDER_ACQUISITION
 
 #ifdef __cplusplus
 namespace lcp {
