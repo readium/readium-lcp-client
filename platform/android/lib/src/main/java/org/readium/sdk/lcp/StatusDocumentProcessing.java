@@ -31,7 +31,6 @@ import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.util.Log;
 
@@ -50,7 +49,6 @@ import java.io.StringWriter;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.UUID;
 
 public class StatusDocumentProcessing {
 
@@ -68,16 +66,26 @@ public class StatusDocumentProcessing {
         public abstract void Done(boolean done);
     }
 
+    public interface IDeviceIDManager {
+        String getDeviceID();
+
+        String checkDeviceID(String key);
+
+        void recordDeviceID(String key);
+    }
+
     private Context m_context;
     private Service mLcpService = null;
     private String mBookPath = null;
     private License mLicense = null;
+    private IDeviceIDManager m_deviceIDManager = null;
 
-    public StatusDocumentProcessing(Context context, Service service, String path, License license) {
+    public StatusDocumentProcessing(Context context, Service service, String path, License license, IDeviceIDManager deviceIDManager) {
         m_context = context;
         mLcpService = service;
         mBookPath = path;
         mLicense = license;
+        m_deviceIDManager = deviceIDManager;
     }
 
     public interface IListener {
@@ -390,30 +398,7 @@ public class StatusDocumentProcessing {
 
     private void registerDevice(final DoneCallback doneCallback_registerDevice) {
 
-        String id = UUID.randomUUID().toString();
-
-        // TODO: weird MAC address on my device...not sure it's reliable (Wifi-ADB, LLDB debug session).
-//        try {
-//            WifiManager wm = (WifiManager) m_context.getSystemService(Context.WIFI_SERVICE);
-//            id = wm.getConnectionInfo().getMacAddress();
-//        } catch(Exception ex){
-//            // ignore
-//        }
-
-        SharedPreferences sharedPrefs_DEVICEID = m_context.getSharedPreferences(
-                "DEVICE_ID", Context.MODE_PRIVATE);
-        String pref_DEVICEID = sharedPrefs_DEVICEID.getString("DEVICE_ID", null);
-        if (pref_DEVICEID == null) {
-            SharedPreferences.Editor editor = sharedPrefs_DEVICEID.edit();
-            editor.putString("DEVICE_ID", id);
-            editor.commit();
-        } else {
-            id = pref_DEVICEID;
-        }
-
-        final String deviceID = id;
-
-        final String PREF_ID = "LSD_DEVICE_REG_" + m_statusDocument_ID;
+        final String deviceID = m_deviceIDManager.getDeviceID();
 
         boolean doRegister = false;
         if (m_statusDocument_LINK_REGISTER == null) {
@@ -422,12 +407,11 @@ public class StatusDocumentProcessing {
             doRegister = true;
         } else if (m_statusDocument_STATUS.equals("active")) {
 
-            SharedPreferences sharedPrefs = m_context.getSharedPreferences(
-                    PREF_ID, Context.MODE_PRIVATE);
-            String pref = sharedPrefs.getString(PREF_ID, null);
-            if (pref == null) {
+            String deviceIDForStatusDoc = m_deviceIDManager.checkDeviceID(m_statusDocument_ID);
+
+            if (deviceIDForStatusDoc == null) {
                 doRegister = true;
-            } else if (!pref.equals(deviceID)) {
+            } else if (!deviceIDForStatusDoc.equals(deviceID)) { // this should really never happen ... but let's ensure anyway.
                 doRegister = true;
             }
         }
@@ -494,16 +478,7 @@ public class StatusDocumentProcessing {
                                     boolean okay = parseStatusDocumentJson(json);
 
                                     if (okay && m_statusDocument_STATUS.equals("active")) {
-
-                                        SharedPreferences sharedPrefs = m_context.getSharedPreferences(
-                                                PREF_ID, Context.MODE_PRIVATE);
-//                                        String pref = sharedPrefs.getString(PREF_ID, null);
-                                        SharedPreferences.Editor editor = sharedPrefs.edit();
-//                                        if (pref != null) {
-//                                            editor.remove(PREF_ID);
-//                                        }
-                                        editor.putString(PREF_ID, deviceID);
-                                        editor.commit();
+                                        m_deviceIDManager.recordDeviceID(m_statusDocument_ID);
                                     }
 
                                     doneCallback_registerDevice.Done(true);
@@ -605,19 +580,12 @@ public class StatusDocumentProcessing {
 
     private void checkLink_RENEW(final DoneCallback doneCallback_checkLink_RENEW) {
 
-        // LSD server denies RENEW for non-active license, but we emit the HTTP PUT request anyway to test...
-//        if (m_statusDocument_STATUS.equals("ready") || m_statusDocument_STATUS.equals("active")) {
-//            return false;
-//        }
-
-        SharedPreferences sharedPrefs_DEVICEID = m_context.getSharedPreferences(
-                "DEVICE_ID", Context.MODE_PRIVATE);
-        String pref_DEVICEID = sharedPrefs_DEVICEID.getString("DEVICE_ID", null);
-        if (pref_DEVICEID == null) {
+        if (!m_statusDocument_STATUS.equals("active")) {
             doneCallback_checkLink_RENEW.Done(false);
             return;
         }
-        final String deviceID = pref_DEVICEID;
+
+        final String deviceID = m_deviceIDManager.getDeviceID();
 
         if (m_statusDocument_LINK_RENEW == null) {
             doneCallback_checkLink_RENEW.Done(false);
@@ -711,14 +679,7 @@ public class StatusDocumentProcessing {
             return;
         }
 
-        SharedPreferences sharedPrefs_DEVICEID = m_context.getSharedPreferences(
-                "DEVICE_ID", Context.MODE_PRIVATE);
-        String pref_DEVICEID = sharedPrefs_DEVICEID.getString("DEVICE_ID", null);
-        if (pref_DEVICEID == null) {
-            doneCallback_checkLink_RETURN.Done(false);
-            return;
-        }
-        final String deviceID = pref_DEVICEID;
+        final String deviceID = m_deviceIDManager.getDeviceID();
 
         if (m_statusDocument_LINK_RETURN == null) {
             doneCallback_checkLink_RETURN.Done(false);
