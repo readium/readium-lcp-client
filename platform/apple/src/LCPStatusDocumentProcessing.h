@@ -1,4 +1,3 @@
-// Copyright (c) 2016 Mantano
 // Licensed to the Readium Foundation under one or more contributor license agreements.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -24,10 +23,36 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#import <Foundation/Foundation.h>
 
-#import "LCPStatusDocumentProcessing.h"
-#import "LCPAcquisition.h"
-#import "LCPError.h"
-#import "LCPLicense.h"
-#import "LCPService.h"
 
+@protocol DeviceIdManager
+
+- (NSString*)getDeviceID;
+- (NSString*)checkDeviceID:(NSString*)key;
+- (void)recordDeviceID:(NSString*)key;
+
+@end
+
+@class LCPStatusDocumentProcessing;
+
+@protocol StatusDocumentProcessingListener
+
+- (void)onStatusDocumentProcessingComplete:(LCPStatusDocumentProcessing*)lsdProcessing;
+
+@end
+
+
+@class LCPLicense;
+@class LCPService;
+
+@interface LCPStatusDocumentProcessing : NSObject
+
+- (instancetype)init_:(LCPService *)service path:(NSString *)path license:(LCPLicense*)license deviceIdManager:(id<DeviceIdManager>)deviceIdManager;
+
+- (void)start:(id<StatusDocumentProcessingListener>)listener;
+
+- (bool) wasCancelled;
+- (void)cancel;
+
+@end
