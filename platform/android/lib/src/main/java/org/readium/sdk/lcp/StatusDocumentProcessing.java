@@ -118,7 +118,10 @@ public class StatusDocumentProcessing {
         }
         m_wasCancelled = true;
         mLicense.setStatusDocumentProcessingFlag(false);
-        m_statusDocumentProcessingListener.onStatusDocumentProcessingComplete();
+
+        if (m_statusDocumentProcessingListener != null) {
+            m_statusDocumentProcessingListener.onStatusDocumentProcessingComplete();
+        }
     }
 
     private IListener m_statusDocumentProcessingListener = null;
