@@ -32,14 +32,14 @@
 #import "IRights.h"
 #import "IRightsService.h"
 #import "LcpServiceCreator.h"
-#if ENABLE_NET_PROVIDER
+#if ENABLE_NET_PROVIDER_ACQUISITION
 #import "LCPAcquisition.h"
-#endif //ENABLE_NET_PROVIDER
+#endif //ENABLE_NET_PROVIDER_ACQUISITION
 #import "LCPError.h"
 #import "LCPLicense.h"
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_NET_PROVIDER
 #import "LCPiOSNetProvider.h"
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_NET_PROVIDER
 #import "LCPiOSStorageProvider.h"
 #import <iostream>
 
@@ -53,7 +53,6 @@ using namespace lcp;
 
 NSString *const LCPRightPrint = @(PrintRight);
 NSString *const LCPRightCopy = @(CopyRight);
-NSString *const LCPRightTTS = @(TtsRight);
 NSString *const LCPRightStart = @(StartRight);
 NSString *const LCPRightEnd = @(EndRight);
 
@@ -81,24 +80,30 @@ NSString *const LCPRightEnd = @(EndRight);
     ILcpService *service = nullptr;
     LcpServiceCreator factory;
     IStorageProvider *storageProvider;
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_NET_PROVIDER
     INetProvider *netProvider;
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_NET_PROVIDER
     IFileSystemProvider *fileSystemProvider;
     
 #if true //TARGET_OS_IPHONE (WORKS FINE FOR BOTH iOS and OSX)
     storageProvider = new iOSStorageProvider();
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_NET_PROVIDER
     netProvider = new iOSNetProvider();
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_NET_PROVIDER
     fileSystemProvider = new DefaultFileSystemProvider();
 #endif
     
     Status status = factory.CreateLcpService([rootCertificate UTF8String],
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_NET_PROVIDER
                                              netProvider,
-#endif //ENABLE_NET_PROVIDER
-                                             storageProvider, fileSystemProvider, &service);
+#endif //!DISABLE_NET_PROVIDER
+                                             storageProvider,
+                                             fileSystemProvider,
+                                             &service
+#if !DISABLE_CRL
+                                             , std::string()
+#endif //!DISABLE_CRL
+                                             );
     
     if (![self checkStatus:status error:error]) {
         return nil;
@@ -154,7 +159,7 @@ NSString *const LCPRightEnd = @(EndRight);
     return [self checkStatus:status error:error];
 }
 
-#if ENABLE_NET_PROVIDER
+#if ENABLE_NET_PROVIDER_ACQUISITION
 - (LCPAcquisition *)createAcquisition:(LCPLicense *)license publicationPath:(NSString *)publicationPath error:(NSError **)error
 {
     LCPAcquisition *acquisition;
@@ -167,7 +172,7 @@ NSString *const LCPRightEnd = @(EndRight);
     
     return acquisition;
 }
-#endif //ENABLE_NET_PROVIDER
+#endif //ENABLE_NET_PROVIDER_ACQUISITION
 
 - (BOOL)checkStatus:(Status)status error:(NSError **)error
 {

@@ -23,33 +23,36 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#import <Foundation/Foundation.h>
 
-#ifndef LCP_ANDROID_SERVICE_H
-#define LCP_ANDROID_SERVICE_H
 
-#include <jni.h>
+@protocol DeviceIdManager
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+- (NSString*)getDeviceID;
+- (NSString*)checkDeviceID:(NSString*)key;
+- (void)recordDeviceID:(NSString*)key;
 
-namespace lcp {
-    class Service {
+@end
 
-    };
-}
+@class LCPStatusDocumentProcessing;
 
-JNIEXPORT jobject JNICALL Java_org_readium_sdk_lcp_Service_nativeOpenLicense(
-        JNIEnv *env, jobject obj, jlong servicePtr, jstring jLicenseJson);
+@protocol StatusDocumentProcessingListener
 
-JNIEXPORT void JNICALL Java_org_readium_sdk_lcp_Service_nativeInjectLicense(
-        JNIEnv *env, jobject obj, jlong servicePtr, jstring jEpubPath, jstring jLicenseJson);
-//
-//JNIEXPORT void JNICALL Java_org_readium_sdk_lcp_Service_nativeInjectLicense(
-//        JNIEnv *env, jobject obj, jlong servicePtr, jstring jEpubPath, jobject jLicense);
+- (void)onStatusDocumentProcessingComplete:(LCPStatusDocumentProcessing*)lsdProcessing;
 
-#ifdef __cplusplus
-}
-#endif
+@end
 
-#endif //LCP_ANDROID_SERVICE_H
+
+@class LCPLicense;
+@class LCPService;
+
+@interface LCPStatusDocumentProcessing : NSObject
+
+- (instancetype)init_:(LCPService *)service path:(NSString *)path license:(LCPLicense*)license deviceIdManager:(id<DeviceIdManager>)deviceIdManager;
+
+- (void)start:(id<StatusDocumentProcessingListener>)listener;
+
+- (bool) wasCancelled;
+- (void)cancel;
+
+@end

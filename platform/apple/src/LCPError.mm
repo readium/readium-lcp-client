@@ -32,9 +32,9 @@ NSString *const LCPErrorExtensionKey = @"LCPErrorExtension";
 
 using namespace lcp;
 
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_NET_PROVIDER
 NSInteger const LCPErrorCommonNoNetProvider = StatusCode::ErrorCommonNoNetProvider;
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_NET_PROVIDER
 NSInteger const LCPErrorCommonNoStorageProvider = StatusCode::ErrorCommonNoStorageProvider;
 NSInteger const LCPErrorCommonEncryptionProfileNotFound = StatusCode::ErrorCommonEncryptionProfileNotFound;
 NSInteger const LCPErrorCommonAlgorithmMismatch = StatusCode::ErrorCommonAlgorithmMismatch;
@@ -51,21 +51,21 @@ NSInteger const LCPErrorOpeningContentProviderCertificateRevoked = StatusCode::E
 NSInteger const LCPErrorOpeningContentProviderCertificateNotStarted = StatusCode::ErrorOpeningContentProviderCertificateNotStarted;
 NSInteger const LCPErrorOpeningContentProviderCertificateExpired = StatusCode::ErrorOpeningContentProviderCertificateExpired;
 NSInteger const LCPErrorOpeningDuplicateLicenseInstance = StatusCode::ErrorOpeningDuplicateLicenseInstance;
-#if ENABLE_NET_PROVIDER
+#if ENABLE_NET_PROVIDER_ACQUISITION
 NSInteger const LCPErrorAcquisitionNoAcquisitionLink = StatusCode::ErrorAcquisitionNoAcquisitionLink;
 NSInteger const LCPErrorAcquisitionPublicationCorrupted = StatusCode::ErrorAcquisitionPublicationCorrupted;
 NSInteger const LCPErrorAcquisitionPublicationWrongType = StatusCode::ErrorAcquisitionPublicationWrongType;
 NSInteger const LCPErrorAcquisitionInvalidFilePath = StatusCode::ErrorAcquisitionInvalidFilePath;
-#endif //ENABLE_NET_PROVIDER
+#endif //ENABLE_NET_PROVIDER_ACQUISITION
 NSInteger const LCPErrorDecryptionUserPassphraseNotValid = StatusCode::ErrorDecryptionUserPassphraseNotValid;
 NSInteger const LCPErrorDecryptionLicenseEncrypted = StatusCode::ErrorDecryptionLicenseEncrypted;
 NSInteger const LCPErrorDecryptionPublicationEncrypted = StatusCode::ErrorDecryptionPublicationEncrypted;
 NSInteger const LCPErrorDecryptionCommonError = StatusCode::ErrorDecryptionCommonError;
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_NET_PROVIDER
 NSInteger const LCPErrorNetworkingRequestNotFound = StatusCode::ErrorNetworkingRequestNotFound;
 NSInteger const LCPErrorNetworkingRequestFailed = StatusCode::ErrorNetworkingRequestFailed;
 
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_NET_PROVIDER
 
 NSError *LCPErrorFromStatus(Status status)
 {

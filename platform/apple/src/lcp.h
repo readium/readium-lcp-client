@@ -25,6 +25,7 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
+#import "LCPStatusDocumentProcessing.h"
 #import "LCPAcquisition.h"
 #import "LCPError.h"
 #import "LCPLicense.h"

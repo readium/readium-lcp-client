@@ -29,22 +29,21 @@
 #ifdef __cplusplus
 namespace lcp {
     class ILcpService;
-#if ENABLE_NET_PROVIDER
+#if !DISABLE_NET_PROVIDER
     class INetProvider;
-#endif //ENABLE_NET_PROVIDER
+#endif //!DISABLE_NET_PROVIDER
     class IStorageProvider;
 }
 #endif
 
-#if ENABLE_NET_PROVIDER
+#if ENABLE_NET_PROVIDER_ACQUISITION
 @class LCPAcquisition;
-#endif //ENABLE_NET_PROVIDER
+#endif //ENABLE_NET_PROVIDER_ACQUISITION
 
 @class LCPLicense;
 
 extern NSString *const LCPRightPrint;
 extern NSString *const LCPRightCopy;
-extern NSString *const LCPRightTTS;
 extern NSString *const LCPRightStart;
 extern NSString *const LCPRightEnd;
 
@@ -62,9 +61,9 @@ extern NSString *const LCPRightEnd;
 - (LCPLicense *)openLicense:(NSString *)path licenseJSON:(NSString *)licenseJSON error:(NSError **)error;
 - (BOOL)decryptLicense:(LCPLicense *)license passphrase:(NSString *)passphrase error:(NSError **)error;
 
-#if ENABLE_NET_PROVIDER
+#if ENABLE_NET_PROVIDER_ACQUISITION
 - (LCPAcquisition *)createAcquisition:(LCPLicense *)license publicationPath:(NSString *)publicationPath error:(NSError **)error;
-#endif //ENABLE_NET_PROVIDER
+#endif //ENABLE_NET_PROVIDER_ACQUISITION
 
 
 - (BOOL)canUseRight:(NSString *)rightIdentifier license:(LCPLicense *)license;
