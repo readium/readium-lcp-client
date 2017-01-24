@@ -249,7 +249,7 @@ namespace lcp
 
                 unsigned long long iterationCount = rangePos_nWholeBlocksToSkip;
 
-                m_decryptor.CTR_SeekToIteration(iterationCount);
+//                m_decryptor.CTR_SeekToIteration(iterationCount);
                 //m_decryptor.CTR_IncrementCounterByOne(iterationCount);
 
 //                std::vector<unsigned char> ivBufferSeeked(ivSize);
