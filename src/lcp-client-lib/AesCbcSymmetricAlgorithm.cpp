@@ -78,7 +78,7 @@ namespace lcp
             cipherData, cipherSize, true,
             new CryptoPP::StreamTransformationFilter(m_decryptor,
                 new CryptoPP::StringSink(decryptedDataStr),
-				CryptoPP::BlockPaddingSchemeDef::W3C_PADDING
+				CryptoPP::BlockPaddingSchemeDef::W3C_PADDING // Note that handling of W3C padding scheme during decryption also handles PKCS#7 (which is BlockPaddingSchemeDef::PKCS_PADDING in CryptoPP, with AES CBC Block Size > 8 (not PKCS#5))
                 )
             );
 
@@ -97,7 +97,7 @@ namespace lcp
             dataLength,
             decryptedData,
             decryptedDataLength,
-            BlockPaddingSchemeDef::W3C_PADDING // == PKCS_PADDING => PKCS#7 (AES CBC Block Size > 8)
+            BlockPaddingSchemeDef::W3C_PADDING // Note that handling of W3C padding scheme during decryption also handles PKCS#7 (which is BlockPaddingSchemeDef::PKCS_PADDING in CryptoPP, with AES CBC Block Size > 8 (not PKCS#5))
             );
     }
 
@@ -119,7 +119,7 @@ namespace lcp
             inBuffer.size(),
             &outBuffer.at(0),
             outBuffer.size(),
-            BlockPaddingSchemeDef::W3C_PADDING // == PKCS_PADDING => PKCS#7 (AES CBC Block Size > 8)
+            BlockPaddingSchemeDef::W3C_PADDING // Note that handling of W3C padding scheme during decryption also handles PKCS#7 (which is BlockPaddingSchemeDef::PKCS_PADDING in CryptoPP, with AES CBC Block Size > 8 (not PKCS#5))
             );
 
         return static_cast<size_t>(stream->Size())
@@ -171,7 +171,7 @@ namespace lcp
         size_t sizeWithoutPaddedBlock = plainTextSize - (plainTextSize % CryptoPP::AES::BLOCKSIZE);
         if (rangeInfo.position + rangeInfo.length > sizeWithoutPaddedBlock)
         {
-            padding = BlockPaddingSchemeDef::W3C_PADDING; // == PKCS_PADDING => PKCS#7 (AES CBC Block Size > 8)
+            padding = BlockPaddingSchemeDef::W3C_PADDING; // Note that handling of W3C padding scheme during decryption also handles PKCS#7 (which is BlockPaddingSchemeDef::PKCS_PADDING in CryptoPP, with AES CBC Block Size > 8 (not PKCS#5))
         }
 
         // Read data from the stream
