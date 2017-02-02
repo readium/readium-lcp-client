@@ -73,10 +73,10 @@ namespace lcp
         certData.Put(rawDecodedCert.data(), rawDecodedCert.size());
         certData.MessageEnd();
 
+        ByteQueue subjectPublicKey;
+
         BERSequenceDecoder cert(certData);
         {
-            ByteQueue subjectPublicKey;
-
             BERSequenceDecoder toBeSignedCert(cert);
             {
                 word32 version = CryptoppUtils::Cert::ReadVersion(toBeSignedCert, CertificateVersion::Certificatev1);
@@ -138,41 +138,42 @@ namespace lcp
 
             CryptoppUtils::Cert::ReadOID(cert, m_signatureAlgorithmId);
 
-            std::string algo = AlgorithmNames::EcdsaSha256Id;
-            if (m_signatureAlgorithmId == sha256withRSAEncryption()) {
-                algo = AlgorithmNames::RsaSha256Id;
-
-            } else if (m_signatureAlgorithmId == sha1withRSAEncryption()) {
-                algo = AlgorithmNames::RsaSha1Id;
-
-            } else if (m_signatureAlgorithmId == md5withRSAEncryption()) {
-                algo = AlgorithmNames::RsaMd5Id;
-            }
-
-            if (algo == AlgorithmNames::EcdsaSha256Id) {
-                m_publicKeyECDSA.BERDecode(subjectPublicKey);
-            } else {
-                m_publicKeyRSA.BERDecode(subjectPublicKey);
-            }
-
-            //this->PublicKey()
-            ByteQueue publicKeyQueue;
-            if (algo == AlgorithmNames::EcdsaSha256Id) {
-                m_publicKeyECDSA.DEREncode(publicKeyQueue);
-            } else {
-                m_publicKeyRSA.DEREncode(publicKeyQueue);
-            }
-            size_t size = static_cast<size_t>(publicKeyQueue.MaxRetrievable());
-            KeyType outKey(size);
-            publicKeyQueue.Get(&outKey.at(0), outKey.size());
-
-            m_signatureAlgorithm.reset(m_encryptionProfile->CreateSignatureAlgorithm(outKey, algo));
-
             unsigned int unused = 0;
             BERDecodeBitString(cert, m_rootSignature, unused);
         }
 
         CryptoppUtils::Cert::PullToBeSignedData(rawDecodedCert, m_toBeSignedData);
+
+
+        std::string algo = AlgorithmNames::EcdsaSha256Id;
+        if (m_signatureAlgorithmId == sha256withRSAEncryption()) {
+            algo = AlgorithmNames::RsaSha256Id;
+
+        } else if (m_signatureAlgorithmId == sha1withRSAEncryption()) {
+            algo = AlgorithmNames::RsaSha1Id;
+
+        } else if (m_signatureAlgorithmId == md5withRSAEncryption()) {
+            algo = AlgorithmNames::RsaMd5Id;
+        }
+
+        if (algo == AlgorithmNames::EcdsaSha256Id) {
+            m_publicKeyECDSA.BERDecode(subjectPublicKey);
+        } else {
+            m_publicKeyRSA.BERDecode(subjectPublicKey);
+        }
+
+        //this->PublicKey()
+        ByteQueue publicKeyQueue;
+        if (algo == AlgorithmNames::EcdsaSha256Id) {
+            m_publicKeyECDSA.DEREncode(publicKeyQueue);
+        } else {
+            m_publicKeyRSA.DEREncode(publicKeyQueue);
+        }
+        size_t size = static_cast<size_t>(publicKeyQueue.MaxRetrievable());
+        KeyType outKey(size);
+        publicKeyQueue.Get(&outKey.at(0), outKey.size());
+
+        m_signatureAlgorithm.reset(m_encryptionProfile->CreateSignatureAlgorithm(outKey, algo));
     }
 
     KeyType Certificate::PublicKey() const
@@ -248,8 +249,14 @@ namespace lcp
             throw StatusException(Status(StatusCode::ErrorOpeningRootCertificateSignatureAlgorithmNotFound, "ErrorOpeningRootCertificateSignatureAlgorithmNotFound"));
         }
 
+
+        // 139
         int s1 = m_rootSignature.size();
+
+        // https://www.cryptopp.com/wiki/Elliptic_Curve_Digital_Signature_Algorithm#Message_Verification
+        // 132 secp521r1
         int s2 = rootVerifierPtr->SignatureLength();
+
         if (s1 != s2)
         {
             throw StatusException(Status(StatusCode::ErrorOpeningContentProviderCertificateNotValid, "ErrorOpeningContentProviderCertificateNotValid"));
