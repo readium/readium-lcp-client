@@ -207,7 +207,20 @@ namespace lcp
         validity.MessageEnd();
     }
 
-    void CryptoppUtils::Cert::ReadSubjectPublicKey(BERSequenceDecoder & toBeSignedCertificate, RSA::PublicKey & result)
+    void CryptoppUtils::Cert::ReadSubjectPublicKeyECDSA(BERSequenceDecoder & toBeSignedCertificate, CryptoPP::ECDSA<CryptoPP::ECP, CryptoPP::SHA256>::PublicKey & result)
+    {
+        ByteQueue subjectPublicKey;
+
+        BERSequenceDecoder subjPublicInfoFrom(toBeSignedCertificate);
+        DERSequenceEncoder subjPublicInfoOut(subjectPublicKey);
+        subjPublicInfoFrom.TransferTo(subjPublicInfoOut, subjPublicInfoFrom.RemainingLength());
+        subjPublicInfoOut.MessageEnd();
+        subjPublicInfoFrom.MessageEnd();
+
+        result.BERDecode(subjectPublicKey);
+    }
+
+    void CryptoppUtils::Cert::ReadSubjectPublicKeyRSA(BERSequenceDecoder & toBeSignedCertificate, RSA::PublicKey & result)
     {
         ByteQueue subjectPublicKey;
 

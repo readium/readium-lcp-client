@@ -33,6 +33,7 @@
 #include <string>
 
 CRYPTOPP_INCLUDE_START
+#include <cryptopp/eccrypto.h>
 #include <cryptopp/rsa.h>
 #include <cryptopp/secblock.h>
 CRYPTOPP_INCLUDE_END
@@ -59,7 +60,10 @@ namespace lcp
             static std::string ReadIntegerAsString(BERSequenceDecoder & sequence);
             static word32 ReadVersion(BERSequenceDecoder & toBeSignedCertificate, word32 defaultVersion);
             static void ReadOID(BERSequenceDecoder & certificate, OID & algorithmId);
-            static void ReadSubjectPublicKey(BERSequenceDecoder & toBeSignedCertificate, RSA::PublicKey & result);
+
+            static void ReadSubjectPublicKeyRSA(BERSequenceDecoder & toBeSignedCertificate, CryptoPP::RSA::PublicKey & result);
+            static void ReadSubjectPublicKeyECDSA(BERSequenceDecoder & toBeSignedCertificate, CryptoPP::ECDSA<CryptoPP::ECP, CryptoPP::SHA256>::PublicKey & result);
+
             static void ReadDateTimeSequence(
                 BERSequenceDecoder & toBeSignedCertificate,
                 std::string & notBefore,

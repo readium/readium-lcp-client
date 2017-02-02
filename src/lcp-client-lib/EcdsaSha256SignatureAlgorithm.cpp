@@ -42,7 +42,7 @@ namespace lcp
 
     std::string EcdsaSha256SignatureAlgorithm::Name() const
     {
-        return AlgorithmNames::RsaSha256Id;
+        return AlgorithmNames::EcdsaSha256Id;
     }
 
     bool EcdsaSha256SignatureAlgorithm::VerifySignature(

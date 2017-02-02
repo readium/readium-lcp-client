@@ -55,9 +55,11 @@ public class ServiceFactory {
                                 CredentialHandler credentialHandler,
                                 StatusDocumentHandler statusDocumentHandler
     ) {
-        certContent = certContent.replaceAll("-*BEGIN CERTIFICATE-*", "");
+        certContent = certContent.replaceAll("[\\s\\S]*-*BEGIN CERTIFICATE-*", "");
+        //certContent = certContent.replaceAll("-*BEGIN CERTIFICATE-*", "");
         certContent = certContent.replaceAll("-*END CERTIFICATE-*", "");
         certContent = certContent.replaceAll("[\r\n]*", "");
+
         return ServiceFactory.nativeBuild(certContent, storageProvider,
 
 //#if !DISABLE_NET_PROVIDER
