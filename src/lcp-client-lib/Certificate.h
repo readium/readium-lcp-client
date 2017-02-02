@@ -37,6 +37,7 @@
 #include <string>
 
 CRYPTOPP_INCLUDE_START
+#include <cryptopp/eccrypto.h>
 #include <cryptopp/rsa.h>
 #include <cryptopp/secblock.h>
 CRYPTOPP_INCLUDE_END
@@ -76,7 +77,10 @@ namespace lcp
         std::string m_serialNumber;
         std::string m_notBeforeDate;
         std::string m_notAfterDate;
-        RSA::PublicKey m_publicKey;
+
+        CryptoPP::ECDSA<CryptoPP::ECP, CryptoPP::SHA256>::PublicKey m_publicKeyECDSA;
+        CryptoPP::RSA::PublicKey m_publicKeyRSA;
+
         SecByteBlock m_toBeSignedData;
         SecByteBlock m_rootSignature;
         OID m_signatureAlgorithmId;
