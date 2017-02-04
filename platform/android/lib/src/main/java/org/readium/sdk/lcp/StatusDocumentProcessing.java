@@ -427,7 +427,7 @@ public class StatusDocumentProcessing {
 
         String url_ = m_statusDocument_LINK_REGISTER.m_href;
         if (m_statusDocument_LINK_REGISTER.m_templated.equals("true")) {
-            url_ = url_.replace("{?id,name}", ""); // TODO: smarter regexp?
+            url_ = url_.replace("{?id,name}", "?id="+deviceID+"&name="+deviceNAME); // TODO: smarter regexp?
         }
         final String url = url_;
 
@@ -454,8 +454,9 @@ public class StatusDocumentProcessing {
                         // LCP / LSD server with message localization
                         .setHeader("Accept-Language", langCode)
 
-                        .setBodyParameter("id", deviceID)
-                        .setBodyParameter("name", deviceNAME)
+// QUERY params (templated URI)
+//                        .setBodyParameter("id", deviceID)
+//                        .setBodyParameter("name", deviceNAME)
 
                         .asInputStream()
                         .withResponse()
@@ -605,7 +606,7 @@ public class StatusDocumentProcessing {
 
                 String url_ = m_statusDocument_LINK_RENEW.m_href;
                 if (m_statusDocument_LINK_RENEW.m_templated.equals("true")) {
-                    url_ = url_.replace("{?end,id,name}", ""); // TODO: smarter regexp?
+                    url_ = url_.replace("{?end,id,name}", "?id="+deviceID+"&name="+deviceNAME); // TODO: smarter regexp?
                 }
                 final String url = url_;
 
@@ -631,10 +632,10 @@ public class StatusDocumentProcessing {
                                 // LCP / LSD server with message localization
                                 .setHeader("Accept-Language", langCode)
 
-                                .setBodyParameter("id", deviceID)
-                                .setBodyParameter("name", deviceNAME)
-
-                                //.setBodyParameter("end", "") //ISO 8601 timestamp (date in future)
+// QUERY params (templated URI)
+//                        .setBodyParameter("id", deviceID)
+//                        .setBodyParameter("name", deviceNAME)
+//.setBodyParameter("end", "") //ISO 8601 date-time
 
                                 .asInputStream()
                                 .withResponse()
@@ -699,7 +700,7 @@ public class StatusDocumentProcessing {
 
                 String url_ = m_statusDocument_LINK_RETURN.m_href;
                 if (m_statusDocument_LINK_RETURN.m_templated.equals("true")) {
-                    url_ = url_.replace("{?id,name}", ""); // TODO: smarter regexp?
+                    url_ = url_.replace("{?id,name}", "?id="+deviceID+"&name="+deviceNAME); // TODO: smarter regexp?
                 }
                 final String url = url_;
 
@@ -725,8 +726,9 @@ public class StatusDocumentProcessing {
                                 // LCP / LSD server with message localization
                                 .setHeader("Accept-Language", langCode)
 
-                                .setBodyParameter("id", deviceID)
-                                .setBodyParameter("name", deviceNAME)
+// QUERY params (templated URI)
+//                        .setBodyParameter("id", deviceID)
+//                        .setBodyParameter("name", deviceNAME)
 
                                 .asInputStream()
                                 .withResponse()
