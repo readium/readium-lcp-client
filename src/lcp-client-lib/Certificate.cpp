@@ -38,12 +38,12 @@ CRYPTOPP_INCLUDE_START
 #include <cryptopp/queue.h>
 #include <cryptopp/rsa.h>
 #include <cryptopp/sha.h>
+#include <cryptopp/asn.h>
+#include <cryptopp/oids.h>
+#include <cryptopp/dsa.h>
 
 #define CRYPTOPP_ENABLE_NAMESPACE_WEAK 1
 #include <cryptopp/md5.h>
-
-#include <cryptopp/asn.h>
-#include <cryptopp/oids.h>
 CRYPTOPP_INCLUDE_END
 
 using namespace CryptoPP;
@@ -250,21 +250,24 @@ namespace lcp
             throw StatusException(Status(StatusCode::ErrorOpeningRootCertificateSignatureAlgorithmNotFound, "ErrorOpeningRootCertificateSignatureAlgorithmNotFound"));
         }
 
-        // TODO temporary bypass (fails below, yet decrypts fine)
-        if (m_signatureAlgorithm->Name() == AlgorithmNames::EcdsaSha256Id) {
-            return true;
-        }
-
-        // 139
-        // 71 - 22
-        int s1 = m_rootSignature.size();
-
         // https://www.cryptopp.com/wiki/Elliptic_Curve_Digital_Signature_Algorithm#Message_Verification
         // 132 secp521r1
         // 64 secp256r1
-        int s2 = rootVerifierPtr->SignatureLength();
+        int verifierSigLength = rootVerifierPtr->SignatureLength();
 
-        if (s1 != s2)
+        byte* sigBytes = m_rootSignature.data();
+        size_t sigLength = m_rootSignature.size();
+
+        if (m_signatureAlgorithm->Name() == AlgorithmNames::EcdsaSha256Id) {
+            byte * buffer = new byte[verifierSigLength];
+            CryptoPP::DSAConvertSignatureFormat(buffer, verifierSigLength, CryptoPP::DSASignatureFormat::DSA_P1363,
+                                                sigBytes, sigLength, CryptoPP::DSASignatureFormat::DSA_DER);
+
+            sigBytes = buffer;
+            sigLength = verifierSigLength;
+        }
+
+        if (verifierSigLength != sigLength)
         {
             throw StatusException(Status(StatusCode::ErrorOpeningContentProviderCertificateNotValid, "ErrorOpeningContentProviderCertificateNotValid"));
         }
@@ -272,8 +275,8 @@ namespace lcp
         return rootVerifierPtr->VerifyMessage(
             m_toBeSignedData.data(),
             m_toBeSignedData.size(),
-            m_rootSignature.data(),
-            m_rootSignature.size()
+            sigBytes,
+            sigLength
             );
     }
 
