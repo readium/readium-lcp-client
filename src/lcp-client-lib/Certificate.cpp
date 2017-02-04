@@ -258,12 +258,14 @@ namespace lcp
         byte* sigBytes = m_rootSignature.data();
         size_t sigLength = m_rootSignature.size();
 
-        if (m_signatureAlgorithm->Name() == AlgorithmNames::EcdsaSha256Id) {
-            byte * buffer = new byte[verifierSigLength];
-            CryptoPP::DSAConvertSignatureFormat(buffer, verifierSigLength, CryptoPP::DSASignatureFormat::DSA_P1363,
-                                                sigBytes, sigLength, CryptoPP::DSASignatureFormat::DSA_DER);
+        byte buffer[verifierSigLength];
 
-            sigBytes = buffer;
+        if (m_signatureAlgorithm->Name() == AlgorithmNames::EcdsaSha256Id) {
+            byte* bufferPtr = &buffer[0]; // == buffer
+
+            CryptoPP::DSAConvertSignatureFormat(bufferPtr, verifierSigLength, CryptoPP::DSASignatureFormat::DSA_P1363,
+                                                sigBytes, sigLength, CryptoPP::DSASignatureFormat::DSA_DER);
+            sigBytes = bufferPtr;
             sigLength = verifierSigLength;
         }
 
