@@ -168,6 +168,8 @@ public class StatusDocumentProcessing {
 
                         .asInputStream()
                         .withResponse()
+
+                        // UI thread
                         .setCallback(new FutureCallback<Response<InputStream>>() {
                             @Override
                             public void onCompleted(Exception e, Response<InputStream> response) {
@@ -460,6 +462,8 @@ public class StatusDocumentProcessing {
 
                         .asInputStream()
                         .withResponse()
+
+                        // UI thread
                         .setCallback(new FutureCallback<Response<InputStream>>() {
                             @Override
                             public void onCompleted(Exception e, Response<InputStream> response) {
@@ -537,6 +541,8 @@ public class StatusDocumentProcessing {
 
                         .asInputStream()
                         .withResponse()
+
+                        // UI thread
                         .setCallback(new FutureCallback<Response<InputStream>>() {
                             @Override
                             public void onCompleted(Exception e, Response<InputStream> response) {
@@ -639,6 +645,8 @@ public class StatusDocumentProcessing {
 
                                 .asInputStream()
                                 .withResponse()
+
+                                // UI thread
                                 .setCallback(new FutureCallback<Response<InputStream>>() {
                                     @Override
                                     public void onCompleted(Exception e, Response<InputStream> response) {
@@ -732,6 +740,8 @@ public class StatusDocumentProcessing {
 
                                 .asInputStream()
                                 .withResponse()
+
+                                // UI thread
                                 .setCallback(new FutureCallback<Response<InputStream>>() {
                                     @Override
                                     public void onCompleted(Exception e, Response<InputStream> response) {

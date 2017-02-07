@@ -106,6 +106,8 @@ public class NetProvider {
                 //.setTimeout(AsyncHttpRequest.DEFAULT_TIMEOUT) //30000
                 .setTimeout(6000)
                 //.setHeader(name, value)
+
+                // UI thread
                 .asInputStream().setCallback(new FutureCallback<InputStream>() {
                     @Override
                     public void onCompleted(Exception e, InputStream inputStream) {
