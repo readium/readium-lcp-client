@@ -47,8 +47,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class StatusDocumentProcessing {
 
@@ -148,11 +146,6 @@ public class StatusDocumentProcessing {
 //            }
 //        });
 
-//        Timer timer = new Timer();
-//        timer.schedule(new TimerTask() {
-//            @Override
-//            public void run() {
-
         Locale currentLocale = getCurrentLocale();
         String langCode = currentLocale.toString().replace('_', '-');
         langCode = langCode + ",en-US;q=0.7,en;q=0.5";
@@ -247,8 +240,6 @@ public class StatusDocumentProcessing {
                         }
                     }
                 });
-//            }
-//        }, 500);
     }
 
 
@@ -434,12 +425,6 @@ public class StatusDocumentProcessing {
         }
         final String url = url_;
 
-
-//        Timer timer = new Timer();
-//        timer.schedule(new TimerTask() {
-//            @Override
-//            public void run() {
-
         Locale currentLocale = getCurrentLocale();
         String langCode = currentLocale.toString().replace('_', '-');
         langCode = langCode + ",en-US;q=0.7,en;q=0.5";
@@ -505,8 +490,6 @@ public class StatusDocumentProcessing {
                         }
                     }
                 });
-//            }
-//        }, 500);
     }
 
     private void fetchAndInjectUpdatedLicense(final DoneCallback doneCallback_fetchAndInjectUpdatedLicense) {
@@ -517,11 +500,6 @@ public class StatusDocumentProcessing {
         }
 
         final String url = m_statusDocument_LINK_LICENSE.m_href;
-
-//        Timer timer = new Timer();
-//        timer.schedule(new TimerTask() {
-//            @Override
-//            public void run() {
 
         Locale currentLocale = getCurrentLocale();
         String langCode = currentLocale.toString().replace('_', '-');
@@ -583,8 +561,6 @@ public class StatusDocumentProcessing {
                         }
                     }
                 });
-//            }
-//        }, 500);
     }
 
     // Note that the user interface / user experience implemented for return/renew operations
@@ -619,11 +595,6 @@ public class StatusDocumentProcessing {
                     url_ = url_.replace("{?end,id,name}", "?id=" + deviceID + "&name=" + deviceNAME); // TODO: smarter regexp?
                 }
                 final String url = url_;
-
-//                Timer timer = new Timer();
-//                timer.schedule(new TimerTask() {
-//                    @Override
-//                    public void run() {
 
                 Locale currentLocale = getCurrentLocale();
                 String langCode = currentLocale.toString().replace('_', '-');
@@ -683,8 +654,6 @@ public class StatusDocumentProcessing {
                                 }
                             }
                         });
-//                    }
-//                }, 500);
             }
         });
     }
@@ -716,11 +685,6 @@ public class StatusDocumentProcessing {
                     url_ = url_.replace("{?id,name}", "?id=" + deviceID + "&name=" + deviceNAME); // TODO: smarter regexp?
                 }
                 final String url = url_;
-
-//                Timer timer = new Timer();
-//                timer.schedule(new TimerTask() {
-//                    @Override
-//                    public void run() {
 
                 Locale currentLocale = getCurrentLocale();
                 String langCode = currentLocale.toString().replace('_', '-');
@@ -779,8 +743,6 @@ public class StatusDocumentProcessing {
                                 }
                             }
                         });
-//                    }
-//                }, 500);
             }
         });
     }
