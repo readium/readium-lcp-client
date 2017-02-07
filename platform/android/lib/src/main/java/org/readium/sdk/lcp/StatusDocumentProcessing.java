@@ -117,6 +117,10 @@ public class StatusDocumentProcessing {
             return;
         }
         m_wasCancelled = true;
+
+        // forces re-check of LSD
+        // (user cancellation does not mean byassing the initial LSD check,
+        // unlike say: network failure)
         mLicense.setStatusDocumentProcessingFlag(false);
 
         if (m_statusDocumentProcessingListener != null) {
@@ -343,11 +347,6 @@ public class StatusDocumentProcessing {
                 @Override
                 public void Done(boolean done) {
 
-                    if (done) {
-                        // forces re-check of LSD, now with updated LCP timestamp
-                        mLicense.setStatusDocumentProcessingFlag(false);
-                    }
-
                     m_statusDocumentProcessingListener.onStatusDocumentProcessingComplete();
                 }
             });
@@ -566,6 +565,9 @@ public class StatusDocumentProcessing {
                             // new LCP license
                             mLcpService.injectLicense(mBookPath, json);
 
+                            // forces re-check of LSD, now with updated LCP timestamp
+                            mLicense.setStatusDocumentProcessingFlag(false);
+
                             doneCallback_fetchAndInjectUpdatedLicense.Done(true);
 
                         } catch (Exception ex) {
@@ -665,6 +667,7 @@ public class StatusDocumentProcessing {
                                 try {
                                     // forces re-check of LSD, now with updated LCP timestamp
                                     mLicense.setStatusDocumentProcessingFlag(false);
+
                                     doneCallback_checkLink_RENEW.Done(true);
 
                                 } catch (Exception ex) {
