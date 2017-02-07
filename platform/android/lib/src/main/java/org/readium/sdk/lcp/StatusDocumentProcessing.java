@@ -343,8 +343,10 @@ public class StatusDocumentProcessing {
                 @Override
                 public void Done(boolean done) {
 
-                    // forces re-check of LSD, now with updated LCP timestamp
-                    mLicense.setStatusDocumentProcessingFlag(false);
+                    if (done) {
+                        // forces re-check of LSD, now with updated LCP timestamp
+                        mLicense.setStatusDocumentProcessingFlag(false);
+                    }
 
                     m_statusDocumentProcessingListener.onStatusDocumentProcessingComplete();
                 }
