@@ -227,12 +227,17 @@ public class StatusDocumentProcessing {
                             if (okay) {
                                 processStatusDocument();
                             } else {
-                                m_statusDocumentProcessingListener.onStatusDocumentProcessingComplete();
+                                if (!m_wasCancelled) {
+                                    m_statusDocumentProcessingListener.onStatusDocumentProcessingComplete();
+                                }
                             }
 
                         } catch (Exception ex) {
                             ex.printStackTrace();
-                            m_statusDocumentProcessingListener.onStatusDocumentProcessingComplete();
+
+                            if (!m_wasCancelled) {
+                                m_statusDocumentProcessingListener.onStatusDocumentProcessingComplete();
+                            }
                         } finally {
                             try {
                                 inputStream.close();
@@ -341,7 +346,9 @@ public class StatusDocumentProcessing {
                 @Override
                 public void Done(boolean done) {
 
-                    m_statusDocumentProcessingListener.onStatusDocumentProcessingComplete();
+                    if (!m_wasCancelled) {
+                        m_statusDocumentProcessingListener.onStatusDocumentProcessingComplete();
+                    }
                 }
             });
             return;
@@ -354,14 +361,19 @@ public class StatusDocumentProcessing {
                 ) {
             // Actually, this should never occur, because the LCP license should not even pass validation due to passed end date / expired timestamp
 
-            m_statusDocumentProcessingListener.onStatusDocumentProcessingComplete();
+            if (!m_wasCancelled) {
+                m_statusDocumentProcessingListener.onStatusDocumentProcessingComplete();
+            }
             return;
         }
 
         checkLink_REGISTER(new DoneCallback() {
             @Override
             public void Done(boolean done) {
-                m_statusDocumentProcessingListener.onStatusDocumentProcessingComplete();
+                
+                if (!m_wasCancelled) {
+                    m_statusDocumentProcessingListener.onStatusDocumentProcessingComplete();
+                }
             }
         });
     }
