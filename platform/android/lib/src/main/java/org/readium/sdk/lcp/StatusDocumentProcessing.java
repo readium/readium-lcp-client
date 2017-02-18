@@ -65,6 +65,8 @@ public class StatusDocumentProcessing {
     }
 
     public interface IDeviceIDManager {
+        String getDeviceNAME();
+
         String getDeviceID();
 
         String checkDeviceID(String key);
@@ -365,9 +367,11 @@ public class StatusDocumentProcessing {
 
     private void checkLink_REGISTER(final DoneCallback doneCallback_checkLink_REGISTER) {
 
-        if (m_statusDocument_LINK_REGISTER == null) {
-            doneCallback_checkLink_REGISTER.Done(false);
-        }
+        //checked in registerDevice(), and allows processing of renew and return interactions
+        //if (m_statusDocument_LINK_REGISTER == null) {
+        //    doneCallback_checkLink_REGISTER.Done(false);
+        //    return;
+        //}
 
         registerDevice(new DoneCallback() {
             @Override
@@ -391,10 +395,9 @@ public class StatusDocumentProcessing {
         });
     }
 
-    private final String deviceNAME = "Android";
-
     private void registerDevice(final DoneCallback doneCallback_registerDevice) {
 
+        final String deviceNAME = m_deviceIDManager.getDeviceNAME();
         final String deviceID = m_deviceIDManager.getDeviceID();
 
         boolean doRegister = false;
@@ -575,6 +578,7 @@ public class StatusDocumentProcessing {
             return;
         }
 
+        final String deviceNAME = m_deviceIDManager.getDeviceNAME();
         final String deviceID = m_deviceIDManager.getDeviceID();
 
         if (m_statusDocument_LINK_RENEW == null) {
@@ -665,6 +669,7 @@ public class StatusDocumentProcessing {
             return;
         }
 
+        final String deviceNAME = m_deviceIDManager.getDeviceNAME();
         final String deviceID = m_deviceIDManager.getDeviceID();
 
         if (m_statusDocument_LINK_RETURN == null) {
