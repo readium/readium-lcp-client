@@ -46,6 +46,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.net.URLEncoder;
 import java.util.Locale;
 
 public class StatusDocumentProcessing {
@@ -397,8 +398,21 @@ public class StatusDocumentProcessing {
 
     private void registerDevice(final DoneCallback doneCallback_registerDevice) {
 
-        final String deviceNAME = m_deviceIDManager.getDeviceNAME();
-        final String deviceID = m_deviceIDManager.getDeviceID();
+        String deviceID = m_deviceIDManager.getDeviceID();
+        try {
+            deviceID = URLEncoder.encode(deviceID, "UTF-8");
+        } catch (Exception ex) {
+            // noop
+        }
+        final String dID = deviceID;
+
+        String deviceNAME = m_deviceIDManager.getDeviceNAME();
+        try {
+            deviceNAME = URLEncoder.encode(deviceNAME, "UTF-8");
+        } catch (Exception ex) {
+            // noop
+        }
+        final String dNAME = deviceNAME;
 
         boolean doRegister = false;
         if (m_statusDocument_LINK_REGISTER == null) {
@@ -424,7 +438,7 @@ public class StatusDocumentProcessing {
 
         String url_ = m_statusDocument_LINK_REGISTER.m_href;
         if (m_statusDocument_LINK_REGISTER.m_templated.equals("true")) {
-            url_ = url_.replace("{?id,name}", "?id=" + deviceID + "&name=" + deviceNAME); // TODO: smarter regexp?
+            url_ = url_.replace("{?id,name}", "?id=" + dID + "&name=" + dNAME); // TODO: smarter regexp?
         }
         final String url = url_;
 
@@ -446,8 +460,8 @@ public class StatusDocumentProcessing {
                 .setHeader("Accept-Language", langCode)
 
 // QUERY params (templated URI)
-//                        .setBodyParameter("id", deviceID)
-//                        .setBodyParameter("name", deviceNAME)
+//                        .setBodyParameter("id", dID)
+//                        .setBodyParameter("name", dNAME)
 
                 .asInputStream()
                 .withResponse()
@@ -578,8 +592,21 @@ public class StatusDocumentProcessing {
             return;
         }
 
-        final String deviceNAME = m_deviceIDManager.getDeviceNAME();
-        final String deviceID = m_deviceIDManager.getDeviceID();
+        String dID = m_deviceIDManager.getDeviceID();
+        try {
+            dID = URLEncoder.encode(dID, "UTF-8");
+        } catch (Exception ex) {
+            // noop
+        }
+        final String deviceID = dID;
+
+        String dNAME = m_deviceIDManager.getDeviceNAME();
+        try {
+            dNAME = URLEncoder.encode(dNAME, "UTF-8");
+        } catch (Exception ex) {
+            // noop
+        }
+        final String deviceNAME = dNAME;
 
         if (m_statusDocument_LINK_RENEW == null) {
             doneCallback_checkLink_RENEW.Done(false);
@@ -669,8 +696,21 @@ public class StatusDocumentProcessing {
             return;
         }
 
-        final String deviceNAME = m_deviceIDManager.getDeviceNAME();
-        final String deviceID = m_deviceIDManager.getDeviceID();
+        String dID = m_deviceIDManager.getDeviceID();
+        try {
+            dID = URLEncoder.encode(dID, "UTF-8");
+        } catch (Exception ex) {
+            // noop
+        }
+        final String deviceID = dID;
+
+        String dNAME = m_deviceIDManager.getDeviceNAME();
+        try {
+            dNAME = URLEncoder.encode(dNAME, "UTF-8");
+        } catch (Exception ex) {
+            // noop
+        }
+        final String deviceNAME = dNAME;
 
         if (m_statusDocument_LINK_RETURN == null) {
             doneCallback_checkLink_RETURN.Done(false);
