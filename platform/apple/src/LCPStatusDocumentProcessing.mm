@@ -37,9 +37,9 @@
 
 #import "ILinks.h"
 
-#import <Cocoa/Cocoa.h>
-
 #include <iostream>
+
+//#import <Cocoa/Cocoa.h>
 
 using namespace lcp;
 
@@ -825,13 +825,13 @@ didCompleteWithError:(nullable NSError *)error
 {
     doneCallback_checkLink_RETURN(false);
 }
-
--(NSAlert*)showStatusDocumentDialog_RETURN_RENEW:(NSString*)msgType doneCallback_showStatusDocumentDialog_RETURN_RENEW:(DoneCallback)doneCallback_showStatusDocumentDialog_RETURN_RENEW //void(^)(bool)
-{
-    doneCallback_showStatusDocumentDialog_RETURN_RENEW(false);
-    return nil;
-}
-
+//
+//-(NSAlert*)showStatusDocumentDialog_RETURN_RENEW:(NSString*)msgType doneCallback_showStatusDocumentDialog_RETURN_RENEW:(DoneCallback)doneCallback_showStatusDocumentDialog_RETURN_RENEW //void(^)(bool)
+//{
+//    doneCallback_showStatusDocumentDialog_RETURN_RENEW(false);
+//    return nil;
+//}
+//
 @end
 
 
