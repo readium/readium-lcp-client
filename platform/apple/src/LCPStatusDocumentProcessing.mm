@@ -25,11 +25,86 @@
 
 #import "LCPStatusDocumentProcessing.h"
 
-#import "ILcpService.h"
+//#import <platform/apple/src/lcp.h>
+//#import "../../../src/lcp-client-lib/public/lcp.h"
+
+
 #import "ILicense.h"
 #import "LCPLicense.h"
 
+#import "ILcpService.h"
+#import "LCPService.h"
+
+#import "ILinks.h"
+
+#import <Cocoa/Cocoa.h>
+
+#include <iostream>
+
 using namespace lcp;
+
+
+@interface StatusDocumentLink : NSObject {
+    
+    NSString* rel;
+    NSString* href;
+    NSString* type;
+    BOOL templated;
+    NSString* title;
+    NSString* profile;
+}
+
+- (instancetype)init_:(NSString*) rel href:(NSString*) href type:(NSString*) type templated:(BOOL) templated title:(NSString*) title profile:(NSString*) profile;
+
+@property (nonatomic, readonly) NSString* rel;
+@property (nonatomic, readonly) NSString* href;
+@property (nonatomic, readonly) NSString* type;
+@property (nonatomic, readonly) BOOL templated;
+@property (nonatomic, readonly) NSString* title;
+@property (nonatomic, readonly) NSString* profile;
+
+@end
+
+
+@interface StatusDocumentLink()
+@end
+
+@implementation StatusDocumentLink {
+@private
+}
+
+@synthesize rel;
+@synthesize href;
+@synthesize type;
+@synthesize templated;
+@synthesize title;
+@synthesize profile;
+
+
+- (instancetype)init_:(NSString*) rel_ href:(NSString*) href_ type:(NSString*) type_ templated:(BOOL) templated_ title:(NSString*) title_ profile:(NSString*) profile_
+{
+    self = [super init];
+    if (self) {
+        
+        rel = rel_ == nil ? @"" : rel_;
+        href = href_ == nil ? @"" : href_;
+        type = type_ == nil ? @"" : type_;
+        templated = templated_;
+        title = title_ == nil ? @"" : title_;
+        profile = profile_ == nil ? @"" : profile_;
+    }
+    
+    return self;
+}
+@end
+
+
+
+
+
+typedef void (^DoneCallback)(bool);
+
+
 
 @interface LCPStatusDocumentProcessing () <NSURLSessionDataDelegate> {
     
@@ -39,14 +114,32 @@ using namespace lcp;
 @implementation LCPStatusDocumentProcessing {
 @private
     LCPService * _service;
-    NSString * _path;
+    NSString * _epubPath;
     LCPLicense * _license;
-    id<DeviceIdManager> _deviceIdManager;
+    id<DeviceIdManager> _deviceIDManager;
     
     bool _wasCancelled;
     id<StatusDocumentProcessingListener> _statusDocumentProcessingListener;
     
+    NSString * _statusDocument_ID;
+    NSString * _statusDocument_STATUS; // ready, active, revoked, returned, cancelled, expired
+    NSString * _statusDocument_MESSAGE; // localized as per HTTP Accept-Language
+    NSString * _statusDocument_UPDATED_LICENSE; //ISO 8601 time and date
+    NSString * _statusDocument_UPDATED_STATUS; //ISO 8601 time and date
+    StatusDocumentLink* _statusDocument_LINK_LICENSE; // HTTP GET URL, no-template
+    StatusDocumentLink* _statusDocument_LINK_REGISTER;
+    StatusDocumentLink* _statusDocument_LINK_RETURN;
+    StatusDocumentLink* _statusDocument_LINK_RENEW;
+    NSString * _statusDocument_POTENTIAL_RIGHTS_END; // ISO 8601 time and date
+
+    NSMutableData *_data_TASK_DESCRIPTION_LCP_LSD_FETCH;
+    NSMutableData *_data_TASK_DESCRIPTION_LCP_LSD_REGISTER;
+    NSMutableData *_data_TASK_DESCRIPTION_LCP_FETCH;
+    
+    DoneCallback _doneCallback_registerDevice;
+    DoneCallback _doneCallback_fetchAndInjectUpdatedLicense;
 }
+
 
 NSString* TASK_DESCRIPTION_LCP_LSD_FETCH = @"LCP_LSD_FETCH";
 
@@ -57,49 +150,35 @@ NSString* TASK_DESCRIPTION_LCP_LSD_RETURN = @"LCP_LSD_RETURN";
 NSString* TASK_DESCRIPTION_LCP_LSD_RENEW = @"LCP_LSD_RENEW";
 
 
-- (instancetype)init_:(LCPService *)service path:(NSString *)path license:(LCPLicense*)license deviceIdManager:(id<DeviceIdManager>)deviceIdManager
+- (instancetype)init_:(LCPService *)service epubPath:(NSString *)epubPath license:(LCPLicense*)license deviceIdManager:(id<DeviceIdManager>)deviceIdManager
 {
     self = [super init];
     if (self) {
         _service = service;
-        _path = path;
+        _epubPath = epubPath;
         _license = license;
-        _deviceIdManager = deviceIdManager;
+        _deviceIDManager = deviceIdManager;
         
         _wasCancelled = false;
         _statusDocumentProcessingListener = nil;
+        
+        _statusDocument_ID = @"";
+        _statusDocument_STATUS = @"";
+        _statusDocument_MESSAGE = @"";
+        _statusDocument_UPDATED_LICENSE = @"";
+        _statusDocument_UPDATED_STATUS = @"";
+        _statusDocument_LINK_LICENSE = nil;
+        _statusDocument_LINK_REGISTER = nil;
+        _statusDocument_LINK_RETURN = nil;
+        _statusDocument_LINK_RENEW = nil;
+        _statusDocument_POTENTIAL_RIGHTS_END = @"";
+        
+        _data_TASK_DESCRIPTION_LCP_LSD_FETCH = nil;
+        _data_TASK_DESCRIPTION_LCP_LSD_REGISTER = nil;
+        _data_TASK_DESCRIPTION_LCP_FETCH = nil;
     }
     
     return self;
-}
-
-- (void)start:(id<StatusDocumentProcessingListener>)listener
-{
-    _statusDocumentProcessingListener = listener;
-    
-    NSURL *sourceUrl = [NSURL URLWithString:@"http://fake.domain.co.in/"];
-    
-    NSURLSessionConfiguration *config = [NSURLSessionConfiguration ephemeralSessionConfiguration];
-    NSURLSession * session = [NSURLSession sessionWithConfiguration:config delegate:self delegateQueue:nil]; //[NSOperationQueue mainQueue] // [[NSThread currentThread] isMainThread]
-    
-    NSURLSessionDataTask *task = [session dataTaskWithURL:sourceUrl];
-    task.taskDescription = TASK_DESCRIPTION_LCP_FETCH;
-    //        id identifier = @(task.taskIdentifier);
-    //        self.requests[identifier] = [NSValue valueWithPointer:request];
-    //        self.callbacks[identifier] = [NSValue valueWithPointer:callback];
-    [task resume];
-
-    
-//    dispatch_queue_t q_background = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
-//    dispatch_async(q_background, ^{
-//        dispatch_queue_t q_background_ = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
-//        double delayInSeconds = 1.0;
-//        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
-//        dispatch_after(popTime, q_background_, ^(void){
-//            
-//        });
-//    });
-
 }
 
 - (bool) wasCancelled {
@@ -110,6 +189,10 @@ NSString* TASK_DESCRIPTION_LCP_LSD_RENEW = @"LCP_LSD_RENEW";
 {
     if (_wasCancelled) return;
     _wasCancelled = true;
+    
+    // forces re-check of LSD
+    // (user cancellation does not mean byassing the initial LSD check,
+    // unlike say: network failure)
     _license.nativeLicense->setStatusDocumentProcessingFlag(false);
     
     if (_statusDocumentProcessingListener != nil) {
@@ -119,36 +202,649 @@ NSString* TASK_DESCRIPTION_LCP_LSD_RENEW = @"LCP_LSD_RENEW";
 
 
 
-- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveResponse:(NSURLResponse *)response completionHandler:(void (^)(NSURLSessionResponseDisposition))completionHandler
+- (void)start:(id<StatusDocumentProcessingListener>)listener
 {
-    if (![dataTask.taskDescription isEqualToString:TASK_DESCRIPTION_LCP_FETCH]) {
+    _statusDocumentProcessingListener = listener;
+    
+    std::string name("status");
+    
+    if (!_license.nativeLicense->Links()->Has(name)) {
+        if (_statusDocumentProcessingListener != nil) {
+            [_statusDocumentProcessingListener onStatusDocumentProcessingComplete:self];
+        }
         return;
+    }
+    
+    lcp::Link link;
+    _license.nativeLicense->Links()->GetLink(name, link);
+    
+    NSString* urlString = [NSString stringWithUTF8String:link.href.c_str()];
+    
+    NSURL *url = [NSURL URLWithString:urlString];
+
+    
+    NSURLSessionConfiguration *config = [NSURLSessionConfiguration ephemeralSessionConfiguration];
+    
+    NSString * locale = [[NSLocale preferredLanguages] objectAtIndex:0];
+    NSString* langCode = [NSString stringWithFormat:@"%@%@", locale, @",en-US;q=0.7,en;q=0.5"];
+
+    NSURLSession * session = [NSURLSession sessionWithConfiguration:config delegate:self delegateQueue:nil]; //[NSOperationQueue mainQueue] // [[NSThread currentThread] isMainThread]
+    
+    NSMutableURLRequest* urlRequest = [[NSMutableURLRequest alloc] initWithURL:url];
+    [urlRequest setHTTPMethod:@"GET"];
+    [urlRequest setValue:langCode forHTTPHeaderField:@"Accept-Language"];
+    // TODO: comment this in production! (this is only for testing a local HTTP server)
+    //[urlRequest setValue:@"2s" forHTTPHeaderField:@"X-Add-Delay"];
+    
+    
+    //NSURLSessionDataTask *task = [session dataTaskWithURL:url];
+    NSURLSessionDataTask *task = [session dataTaskWithRequest:urlRequest];
+    task.taskDescription = TASK_DESCRIPTION_LCP_LSD_FETCH;
+    
+    [task resume];
+}
+
+
+
+/////////////////////////////////////////
+/////////////////////////////////////////
+/////////////////////////////////////////
+
+
+/////////////////////////////////////////
+//NSURLSessionDataDelegate
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
+didReceiveResponse:(NSURLResponse *)response
+ completionHandler:(void (^)(NSURLSessionResponseDisposition disposition))completionHandler
+{
+    if ([dataTask.taskDescription isEqualToString:TASK_DESCRIPTION_LCP_LSD_FETCH]) {
+        
+        _data_TASK_DESCRIPTION_LCP_LSD_FETCH = nil;
+        
+    } else if ([dataTask.taskDescription isEqualToString:TASK_DESCRIPTION_LCP_LSD_REGISTER]) {
+        
+        _data_TASK_DESCRIPTION_LCP_LSD_REGISTER = nil;
+        
+    } else if ([dataTask.taskDescription isEqualToString:TASK_DESCRIPTION_LCP_FETCH]) {
+        
+        _data_TASK_DESCRIPTION_LCP_FETCH = nil;
     }
     
     completionHandler(NSURLSessionResponseAllow);
 }
 
-- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)task didReceiveData:(NSData *)data
+/////////////////////////////////////////
+//NSURLSessionDataDelegate
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask
+    didReceiveData:(NSData *)data
 {
-    if (![task.taskDescription isEqualToString:TASK_DESCRIPTION_LCP_FETCH]) {
+    
+    float progress = -1;
+    float received = dataTask.countOfBytesReceived;
+    float expected = dataTask.countOfBytesExpectedToReceive;
+    if (expected > 0) {
+        progress = received / expected;
+    }
+    
+    
+    if ([dataTask.taskDescription isEqualToString:TASK_DESCRIPTION_LCP_LSD_FETCH]) {
+        
+        if (_data_TASK_DESCRIPTION_LCP_LSD_FETCH == nil) {
+            _data_TASK_DESCRIPTION_LCP_LSD_FETCH = [NSMutableData dataWithCapacity:(expected>0?expected:2048)];
+        }
+        [_data_TASK_DESCRIPTION_LCP_LSD_FETCH appendData:data];
+        
+        return;
+    }
+    
+    if ([dataTask.taskDescription isEqualToString:TASK_DESCRIPTION_LCP_LSD_REGISTER]) {
+        
+        if (_data_TASK_DESCRIPTION_LCP_LSD_REGISTER == nil) {
+            _data_TASK_DESCRIPTION_LCP_LSD_REGISTER = [NSMutableData dataWithCapacity:(expected>0?expected:2048)];
+        }
+        [_data_TASK_DESCRIPTION_LCP_LSD_REGISTER appendData:data];
+        
+        return;
+    }
+    
+    if ([dataTask.taskDescription isEqualToString:TASK_DESCRIPTION_LCP_FETCH]) {
+        
+        if (_data_TASK_DESCRIPTION_LCP_FETCH == nil) {
+            _data_TASK_DESCRIPTION_LCP_FETCH = [NSMutableData dataWithCapacity:(expected>0?expected:2048)];
+        }
+        [_data_TASK_DESCRIPTION_LCP_FETCH appendData:data];
+        
         return;
     }
     
 }
 
-- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error
+/////////////////////////////////////////
+//NSURLSessionTaskDelegate
+- (void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task
+didCompleteWithError:(nullable NSError *)error
 {
-    if (![task.taskDescription isEqualToString:TASK_DESCRIPTION_LCP_FETCH]) {
+    NSInteger code = [(NSHTTPURLResponse *)task.response statusCode];
+    
+    if ([task.taskDescription isEqualToString:TASK_DESCRIPTION_LCP_LSD_FETCH]) {
+        
+        if (error) {
+            
+            _data_TASK_DESCRIPTION_LCP_LSD_FETCH = nil;
+            
+            NSLog(@"%@", [NSString stringWithFormat:@"HTTP error (TASK_DESCRIPTION_LCP_LSD_FETCH) [%@] => (%li) ... %@ [%li]", [(NSHTTPURLResponse *)task.originalRequest URL], code, error.domain, error.code]);
+            
+            if (!_wasCancelled) {
+                [_statusDocumentProcessingListener onStatusDocumentProcessingComplete:self];
+            }
+            
+        } else if (code < 200 || code >= 300) {
+            
+            _data_TASK_DESCRIPTION_LCP_LSD_FETCH = nil;
+            
+            NSLog(@"%@", [NSString stringWithFormat:@"HTTP fail (TASK_DESCRIPTION_LCP_LSD_FETCH) [%@] => (%li)", [(NSHTTPURLResponse *)task.response URL], code]);
+            
+            if (!_wasCancelled) {
+                [_statusDocumentProcessingListener onStatusDocumentProcessingComplete:self];
+            }
+            
+        } else {
+            
+            try {
+                NSString *json = [[NSString alloc] initWithData:_data_TASK_DESCRIPTION_LCP_LSD_FETCH encoding:NSUTF8StringEncoding];
+                _data_TASK_DESCRIPTION_LCP_LSD_FETCH = nil;
+                bool okay = [self parseStatusDocumentJson:json];
+                if (okay) {
+                    [self processStatusDocument];
+                } else {
+                    if (!_wasCancelled) {
+                        [_statusDocumentProcessingListener onStatusDocumentProcessingComplete:self];
+                    }
+                }
+            }
+            catch (NSException *e) {
+                
+                NSLog(@"%@", [e reason]);
+                
+                if (!_wasCancelled) {
+                    [_statusDocumentProcessingListener onStatusDocumentProcessingComplete:self];
+                }
+            }
+            catch (std::exception& e) {
+                
+                auto msg = e.what();
+                std::cout << msg << std::endl;
+                
+                if (!_wasCancelled) {
+                    [_statusDocumentProcessingListener onStatusDocumentProcessingComplete:self];
+                }
+            }
+            catch (...) {
+                
+                if (!_wasCancelled) {
+                    [_statusDocumentProcessingListener onStatusDocumentProcessingComplete:self];
+                }
+            }
+        }
+        
+        return;
+    }
+    
+    if ([task.taskDescription isEqualToString:TASK_DESCRIPTION_LCP_LSD_REGISTER]) {
+        
+        if (error) {
+            
+            _data_TASK_DESCRIPTION_LCP_LSD_REGISTER = nil;
+            
+            NSLog(@"%@", [NSString stringWithFormat:@"HTTP error (TASK_DESCRIPTION_LCP_LSD_REGISTER) [%@] => (%li) ... %@ [%li]", [(NSHTTPURLResponse *)task.originalRequest URL], code, error.domain, error.code]);
+            
+            _doneCallback_registerDevice(false);
+            
+        } else if (code < 200 || code >= 300) {
+            
+            _data_TASK_DESCRIPTION_LCP_LSD_REGISTER = nil;
+            
+            NSLog(@"%@", [NSString stringWithFormat:@"HTTP fail (TASK_DESCRIPTION_LCP_LSD_REGISTER) [%@] => (%li)", [(NSHTTPURLResponse *)task.response URL], code]);
+            
+            _doneCallback_registerDevice(false);
+            
+        } else {
+            
+            try {
+                NSString *json = [[NSString alloc] initWithData:_data_TASK_DESCRIPTION_LCP_LSD_REGISTER encoding:NSUTF8StringEncoding];
+                _data_TASK_DESCRIPTION_LCP_LSD_REGISTER = nil;
+                bool okay = [self parseStatusDocumentJson:json];
+                if (okay && [_statusDocument_STATUS isEqualToString:@"active"]) {
+                    [_deviceIDManager recordDeviceID:_statusDocument_ID];
+                }
+                
+                _doneCallback_registerDevice(true);
+            }
+            catch (NSException *e) {
+                
+                NSLog(@"%@", [e reason]);
+                
+                _doneCallback_registerDevice(false);
+            }
+            catch (std::exception& e) {
+                
+                auto msg = e.what();
+                std::cout << msg << std::endl;
+                
+                _doneCallback_registerDevice(false);
+            }
+            catch (...) {
+                
+                _doneCallback_registerDevice(false);
+            }
+        }
+        
+        return;
+    }
+    
+    if ([task.taskDescription isEqualToString:TASK_DESCRIPTION_LCP_FETCH]) {
+        
+        if (error) {
+            
+            _data_TASK_DESCRIPTION_LCP_FETCH = nil;
+            
+            NSLog(@"%@", [NSString stringWithFormat:@"HTTP error (TASK_DESCRIPTION_LCP_LSD_FETCH) [%@] => (%li) ... %@ [%li]", [(NSHTTPURLResponse *)task.originalRequest URL], code, error.domain, error.code]);
+            
+            _doneCallback_fetchAndInjectUpdatedLicense(false);
+            
+        } else if (code < 200 || code >= 300) {
+            
+            _data_TASK_DESCRIPTION_LCP_FETCH = nil;
+            
+            NSLog(@"%@", [NSString stringWithFormat:@"HTTP fail (TASK_DESCRIPTION_LCP_LSD_FETCH) [%@] => (%li)", [(NSHTTPURLResponse *)task.response URL], code]);
+            
+            _doneCallback_fetchAndInjectUpdatedLicense(false);
+            
+        } else {
+            
+            try {
+                NSString *json = [[NSString alloc] initWithData:_data_TASK_DESCRIPTION_LCP_FETCH encoding:NSUTF8StringEncoding];
+                _data_TASK_DESCRIPTION_LCP_FETCH = nil;
+                
+                // new LCP license
+                _service.nativeService->InjectLicense([_epubPath UTF8String], [json UTF8String]);
+                
+                // forces re-check of LSD, now with updated LCP timestamp
+                _license.nativeLicense->setStatusDocumentProcessingFlag(false);
+
+                _doneCallback_fetchAndInjectUpdatedLicense(true);
+            }
+            catch (NSException *e) {
+                
+                NSLog(@"%@", [e reason]);
+                
+                _doneCallback_fetchAndInjectUpdatedLicense(false);
+            }
+            catch (std::exception& e) {
+                
+                auto msg = e.what();
+                std::cout << msg << std::endl;
+                
+                _doneCallback_fetchAndInjectUpdatedLicense(false);
+            }
+            catch (...) {
+                
+                _doneCallback_fetchAndInjectUpdatedLicense(false);
+            }
+        }
+        
+        return;
+    }
+}
+
+/////////////////////////////////////////
+/////////////////////////////////////////
+/////////////////////////////////////////
+
+
+
+
+
+
+- (bool)parseStatusDocumentJson:(NSString*)json
+{
+    try {
+        NSError *jsonError = nil;
+        id rootJsonObj = [NSJSONSerialization JSONObjectWithData:[json dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:&jsonError];
+        
+        if (jsonError != nil) {
+            return false;
+        }
+        
+        if (rootJsonObj == nil) {
+            return false;
+        }
+        
+        BOOL okay = [NSJSONSerialization isValidJSONObject:rootJsonObj];
+        if (!okay) {
+            return false;
+        }
+        
+        if (![rootJsonObj isKindOfClass:[NSDictionary class]]) {
+            return false;
+        }
+        
+        NSString* strTemp = nil;
+        
+        NSDictionary *rootJsonDict = (NSDictionary *)rootJsonObj;
+        
+        strTemp = [rootJsonDict valueForKey:@"id"];
+        if (strTemp != nil) {
+            _statusDocument_ID = strTemp;
+        }
+        
+        strTemp = [rootJsonDict valueForKey:@"status"];
+        if (strTemp != nil) {
+            _statusDocument_STATUS = strTemp;
+        }
+        
+        strTemp = [rootJsonDict valueForKey:@"message"];
+        if (strTemp != nil) {
+            _statusDocument_MESSAGE = strTemp;
+        }
+        
+        NSDictionary *updatedJsonDict = [rootJsonDict valueForKey:@"updated"];
+        
+        strTemp = [updatedJsonDict valueForKey:@"license"];
+        if (strTemp != nil) {
+            _statusDocument_UPDATED_LICENSE = strTemp;
+        }
+        
+        strTemp = [updatedJsonDict valueForKey:@"status"];
+        if (strTemp != nil) {
+            _statusDocument_UPDATED_STATUS = strTemp;
+        }
+        
+        NSArray *linksJsonArray = [rootJsonDict valueForKey:@"links"];
+        for (id linkJsonDict in linksJsonArray) {
+            
+            if (![linkJsonDict isKindOfClass:[NSDictionary class]]) {
+                return false;
+            }
+            
+            NSString* rel = [linkJsonDict valueForKey:@"rel"];
+            NSString* href = [linkJsonDict valueForKey:@"href"];
+            NSString* type = [linkJsonDict valueForKey:@"type"];
+            
+            id templated_ = [linkJsonDict valueForKey:@"templated"];
+            BOOL templated = NO;
+            if ([templated_ isKindOfClass:[NSString class]]) {
+                if ([((NSString*)templated_) isEqualToString:@"true"]) {
+                    templated = YES;
+                }
+            } else if ([templated_ isKindOfClass:[NSNumber class]]) {
+                if (((NSNumber*)templated_) > 0) {
+                    templated = YES;
+                }
+            }
+            
+            NSString* title = [linkJsonDict valueForKey:@"title"];
+            NSString* profile = [linkJsonDict valueForKey:@"profile"];
+            
+            StatusDocumentLink* link = [[StatusDocumentLink alloc] init_:rel href:href type:type templated:templated title:title profile:profile];
+            
+            if ([rel isEqualToString:@"license"]) {
+                _statusDocument_LINK_LICENSE = link;
+            } else if ([rel isEqualToString:@"register"]) {
+                _statusDocument_LINK_REGISTER = link;
+            } else if ([rel isEqualToString:@"return"]) {
+                _statusDocument_LINK_RETURN = link;
+            } else if ([rel isEqualToString:@"renew"]) {
+                _statusDocument_LINK_RENEW = link;
+            } else {
+                BOOL breakpoint = true;
+            }
+        }
+
+        
+        NSDictionary* potentialRightsJsonDict = [rootJsonDict valueForKey:@"potential_rights"];
+        
+        strTemp = [potentialRightsJsonDict valueForKey:@"end"];
+        if (strTemp != nil) {
+            _statusDocument_POTENTIAL_RIGHTS_END = strTemp;
+        }
+        
+        NSArray* eventsJsonArray = [rootJsonDict valueForKey:@"events"];
+        if (eventsJsonArray != nil) {
+            for (id eventJsonDict in eventsJsonArray) {
+                
+                if (![eventJsonDict isKindOfClass:[NSDictionary class]]) {
+                    break;
+                }
+                
+                NSString* type = [eventJsonDict valueForKey:@"type"];
+                NSString* name = [eventJsonDict valueForKey:@"name"];
+                NSString* timestamp = [eventJsonDict valueForKey:@"timestamp"]; // ISO 8601 time and date
+                NSString* id = [eventJsonDict valueForKey:@"id"];
+            }
+        }
+        
+        return true;
+    }
+    catch (NSException *e) {
+        
+        NSLog(@"%@", [e reason]);
+    }
+    catch (std::exception& e) {
+        
+        auto msg = e.what();
+        std::cout << msg << std::endl;
+    }
+    catch (...) {
+        
+    }
+    
+    return false;
+}
+
+- (void)processStatusDocument
+{
+    std::string t2([_statusDocument_UPDATED_LICENSE UTF8String]);
+    
+    std::string t1 = _license.nativeLicense->Updated();
+    if (t1.length() == 0){
+        t1 = _license.nativeLicense->Issued();
+    }
+    int compared = _service.nativeService->TimeStampCompare(t1, t2);
+    
+    BOOL licenseNeedsUpdating = (compared < 0); // license is older than status
+    
+    if (licenseNeedsUpdating) {
+        [self fetchAndInjectUpdatedLicense:^(bool done){
+            if (!_wasCancelled) {
+                [_statusDocumentProcessingListener onStatusDocumentProcessingComplete:self];
+            }
+        }];
         return;
     }
     
     
-    // TODO temp code, just to test immediate return and continue load EPUB
-    //_license.nativeLicense->setStatusDocumentProcessingFlag(false);
-    [_statusDocumentProcessingListener onStatusDocumentProcessingComplete:self];
-
+    if ([_statusDocument_STATUS isEqualToString:@"revoked"]
+        || [_statusDocument_STATUS isEqualToString:@"returned"]
+        || [_statusDocument_STATUS isEqualToString:@"cancelled"]
+        || [_statusDocument_STATUS isEqualToString:@"expired"]
+        ) {
+        // Actually, this should never occur, because the LCP license should not even pass validation due to passed end date / expired timestamp
+        
+        if (!_wasCancelled) {
+            [_statusDocumentProcessingListener onStatusDocumentProcessingComplete:self];
+        }
+        return;
+    }
+    
+    
+    [self checkLink_REGISTER:^(bool done){
+        if (!_wasCancelled) {
+            [_statusDocumentProcessingListener onStatusDocumentProcessingComplete:self];
+        }
+    }];
 }
 
+-(void)checkLink_REGISTER:(DoneCallback)doneCallback_checkLink_REGISTER //void(^)(bool)
+{
+    //checked in registerDevice(), and allows processing of renew and return interactions
+    // if (_statusDocument_LINK_REGISTER == nil) {
+    //    doneCallback_checkLink_REGISTER(false);
+    //    return;
+    //}
+    
+    [self registerDevice:^(bool done_registerDevice){
+        
+        [self checkLink_RENEW:^(bool done_checkLink_RENEW){
+        
+            if (done_checkLink_RENEW) {
+                doneCallback_checkLink_REGISTER(done_registerDevice);
+                return;
+            }
+            
+            [self checkLink_RETURN:^(bool done_checkLink_RETURN){
+                doneCallback_checkLink_REGISTER(done_registerDevice);
+            }];
+        }];
+    }];
+}
 
+-(void)registerDevice:(DoneCallback)doneCallback_registerDevice //void(^)(bool)
+{
+    NSString* deviceNAME = [_deviceIDManager getDeviceNAME];
+    NSString* deviceID = [_deviceIDManager getDeviceID];
+    
+    bool doRegister = false;
+    if (_statusDocument_LINK_REGISTER == nil) {
+        doRegister = false;
+    } else if ([_statusDocument_STATUS isEqualToString:@"ready"]) {
+        doRegister = true;
+    } else if ([_statusDocument_STATUS isEqualToString:@"active"]) {
+        
+        NSString* deviceIDForStatusDoc = [_deviceIDManager checkDeviceID:_statusDocument_ID];
+        
+        if (deviceIDForStatusDoc == nil) {
+            doRegister = true;
+        } else if (![deviceIDForStatusDoc isEqualToString:deviceID]) { // this should really never happen ... but let's ensure anyway.
+            doRegister = true;
+        }
+    }
+    
+    if (!doRegister) {
+        doneCallback_registerDevice(false);
+        return;
+    }
+    
+    NSString* queryStr = [NSString stringWithFormat:@"id=%@&name=%@", deviceID, deviceNAME];
+    
+    NSString* urlString = _statusDocument_LINK_REGISTER.href;
+    if (_statusDocument_LINK_REGISTER.templated) {
+        
+        urlString = [urlString stringByReplacingOccurrencesOfString:@"{?id,name}" withString:[NSString stringWithFormat:@"?%@", queryStr]]; // TODO: smarter regexp?
+    }
+    
+    //urlString = [urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; //NSASCIIStringEncoding
+    urlString = [urlString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    
+    NSURL *url = [NSURL URLWithString:urlString];
+    
+    
+    NSURLSessionConfiguration *config = [NSURLSessionConfiguration ephemeralSessionConfiguration];
+    
+    NSString * locale = [[NSLocale preferredLanguages] objectAtIndex:0];
+    NSString* langCode = [NSString stringWithFormat:@"%@%@", locale, @",en-US;q=0.7,en;q=0.5"];
+    
+    NSURLSession * session = [NSURLSession sessionWithConfiguration:config delegate:self delegateQueue:nil]; //[NSOperationQueue mainQueue] // [[NSThread currentThread] isMainThread]
+    
+    NSMutableURLRequest* urlRequest = [[NSMutableURLRequest alloc] initWithURL:url];
+    [urlRequest setHTTPMethod:@"POST"];
+    [urlRequest setValue:langCode forHTTPHeaderField:@"Accept-Language"];
+    // TODO: comment this in production! (this is only for testing a local HTTP server)
+    //[urlRequest setValue:@"2s" forHTTPHeaderField:@"X-Add-Delay"];
+    
+    NSData *postData = [queryStr dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+    NSString *postLength = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
+    [urlRequest setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    [urlRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    [urlRequest setHTTPBody:postData];
+    
+    //NSURLSessionDataTask *task = [session dataTaskWithURL:url];
+    NSURLSessionDataTask *task = [session dataTaskWithRequest:urlRequest];
+    task.taskDescription = TASK_DESCRIPTION_LCP_LSD_REGISTER;
+    
+    _doneCallback_registerDevice = doneCallback_registerDevice;
+    
+    [task resume];
+}
+
+-(void)fetchAndInjectUpdatedLicense:(DoneCallback)doneCallback_fetchAndInjectUpdatedLicense //void(^)(bool)
+{
+    if (_statusDocument_LINK_LICENSE == nil) {
+        doneCallback_fetchAndInjectUpdatedLicense(false);
+        return;
+    }
+    
+    NSString* urlString = _statusDocument_LINK_LICENSE.href;
+    
+    NSURL *url = [NSURL URLWithString:urlString];
+    
+    
+    NSURLSessionConfiguration *config = [NSURLSessionConfiguration ephemeralSessionConfiguration];
+    
+    NSString * locale = [[NSLocale preferredLanguages] objectAtIndex:0];
+    NSString* langCode = [NSString stringWithFormat:@"%@%@", locale, @",en-US;q=0.7,en;q=0.5"];
+    
+    NSURLSession * session = [NSURLSession sessionWithConfiguration:config delegate:self delegateQueue:nil]; //[NSOperationQueue mainQueue] // [[NSThread currentThread] isMainThread]
+    
+    NSMutableURLRequest* urlRequest = [[NSMutableURLRequest alloc] initWithURL:url];
+    [urlRequest setHTTPMethod:@"GET"];
+    [urlRequest setValue:langCode forHTTPHeaderField:@"Accept-Language"];
+    // TODO: comment this in production! (this is only for testing a local HTTP server)
+    //[urlRequest setValue:@"2s" forHTTPHeaderField:@"X-Add-Delay"];
+    
+    //NSURLSessionDataTask *task = [session dataTaskWithURL:url];
+    NSURLSessionDataTask *task = [session dataTaskWithRequest:urlRequest];
+    task.taskDescription = TASK_DESCRIPTION_LCP_FETCH;
+    
+    _doneCallback_fetchAndInjectUpdatedLicense = doneCallback_fetchAndInjectUpdatedLicense;
+    
+    [task resume];
+}
+
+// Note that the user interface / user experience implemented for return/renew operations
+// is only for testing / demonstration purposes. In the real world,
+// ebook lending use-cases scenarios would probably not be handled
+// directly from the reading system app, but via an intermediary process.
+
+-(void)checkLink_RENEW:(DoneCallback)doneCallback_checkLink_RENEW //void(^)(bool)
+{
+    doneCallback_checkLink_RENEW(false);
+}
+
+-(void)checkLink_RETURN:(DoneCallback)doneCallback_checkLink_RETURN //void(^)(bool)
+{
+    doneCallback_checkLink_RETURN(false);
+}
+
+-(NSAlert*)showStatusDocumentDialog_RETURN_RENEW:(NSString*)msgType doneCallback_showStatusDocumentDialog_RETURN_RENEW:(DoneCallback)doneCallback_showStatusDocumentDialog_RETURN_RENEW //void(^)(bool)
+{
+    doneCallback_showStatusDocumentDialog_RETURN_RENEW(false);
+    return nil;
+}
 
 @end
+
+
+
+
+
+//    dispatch_queue_t q_background = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+//    dispatch_async(q_background, ^{
+//        dispatch_queue_t q_background_ = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+//        double delayInSeconds = 1.0;
+//        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+//        dispatch_after(popTime, q_background_, ^(void){
+//
+//        });
+//    });
+

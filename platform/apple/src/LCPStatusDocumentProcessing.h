@@ -28,6 +28,7 @@
 
 @protocol DeviceIdManager
 
+- (NSString*)getDeviceNAME;
 - (NSString*)getDeviceID;
 - (NSString*)checkDeviceID:(NSString*)key;
 - (void)recordDeviceID:(NSString*)key;
@@ -48,7 +49,7 @@
 
 @interface LCPStatusDocumentProcessing : NSObject
 
-- (instancetype)init_:(LCPService *)service path:(NSString *)path license:(LCPLicense*)license deviceIdManager:(id<DeviceIdManager>)deviceIdManager;
+- (instancetype)init_:(LCPService *)service epubPath:(NSString *)epubPath license:(LCPLicense*)license deviceIdManager:(id<DeviceIdManager>)deviceIdManager;
 
 - (void)start:(id<StatusDocumentProcessingListener>)listener;
 
