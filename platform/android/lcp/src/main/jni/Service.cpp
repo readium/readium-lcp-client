@@ -32,7 +32,10 @@
 
 #include <ePub3/utilities/utfstring.h>
 
-#include <epub3.h>
+//#include <ePub3/epub3.h>
+extern "C" jboolean javaEPub3_handleSdkError(JNIEnv *env, jstring message, jboolean isSevereEpubError);
+//extern "C" jstring toJstring(JNIEnv *env, const char* str, bool freeNative = false);
+
 
 JNIEXPORT void JNICALL Java_org_readium_sdk_lcp_Service_nativeInjectLicense(
         JNIEnv *env, jobject obj, jlong servicePtr, jstring jEpubPath, jstring jLicenseJson) {
@@ -87,6 +90,7 @@ JNIEXPORT jobject JNICALL Java_org_readium_sdk_lcp_Service_nativeOpenLicense(
 
           if (!lcp::Status::IsSuccess(status)) {
 
+               //jstring test = toJstring(env, "test", false);
                jstring jmessage = env->NewStringUTF(lcp::Status::ToString(status).c_str());
                jboolean b = javaEPub3_handleSdkError(env, jmessage, (jboolean)true);
                env->DeleteLocalRef(jmessage);
