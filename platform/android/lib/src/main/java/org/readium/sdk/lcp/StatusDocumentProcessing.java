@@ -31,6 +31,7 @@ import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 
@@ -292,32 +293,36 @@ public class StatusDocumentProcessing {
             m_statusDocument_UPDATED_STATUS = jsonObject_UPDATED.getString("status");
 
             JSONArray jsonArray_LINKS = jsonObject_ROOT.getJSONArray("links");
-            for (int i = 0; i < jsonArray_LINKS.length(); i++) {
-                JSONObject jsonObject_LINK = jsonArray_LINKS.getJSONObject(i);
+            if (jsonArray_LINKS != null) {
+                for (int i = 0; i < jsonArray_LINKS.length(); i++) {
+                    JSONObject jsonObject_LINK = jsonArray_LINKS.getJSONObject(i);
 
-                String rel = jsonObject_LINK.getString("rel");
-                String href = jsonObject_LINK.getString("href");
-                String type = jsonObject_LINK.optString("type");
-                String templated = jsonObject_LINK.optString("templated");
-                String title = jsonObject_LINK.optString("title");
-                String profile = jsonObject_LINK.optString("profile");
+                    String rel = jsonObject_LINK.getString("rel");
+                    String href = jsonObject_LINK.getString("href");
+                    String type = jsonObject_LINK.optString("type");
+                    String templated = jsonObject_LINK.optString("templated");
+                    String title = jsonObject_LINK.optString("title");
+                    String profile = jsonObject_LINK.optString("profile");
 
-                StatusDocumentLink link = new StatusDocumentLink(rel, href, type, templated, title, profile);
-                if (rel.equals("license")) {
-                    m_statusDocument_LINK_LICENSE = link;
-                } else if (rel.equals("register")) {
-                    m_statusDocument_LINK_REGISTER = link;
-                } else if (rel.equals("return")) {
-                    m_statusDocument_LINK_RETURN = link;
-                } else if (rel.equals("renew")) {
-                    m_statusDocument_LINK_RENEW = link;
-                } else {
-                    boolean breakpoint = true;
+                    StatusDocumentLink link = new StatusDocumentLink(rel, href, type, templated, title, profile);
+                    if (rel.equals("license")) {
+                        m_statusDocument_LINK_LICENSE = link;
+                    } else if (rel.equals("register")) {
+                        m_statusDocument_LINK_REGISTER = link;
+                    } else if (rel.equals("return")) {
+                        m_statusDocument_LINK_RETURN = link;
+                    } else if (rel.equals("renew")) {
+                        m_statusDocument_LINK_RENEW = link;
+                    } else {
+                        boolean breakpoint = true;
+                    }
                 }
             }
 
             JSONObject jsonObject_POTENTIAL_RIGHTS = jsonObject_ROOT.optJSONObject("potential_rights");
-            m_statusDocument_POTENTIAL_RIGHTS_END = jsonObject_POTENTIAL_RIGHTS.getString("end");
+            if (jsonObject_POTENTIAL_RIGHTS != null) {
+                m_statusDocument_POTENTIAL_RIGHTS_END = jsonObject_POTENTIAL_RIGHTS.getString("end");
+            }
 
             JSONArray jsonArray_EVENTS = jsonObject_ROOT.optJSONArray("events");
             if (jsonArray_EVENTS != null) {
@@ -370,7 +375,7 @@ public class StatusDocumentProcessing {
         checkLink_REGISTER(new DoneCallback() {
             @Override
             public void Done(boolean done) {
-                
+
                 if (!m_wasCancelled) {
                     m_statusDocumentProcessingListener.onStatusDocumentProcessingComplete();
                 }
@@ -411,19 +416,21 @@ public class StatusDocumentProcessing {
     private void registerDevice(final DoneCallback doneCallback_registerDevice) {
 
         String deviceID = m_deviceIDManager.getDeviceID();
-        try {
-            deviceID = URLEncoder.encode(deviceID, "UTF-8");
-        } catch (Exception ex) {
-            // noop
-        }
+        // URLEncoder.encode() doesn't generate %20 for space character (instead: '+')
+        // So we use android.net.Uri's appendQueryParameter() instead (see below)
+//        try {
+//            deviceID = URLEncoder.encode(deviceID, "UTF-8");
+//        } catch (Exception ex) {
+//            // noop
+//        }
         final String dID = deviceID;
 
         String deviceNAME = m_deviceIDManager.getDeviceNAME();
-        try {
-            deviceNAME = URLEncoder.encode(deviceNAME, "UTF-8");
-        } catch (Exception ex) {
-            // noop
-        }
+//        try {
+//            deviceNAME = URLEncoder.encode(deviceNAME, "UTF-8");
+//        } catch (Exception ex) {
+//            // noop
+//        }
         final String dNAME = deviceNAME;
 
         boolean doRegister = false;
@@ -450,7 +457,12 @@ public class StatusDocumentProcessing {
 
         String url_ = m_statusDocument_LINK_REGISTER.m_href;
         if (m_statusDocument_LINK_REGISTER.m_templated.equals("true")) {
-            url_ = url_.replace("{?id,name}", "?id=" + dID + "&name=" + dNAME); // TODO: smarter regexp?
+            //url_ = url_.replace("{?id,name}", "?id=" + dID + "&name=" + dNAME);
+            url_ = url_.replace("{?id,name}", ""); // TODO: smarter regexp?
+            url_ = Uri.parse(url_).buildUpon()
+                    .appendQueryParameter("id", dID)
+                    .appendQueryParameter("name", dNAME)
+                    .build().toString();
         }
         final String url = url_;
 
