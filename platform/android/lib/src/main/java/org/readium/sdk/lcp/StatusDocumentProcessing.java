@@ -274,7 +274,10 @@ public class StatusDocumentProcessing {
     private StatusDocumentLink m_statusDocument_LINK_RENEW = null;
     private String m_statusDocument_POTENTIAL_RIGHTS_END = ""; // ISO 8601 time and date
 
+    private boolean m_isInitialized = false;
+
     private boolean parseStatusDocumentJson(String json) {
+        m_isInitialized = false;
         try {
             JSONObject jsonObject_ROOT = new JSONObject(json);
             m_statusDocument_ID = jsonObject_ROOT.getString("id");
@@ -329,12 +332,17 @@ public class StatusDocumentProcessing {
                 }
             }
 
+            m_isInitialized = true;
             return true;
 
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public boolean isInitialized() {
+        return m_isInitialized;
     }
 
     public boolean hasLicenseUpdatePending() {
