@@ -28,9 +28,7 @@ package org.readium.sdk.lcp;
 
 
 import android.annotation.TargetApi;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
@@ -47,7 +45,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
-import java.net.URLEncoder;
 import java.util.Locale;
 
 public class StatusDocumentProcessing {
@@ -60,10 +57,6 @@ public class StatusDocumentProcessing {
             //noinspection deprecation
             return m_context.getResources().getConfiguration().locale;
         }
-    }
-
-    protected abstract class DoneCallback {
-        public abstract void Done(boolean done);
     }
 
     public interface IDeviceIDManager {
@@ -344,9 +337,16 @@ public class StatusDocumentProcessing {
         }
     }
 
+    public boolean hasLicenseUpdatePending() {
+        if (m_statusDocument_UPDATED_LICENSE == null) {
+            return false;
+        }
+        return mLicense.isOlderThan(m_statusDocument_UPDATED_LICENSE);
+    }
+
     private void processStatusDocument() {
-        boolean licenseNeedsUpdating = mLicense.isOlderThan(m_statusDocument_UPDATED_LICENSE);
-        if (licenseNeedsUpdating) {
+
+        if (hasLicenseUpdatePending()) {
             fetchAndInjectUpdatedLicense(new DoneCallback() {
                 @Override
                 public void Done(boolean done) {
@@ -394,21 +394,25 @@ public class StatusDocumentProcessing {
         registerDevice(new DoneCallback() {
             @Override
             public void Done(final boolean done_registerDevice) {
-                checkLink_RENEW(new DoneCallback() {
-                    @Override
-                    public void Done(final boolean done_checkLink_RENEW) {
-                        if (done_checkLink_RENEW) {
-                            doneCallback_checkLink_REGISTER.Done(done_registerDevice);
-                            return;
-                        }
-                        checkLink_RETURN(new DoneCallback() {
-                            @Override
-                            public void Done(final boolean done_checkLink_RETURN) {
-                                doneCallback_checkLink_REGISTER.Done(done_registerDevice);
-                            }
-                        });
-                    }
-                });
+                doneCallback_checkLink_REGISTER.Done(done_registerDevice);
+
+// The renew + return LSD interactions should be controlled from the app side
+// (some reading systems apps may decide not to expose them at all, relying on web-based frontend service instead)
+//                checkLink_RENEW(new DoneCallback() {
+//                    @Override
+//                    public void Done(final boolean done_checkLink_RENEW) {
+//                        if (done_checkLink_RENEW) {
+//                            doneCallback_checkLink_REGISTER.Done(done_registerDevice);
+//                            return;
+//                        }
+//                        checkLink_RETURN(new DoneCallback() {
+//                            @Override
+//                            public void Done(final boolean done_checkLink_RETURN) {
+//                                doneCallback_checkLink_REGISTER.Done(done_registerDevice);
+//                            }
+//                        });
+//                    }
+//                });
             }
         });
     }
@@ -598,36 +602,18 @@ public class StatusDocumentProcessing {
                 });
     }
 
-    // Note that the user interface / user experience implemented for return/renew operations
-    // is only for testing / demonstration purposes. In the real world,
-    // ebook lending use-cases scenarios would probably not be handled
-    // directly from the reading system app, but via an intermediary process.
-
-    private void checkLink_RENEW(final DoneCallback doneCallback_checkLink_RENEW) {
-
-        if (!m_statusDocument_STATUS.equals("active")) {
-            doneCallback_checkLink_RENEW.Done(false);
-            return;
-        }
+    public void doRenew(final DoneCallback doneCallback_checkLink_RENEW) {
 
         if (m_statusDocument_LINK_RENEW == null) {
             doneCallback_checkLink_RENEW.Done(false);
             return;
         }
 
-        showStatusDocumentDialog_RETURN_RENEW("renew", new DoneCallback() {
-            @Override
-            public void Done(boolean done) {
-                if (!done) {
-                    doneCallback_checkLink_RENEW.Done(false);
-                    return;
-                }
+        String url = m_statusDocument_LINK_RENEW.m_href;
+        if (m_statusDocument_LINK_RENEW.m_templated.equals("true")) {
 
-                String url = m_statusDocument_LINK_RENEW.m_href;
-                if (m_statusDocument_LINK_RENEW.m_templated.equals("true")) {
-
-                    String deviceID = m_deviceIDManager.getDeviceID();
-                    String deviceNAME = m_deviceIDManager.getDeviceNAME();
+            String deviceID = m_deviceIDManager.getDeviceID();
+            String deviceNAME = m_deviceIDManager.getDeviceNAME();
 
 // URLEncoder.encode() doesn't generate %20 for space character (instead: '+')
 // So we use android.net.Uri's appendQueryParameter() instead (see below)
@@ -639,100 +625,85 @@ public class StatusDocumentProcessing {
 //        }
 //        url = url.replace("{?end,id,name}", "?id=" + deviceID + "&name=" + deviceNAME);
 
-                    url = url.replace("{?end,id,name}", ""); // TODO: smarter regexp?
-                    url = Uri.parse(url).buildUpon()
-                            .appendQueryParameter("id", deviceID)
-                            .appendQueryParameter("name", deviceNAME)
-                            .build().toString();
-                }
+            url = url.replace("{?end,id,name}", ""); // TODO: smarter regexp?
+            url = Uri.parse(url).buildUpon()
+                    .appendQueryParameter("id", deviceID)
+                    .appendQueryParameter("name", deviceNAME)
+                    .build().toString();
+        }
 
-                Locale currentLocale = getCurrentLocale();
-                String langCode = currentLocale.toString().replace('_', '-');
-                langCode = langCode + ",en-US;q=0.7,en;q=0.5";
+        Locale currentLocale = getCurrentLocale();
+        String langCode = currentLocale.toString().replace('_', '-');
+        langCode = langCode + ",en-US;q=0.7,en;q=0.5";
 
-                Future<Response<InputStream>> request = Ion.with(m_context)
-                        .load("PUT", url)
-                        .setLogging("Readium Ion", Log.VERBOSE)
+        Future<Response<InputStream>> request = Ion.with(m_context)
+                .load("PUT", url)
+                .setLogging("Readium Ion", Log.VERBOSE)
 
-                        //.setTimeout(AsyncHttpRequest.DEFAULT_TIMEOUT) //30000
-                        .setTimeout(6000)
+                //.setTimeout(AsyncHttpRequest.DEFAULT_TIMEOUT) //30000
+                .setTimeout(6000)
 
-                        // TODO: comment this in production! (this is only for testing a local HTTP server)
-                        //.setHeader("X-Add-Delay", "2s")
+                // TODO: comment this in production! (this is only for testing a local HTTP server)
+                //.setHeader("X-Add-Delay", "2s")
 
-                        // LCP / LSD server with message localization
-                        .setHeader("Accept-Language", langCode)
+                // LCP / LSD server with message localization
+                .setHeader("Accept-Language", langCode)
 
 // QUERY params (templated URI)
 //                        .setBodyParameter("id", deviceID)
 //                        .setBodyParameter("name", deviceNAME)
 //.setBodyParameter("end", "") //ISO 8601 date-time
 
-                        .asInputStream()
-                        .withResponse()
+                .asInputStream()
+                .withResponse()
 
-                        // UI thread
-                        .setCallback(new FutureCallback<Response<InputStream>>() {
-                            @Override
-                            public void onCompleted(Exception e, Response<InputStream> response) {
+                // UI thread
+                .setCallback(new FutureCallback<Response<InputStream>>() {
+                    @Override
+                    public void onCompleted(Exception e, Response<InputStream> response) {
 
-                                InputStream inputStream = response != null ? response.getResult() : null;
-                                int httpResponseCode = response != null ? response.getHeaders().code() : 0;
-                                if (e != null || inputStream == null
-                                        || httpResponseCode < 200 || httpResponseCode >= 300) {
+                        InputStream inputStream = response != null ? response.getResult() : null;
+                        int httpResponseCode = response != null ? response.getHeaders().code() : 0;
+                        if (e != null || inputStream == null
+                                || httpResponseCode < 200 || httpResponseCode >= 300) {
 
-                                    doneCallback_checkLink_RENEW.Done(false);
-                                    return;
-                                }
+                            doneCallback_checkLink_RENEW.Done(false);
+                            return;
+                        }
 
-                                try {
-                                    // forces re-check of LSD, now with updated LCP timestamp
-                                    mLicense.setStatusDocumentProcessingFlag(false);
+                        try {
+                            // forces re-check of LSD, now with updated LCP timestamp
+                            mLicense.setStatusDocumentProcessingFlag(false);
 
-                                    doneCallback_checkLink_RENEW.Done(true);
+                            doneCallback_checkLink_RENEW.Done(true);
 
-                                } catch (Exception ex) {
-                                    ex.printStackTrace();
-                                    doneCallback_checkLink_RENEW.Done(false);
-                                } finally {
-                                    try {
-                                        inputStream.close();
-                                    } catch (IOException ex) {
-                                        ex.printStackTrace();
-                                        // ignore
-                                    }
-                                }
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                            doneCallback_checkLink_RENEW.Done(false);
+                        } finally {
+                            try {
+                                inputStream.close();
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
+                                // ignore
                             }
-                        });
-            }
-        });
+                        }
+                    }
+                });
     }
 
-    private void checkLink_RETURN(final DoneCallback doneCallback_checkLink_RETURN) {
-
-        if (!m_statusDocument_STATUS.equals("active")) {
-            doneCallback_checkLink_RETURN.Done(false);
-            return;
-        }
+    public void doReturn(final DoneCallback doneCallback_checkLink_RETURN) {
 
         if (m_statusDocument_LINK_RETURN == null) {
             doneCallback_checkLink_RETURN.Done(false);
             return;
         }
 
-        showStatusDocumentDialog_RETURN_RENEW("return", new DoneCallback() {
-            @Override
-            public void Done(boolean done) {
-                if (!done) {
-                    doneCallback_checkLink_RETURN.Done(false);
-                    return;
-                }
+        String url = m_statusDocument_LINK_RETURN.m_href;
+        if (m_statusDocument_LINK_RETURN.m_templated.equals("true")) {
 
-                String url = m_statusDocument_LINK_RETURN.m_href;
-                if (m_statusDocument_LINK_RETURN.m_templated.equals("true")) {
-
-                    String deviceID = m_deviceIDManager.getDeviceID();
-                    String deviceNAME = m_deviceIDManager.getDeviceNAME();
+            String deviceID = m_deviceIDManager.getDeviceID();
+            String deviceNAME = m_deviceIDManager.getDeviceNAME();
 
 // URLEncoder.encode() doesn't generate %20 for space character (instead: '+')
 // So we use android.net.Uri's appendQueryParameter() instead (see below)
@@ -744,123 +715,81 @@ public class StatusDocumentProcessing {
 //        }
 //        url = url.replace("{?id,name}", "?id=" + deviceID + "&name=" + deviceNAME);
 
-                    url = url.replace("{?id,name}", ""); // TODO: smarter regexp?
-                    url = Uri.parse(url).buildUpon()
-                            .appendQueryParameter("id", deviceID)
-                            .appendQueryParameter("name", deviceNAME)
-                            .build().toString();
-                }
+            url = url.replace("{?id,name}", ""); // TODO: smarter regexp?
+            url = Uri.parse(url).buildUpon()
+                    .appendQueryParameter("id", deviceID)
+                    .appendQueryParameter("name", deviceNAME)
+                    .build().toString();
+        }
 
-                Locale currentLocale = getCurrentLocale();
-                String langCode = currentLocale.toString().replace('_', '-');
-                langCode = langCode + ",en-US;q=0.7,en;q=0.5";
+        Locale currentLocale = getCurrentLocale();
+        String langCode = currentLocale.toString().replace('_', '-');
+        langCode = langCode + ",en-US;q=0.7,en;q=0.5";
 
-                Future<Response<InputStream>> request = Ion.with(m_context)
-                        .load("PUT", url)
-                        .setLogging("Readium Ion", Log.VERBOSE)
+        Future<Response<InputStream>> request = Ion.with(m_context)
+                .load("PUT", url)
+                .setLogging("Readium Ion", Log.VERBOSE)
 
-                        //.setTimeout(AsyncHttpRequest.DEFAULT_TIMEOUT) //30000
-                        .setTimeout(6000)
+                //.setTimeout(AsyncHttpRequest.DEFAULT_TIMEOUT) //30000
+                .setTimeout(6000)
 
-                        // TODO: comment this in production! (this is only for testing a local HTTP server)
-                        //.setHeader("X-Add-Delay", "2s")
+                // TODO: comment this in production! (this is only for testing a local HTTP server)
+                //.setHeader("X-Add-Delay", "2s")
 
-                        // LCP / LSD server with message localization
-                        .setHeader("Accept-Language", langCode)
+                // LCP / LSD server with message localization
+                .setHeader("Accept-Language", langCode)
 
 // QUERY params (templated URI)
 //                        .setBodyParameter("id", deviceID)
 //                        .setBodyParameter("name", deviceNAME)
 
-                        .asInputStream()
-                        .withResponse()
+                .asInputStream()
+                .withResponse()
 
-                        // UI thread
-                        .setCallback(new FutureCallback<Response<InputStream>>() {
-                            @Override
-                            public void onCompleted(Exception e, Response<InputStream> response) {
+                // UI thread
+                .setCallback(new FutureCallback<Response<InputStream>>() {
+                    @Override
+                    public void onCompleted(Exception e, Response<InputStream> response) {
 
-                                InputStream inputStream = response != null ? response.getResult() : null;
-                                int httpResponseCode = response != null ? response.getHeaders().code() : 0;
-                                if (e != null || inputStream == null
-                                        || httpResponseCode < 200 || httpResponseCode >= 300) {
+                        InputStream inputStream = response != null ? response.getResult() : null;
+                        int httpResponseCode = response != null ? response.getHeaders().code() : 0;
+                        if (e != null || inputStream == null
+                                || httpResponseCode < 200 || httpResponseCode >= 300) {
 
-                                    doneCallback_checkLink_RETURN.Done(false);
-                                    return;
-                                }
+                            doneCallback_checkLink_RETURN.Done(false);
+                            return;
+                        }
 
-                                try {
-                                    // forces re-check of LSD, now with updated LCP timestamp
-                                    mLicense.setStatusDocumentProcessingFlag(false);
+                        try {
+                            // forces re-check of LSD, now with updated LCP timestamp
+                            mLicense.setStatusDocumentProcessingFlag(false);
 
-                                    doneCallback_checkLink_RETURN.Done(true);
+                            doneCallback_checkLink_RETURN.Done(true);
 
-                                } catch (Exception ex) {
-                                    ex.printStackTrace();
-                                    doneCallback_checkLink_RETURN.Done(false);
-                                } finally {
-                                    try {
-                                        inputStream.close();
-                                    } catch (IOException ex) {
-                                        ex.printStackTrace();
-                                        // ignore
-                                    }
-                                }
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                            doneCallback_checkLink_RETURN.Done(false);
+                        } finally {
+                            try {
+                                inputStream.close();
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
+                                // ignore
                             }
-                        });
-            }
-        });
+                        }
+                    }
+                });
     }
 
-    public AlertDialog showStatusDocumentDialog_RETURN_RENEW(String msgType, final DoneCallback doneCallback_showStatusDocumentDialog_RETURN_RENEW) {
+    public boolean isActive() {
+        return m_statusDocument_STATUS != null && m_statusDocument_STATUS.equals("active");
+    }
 
-        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(m_context);
+    public boolean hasRenewLink() {
+        return m_statusDocument_LINK_RENEW != null;
+    }
 
-        alertBuilder.setTitle("LCP EPUB => LSD [" + msgType + "]?");
-        alertBuilder.setMessage("License Status Document [" + msgType + "] LCP EPUB?");
-
-        alertBuilder.setOnCancelListener(
-                new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialog) {
-                        doneCallback_showStatusDocumentDialog_RETURN_RENEW.Done(false);
-                    }
-                }
-        );
-
-        alertBuilder.setOnDismissListener(
-                new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                    }
-                }
-        );
-
-        alertBuilder.setPositiveButton("Yes",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-
-                        doneCallback_showStatusDocumentDialog_RETURN_RENEW.Done(true);
-                    }
-                }
-        );
-        alertBuilder.setNegativeButton("No",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                }
-        );
-
-        alertBuilder.setCancelable(true);
-        AlertDialog alert = alertBuilder.create();
-        alert.setCanceledOnTouchOutside(true);
-
-        alert.show(); //async!
-
-        return alert;
+    public boolean hasReturnLink() {
+        return m_statusDocument_LINK_RETURN != null;
     }
 }
