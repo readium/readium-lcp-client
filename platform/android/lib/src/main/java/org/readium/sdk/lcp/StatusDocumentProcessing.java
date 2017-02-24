@@ -416,22 +416,7 @@ public class StatusDocumentProcessing {
     private void registerDevice(final DoneCallback doneCallback_registerDevice) {
 
         String deviceID = m_deviceIDManager.getDeviceID();
-        // URLEncoder.encode() doesn't generate %20 for space character (instead: '+')
-        // So we use android.net.Uri's appendQueryParameter() instead (see below)
-//        try {
-//            deviceID = URLEncoder.encode(deviceID, "UTF-8");
-//        } catch (Exception ex) {
-//            // noop
-//        }
-        final String dID = deviceID;
-
         String deviceNAME = m_deviceIDManager.getDeviceNAME();
-//        try {
-//            deviceNAME = URLEncoder.encode(deviceNAME, "UTF-8");
-//        } catch (Exception ex) {
-//            // noop
-//        }
-        final String dNAME = deviceNAME;
 
         boolean doRegister = false;
         if (m_statusDocument_LINK_REGISTER == null) {
@@ -455,16 +440,25 @@ public class StatusDocumentProcessing {
         }
 
 
-        String url_ = m_statusDocument_LINK_REGISTER.m_href;
+        String url = m_statusDocument_LINK_REGISTER.m_href;
         if (m_statusDocument_LINK_REGISTER.m_templated.equals("true")) {
-            //url_ = url_.replace("{?id,name}", "?id=" + dID + "&name=" + dNAME);
-            url_ = url_.replace("{?id,name}", ""); // TODO: smarter regexp?
-            url_ = Uri.parse(url_).buildUpon()
-                    .appendQueryParameter("id", dID)
-                    .appendQueryParameter("name", dNAME)
+
+// URLEncoder.encode() doesn't generate %20 for space character (instead: '+')
+// So we use android.net.Uri's appendQueryParameter() instead (see below)
+//        try {
+//            deviceID = URLEncoder.encode(deviceID, "UTF-8");
+//            deviceNAME = URLEncoder.encode(deviceNAME, "UTF-8");
+//        } catch (Exception ex) {
+//            // noop
+//        }
+//        url = url.replace("{?id,name}", "?id=" + deviceID + "&name=" + deviceNAME);
+
+            url = url.replace("{?id,name}", ""); // TODO: smarter regexp?
+            url = Uri.parse(url).buildUpon()
+                    .appendQueryParameter("id", deviceID)
+                    .appendQueryParameter("name", deviceNAME)
                     .build().toString();
         }
-        final String url = url_;
 
         Locale currentLocale = getCurrentLocale();
         String langCode = currentLocale.toString().replace('_', '-');
@@ -616,22 +610,6 @@ public class StatusDocumentProcessing {
             return;
         }
 
-        String dID = m_deviceIDManager.getDeviceID();
-        try {
-            dID = URLEncoder.encode(dID, "UTF-8");
-        } catch (Exception ex) {
-            // noop
-        }
-        final String deviceID = dID;
-
-        String dNAME = m_deviceIDManager.getDeviceNAME();
-        try {
-            dNAME = URLEncoder.encode(dNAME, "UTF-8");
-        } catch (Exception ex) {
-            // noop
-        }
-        final String deviceNAME = dNAME;
-
         if (m_statusDocument_LINK_RENEW == null) {
             doneCallback_checkLink_RENEW.Done(false);
             return;
@@ -645,11 +623,28 @@ public class StatusDocumentProcessing {
                     return;
                 }
 
-                String url_ = m_statusDocument_LINK_RENEW.m_href;
+                String url = m_statusDocument_LINK_RENEW.m_href;
                 if (m_statusDocument_LINK_RENEW.m_templated.equals("true")) {
-                    url_ = url_.replace("{?end,id,name}", "?id=" + deviceID + "&name=" + deviceNAME); // TODO: smarter regexp?
+
+                    String deviceID = m_deviceIDManager.getDeviceID();
+                    String deviceNAME = m_deviceIDManager.getDeviceNAME();
+
+// URLEncoder.encode() doesn't generate %20 for space character (instead: '+')
+// So we use android.net.Uri's appendQueryParameter() instead (see below)
+//        try {
+//            deviceID = URLEncoder.encode(deviceID, "UTF-8");
+//            deviceNAME = URLEncoder.encode(deviceNAME, "UTF-8");
+//        } catch (Exception ex) {
+//            // noop
+//        }
+//        url = url.replace("{?end,id,name}", "?id=" + deviceID + "&name=" + deviceNAME);
+
+                    url = url.replace("{?end,id,name}", ""); // TODO: smarter regexp?
+                    url = Uri.parse(url).buildUpon()
+                            .appendQueryParameter("id", deviceID)
+                            .appendQueryParameter("name", deviceNAME)
+                            .build().toString();
                 }
-                final String url = url_;
 
                 Locale currentLocale = getCurrentLocale();
                 String langCode = currentLocale.toString().replace('_', '-');
@@ -720,22 +715,6 @@ public class StatusDocumentProcessing {
             return;
         }
 
-        String dID = m_deviceIDManager.getDeviceID();
-        try {
-            dID = URLEncoder.encode(dID, "UTF-8");
-        } catch (Exception ex) {
-            // noop
-        }
-        final String deviceID = dID;
-
-        String dNAME = m_deviceIDManager.getDeviceNAME();
-        try {
-            dNAME = URLEncoder.encode(dNAME, "UTF-8");
-        } catch (Exception ex) {
-            // noop
-        }
-        final String deviceNAME = dNAME;
-
         if (m_statusDocument_LINK_RETURN == null) {
             doneCallback_checkLink_RETURN.Done(false);
             return;
@@ -749,11 +728,28 @@ public class StatusDocumentProcessing {
                     return;
                 }
 
-                String url_ = m_statusDocument_LINK_RETURN.m_href;
+                String url = m_statusDocument_LINK_RETURN.m_href;
                 if (m_statusDocument_LINK_RETURN.m_templated.equals("true")) {
-                    url_ = url_.replace("{?id,name}", "?id=" + deviceID + "&name=" + deviceNAME); // TODO: smarter regexp?
+
+                    String deviceID = m_deviceIDManager.getDeviceID();
+                    String deviceNAME = m_deviceIDManager.getDeviceNAME();
+
+// URLEncoder.encode() doesn't generate %20 for space character (instead: '+')
+// So we use android.net.Uri's appendQueryParameter() instead (see below)
+//        try {
+//            deviceID = URLEncoder.encode(deviceID, "UTF-8");
+//            deviceNAME = URLEncoder.encode(deviceNAME, "UTF-8");
+//        } catch (Exception ex) {
+//            // noop
+//        }
+//        url = url.replace("{?id,name}", "?id=" + deviceID + "&name=" + deviceNAME);
+
+                    url = url.replace("{?id,name}", ""); // TODO: smarter regexp?
+                    url = Uri.parse(url).buildUpon()
+                            .appendQueryParameter("id", deviceID)
+                            .appendQueryParameter("name", deviceNAME)
+                            .build().toString();
                 }
-                final String url = url_;
 
                 Locale currentLocale = getCurrentLocale();
                 String langCode = currentLocale.toString().replace('_', '-');
