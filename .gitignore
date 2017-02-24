@@ -68,3 +68,5 @@ storage.json
 result.epub
 
 *.iml
+
+platform/android/lcp/libs/
