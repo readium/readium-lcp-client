@@ -561,52 +561,55 @@ didCompleteWithError:(nullable NSError *)error
         }
         
         NSArray *linksJsonArray = [rootJsonDict valueForKey:@"links"];
-        for (id linkJsonDict in linksJsonArray) {
-            
-            if (![linkJsonDict isKindOfClass:[NSDictionary class]]) {
-                return false;
-            }
-            
-            NSString* rel = [linkJsonDict valueForKey:@"rel"];
-            NSString* href = [linkJsonDict valueForKey:@"href"];
-            NSString* type = [linkJsonDict valueForKey:@"type"];
-            
-            id templated_ = [linkJsonDict valueForKey:@"templated"];
-            BOOL templated = NO;
-            if ([templated_ isKindOfClass:[NSString class]]) {
-                if ([((NSString*)templated_) isEqualToString:@"true"]) {
-                    templated = YES;
+        if (linksJsonArray != nil) {
+            for (id linkJsonDict in linksJsonArray) {
+                
+                if (![linkJsonDict isKindOfClass:[NSDictionary class]]) {
+                    return false;
                 }
-            } else if ([templated_ isKindOfClass:[NSNumber class]]) {
-                if (((NSNumber*)templated_) > 0) {
-                    templated = YES;
+                
+                NSString* rel = [linkJsonDict valueForKey:@"rel"];
+                NSString* href = [linkJsonDict valueForKey:@"href"];
+                NSString* type = [linkJsonDict valueForKey:@"type"];
+                
+                id templated_ = [linkJsonDict valueForKey:@"templated"];
+                BOOL templated = NO;
+                if ([templated_ isKindOfClass:[NSString class]]) {
+                    if ([((NSString*)templated_) isEqualToString:@"true"]) {
+                        templated = YES;
+                    }
+                } else if ([templated_ isKindOfClass:[NSNumber class]]) {
+                    if (((NSNumber*)templated_) > 0) {
+                        templated = YES;
+                    }
                 }
-            }
-            
-            NSString* title = [linkJsonDict valueForKey:@"title"];
-            NSString* profile = [linkJsonDict valueForKey:@"profile"];
-            
-            StatusDocumentLink* link = [[StatusDocumentLink alloc] init_:rel href:href type:type templated:templated title:title profile:profile];
-            
-            if ([rel isEqualToString:@"license"]) {
-                _statusDocument_LINK_LICENSE = link;
-            } else if ([rel isEqualToString:@"register"]) {
-                _statusDocument_LINK_REGISTER = link;
-            } else if ([rel isEqualToString:@"return"]) {
-                _statusDocument_LINK_RETURN = link;
-            } else if ([rel isEqualToString:@"renew"]) {
-                _statusDocument_LINK_RENEW = link;
-            } else {
-                BOOL breakpoint = true;
+                
+                NSString* title = [linkJsonDict valueForKey:@"title"];
+                NSString* profile = [linkJsonDict valueForKey:@"profile"];
+                
+                StatusDocumentLink* link = [[StatusDocumentLink alloc] init_:rel href:href type:type templated:templated title:title profile:profile];
+                
+                if ([rel isEqualToString:@"license"]) {
+                    _statusDocument_LINK_LICENSE = link;
+                } else if ([rel isEqualToString:@"register"]) {
+                    _statusDocument_LINK_REGISTER = link;
+                } else if ([rel isEqualToString:@"return"]) {
+                    _statusDocument_LINK_RETURN = link;
+                } else if ([rel isEqualToString:@"renew"]) {
+                    _statusDocument_LINK_RENEW = link;
+                } else {
+                    BOOL breakpoint = true;
+                }
             }
         }
 
         
         NSDictionary* potentialRightsJsonDict = [rootJsonDict valueForKey:@"potential_rights"];
-        
-        strTemp = [potentialRightsJsonDict valueForKey:@"end"];
-        if (strTemp != nil) {
-            _statusDocument_POTENTIAL_RIGHTS_END = strTemp;
+        if (potentialRightsJsonDict != nil) {
+            strTemp = [potentialRightsJsonDict valueForKey:@"end"];
+            if (strTemp != nil) {
+                _statusDocument_POTENTIAL_RIGHTS_END = strTemp;
+            }
         }
         
         NSArray* eventsJsonArray = [rootJsonDict valueForKey:@"events"];
