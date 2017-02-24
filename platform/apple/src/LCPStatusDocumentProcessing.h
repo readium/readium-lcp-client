@@ -58,6 +58,8 @@ typedef void (^DoneCallback)(bool);
 - (bool) wasCancelled;
 - (void)cancel;
 
+-(bool)isInitialized;
+
 -(bool)hasLicenseUpdatePending;
 -(bool)isActive;
 -(bool)hasRenewLink;

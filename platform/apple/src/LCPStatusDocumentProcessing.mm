@@ -134,6 +134,8 @@ using namespace lcp;
     DoneCallback _doneCallback_fetchAndInjectUpdatedLicense;
     DoneCallback _doneCallback_doReturn;
     DoneCallback _doneCallback_doRenew;
+    
+    bool _isInitialized;
 }
 
 
@@ -631,6 +633,8 @@ didCompleteWithError:(nullable NSError *)error
 
 - (bool)parseStatusDocumentJson:(NSString*)json
 {
+    _isInitialized = false;
+    
     try {
         NSError *jsonError = nil;
         id rootJsonObj = [NSJSONSerialization JSONObjectWithData:[json dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingMutableContainers error:&jsonError];
@@ -750,6 +754,7 @@ didCompleteWithError:(nullable NSError *)error
             }
         }
         
+        _isInitialized = true;
         return true;
     }
     catch (NSException *e) {
@@ -766,6 +771,10 @@ didCompleteWithError:(nullable NSError *)error
     }
     
     return false;
+}
+
+-(bool)isInitialized {
+    return _isInitialized;
 }
 
 -(bool)hasLicenseUpdatePending {
