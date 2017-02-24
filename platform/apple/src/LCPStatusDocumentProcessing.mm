@@ -98,12 +98,6 @@ using namespace lcp;
 
 
 
-
-
-typedef void (^DoneCallback)(bool);
-
-
-
 @interface LCPStatusDocumentProcessing () <NSURLSessionDataDelegate> {
     
 }
@@ -133,9 +127,13 @@ typedef void (^DoneCallback)(bool);
     NSMutableData *_data_TASK_DESCRIPTION_LCP_LSD_FETCH;
     NSMutableData *_data_TASK_DESCRIPTION_LCP_LSD_REGISTER;
     NSMutableData *_data_TASK_DESCRIPTION_LCP_FETCH;
+    NSMutableData *_data_TASK_DESCRIPTION_LCP_LSD_RETURN;
+    NSMutableData *_data_TASK_DESCRIPTION_LCP_LSD_RENEW;
     
     DoneCallback _doneCallback_registerDevice;
     DoneCallback _doneCallback_fetchAndInjectUpdatedLicense;
+    DoneCallback _doneCallback_doReturn;
+    DoneCallback _doneCallback_doRenew;
 }
 
 
@@ -266,6 +264,14 @@ didReceiveResponse:(NSURLResponse *)response
     } else if ([dataTask.taskDescription isEqualToString:TASK_DESCRIPTION_LCP_FETCH]) {
         
         _data_TASK_DESCRIPTION_LCP_FETCH = nil;
+        
+    } else if ([dataTask.taskDescription isEqualToString:TASK_DESCRIPTION_LCP_LSD_RETURN]) {
+        
+        _data_TASK_DESCRIPTION_LCP_LSD_RETURN = nil;
+        
+    } else if ([dataTask.taskDescription isEqualToString:TASK_DESCRIPTION_LCP_LSD_RENEW]) {
+        
+        _data_TASK_DESCRIPTION_LCP_LSD_RENEW = nil;
     }
     
     completionHandler(NSURLSessionResponseAllow);
@@ -315,6 +321,25 @@ didReceiveResponse:(NSURLResponse *)response
         return;
     }
     
+    if ([dataTask.taskDescription isEqualToString:TASK_DESCRIPTION_LCP_LSD_RENEW]) {
+        
+        if (_data_TASK_DESCRIPTION_LCP_LSD_RENEW == nil) {
+            _data_TASK_DESCRIPTION_LCP_LSD_RENEW = [NSMutableData dataWithCapacity:(expected>0?expected:2048)];
+        }
+        [_data_TASK_DESCRIPTION_LCP_LSD_RENEW appendData:data];
+        
+        return;
+    }
+    
+    if ([dataTask.taskDescription isEqualToString:TASK_DESCRIPTION_LCP_LSD_RETURN]) {
+        
+        if (_data_TASK_DESCRIPTION_LCP_LSD_RETURN == nil) {
+            _data_TASK_DESCRIPTION_LCP_LSD_RETURN = [NSMutableData dataWithCapacity:(expected>0?expected:2048)];
+        }
+        [_data_TASK_DESCRIPTION_LCP_LSD_RETURN appendData:data];
+        
+        return;
+    }
 }
 
 /////////////////////////////////////////
@@ -488,6 +513,106 @@ didCompleteWithError:(nullable NSError *)error
             catch (...) {
                 
                 _doneCallback_fetchAndInjectUpdatedLicense(false);
+            }
+        }
+        
+        return;
+    }
+    
+    if ([task.taskDescription isEqualToString:TASK_DESCRIPTION_LCP_LSD_RENEW]) {
+        
+        if (error) {
+            
+            _data_TASK_DESCRIPTION_LCP_LSD_RENEW = nil;
+            
+            NSLog(@"%@", [NSString stringWithFormat:@"HTTP error (TASK_DESCRIPTION_LCP_LSD_RENEW) [%@] => (%li) ... %@ [%li]", [(NSHTTPURLResponse *)task.originalRequest URL], code, error.domain, error.code]);
+            
+            _doneCallback_doRenew(false);
+            
+        } else if (code < 200 || code >= 300) {
+            
+            _data_TASK_DESCRIPTION_LCP_LSD_RENEW = nil;
+            
+            NSLog(@"%@", [NSString stringWithFormat:@"HTTP fail (TASK_DESCRIPTION_LCP_LSD_RENEW) [%@] => (%li)", [(NSHTTPURLResponse *)task.response URL], code]);
+            
+            _doneCallback_doRenew(false);
+            
+        } else {
+            
+            try {
+                _data_TASK_DESCRIPTION_LCP_LSD_RENEW = nil;
+                
+                // forces re-check of LSD, now with updated LCP timestamp
+                _license.nativeLicense->setStatusDocumentProcessingFlag(false);
+                
+                _doneCallback_doRenew(true);
+            }
+            catch (NSException *e) {
+                
+                NSLog(@"%@", [e reason]);
+                
+                _doneCallback_doRenew(false);
+            }
+            catch (std::exception& e) {
+                
+                auto msg = e.what();
+                std::cout << msg << std::endl;
+                
+                _doneCallback_doRenew(false);
+            }
+            catch (...) {
+                
+                _doneCallback_doRenew(false);
+            }
+        }
+        
+        return;
+    }
+    
+    if ([task.taskDescription isEqualToString:TASK_DESCRIPTION_LCP_LSD_RETURN]) {
+        
+        if (error) {
+            
+            _data_TASK_DESCRIPTION_LCP_LSD_RETURN = nil;
+            
+            NSLog(@"%@", [NSString stringWithFormat:@"HTTP error (TASK_DESCRIPTION_LCP_LSD_RETURN) [%@] => (%li) ... %@ [%li]", [(NSHTTPURLResponse *)task.originalRequest URL], code, error.domain, error.code]);
+            
+            _doneCallback_doReturn(false);
+            
+        } else if (code < 200 || code >= 300) {
+            
+            _data_TASK_DESCRIPTION_LCP_LSD_RETURN = nil;
+            
+            NSLog(@"%@", [NSString stringWithFormat:@"HTTP fail (TASK_DESCRIPTION_LCP_LSD_RETURN) [%@] => (%li)", [(NSHTTPURLResponse *)task.response URL], code]);
+            
+            _doneCallback_doReturn(false);
+            
+        } else {
+            
+            try {
+                _data_TASK_DESCRIPTION_LCP_LSD_RETURN = nil;
+                
+                // forces re-check of LSD, now with updated LCP timestamp
+                _license.nativeLicense->setStatusDocumentProcessingFlag(false);
+                
+                _doneCallback_doReturn(true);
+            }
+            catch (NSException *e) {
+                
+                NSLog(@"%@", [e reason]);
+                
+                _doneCallback_doReturn(false);
+            }
+            catch (std::exception& e) {
+                
+                auto msg = e.what();
+                std::cout << msg << std::endl;
+                
+                _doneCallback_doReturn(false);
+            }
+            catch (...) {
+                
+                _doneCallback_doReturn(false);
             }
         }
         
@@ -827,6 +952,119 @@ didCompleteWithError:(nullable NSError *)error
     [task resume];
 }
 
+
+-(void)doRenew:(DoneCallback)doneCallback_doRenew //void(^)(bool)
+{
+    if (_statusDocument_LINK_RENEW == nil) {
+        doneCallback_doRenew(false);
+        return;
+    }
+    
+    NSString* deviceNAME = [_deviceIDManager getDeviceNAME];
+    NSString* deviceID = [_deviceIDManager getDeviceID];
+    
+    NSString* deviceID_escaped = [deviceID stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    NSString* deviceNAME_escaped = [deviceNAME stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    
+    NSString* queryStr = [NSString stringWithFormat:@"id=%@&name=%@", deviceID_escaped, deviceNAME_escaped];
+    
+    NSString* urlString = _statusDocument_LINK_RENEW.href;
+    if (_statusDocument_LINK_RENEW.templated) {
+        
+        urlString = [urlString stringByReplacingOccurrencesOfString:@"{?end,id,name}" withString:[NSString stringWithFormat:@"?%@", queryStr]]; // TODO: smarter regexp?
+    }
+    
+    //urlString = [urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; //NSASCIIStringEncoding
+    //urlString = [urlString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    
+    NSURL *url = [NSURL URLWithString:urlString];
+    
+    
+    NSURLSessionConfiguration *config = [NSURLSessionConfiguration ephemeralSessionConfiguration];
+    
+    NSString * locale = [[NSLocale preferredLanguages] objectAtIndex:0];
+    NSString* langCode = [NSString stringWithFormat:@"%@%@", locale, @",en-US;q=0.7,en;q=0.5"];
+    
+    NSURLSession * session = [NSURLSession sessionWithConfiguration:config delegate:self delegateQueue:nil]; //[NSOperationQueue mainQueue] // [[NSThread currentThread] isMainThread]
+    
+    NSMutableURLRequest* urlRequest = [[NSMutableURLRequest alloc] initWithURL:url];
+    [urlRequest setHTTPMethod:@"PUT"];
+    [urlRequest setValue:langCode forHTTPHeaderField:@"Accept-Language"];
+    // TODO: comment this in production! (this is only for testing a local HTTP server)
+    //[urlRequest setValue:@"2s" forHTTPHeaderField:@"X-Add-Delay"];
+    
+    NSData *postData = [queryStr dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+    NSString *postLength = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
+    [urlRequest setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    [urlRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    [urlRequest setHTTPBody:postData];
+    
+    //NSURLSessionDataTask *task = [session dataTaskWithURL:url];
+    NSURLSessionDataTask *task = [session dataTaskWithRequest:urlRequest];
+    task.taskDescription = TASK_DESCRIPTION_LCP_LSD_RENEW;
+    
+    _doneCallback_doRenew = doneCallback_doRenew;
+    
+    [task resume];
+}
+
+
+-(void)doReturn:(DoneCallback)doneCallback_doReturn //void(^)(bool)
+{
+    if (_statusDocument_LINK_RETURN == nil) {
+        doneCallback_doReturn(false);
+        return;
+    }
+    
+    NSString* deviceNAME = [_deviceIDManager getDeviceNAME];
+    NSString* deviceID = [_deviceIDManager getDeviceID];
+    
+    NSString* deviceID_escaped = [deviceID stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    NSString* deviceNAME_escaped = [deviceNAME stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    
+    NSString* queryStr = [NSString stringWithFormat:@"id=%@&name=%@", deviceID_escaped, deviceNAME_escaped];
+    
+    NSString* urlString = _statusDocument_LINK_RETURN.href;
+    if (_statusDocument_LINK_RETURN.templated) {
+        
+        urlString = [urlString stringByReplacingOccurrencesOfString:@"{?id,name}" withString:[NSString stringWithFormat:@"?%@", queryStr]]; // TODO: smarter regexp?
+    }
+    
+    //urlString = [urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; //NSASCIIStringEncoding
+    //urlString = [urlString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    
+    NSURL *url = [NSURL URLWithString:urlString];
+    
+    
+    NSURLSessionConfiguration *config = [NSURLSessionConfiguration ephemeralSessionConfiguration];
+    
+    NSString * locale = [[NSLocale preferredLanguages] objectAtIndex:0];
+    NSString* langCode = [NSString stringWithFormat:@"%@%@", locale, @",en-US;q=0.7,en;q=0.5"];
+    
+    NSURLSession * session = [NSURLSession sessionWithConfiguration:config delegate:self delegateQueue:nil]; //[NSOperationQueue mainQueue] // [[NSThread currentThread] isMainThread]
+    
+    NSMutableURLRequest* urlRequest = [[NSMutableURLRequest alloc] initWithURL:url];
+    [urlRequest setHTTPMethod:@"PUT"];
+    [urlRequest setValue:langCode forHTTPHeaderField:@"Accept-Language"];
+    // TODO: comment this in production! (this is only for testing a local HTTP server)
+    //[urlRequest setValue:@"2s" forHTTPHeaderField:@"X-Add-Delay"];
+    
+    NSData *postData = [queryStr dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+    NSString *postLength = [NSString stringWithFormat:@"%lu", (unsigned long)[postData length]];
+    [urlRequest setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    [urlRequest setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    [urlRequest setHTTPBody:postData];
+    
+    //NSURLSessionDataTask *task = [session dataTaskWithURL:url];
+    NSURLSessionDataTask *task = [session dataTaskWithRequest:urlRequest];
+    task.taskDescription = TASK_DESCRIPTION_LCP_LSD_RETURN;
+    
+    _doneCallback_doReturn = doneCallback_doReturn;
+    
+    [task resume];
+}
+
+
 -(bool)isActive {
     return (_statusDocument_STATUS != nil && [_statusDocument_STATUS isEqualToString:@"active"]);
 }
@@ -839,23 +1077,6 @@ didCompleteWithError:(nullable NSError *)error
     return (_statusDocument_LINK_RETURN != nil);
 }
 
-//
-//-(void)checkLink_RENEW:(DoneCallback)doneCallback_checkLink_RENEW //void(^)(bool)
-//{
-//    doneCallback_checkLink_RENEW(false);
-//}
-//
-//-(void)checkLink_RETURN:(DoneCallback)doneCallback_checkLink_RETURN //void(^)(bool)
-//{
-//    doneCallback_checkLink_RETURN(false);
-//}
-//
-//-(NSAlert*)showStatusDocumentDialog_RETURN_RENEW:(NSString*)msgType doneCallback_showStatusDocumentDialog_RETURN_RENEW:(DoneCallback)doneCallback_showStatusDocumentDialog_RETURN_RENEW //void(^)(bool)
-//{
-//    doneCallback_showStatusDocumentDialog_RETURN_RENEW(false);
-//    return nil;
-//}
-//
 @end
 
 

@@ -47,6 +47,8 @@
 @class LCPLicense;
 @class LCPService;
 
+typedef void (^DoneCallback)(bool);
+
 @interface LCPStatusDocumentProcessing : NSObject
 
 - (instancetype)init_:(LCPService *)service epubPath:(NSString *)epubPath license:(LCPLicense*)license deviceIdManager:(id<DeviceIdManager>)deviceIdManager;
@@ -60,5 +62,8 @@
 -(bool)isActive;
 -(bool)hasRenewLink;
 -(bool)hasReturnLink;
+
+-(void)doRenew:(DoneCallback)doneCallback_doRenew; //void(^)(bool)
+-(void)doReturn:(DoneCallback)doneCallback_doReturn; //void(^)(bool)
 
 @end
