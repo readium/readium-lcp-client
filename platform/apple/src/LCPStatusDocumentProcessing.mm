@@ -39,8 +39,6 @@
 
 #include <iostream>
 
-//#import <Cocoa/Cocoa.h>
-
 using namespace lcp;
 
 
@@ -645,8 +643,11 @@ didCompleteWithError:(nullable NSError *)error
     return false;
 }
 
-- (void)processStatusDocument
-{
+-(bool)hasLicenseUpdatePending {
+    if (_statusDocument_UPDATED_LICENSE == nil) {
+        return false;
+    }
+    
     std::string t2([_statusDocument_UPDATED_LICENSE UTF8String]);
     
     std::string t1 = _license.nativeLicense->Updated();
@@ -657,7 +658,12 @@ didCompleteWithError:(nullable NSError *)error
     
     BOOL licenseNeedsUpdating = (compared < 0); // license is older than status
     
-    if (licenseNeedsUpdating) {
+    return (bool)licenseNeedsUpdating;
+}
+
+- (void)processStatusDocument
+{
+    if ([self hasLicenseUpdatePending]) {
         [self fetchAndInjectUpdatedLicense:^(bool done){
             if (!_wasCancelled) {
                 [_statusDocumentProcessingListener onStatusDocumentProcessingComplete:self];
@@ -698,17 +704,21 @@ didCompleteWithError:(nullable NSError *)error
     
     [self registerDevice:^(bool done_registerDevice){
         
-        [self checkLink_RENEW:^(bool done_checkLink_RENEW){
+        doneCallback_checkLink_REGISTER(done_registerDevice);
         
-            if (done_checkLink_RENEW) {
-                doneCallback_checkLink_REGISTER(done_registerDevice);
-                return;
-            }
-            
-            [self checkLink_RETURN:^(bool done_checkLink_RETURN){
-                doneCallback_checkLink_REGISTER(done_registerDevice);
-            }];
-        }];
+        // application client side checks for return / renew interactions
+//        
+//        [self checkLink_RENEW:^(bool done_checkLink_RENEW){
+//
+//            if (done_checkLink_RENEW) {
+//                doneCallback_checkLink_REGISTER(done_registerDevice);
+//                return;
+//            }
+//            
+//            [self checkLink_RETURN:^(bool done_checkLink_RETURN){
+//                doneCallback_checkLink_REGISTER(done_registerDevice);
+//            }];
+//        }];
     }];
 }
 
@@ -738,7 +748,10 @@ didCompleteWithError:(nullable NSError *)error
         return;
     }
     
-    NSString* queryStr = [NSString stringWithFormat:@"id=%@&name=%@", deviceID, deviceNAME];
+    NSString* deviceID_escaped = [deviceID stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    NSString* deviceNAME_escaped = [deviceNAME stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    
+    NSString* queryStr = [NSString stringWithFormat:@"id=%@&name=%@", deviceID_escaped, deviceNAME_escaped];
     
     NSString* urlString = _statusDocument_LINK_REGISTER.href;
     if (_statusDocument_LINK_REGISTER.templated) {
@@ -747,7 +760,7 @@ didCompleteWithError:(nullable NSError *)error
     }
     
     //urlString = [urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; //NSASCIIStringEncoding
-    urlString = [urlString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    //urlString = [urlString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     
     NSURL *url = [NSURL URLWithString:urlString];
     
@@ -814,20 +827,28 @@ didCompleteWithError:(nullable NSError *)error
     [task resume];
 }
 
-// Note that the user interface / user experience implemented for return/renew operations
-// is only for testing / demonstration purposes. In the real world,
-// ebook lending use-cases scenarios would probably not be handled
-// directly from the reading system app, but via an intermediary process.
-
--(void)checkLink_RENEW:(DoneCallback)doneCallback_checkLink_RENEW //void(^)(bool)
-{
-    doneCallback_checkLink_RENEW(false);
+-(bool)isActive {
+    return (_statusDocument_STATUS != nil && [_statusDocument_STATUS isEqualToString:@"active"]);
 }
 
--(void)checkLink_RETURN:(DoneCallback)doneCallback_checkLink_RETURN //void(^)(bool)
-{
-    doneCallback_checkLink_RETURN(false);
+-(bool)hasRenewLink {
+    return (_statusDocument_LINK_RENEW != nil);
 }
+
+-(bool)hasReturnLink {
+    return (_statusDocument_LINK_RETURN != nil);
+}
+
+//
+//-(void)checkLink_RENEW:(DoneCallback)doneCallback_checkLink_RENEW //void(^)(bool)
+//{
+//    doneCallback_checkLink_RENEW(false);
+//}
+//
+//-(void)checkLink_RETURN:(DoneCallback)doneCallback_checkLink_RETURN //void(^)(bool)
+//{
+//    doneCallback_checkLink_RETURN(false);
+//}
 //
 //-(NSAlert*)showStatusDocumentDialog_RETURN_RENEW:(NSString*)msgType doneCallback_showStatusDocumentDialog_RETURN_RENEW:(DoneCallback)doneCallback_showStatusDocumentDialog_RETURN_RENEW //void(^)(bool)
 //{

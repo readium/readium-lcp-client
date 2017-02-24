@@ -56,4 +56,9 @@
 - (bool) wasCancelled;
 - (void)cancel;
 
+-(bool)hasLicenseUpdatePending;
+-(bool)isActive;
+-(bool)hasRenewLink;
+-(bool)hasReturnLink;
+
 @end
