@@ -66,3 +66,7 @@ DerivedData
 # Generated Testing Data
 storage.json
 result.epub
+
+*.iml
+
+platform/android/lcp/libs/

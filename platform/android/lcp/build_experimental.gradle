@@ -1,0 +1,124 @@
+apply plugin: 'com.android.model.native'
+
+def ndk_skipX86 = (rootProject.hasProperty("readium_ndk_skipX86") && rootProject.readium_ndk_skipX86)
+def ndk_skipARM = (rootProject.hasProperty("readium_ndk_skipARM") && rootProject.readium_ndk_skipARM)
+def ndk_clang = (rootProject.hasProperty("readium_ndk_clang") && rootProject.readium_ndk_clang)
+def ndk_experimental = (rootProject.hasProperty("readium_ndk_experimental") && rootProject.readium_ndk_experimental)
+
+model {
+    android {
+        compileSdkVersion = 25
+        sources {
+            main {
+                jni {
+                    source {
+                        srcDirs = [
+                                './src/main/jni',
+                                '../../../src/lcp-client-lib',
+                                '../../../src/lcp-content-filter',
+                                '../../../src/third-parties'
+                        ]
+
+                        excludes.add('curl/**/*.*')
+                        excludes.add('gtest/**/*.*')
+                        excludes.add('rapidjson/**/*.*')
+                        excludes.add('utf8-cpp/**/*.*')
+                        excludes.add('cryptopp/*test.cpp')
+                        excludes.add('cryptopp/TestScripts/*.*')
+                        excludes.add('cryptopp/bench*.cpp')
+                        excludes.add('cryptopp/validat*.cpp')
+                        excludes.add('cryptopp/adhoc.cpp')
+                        excludes.add('ziplib/Source/Sample/*.*')
+                        excludes.add('ziplib/Source/ZipLib/extlibs/lzma/*.c')
+                        excludes.add('ziplib/Source/ZipLib/extlibs/lzma/**/*.c')
+                    } //source
+
+                    exportedHeaders {
+                        srcDir "./src/main/jni"
+                    }
+
+                    dependencies {
+                        project ":epub3" linkage "shared"
+                    }
+                }
+            }
+        } //sources
+
+        ndk {
+            moduleName = "lcp"
+
+            //arguments "-j 4" //Runtime.runtime.availableProcessors()
+
+            toolchain = ndk_clang ? "clang" : "gcc"
+            toolchainVersion = ndk_clang ? "" : "4.9" //https://github.com/android-ndk/ndk/issues/229
+
+            def clangWithGnuStl = false
+
+            if (!ndk_clang || clangWithGnuStl)
+                stl = "gnustl_shared"
+            else
+                stl = "c++_shared"
+
+            def arrayFlags = [
+                    "-fexceptions",
+                    "-fpic",
+                    "-DFEATURES_READIUM",
+                    "-DZLIB_ONLY",
+                    ndk_clang ? "-D_LIBCPP_INLINE_VISIBILITY_EXCEPT_GCC49=_LIBCPP_INLINE_VISIBILITY" : "-DREADIUM_GCC",
+                    "-I" + project(':epub3').projectDir +  "/include",
+                    "-I${file("../../../src/lcp-client-lib")}".toString(),
+                    "-I${file("../../../src/lcp-client-lib/public")}".toString(),
+                    "-I${file("../../../src/lcp-content-filter")}".toString(),
+                    "-I${file("../../../src/lcp-content-filter/public")}".toString(),
+                    "-I${file("../../../src/third-parties")}".toString()
+            ]
+
+            def arrayFlagsCPP = [
+                    "-fpermissive",
+                    "-frtti"
+            ]
+
+            cppFlags.addAll(arrayFlags)
+            cppFlags.addAll(arrayFlagsCPP)
+            cppFlags.add((!ndk_clang || clangWithGnuStl) ? "-std=gnu++11" : "-std=c++11")
+
+            CFlags.addAll(arrayFlags)
+            CFlags.add((!ndk_clang || clangWithGnuStl) ? "-std=gnu11" : "-std=c11")
+
+            ldLibs.addAll(['z', 'android', 'log'])
+            if (ndk_clang) ldLibs.addAll(['atomic'])
+        } //ndk
+
+        buildTypes {
+            release {
+
+            }
+            debug {
+                ndk.with {
+                    debuggable = true //"NDK_DEBUG=1"
+                }
+            }
+        } //buildTypes
+
+        productFlavors {
+            if (!ndk_skipARM)
+                create("arm") {
+                    ndk.with {
+                        abiFilters.add("armeabi-v7a")
+                        ldFlags.addAll([
+                                "-L${file("./obj/local/armeabi-v7a")}".toString()
+                        ])
+                    }
+                }
+            if (!ndk_skipX86)
+                create("x86") {
+                    ndk.with {
+                        abiFilters.add("x86")
+                        ldFlags.addAll([
+                                "-L${file("./obj/local/x86")}".toString()
+                        ])
+                    }
+                }
+        } //productFlavors
+    } //android
+} //model

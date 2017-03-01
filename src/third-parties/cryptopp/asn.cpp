@@ -1,6 +1,7 @@
 // asn.cpp - written and placed in the public domain by Wei Dai
 
 #include "pch.h"
+#include "config.h"
 
 #ifndef CRYPTOPP_IMPORTS
 
@@ -74,7 +75,7 @@ bool BERLengthDecode(BufferedTransformation &bt, lword &length, bool &definiteLe
 
 bool BERLengthDecode(BufferedTransformation &bt, size_t &length)
 {
-	lword lw;
+	lword lw = 0;
 	bool definiteLength;
 	if (!BERLengthDecode(bt, lw, definiteLength))
 		BERDecodeError();
@@ -123,7 +124,7 @@ size_t BERDecodeOctetString(BufferedTransformation &bt, SecByteBlock &str)
 	if (!BERLengthDecode(bt, bc))
 		BERDecodeError();
 
-	str.resize(bc);
+	str.New(bc);
 	if (bc != bt.Get(str, bc))
 		BERDecodeError();
 	return bc;
@@ -198,32 +199,6 @@ size_t BERDecodeBitString(BufferedTransformation &bt, SecByteBlock &str, unsigne
 	return bc-1;
 }
 
-void BERDecodeTime(CryptoPP::BufferedTransformation& bt, std::string& time)
-{
-    byte b;
-    if (!bt.Get(b) || (b != GENERALIZED_TIME && b != UTC_TIME))
-        BERDecodeError();
-
-    size_t bc;
-    if (!BERLengthDecode(bt, bc))
-        BERDecodeError();
-
-    SecByteBlock secBlockTime(bc);
-    if (bc != bt.Get(secBlockTime, bc))
-        BERDecodeError();
-
-    time.assign(secBlockTime.begin(), secBlockTime.end());
-    if (b == UTC_TIME)
-    {
-        int years = std::stoi(time.substr(0, 2));
-        if (years < 50)
-            time = "20" + time;
-        else
-            time = "19" + time;
-    }
-    time = time.substr(0, 8) + "T" + time.substr(8);
-}
-
 void DERReencode(BufferedTransformation &source, BufferedTransformation &dest)
 {
 	byte tag;
@@ -269,7 +244,7 @@ size_t OID::DecodeValue(BufferedTransformation &bt, word32 &v)
 
 void OID::DEREncode(BufferedTransformation &bt) const
 {
-	assert(m_values.size() >= 2);
+	CRYPTOPP_ASSERT(m_values.size() >= 2);
 	ByteQueue temp;
 	temp.Put(byte(m_values[0] * 40 + m_values[1]));
 	for (size_t i=2; i<m_values.size(); i++)
@@ -291,7 +266,7 @@ void OID::BERDecode(BufferedTransformation &bt)
 
 	if (!bt.Get(b))
 		BERDecodeError();
-	
+
 	length--;
 	m_values.resize(2);
 	m_values[0] = b / 40;
@@ -317,7 +292,7 @@ void OID::BERDecodeAndCheck(BufferedTransformation &bt) const
 
 inline BufferedTransformation & EncodedObjectFilter::CurrentTarget()
 {
-	if (m_flags & PUT_OBJECTS) 
+	if (m_flags & PUT_OBJECTS)
 		return *AttachedTransformation();
 	else
 		return TheBitBucket();
@@ -374,6 +349,10 @@ void EncodedObjectFilter::Put(const byte *inString, size_t length)
 
 			if (m_lengthRemaining == 0)
 				m_state = IDENTIFIER;
+
+		case TAIL:			// silence warnings
+		case ALL_DONE:
+		default: ;;
 		}
 
 		if (m_state == IDENTIFIER && m_level == 0)
@@ -426,13 +405,14 @@ void BERGeneralDecoder::Init(byte asnTag)
 
 BERGeneralDecoder::~BERGeneralDecoder()
 {
-	try	// avoid throwing in constructor
+	try	// avoid throwing in destructor
 	{
 		if (!m_finished)
 			MessageEnd();
 	}
-	catch (...)
+	catch (const Exception&)
 	{
+		// CRYPTOPP_ASSERT(0);
 	}
 }
 
@@ -506,12 +486,14 @@ lword BERGeneralDecoder::ReduceLength(lword delta)
 }
 
 DERGeneralEncoder::DERGeneralEncoder(BufferedTransformation &outQueue, byte asnTag)
-	: m_outQueue(outQueue), m_finished(false), m_asnTag(asnTag)
+	: ByteQueue(), m_outQueue(outQueue), m_finished(false), m_asnTag(asnTag)
 {
 }
 
+// TODO: GCC (and likely other compilers) identify this as a copy constructor; and not a constructor.
+//   We have to wait until Crypto++ 6.0 to fix it becuase the signature change breaks versioning.
 DERGeneralEncoder::DERGeneralEncoder(DERGeneralEncoder &outQueue, byte asnTag)
-	: m_outQueue(outQueue), m_finished(false), m_asnTag(asnTag)
+	: ByteQueue(), m_outQueue(outQueue), m_finished(false), m_asnTag(asnTag)
 {
 }
 
@@ -522,8 +504,9 @@ DERGeneralEncoder::~DERGeneralEncoder()
 		if (!m_finished)
 			MessageEnd();
 	}
-	catch (...)
+	catch (const Exception&)
 	{
+		CRYPTOPP_ASSERT(0);
 	}
 }
 

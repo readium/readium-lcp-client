@@ -135,6 +135,9 @@
 		5A5C61491C04BB5900185159 /* zdeflate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60C31C04BB5900185159 /* zdeflate.cpp */; };
 		5A5C614A1C04BB5900185159 /* zinflate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60C41C04BB5900185159 /* zinflate.cpp */; };
 		5A5C614B1C04BB5900185159 /* zlib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60C51C04BB5900185159 /* zlib.cpp */; };
+		8330F85E1E55FDE0003233B9 /* blake2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8330F8551E55FDE0003233B9 /* blake2.cpp */; };
+		8330F85F1E55FDE0003233B9 /* chacha.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8330F8571E55FDE0003233B9 /* chacha.cpp */; };
+		8330F8601E55FDE0003233B9 /* keccak.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8330F85C1E55FDE0003233B9 /* keccak.cpp */; };
 		833882041C5FC64D003400CD /* 3way.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60401C04BB5800185159 /* 3way.cpp */; };
 		833882051C5FC64D003400CD /* adhoc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60411C04BB5800185159 /* adhoc.cpp */; };
 		833882061C5FC64D003400CD /* adler32.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5A5C60421C04BB5800185159 /* adler32.cpp */; };
@@ -543,6 +546,17 @@
 		5A5C60C41C04BB5900185159 /* zinflate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = zinflate.cpp; sourceTree = "<group>"; };
 		5A5C60C51C04BB5900185159 /* zlib.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = zlib.cpp; sourceTree = "<group>"; };
 		5A5C614C1C04BCD100185159 /* cryptopp.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = cryptopp.xcconfig; sourceTree = "<group>"; };
+		8330F8551E55FDE0003233B9 /* blake2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blake2.cpp; sourceTree = "<group>"; };
+		8330F8561E55FDE0003233B9 /* blake2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = blake2.h; sourceTree = "<group>"; };
+		8330F8571E55FDE0003233B9 /* chacha.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = chacha.cpp; sourceTree = "<group>"; };
+		8330F8581E55FDE0003233B9 /* chacha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = chacha.h; sourceTree = "<group>"; };
+		8330F8591E55FDE0003233B9 /* fhmqv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fhmqv.h; sourceTree = "<group>"; };
+		8330F85A1E55FDE0003233B9 /* hkdf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hkdf.h; sourceTree = "<group>"; };
+		8330F85B1E55FDE0003233B9 /* hmqv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hmqv.h; sourceTree = "<group>"; };
+		8330F85C1E55FDE0003233B9 /* keccak.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = keccak.cpp; sourceTree = "<group>"; };
+		8330F85D1E55FDE0003233B9 /* keccak.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = keccak.h; sourceTree = "<group>"; };
+		8330F8611E55FE6C003233B9 /* mersenne.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mersenne.h; sourceTree = "<group>"; };
+		8330F8621E55FE6C003233B9 /* ossig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ossig.h; sourceTree = "<group>"; };
 		833881F91C5FC60C003400CD /* libcryptopp (OS X).a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libcryptopp (OS X).a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -585,6 +599,17 @@
 		5A5C5FB81C04BB3E00185159 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				8330F8611E55FE6C003233B9 /* mersenne.h */,
+				8330F8621E55FE6C003233B9 /* ossig.h */,
+				8330F8551E55FDE0003233B9 /* blake2.cpp */,
+				8330F8561E55FDE0003233B9 /* blake2.h */,
+				8330F8571E55FDE0003233B9 /* chacha.cpp */,
+				8330F8581E55FDE0003233B9 /* chacha.h */,
+				8330F8591E55FDE0003233B9 /* fhmqv.h */,
+				8330F85A1E55FDE0003233B9 /* hkdf.h */,
+				8330F85B1E55FDE0003233B9 /* hmqv.h */,
+				8330F85C1E55FDE0003233B9 /* keccak.cpp */,
+				8330F85D1E55FDE0003233B9 /* keccak.h */,
 				5A5C5FB91C04BB5800185159 /* 3way.h */,
 				5A5C5FBA1C04BB5800185159 /* adler32.h */,
 				5A5C5FBB1C04BB5800185159 /* aes.h */,
@@ -939,6 +964,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5A5C610B1C04BB5900185159 /* misc.cpp in Sources */,
 				5A5C614B1C04BB5900185159 /* zlib.cpp in Sources */,
 				5A5C60FE1C04BB5900185159 /* hex.cpp in Sources */,
 				5A5C60E91C04BB5900185159 /* dsa.cpp in Sources */,
@@ -957,6 +983,7 @@
 				5A5C60E51C04BB5900185159 /* dh.cpp in Sources */,
 				5A5C613D1C04BB5900185159 /* ttmac.cpp in Sources */,
 				5A5C60FB1C04BB5900185159 /* gfpcrypt.cpp in Sources */,
+				8330F8601E55FDE0003233B9 /* keccak.cpp in Sources */,
 				5A5C61191C04BB5900185159 /* queue.cpp in Sources */,
 				5A5C60FA1C04BB5900185159 /* gf256.cpp in Sources */,
 				5A5C61261C04BB5900185159 /* safer.cpp in Sources */,
@@ -974,6 +1001,7 @@
 				5A5C61151C04BB5900185159 /* pkcspad.cpp in Sources */,
 				5A5C61211C04BB5900185159 /* rijndael.cpp in Sources */,
 				5A5C612C1C04BB5900185159 /* sha3.cpp in Sources */,
+				8330F85F1E55FDE0003233B9 /* chacha.cpp in Sources */,
 				5A5C61341C04BB5900185159 /* square.cpp in Sources */,
 				5A5C60EE1C04BB5900185159 /* elgamal.cpp in Sources */,
 				5A5C60C91C04BB5900185159 /* algebra.cpp in Sources */,
@@ -1018,7 +1046,6 @@
 				5A5C61421C04BB5900185159 /* vmac.cpp in Sources */,
 				5A5C60EA1C04BB5900185159 /* eax.cpp in Sources */,
 				5A5C61001C04BB5900185159 /* hrtimer.cpp in Sources */,
-				5A5C610B1C04BB5900185159 /* misc.cpp in Sources */,
 				5A5C611E1C04BB5900185159 /* rc6.cpp in Sources */,
 				5A5C611A1C04BB5900185159 /* rabin.cpp in Sources */,
 				5A5C610C1C04BB5900185159 /* modes.cpp in Sources */,
@@ -1028,6 +1055,7 @@
 				5A5C60DF1C04BB5900185159 /* cryptlib_bds.cpp in Sources */,
 				5A5C61061C04BB5900185159 /* mars.cpp in Sources */,
 				5A5C60E71C04BB5900185159 /* dll.cpp in Sources */,
+				8330F85E1E55FDE0003233B9 /* blake2.cpp in Sources */,
 				5A5C60DA1C04BB5900185159 /* ccm.cpp in Sources */,
 				5A5C612E1C04BB5900185159 /* shark.cpp in Sources */,
 				5A5C610E1C04BB5900185159 /* mqv.cpp in Sources */,
@@ -1234,7 +1262,7 @@
 					"$(inherited)",
 				);
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -1260,8 +1288,9 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = "${inherited}";
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -1271,6 +1300,9 @@
 		5A5C5FB61C04BAD700185159 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1280,6 +1312,9 @@
 		5A5C5FB71C04BAD700185159 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

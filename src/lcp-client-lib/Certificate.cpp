@@ -1,8 +1,29 @@
+// Copyright (c) 2016 Mantano
+// Licensed to the Readium Foundation under one or more contributor license agreements.
 //
-//  Created by Artem Brazhnikov on 11/15.
-//  Copyright (c) 2014 Readium Foundation and/or its licensees. All rights reserved.
+// Redistribution and use in source and binary forms, with or without modification,
+// are permitted provided that the following conditions are met:
 //
+// 1. Redistributions of source code must retain the above copyright notice, this
+//    list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright notice,
+//    this list of conditions and the following disclaimer in the documentation and/or
+//    other materials provided with the distribution.
+// 3. Neither the name of the organization nor the names of its contributors may be
+//    used to endorse or promote products derived from this software without specific
+//    prior written permission
 //
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+// WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+// DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+// ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+// (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+// LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+// ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
 
 #include "Certificate.h"
 #include "CryptoAlgorithmInterfaces.h"
@@ -10,15 +31,19 @@
 #include "IncludeMacros.h"
 #include "IEncryptionProfile.h"
 #include "LcpUtils.h"
+#include "AlgorithmNames.h"
 
 CRYPTOPP_INCLUDE_START
 #include <cryptopp/cryptlib.h>
 #include <cryptopp/queue.h>
 #include <cryptopp/rsa.h>
 #include <cryptopp/sha.h>
-#include <cryptopp/md5.h>
 #include <cryptopp/asn.h>
 #include <cryptopp/oids.h>
+#include <cryptopp/dsa.h>
+
+#define CRYPTOPP_ENABLE_NAMESPACE_WEAK 1
+#include <cryptopp/md5.h>
 CRYPTOPP_INCLUDE_END
 
 using namespace CryptoPP;
@@ -27,6 +52,7 @@ using namespace CryptoPP;
 DEFINE_OID(ASN1::pkcs_1() + 4, md5withRSAEncryption);
 DEFINE_OID(ASN1::pkcs_1() + 5, sha1withRSAEncryption);
 DEFINE_OID(ASN1::pkcs_1() + 11, sha256withRSAEncryption);
+//sha256withECDSAEncryption = 1.2.840.10045.4.3.2
 
 DEFINE_OID(ASN1::joint_iso_ccitt() + 5, joint_iso_ccitt_ds);
 DEFINE_OID(joint_iso_ccitt_ds() + 29, id_ce);
@@ -47,6 +73,8 @@ namespace lcp
         ByteQueue certData;
         certData.Put(rawDecodedCert.data(), rawDecodedCert.size());
         certData.MessageEnd();
+
+        ByteQueue subjectPublicKey;
 
         BERSequenceDecoder cert(certData);
         {
@@ -70,9 +98,15 @@ namespace lcp
                 // subject
                 CryptoppUtils::Cert::SkipNextSequence(toBeSignedCert);
 
-                CryptoppUtils::Cert::ReadSubjectPublicKey(toBeSignedCert, m_publicKey);
+                //subjectPublicKey (RSA or ECDSA)
+                //CryptoppUtils::Cert::ReadSubjectPublicKey(toBeSignedCert, m_publicKeyRSA);
+                BERSequenceDecoder subjPublicInfoFrom(toBeSignedCert);
+                DERSequenceEncoder subjPublicInfoOut(subjectPublicKey);
+                subjPublicInfoFrom.TransferTo(subjPublicInfoOut, subjPublicInfoFrom.RemainingLength());
+                subjPublicInfoOut.MessageEnd();
+                subjPublicInfoFrom.MessageEnd();
 
-                
+
                 while (!toBeSignedCert.EndReached())
                 {
                     byte extensionsContext = toBeSignedCert.PeekByte();
@@ -104,18 +138,54 @@ namespace lcp
             toBeSignedCert.MessageEnd();
 
             CryptoppUtils::Cert::ReadOID(cert, m_signatureAlgorithmId);
+
             unsigned int unused = 0;
             BERDecodeBitString(cert, m_rootSignature, unused);
         }
 
         CryptoppUtils::Cert::PullToBeSignedData(rawDecodedCert, m_toBeSignedData);
-        m_signatureAlgorithm.reset(m_encryptionProfile->CreateSignatureAlgorithm(this->PublicKey()));
+
+
+        std::string algo = AlgorithmNames::EcdsaSha256Id;
+        if (m_signatureAlgorithmId == sha256withRSAEncryption()) {
+            algo = AlgorithmNames::RsaSha256Id;
+
+        } else if (m_signatureAlgorithmId == sha1withRSAEncryption()) {
+            algo = AlgorithmNames::RsaSha1Id;
+
+        } else if (m_signatureAlgorithmId == md5withRSAEncryption()) {
+            algo = AlgorithmNames::RsaMd5Id;
+        }
+
+        if (algo == AlgorithmNames::EcdsaSha256Id) {
+            m_publicKeyECDSA.BERDecode(subjectPublicKey);
+        } else {
+            m_publicKeyRSA.BERDecode(subjectPublicKey);
+        }
+
+        //this->PublicKey()
+        ByteQueue publicKeyQueue;
+        if (algo == AlgorithmNames::EcdsaSha256Id) {
+            m_publicKeyECDSA.DEREncode(publicKeyQueue);
+        } else {
+            m_publicKeyRSA.DEREncode(publicKeyQueue);
+        }
+        size_t size = static_cast<size_t>(publicKeyQueue.MaxRetrievable());
+        KeyType outKey(size);
+        publicKeyQueue.Get(&outKey.at(0), outKey.size());
+
+        m_signatureAlgorithm.reset(m_encryptionProfile->CreateSignatureAlgorithm(outKey, algo));
     }
 
     KeyType Certificate::PublicKey() const
     {
         ByteQueue publicKeyQueue;
-        m_publicKey.DEREncode(publicKeyQueue);
+        if (m_signatureAlgorithm->Name() == AlgorithmNames::EcdsaSha256Id) {
+            m_publicKeyECDSA.DEREncode(publicKeyQueue);
+        } else {
+            m_publicKeyRSA.DEREncode(publicKeyQueue);
+        }
+
         size_t size = static_cast<size_t>(publicKeyQueue.MaxRetrievable());
         KeyType outKey(size);
         publicKeyQueue.Get(&outKey.at(0), outKey.size());
@@ -148,38 +218,67 @@ namespace lcp
         KeyType rawPublicKey = rootCertificate->PublicKey();
         publicKeyQueue.Put(&rawPublicKey.at(0), rawPublicKey.size());
         publicKeyQueue.MessageEnd();
-        RSA::PublicKey publicKey;
-        publicKey.BERDecode(publicKeyQueue);
+
+        CryptoPP::ECDSA<CryptoPP::ECP, CryptoPP::SHA256>::PublicKey publicKeyECDSA;
+        CryptoPP::RSA::PublicKey publicKeyRSA;
+
+        if (m_signatureAlgorithm->Name() == AlgorithmNames::EcdsaSha256Id) {
+            publicKeyECDSA.BERDecode(publicKeyQueue);
+        } else {
+            publicKeyRSA.BERDecode(publicKeyQueue);
+        }
 
         std::unique_ptr<PK_Verifier> rootVerifierPtr;
 
-        if (m_signatureAlgorithmId == sha256withRSAEncryption())
+        if (m_signatureAlgorithm->Name() == AlgorithmNames::EcdsaSha256Id) {
+            rootVerifierPtr.reset(new ECDSA<ECP, SHA256>::Verifier(publicKeyECDSA));
+        }
+        else if (m_signatureAlgorithmId == sha256withRSAEncryption())
         {
-            rootVerifierPtr.reset(new RSASS<PKCS1v15, SHA256>::Verifier(publicKey));
+            rootVerifierPtr.reset(new RSASS<PKCS1v15, SHA256>::Verifier(publicKeyRSA));
         }
         else if (m_signatureAlgorithmId == sha1withRSAEncryption())
         {
-            rootVerifierPtr.reset(new RSASS<PKCS1v15, SHA1>::Verifier(publicKey));
+            rootVerifierPtr.reset(new RSASS<PKCS1v15, SHA1>::Verifier(publicKeyRSA));
         }
         else if (m_signatureAlgorithmId == md5withRSAEncryption())
         {
-            rootVerifierPtr.reset(new RSASS<PKCS1v15, Weak::MD5>::Verifier(publicKey));
+            rootVerifierPtr.reset(new RSASS<PKCS1v15, Weak::MD5>::Verifier(publicKeyRSA));
         }
         else
         {
-            throw StatusException(Status(StatusCode::ErrorOpeningRootCertificateSignatureAlgorithmNotFound));
+            throw StatusException(Status(StatusCode::ErrorOpeningRootCertificateSignatureAlgorithmNotFound, "ErrorOpeningRootCertificateSignatureAlgorithmNotFound"));
         }
 
-        if (m_rootSignature.size() != rootVerifierPtr->SignatureLength())
+        // https://www.cryptopp.com/wiki/Elliptic_Curve_Digital_Signature_Algorithm#Message_Verification
+        // 132 secp521r1
+        // 64 secp256r1
+        int verifierSigLength = rootVerifierPtr->SignatureLength();
+
+        byte* sigBytes = m_rootSignature.data();
+        size_t sigLength = m_rootSignature.size();
+
+        byte buffer[verifierSigLength];
+
+        if (m_signatureAlgorithm->Name() == AlgorithmNames::EcdsaSha256Id) {
+            byte* bufferPtr = &buffer[0]; // == buffer
+
+            CryptoPP::DSAConvertSignatureFormat(bufferPtr, verifierSigLength, CryptoPP::DSASignatureFormat::DSA_P1363,
+                                                sigBytes, sigLength, CryptoPP::DSASignatureFormat::DSA_DER);
+            sigBytes = bufferPtr;
+            sigLength = verifierSigLength;
+        }
+
+        if (verifierSigLength != sigLength)
         {
-            throw StatusException(Status(StatusCode::ErrorOpeningContentProviderCertificateNotValid));
+            throw StatusException(Status(StatusCode::ErrorOpeningContentProviderCertificateNotValid, "ErrorOpeningContentProviderCertificateNotValid"));
         }
 
         return rootVerifierPtr->VerifyMessage(
             m_toBeSignedData.data(),
             m_toBeSignedData.size(),
-            m_rootSignature.data(),
-            m_rootSignature.size()
+            sigBytes,
+            sigLength
             );
     }
 

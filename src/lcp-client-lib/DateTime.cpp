@@ -1,8 +1,29 @@
+// Copyright (c) 2016 Mantano
+// Licensed to the Readium Foundation under one or more contributor license agreements.
 //
-//  Created by Artem Brazhnikov on 11/15.
-//  Copyright (c) 2014 Readium Foundation and/or its licensees. All rights reserved.
+// Redistribution and use in source and binary forms, with or without modification,
+// are permitted provided that the following conditions are met:
 //
+// 1. Redistributions of source code must retain the above copyright notice, this
+//    list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright notice,
+//    this list of conditions and the following disclaimer in the documentation and/or
+//    other materials provided with the distribution.
+// 3. Neither the name of the organization nor the names of its contributors may be
+//    used to endorse or promote products derived from this software without specific
+//    prior written permission
 //
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+// WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+// DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+// ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+// (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+// LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+// ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
 
 #include <sstream>
 #include <iomanip>
@@ -159,7 +180,8 @@ namespace lcp
 
     void DateTime::ProcessIsoUtcTime(const std::string & isoTime)
     {
-        if (!TimeStringToTm(isoTime, "%Y-%m-%dT%H:%M:%SZ", m_tm))
+        // Fraction of seconds cannot be parsed so remove it
+        if (!TimeStringToTm(isoTime.substr(0, 19), "%Y-%m-%dT%H:%M:%S", m_tm))
         {
             throw std::runtime_error("Cannot parse iso time");
         }
@@ -186,13 +208,13 @@ namespace lcp
 
         if (isPlus)
         {
-            m_tm.tm_hour += timeZone.tm_hour;
-            m_tm.tm_min += timeZone.tm_min;
+            m_tm.tm_hour -= timeZone.tm_hour;
+            m_tm.tm_min -= timeZone.tm_min;
         }
         else
         {
-            m_tm.tm_hour -= timeZone.tm_hour;
-            m_tm.tm_min -= timeZone.tm_min;
+            m_tm.tm_hour += timeZone.tm_hour;
+            m_tm.tm_min += timeZone.tm_min;
         }
         m_time = mktime64(&m_tm);
     }
@@ -221,10 +243,14 @@ namespace lcp
     {
         result = {};
         std::tm tempResult = {};
-        std::istringstream strm(time);
-        strm >> std::get_time(&tempResult, format.c_str());
+
+        if (strptime(time.c_str(), format.c_str(), &tempResult) == NULL) {
+            // Unable to convert time
+            return false;
+        }
+
         result = TmToTm64(tempResult);
-        return (!strm.fail());
+        return true;
     }
 
     /*static*/ TM DateTime::TmToTm64(const std::tm & from)

@@ -1,8 +1,31 @@
+// Copyright (c) 2016 Mantano
+// Licensed to the Readium Foundation under one or more contributor license agreements.
 //
-//  Created by Artem Brazhnikov on 11/15.
-//  Copyright (c) 2014 Readium Foundation and/or its licensees. All rights reserved.
+// Redistribution and use in source and binary forms, with or without modification,
+// are permitted provided that the following conditions are met:
 //
+// 1. Redistributions of source code must retain the above copyright notice, this
+//    list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright notice,
+//    this list of conditions and the following disclaimer in the documentation and/or
+//    other materials provided with the distribution.
+// 3. Neither the name of the organization nor the names of its contributors may be
+//    used to endorse or promote products derived from this software without specific
+//    prior written permission
 //
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+// WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+// DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+// ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+// (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+// LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+// ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+#if ENABLE_NET_PROVIDER_ACQUISITION
 
 #include "public/ILicense.h"
 #include "Acquisition.h"
@@ -16,6 +39,8 @@
 ZIPLIB_INCLUDE_START
 #include "ziplib/Source/ZipLib/ZipFile.h"
 ZIPLIB_INCLUDE_END
+
+static std::string const LcpLicensePath = "META-INF/license.lcpl";
 
 namespace lcp
 {
@@ -48,19 +73,20 @@ namespace lcp
             ILinks * links = m_license->Links();
             if (!links->Has(Publication))
             {
-                return Status(StatusCode::ErrorAcquisitionNoAcquisitionLink);
+                return Status(StatusCode::ErrorAcquisitionNoAcquisitionLink, "ErrorAcquisitionNoAcquisitionLink");
             }
             
             links->GetLink(Publication, m_publicationLink);
             if (m_publicationLink.type != PublicationType)
             {
-                return Status(StatusCode::ErrorAcquisitionPublicationWrongType);
+                // See https://github.com/readium/readium-lcp-client/issues/15
+                //return Status(StatusCode::ErrorAcquisitionPublicationWrongType, "ErrorAcquisitionPublicationWrongType");
             }
 
             m_file.reset(m_fileSystemProvider->GetFile(m_publicationPath));
             if (m_file.get() == nullptr)
             {
-                return Status(StatusCode::ErrorAcquisitionInvalidFilePath);
+                return Status(StatusCode::ErrorAcquisitionInvalidFilePath, "ErrorAcquisitionInvalidFilePath");
             }
             m_request.reset(new DownloadInFileRequest(m_publicationLink.href, m_file.get()));
 
@@ -92,7 +118,7 @@ namespace lcp
 
             if (hexHash != link.hash)
             {
-                return Status(StatusCode::ErrorAcquisitionPublicationCorrupted);
+                return Status(StatusCode::ErrorAcquisitionPublicationCorrupted, "ErrorAcquisitionPublicationCorrupted");
             }
         }
         return Status(StatusCode::ErrorCommonSuccess);
@@ -102,6 +128,7 @@ namespace lcp
     {
         std::unique_lock<std::mutex> locker(m_sync);
         m_request->SetCanceled(true);
+        m_netProvider->CancelDownloadRequest(m_request.get());
         return Status(StatusCode::ErrorCommonSuccess);
     }
 
@@ -169,7 +196,7 @@ namespace lcp
             // Release the epub file to perform zip operations
             m_file.reset();
             std::stringstream licenseStream(m_license->OriginalContent());
-            ZipFile::AddFile(m_publicationPath, licenseStream, "META-INF/license.lcpl");
+            ZipFile::AddFile(m_publicationPath, licenseStream, LcpLicensePath);
 
             if (m_callback != nullptr)
             {
@@ -180,8 +207,10 @@ namespace lcp
         {
             if (m_callback != nullptr)
             {
-                m_callback->OnAcquisitionEnded(this, Status(StatusCode::ErrorNetworkingRequestFailed, ex.what()));
+                m_callback->OnAcquisitionEnded(this, Status(StatusCode::ErrorNetworkingRequestFailed, "ErrorNetworkingRequestFailed" + std::string(ex.what())));
             }
         }
     }
 }
+
+#endif //ENABLE_NET_PROVIDER_ACQUISITION

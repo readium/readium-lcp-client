@@ -1,8 +1,28 @@
+// Copyright (c) 2016 Mantano
+// Licensed to the Readium Foundation under one or more contributor license agreements.
 //
-//  Created by Artem Brazhnikov on 11/15.
-//  Copyright (c) 2014 Readium Foundation and/or its licensees. All rights reserved.
+// Redistribution and use in source and binary forms, with or without modification,
+// are permitted provided that the following conditions are met:
 //
+// 1. Redistributions of source code must retain the above copyright notice, this
+//    list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright notice,
+//    this list of conditions and the following disclaimer in the documentation and/or
+//    other materials provided with the distribution.
+// 3. Neither the name of the organization nor the names of its contributors may be
+//    used to endorse or promote products derived from this software without specific
+//    prior written permission
 //
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+// WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+// DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+// ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+// (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+// LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+// ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "AesCbcSymmetricAlgorithm.h"
 #include "AlgorithmNames.h"
@@ -57,7 +77,8 @@ namespace lcp
         CryptoPP::ArraySource source(
             cipherData, cipherSize, true,
             new CryptoPP::StreamTransformationFilter(m_decryptor,
-                new CryptoPP::StringSink(decryptedDataStr)
+                new CryptoPP::StringSink(decryptedDataStr),
+				CryptoPP::BlockPaddingSchemeDef::W3C_PADDING // Note that handling of W3C padding scheme during decryption also handles PKCS#7 (which is BlockPaddingSchemeDef::PKCS_PADDING in CryptoPP, with AES CBC Block Size > 8 (not PKCS#5))
                 )
             );
 
@@ -76,7 +97,7 @@ namespace lcp
             dataLength,
             decryptedData,
             decryptedDataLength,
-            BlockPaddingSchemeDef::DEFAULT_PADDING
+            BlockPaddingSchemeDef::W3C_PADDING // Note that handling of W3C padding scheme during decryption also handles PKCS#7 (which is BlockPaddingSchemeDef::PKCS_PADDING in CryptoPP, with AES CBC Block Size > 8 (not PKCS#5))
             );
     }
 
@@ -98,7 +119,7 @@ namespace lcp
             inBuffer.size(),
             &outBuffer.at(0),
             outBuffer.size(),
-            BlockPaddingSchemeDef::DEFAULT_PADDING
+            BlockPaddingSchemeDef::W3C_PADDING // Note that handling of W3C padding scheme during decryption also handles PKCS#7 (which is BlockPaddingSchemeDef::PKCS_PADDING in CryptoPP, with AES CBC Block Size > 8 (not PKCS#5))
             );
 
         return static_cast<size_t>(stream->Size())
@@ -150,7 +171,7 @@ namespace lcp
         size_t sizeWithoutPaddedBlock = plainTextSize - (plainTextSize % CryptoPP::AES::BLOCKSIZE);
         if (rangeInfo.position + rangeInfo.length > sizeWithoutPaddedBlock)
         {
-            padding = BlockPaddingSchemeDef::DEFAULT_PADDING;
+            padding = BlockPaddingSchemeDef::W3C_PADDING; // Note that handling of W3C padding scheme during decryption also handles PKCS#7 (which is BlockPaddingSchemeDef::PKCS_PADDING in CryptoPP, with AES CBC Block Size > 8 (not PKCS#5))
         }
 
         // Read data from the stream

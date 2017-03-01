@@ -87,6 +87,14 @@
 		833882BE1C5FC729003400CD /* time64.c in Sources */ = {isa = PBXBuildFile; fileRef = 5A2D654C1C170EAB00ED4673 /* time64.c */; };
 		833882BF1C5FC75B003400CD /* libcryptopp (OS X).a in Frameworks */ = {isa = PBXBuildFile; fileRef = 833882931C5FC6DE003400CD /* libcryptopp (OS X).a */; };
 		833882C01C5FC75B003400CD /* libziplib (OS X).a in Frameworks */ = {isa = PBXBuildFile; fileRef = 833882971C5FC6DE003400CD /* libziplib (OS X).a */; };
+		834E3B571E32565900DF472A /* AesGcmSymmetricAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 834E3B551E32565900DF472A /* AesGcmSymmetricAlgorithm.cpp */; };
+		834E3B5A1E32566300DF472A /* EcdsaSha256SignatureAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 834E3B581E32566300DF472A /* EcdsaSha256SignatureAlgorithm.cpp */; };
+		834E3B5B1E3258DE00DF472A /* EcdsaSha256SignatureAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 834E3B581E32566300DF472A /* EcdsaSha256SignatureAlgorithm.cpp */; };
+		834E3B5C1E3258DE00DF472A /* AesGcmSymmetricAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 834E3B551E32565900DF472A /* AesGcmSymmetricAlgorithm.cpp */; };
+		834E3B5F1E32A43600DF472A /* LCPStatusDocumentProcessing.mm in Sources */ = {isa = PBXBuildFile; fileRef = 834E3B5E1E32A43600DF472A /* LCPStatusDocumentProcessing.mm */; };
+		834E3B691E32AEAC00DF472A /* LCPStatusDocumentProcessing.mm in Sources */ = {isa = PBXBuildFile; fileRef = 834E3B5E1E32A43600DF472A /* LCPStatusDocumentProcessing.mm */; };
+		83534AAE1CC4B2AC0043A730 /* LcpContentModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 83534AAD1CC4B2AC0043A730 /* LcpContentModule.cpp */; };
+		83534AAF1CC4C9660043A730 /* LcpContentModule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 83534AAD1CC4B2AC0043A730 /* LcpContentModule.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -279,6 +287,14 @@
 		5AF00D641C1F0A58008D0A5E /* UserLcpNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UserLcpNode.cpp; sourceTree = "<group>"; };
 		5AF00D651C1F0A58008D0A5E /* UserLcpNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserLcpNode.h; sourceTree = "<group>"; };
 		833882881C5FC6DD003400CD /* libLCP-client-OSX.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libLCP-client-OSX.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		834E3B551E32565900DF472A /* AesGcmSymmetricAlgorithm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AesGcmSymmetricAlgorithm.cpp; sourceTree = "<group>"; };
+		834E3B561E32565900DF472A /* AesGcmSymmetricAlgorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AesGcmSymmetricAlgorithm.h; sourceTree = "<group>"; };
+		834E3B581E32566300DF472A /* EcdsaSha256SignatureAlgorithm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EcdsaSha256SignatureAlgorithm.cpp; sourceTree = "<group>"; };
+		834E3B591E32566300DF472A /* EcdsaSha256SignatureAlgorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EcdsaSha256SignatureAlgorithm.h; sourceTree = "<group>"; };
+		834E3B5D1E32A43600DF472A /* LCPStatusDocumentProcessing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LCPStatusDocumentProcessing.h; sourceTree = "<group>"; };
+		834E3B5E1E32A43600DF472A /* LCPStatusDocumentProcessing.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LCPStatusDocumentProcessing.mm; sourceTree = "<group>"; };
+		83534AA81CC4B2A00043A730 /* LcpContentModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LcpContentModule.h; sourceTree = "<group>"; };
+		83534AAD1CC4B2AC0043A730 /* LcpContentModule.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LcpContentModule.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -306,6 +322,8 @@
 		5A01167F1C088BA4006F1A6F /* Apple */ = {
 			isa = PBXGroup;
 			children = (
+				834E3B5D1E32A43600DF472A /* LCPStatusDocumentProcessing.h */,
+				834E3B5E1E32A43600DF472A /* LCPStatusDocumentProcessing.mm */,
 				5A0116801C088BA4006F1A6F /* LCPAcquisition.h */,
 				5A0116811C088BA4006F1A6F /* LCPAcquisition.mm */,
 				5A0116821C088BA4006F1A6F /* LCPError.h */,
@@ -504,6 +522,7 @@
 		5AF00CFF1C1F0A58008D0A5E /* lcp-content-filter */ = {
 			isa = PBXGroup;
 			children = (
+				83534AAD1CC4B2AC0043A730 /* LcpContentModule.cpp */,
 				5AF00D001C1F0A58008D0A5E /* LcpContentFilter.cpp */,
 				5AF00D011C1F0A58008D0A5E /* LcpFilterContext.h */,
 				5AF00D021C1F0A58008D0A5E /* LcpSeekableByteStreamAdapter.h */,
@@ -515,6 +534,7 @@
 		5AF00D031C1F0A58008D0A5E /* public */ = {
 			isa = PBXGroup;
 			children = (
+				83534AA81CC4B2A00043A730 /* LcpContentModule.h */,
 				5AF00D041C1F0A58008D0A5E /* LcpContentFilter.h */,
 			);
 			path = public;
@@ -523,6 +543,10 @@
 		5AF00D051C1F0A58008D0A5E /* lcp-client-lib */ = {
 			isa = PBXGroup;
 			children = (
+				834E3B581E32566300DF472A /* EcdsaSha256SignatureAlgorithm.cpp */,
+				834E3B591E32566300DF472A /* EcdsaSha256SignatureAlgorithm.h */,
+				834E3B551E32565900DF472A /* AesGcmSymmetricAlgorithm.cpp */,
+				834E3B561E32565900DF472A /* AesGcmSymmetricAlgorithm.h */,
 				5AF00D061C1F0A58008D0A5E /* Acquisition.cpp */,
 				5AF00D071C1F0A58008D0A5E /* Acquisition.h */,
 				5AF00D081C1F0A58008D0A5E /* AesCbcSymmetricAlgorithm.cpp */,
@@ -683,7 +707,7 @@
 		5ACE2E031BF21D7900AC0585 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0710;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = Readium;
 				TargetAttributes = {
 					5ACE2E1A1BF21D8C00AC0585 = {
@@ -767,12 +791,15 @@
 				5AF00D721C1F0A58008D0A5E /* DateTime.cpp in Sources */,
 				5A6EEB0A1C0C61CD0003A6DC /* LCPiOSNetProvider.mm in Sources */,
 				5AF00D811C1F0A58008D0A5E /* SymmetricAlgorithmEncryptedStream.cpp in Sources */,
+				834E3B571E32565900DF472A /* AesGcmSymmetricAlgorithm.cpp in Sources */,
 				5A0116921C088BA4006F1A6F /* LCPService.mm in Sources */,
 				5AF00D671C1F0A58008D0A5E /* Acquisition.cpp in Sources */,
 				5AF00D6C1C1F0A58008D0A5E /* CertificateRevocationList.cpp in Sources */,
 				5AF00D6B1C1F0A58008D0A5E /* CertificateExtension.cpp in Sources */,
 				5AF00D751C1F0A58008D0A5E /* JsonCanonicalizer.cpp in Sources */,
 				5AF00D821C1F0A58008D0A5E /* ThreadTimer.cpp in Sources */,
+				834E3B5A1E32566300DF472A /* EcdsaSha256SignatureAlgorithm.cpp in Sources */,
+				834E3B5F1E32A43600DF472A /* LCPStatusDocumentProcessing.mm in Sources */,
 				5A0116911C088BA4006F1A6F /* LCPLicense.mm in Sources */,
 				5AF00D6D1C1F0A58008D0A5E /* CrlDistributionPoints.cpp in Sources */,
 				5AF00D7A1C1F0A58008D0A5E /* LcpUtils.cpp in Sources */,
@@ -789,6 +816,7 @@
 				5AF00D7C1C1F0A58008D0A5E /* RightsLcpNode.cpp in Sources */,
 				5AF00D771C1F0A58008D0A5E /* Lcp1dot0EncryptionProfile.cpp in Sources */,
 				5AF00D661C1F0A58008D0A5E /* LcpContentFilter.cpp in Sources */,
+				83534AAE1CC4B2AC0043A730 /* LcpContentModule.cpp in Sources */,
 				5A0116931C088BA4006F1A6F /* UICKeyChainStore.m in Sources */,
 				5A2D65501C170EAB00ED4673 /* time64.c in Sources */,
 				5AF00D7B1C1F0A58008D0A5E /* LinksLcpNode.cpp in Sources */,
@@ -803,6 +831,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				834E3B691E32AEAC00DF472A /* LCPStatusDocumentProcessing.mm in Sources */,
+				834E3B5B1E3258DE00DF472A /* EcdsaSha256SignatureAlgorithm.cpp in Sources */,
+				834E3B5C1E3258DE00DF472A /* AesGcmSymmetricAlgorithm.cpp in Sources */,
+				83534AAF1CC4C9660043A730 /* LcpContentModule.cpp in Sources */,
 				833882991C5FC728003400CD /* LCPAcquisition.mm in Sources */,
 				8338829A1C5FC728003400CD /* LCPError.mm in Sources */,
 				8338829B1C5FC728003400CD /* LCPiOSStorageProvider.mm in Sources */,
@@ -861,8 +893,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -884,7 +918,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -905,8 +939,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -916,13 +952,14 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = "${inherited}";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -933,6 +970,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5A2496AE1C620ECA00EABFFC /* LCP Client (iOS).xcconfig */;
 			buildSettings = {
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/third-parties/cryptopp/lib",
@@ -946,6 +984,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5A2496AE1C620ECA00EABFFC /* LCP Client (iOS).xcconfig */;
 			buildSettings = {
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/third-parties/cryptopp/lib",

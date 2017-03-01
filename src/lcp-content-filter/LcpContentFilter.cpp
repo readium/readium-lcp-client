@@ -1,8 +1,28 @@
+// Copyright (c) 2016 Mantano
+// Licensed to the Readium Foundation under one or more contributor license agreements.
 //
-//  Created by Mickaël Menu on 24/11/15.
-//  Copyright (c) 2014 Readium Foundation and/or its licensees. All rights reserved.
+// Redistribution and use in source and binary forms, with or without modification,
+// are permitted provided that the following conditions are met:
 //
+// 1. Redistributions of source code must retain the above copyright notice, this
+//    list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright notice,
+//    this list of conditions and the following disclaimer in the documentation and/or
+//    other materials provided with the distribution.
+// 3. Neither the name of the organization nor the names of its contributors may be
+//    used to endorse or promote products derived from this software without specific
+//    prior written permission
 //
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+// WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+// DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+// ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+// (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+// LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+// ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #if FEATURES_READIUM
 
@@ -16,8 +36,13 @@
 READIUM_INCLUDE_START
 #include <ePub3/container.h>
 #include <ePub3/filter_manager.h>
+#include <ePub3/media-overlays_smil_utils.h>
+//#include <cmath>
 #include <ePub3/package.h>
 #include <ePub3/utilities/byte_stream.h>
+#include <zlib.h>
+#include <ePub3/utilities/byte_buffer.h>
+
 READIUM_INCLUDE_END
 
 #if DEBUG
@@ -26,7 +51,7 @@ READIUM_INCLUDE_END
 #define LOG(msg)
 #endif
 
-static std::string const LcpLicensePath = "META-INF/license.lcpl";
+//static std::string const LcpLicensePath = "META-INF/license.lcpl";
 
 namespace lcp {
     bool LcpContentFilter::SniffLcpContent(ConstManifestItemPtr item)
@@ -39,7 +64,89 @@ namespace lcp {
         
         return encrypted;
     }
-    
+
+    uint8_t* checkAndProcessDeflateBuffer(uint8_t* buffer, size_t* outputLen, LcpFilterContext *context) {
+
+        if (context->CompressionMethod() == "8") {
+
+            z_stream zstr = {0};
+
+            zstr.zalloc = (alloc_func)Z_NULL;
+            zstr.zfree = (free_func)Z_NULL;
+
+            zstr.opaque = (voidpf)NULL;
+
+            zstr.total_in = 0;
+            zstr.total_out = 0;
+
+            zstr.next_in = (Bytef *)buffer;
+            zstr.avail_in = *outputLen;
+
+            int64_t inflatedBufferLength = 16*1024; // TODO: should be 128KB ? (inflate seems to work fine in 16KB chunks)
+
+            //uint8_t* inflatedBuffer = new uint8_t[inflatedBufferLength];
+            uint8_t inflatedBuffer[inflatedBufferLength];
+
+            zstr.next_out = (Bytef *)&inflatedBuffer;
+            zstr.avail_out = inflatedBufferLength; //sizeof(inflatedBuffer)
+
+            ePub3::ByteBuffer byteBuffer;
+            //byteBuffer.EnsureCapacity(bytesToRead);
+
+            int rez = inflateInit2(&zstr, -MAX_WBITS); //(MAX_WBITS + 32)); //15 window bits, and the +32 tells zlib to to detect if using gzip or zlib
+            if (rez == Z_OK) {
+
+                while (true) {
+                    zstr.next_out = (Bytef *)&inflatedBuffer;
+                    zstr.avail_out = inflatedBufferLength; //sizeof(inflatedBuffer)
+
+                    int ress = inflate(&zstr, Z_FINISH);
+
+                    if (ress != Z_STREAM_END && ress != Z_OK && ress != Z_BUF_ERROR) {
+                        inflateEnd(&zstr);
+                        //delete[] inflatedBuffer;
+                        return nullptr;
+                    }
+
+                    int toAdd = inflatedBufferLength - zstr.avail_out;
+                    if (toAdd > 0) {
+                        byteBuffer.AddBytes(inflatedBuffer, toAdd);
+                    }
+
+                    if (ress == Z_STREAM_END) {
+                        break;
+                    }
+                }
+            }
+            else {
+                inflateEnd(&zstr);
+                //delete[] inflatedBuffer;
+                return nullptr;
+            }
+
+            inflateEnd(&zstr);
+            //delete[] inflatedBuffer;
+
+            *outputLen = byteBuffer.GetBufferSize();
+
+            const ePub3::string sizeStr = context->OriginalLength();
+            uint32_t sizeDeclared = (uint32_t) floor(SmilClockValuesParser::ToSeconds(sizeStr));
+            size_t sizeActual = *outputLen;
+            if (sizeDeclared != sizeActual) {
+                std::cout << "LCP compress-before-encrypt wrong length: " << sizeStr << " => " << sizeDeclared << " vs. " << sizeActual << std::endl;
+            }
+
+            //not good, as the returned buffer pointer will be freed when byteBuffer is destroyed (stack memory)
+            //buffer = byteBuffer.GetBytes();
+
+            // note that when existing temp buffer (size == bytesToRead) is too small, new one is allocated.
+            buffer = context->GetAllocateTemporaryByteBuffer(*outputLen);
+            std::memcpy(buffer, byteBuffer.GetBytes(), *outputLen);
+        }
+
+        return buffer;
+    }
+
     void *LcpContentFilter::FilterData(FilterContext *filterContext, void *data, size_t len, size_t *outputLen)
     {
         *outputLen = 0;
@@ -59,13 +166,17 @@ namespace lcp {
             // filter in a chain of filters.
             size_t bufferLen = len;
             uint8_t *buffer = new unsigned char[bufferLen];
-            Status res = lcpService->DecryptData(m_license, (const unsigned char *)data, len, buffer, &bufferLen, context->Algorithm());
+
+            Status res = LcpContentFilter::lcpService->DecryptData(m_license, (const unsigned char *)data, len, buffer, &bufferLen, context->Algorithm());
             if (!Status::IsSuccess(res)) {
                 delete [] buffer;
                 return nullptr;
             }
             
             *outputLen = bufferLen;
+
+            buffer = checkAndProcessDeflateBuffer(buffer, outputLen, context);
+
             return buffer;
             
         } else {
@@ -78,13 +189,14 @@ namespace lcp {
             if (!byteStream->IsOpen()) {
                 return nullptr;
             }
-            
-            SeekableByteStreamAdapter *readableStream = new SeekableByteStreamAdapter(byteStream);
-            
+
+            IReadableStream *readableStream = new SeekableByteStreamAdapter(byteStream);
+
             IEncryptedStream *encryptedStream;
-            Status status = lcpService->CreateEncryptedDataStream(m_license, readableStream, context->Algorithm(), &encryptedStream);
+            Status status = LcpContentFilter::lcpService->CreateEncryptedDataStream(m_license, readableStream, context->Algorithm(), &encryptedStream);
             if (!Status::IsSuccess(status)) {
                 LOG("Failed to create readable stream");
+
                 return nullptr;
             }
             
@@ -99,13 +211,16 @@ namespace lcp {
             }
             
             if (bytesToRead == 0) {
+
                 return nullptr;
             }
             
             uint8_t *buffer = context->GetAllocateTemporaryByteBuffer(bytesToRead);
             encryptedStream->Read(buffer, bytesToRead);
             *outputLen = bytesToRead;
-            
+
+            buffer = checkAndProcessDeflateBuffer(buffer, outputLen, context);
+
             return buffer;
         }
     }
@@ -116,10 +231,23 @@ namespace lcp {
         if (context != nullptr) {
             SeekableByteStreamAdapter *readableStream = new SeekableByteStreamAdapter(byteStream);
             IEncryptedStream *encryptedStream;
-            Status status = lcpService->CreateEncryptedDataStream(m_license, readableStream, context->Algorithm(), &encryptedStream);
+            Status status = LcpContentFilter::lcpService->CreateEncryptedDataStream(m_license, readableStream, context->Algorithm(), &encryptedStream);
             
             if (Status::IsSuccess(status)) {
-                return encryptedStream->DecryptedSize();
+
+                if (context->CompressionMethod() == "8") {
+
+                    const ePub3::string sizeStr = context->OriginalLength();
+                    uint32_t sizeOriginal = (uint32_t) floor(SmilClockValuesParser::ToSeconds(sizeStr));
+                    size_t sizeBeforeDecompressInflate = encryptedStream->DecryptedSize(); //  should be smaller than sizeDeclared
+                    if (sizeBeforeDecompressInflate >= sizeOriginal) {
+                        std::cout << "LCP compress-before-encrypt incorrect length? " << sizeStr << " => " << sizeOriginal << " <= " << sizeBeforeDecompressInflate << std::endl;
+                    }
+                    return sizeOriginal;
+
+                } else {
+                    return encryptedStream->DecryptedSize();
+                }
             } else {
                 LOG("Failed to create readable stream");
             }
@@ -135,6 +263,7 @@ namespace lcp {
         EncryptionInfoPtr encryptionInfo = item->GetEncryptionInfo();
         if (encryptionInfo != nullptr) {
             filterContext->SetAlgorithm(std::string(encryptionInfo->Algorithm().data()));
+            filterContext->SetCompressionInfo(encryptionInfo->CompressionMethod(), encryptionInfo->UnCompressedSize()); //OriginalLength
         }
         
         return filterContext;
@@ -142,36 +271,22 @@ namespace lcp {
     
     ContentFilterPtr LcpContentFilter::Factory(ConstPackagePtr package)
     {
-        ContainerPtr container = package->GetContainer();
-        if (!container->FileExistsAtPath(LcpLicensePath)) {
-            return nullptr;
+        if (LcpContentFilter::lcpLicense != NULL) {
+            return std::make_shared<LcpContentFilter>(LcpContentFilter::lcpLicense); //New(LcpContentFilter::lcpLicense);
         }
-        
-        // read license.lcpl
-        std::unique_ptr<ePub3::ByteStream> stream = container->ReadStreamAtPath(LcpLicensePath);
-        void *buffer = nullptr;
-        size_t length = stream->ReadAllBytes(&buffer);
-        std::string licenseJSON((char *)buffer, length);
-        free (buffer);
-        
-        // create content filter
-        shared_ptr<LcpContentFilter> contentFilter = nullptr;
-        ILicense *license;
-        Status res = lcpService->OpenLicense(licenseJSON, &license);
-        if (Status::IsSuccess(res)) {
-            return New(license);
-        } else {
-            LOG("Failed to parse license <" << res.Code << ": " << res.Extension << ">");
-        }
-        
         return nullptr;
     }
-    
+
+    // static
+    ILicense *LcpContentFilter::lcpLicense = NULL;
+
+    // static
     ILcpService *LcpContentFilter::lcpService = NULL;
     
-    void LcpContentFilter::Register(ILcpService *const lcpService)
+    void LcpContentFilter::Register(ILcpService *const service, ILicense *const license)
     {
-        LcpContentFilter::lcpService = lcpService;
+        LcpContentFilter::lcpService = service;
+        LcpContentFilter::lcpLicense = license;
         FilterManager::Instance()->RegisterFilter("LcpFilter", MustAccessRawBytes, LcpContentFilter::Factory);
     }
 }
