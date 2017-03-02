@@ -30,4 +30,5 @@
 namespace lcp
 {
     /*static*/ std::string EncryptionProfileNames::Lcp1dot0ProfileId = "http://readium.org/lcp/profile-1.0";
+    /*static*/ std::string EncryptionProfileNames::LcpBasicProfileId = "http://readium.org/lcp/basic-profile";
 }

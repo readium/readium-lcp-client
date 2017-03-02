@@ -36,6 +36,7 @@ namespace lcp
     {
     public:
         static std::string Lcp1dot0ProfileId;
+        static std::string LcpBasicProfileId;
     };
 }
 

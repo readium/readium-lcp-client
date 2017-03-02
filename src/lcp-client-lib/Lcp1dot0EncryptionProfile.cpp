@@ -96,11 +96,18 @@ namespace lcp
         throw StatusException(Status(StatusCode::ErrorCommonAlgorithmMismatch, "ErrorCommonAlgorithmMismatch"));
     }
 
+#if ENABLE_PROFILE_NAMES
     std::string Lcp1dot0EncryptionProfile::Name() const
     {
         //http://readium.org/lcp/profile-1.0
         return EncryptionProfileNames::Lcp1dot0ProfileId;
+
+        ...OR?
+
+        //http://readium.org/lcp/basic-profile
+        return EncryptionProfileNames::LcpBasicProfileId
     }
+#endif //ENABLE_PROFILE_NAMES
 
     std::string Lcp1dot0EncryptionProfile::UserKeyAlgorithm() const
     {

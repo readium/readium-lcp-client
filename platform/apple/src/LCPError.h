@@ -34,7 +34,9 @@ extern NSString *const LCPErrorExtensionKey;
 // @see LcpStatus.h for documentation
 extern NSInteger const LCPErrorCommonNoNetProvider;
 extern NSInteger const LCPErrorCommonNoStorageProvider;
+#if ENABLE_PROFILE_NAMES
 extern NSInteger const LCPErrorCommonEncryptionProfileNotFound;
+#endif //ENABLE_PROFILE_NAMES
 extern NSInteger const LCPErrorCommonAlgorithmMismatch;
 extern NSInteger const LCPErrorOpeningLicenseNotValid;
 extern NSInteger const LCPErrorOpeningLicenseNotStarted;

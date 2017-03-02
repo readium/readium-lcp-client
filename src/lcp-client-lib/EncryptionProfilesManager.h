@@ -28,9 +28,12 @@
 #ifndef __ENCRYPTION_PROFILES_MANAGER_H__
 #define __ENCRYPTION_PROFILES_MANAGER_H__
 
+#if ENABLE_PROFILE_NAMES
 #include <map>
 #include <memory>
 #include <mutex>
+#endif //ENABLE_PROFILE_NAMES
+
 #include "IEncryptionProfile.h"
 #include "NonCopyable.h"
 
@@ -40,13 +43,21 @@ namespace lcp
     {
     public:
         EncryptionProfilesManager();
+#if ENABLE_PROFILE_NAMES
         bool RegisterProfile(std::unique_ptr<IEncryptionProfile> profile);
         IEncryptionProfile * GetProfile(const std::string & name) const;
+#else
+        IEncryptionProfile * GetProfile() const;
+#endif //ENABLE_PROFILE_NAMES
 
     private:
+#if ENABLE_PROFILE_NAMES
         typedef std::map<std::string, std::unique_ptr<IEncryptionProfile> > ProfilesMap;
         ProfilesMap m_profilesMap;
         mutable std::mutex m_profilesSync;
+#else
+        std::unique_ptr<IEncryptionProfile> m_profile;
+#endif //ENABLE_PROFILE_NAMES
     };
 }
 
