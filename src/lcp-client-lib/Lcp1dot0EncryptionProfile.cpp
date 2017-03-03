@@ -26,7 +26,11 @@
 
 
 #include "Lcp1dot0EncryptionProfile.h"
+
+#if ENABLE_PROFILE_NAMES
 #include "EncryptionProfileNames.h"
+#endif //ENABLE_PROFILE_NAMES
+
 #include "AlgorithmNames.h"
 
 #include "LcpUtils.h"
