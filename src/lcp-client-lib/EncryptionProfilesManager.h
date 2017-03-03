@@ -30,9 +30,10 @@
 
 #if ENABLE_PROFILE_NAMES
 #include <map>
-#include <memory>
 #include <mutex>
 #endif //ENABLE_PROFILE_NAMES
+
+#include <memory>
 
 #include "IEncryptionProfile.h"
 #include "NonCopyable.h"
