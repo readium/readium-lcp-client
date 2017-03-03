@@ -40,7 +40,12 @@ namespace lcptest
     TEST(CertificateTest, CertificateDistributionPoints)
     {
         lcp::EncryptionProfilesManager profilesManager;
+
+#if ENABLE_PROFILE_NAMES
         lcp::IEncryptionProfile * profile = profilesManager.GetProfile("http://readium.org/lcp/profile-1.0");
+#else
+        lcp::IEncryptionProfile * profile = profilesManager.GetProfile();
+#endif //ENABLE_PROFILE_NAMES
 
         ASSERT_NE(profile, nullptr);
 
@@ -55,7 +60,12 @@ namespace lcptest
     TEST(CertificateTest, CertificateRevocationList_)
     {
         lcp::EncryptionProfilesManager profilesManager;
+
+#if ENABLE_PROFILE_NAMES
         lcp::IEncryptionProfile * profile = profilesManager.GetProfile("http://readium.org/lcp/profile-1.0");
+#else
+        lcp::IEncryptionProfile * profile = profilesManager.GetProfile();
+#endif //ENABLE_PROFILE_NAMES
 
         ASSERT_NE(profile, nullptr);
 
@@ -84,7 +94,12 @@ namespace lcptest
     TEST(CertificateTest, CertificateParse)
     {
         lcp::EncryptionProfilesManager profilesManager;
+
+#if ENABLE_PROFILE_NAMES
         lcp::IEncryptionProfile * profile = profilesManager.GetProfile("http://readium.org/lcp/profile-1.0");
+#else
+        lcp::IEncryptionProfile * profile = profilesManager.GetProfile();
+#endif //ENABLE_PROFILE_NAMES
         
         ASSERT_NE(profile, nullptr);
 
@@ -98,7 +113,12 @@ namespace lcptest
     TEST(CertificateTest, CertificateVerifyByRoot)
     {
         lcp::EncryptionProfilesManager profilesManager;
+
+#if ENABLE_PROFILE_NAMES
         lcp::IEncryptionProfile * profile = profilesManager.GetProfile("http://readium.org/lcp/profile-1.0");
+#else
+        lcp::IEncryptionProfile * profile = profilesManager.GetProfile();
+#endif //ENABLE_PROFILE_NAMES
 
         ASSERT_NE(profile, nullptr);
 
@@ -111,7 +131,12 @@ namespace lcptest
     TEST(CertificateTest, CertificateVerifySignature)
     {
         lcp::EncryptionProfilesManager profilesManager;
+
+#if ENABLE_PROFILE_NAMES
         lcp::IEncryptionProfile * profile = profilesManager.GetProfile("http://readium.org/lcp/profile-1.0");
+#else
+        lcp::IEncryptionProfile * profile = profilesManager.GetProfile();
+#endif //ENABLE_PROFILE_NAMES
 
         ASSERT_NE(profile, nullptr);
 

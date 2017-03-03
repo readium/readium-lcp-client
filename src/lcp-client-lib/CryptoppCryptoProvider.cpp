@@ -104,11 +104,15 @@ namespace lcp
     {
         try
         {
+#if ENABLE_PROFILE_NAMES
             IEncryptionProfile * profile = m_encryptionProfilesManager->GetProfile(license->Crypto()->EncryptionProfile());
             if (profile == nullptr)
             {
                 return Status(StatusCode::ErrorCommonEncryptionProfileNotFound, "ErrorCommonEncryptionProfileNotFound");
             }
+#else
+            IEncryptionProfile * profile = m_encryptionProfilesManager->GetProfile();
+#endif //ENABLE_PROFILE_NAMES
 
             if (rootCertificateBase64.empty())
             {
@@ -190,11 +194,15 @@ namespace lcp
     {
         try
         {
+#if ENABLE_PROFILE_NAMES
             IEncryptionProfile * profile = m_encryptionProfilesManager->GetProfile(license->Crypto()->EncryptionProfile());
             if (profile == nullptr)
             {
                 return Status(StatusCode::ErrorCommonEncryptionProfileNotFound, "ErrorCommonEncryptionProfileNotFound");
             }
+#else
+            IEncryptionProfile * profile = m_encryptionProfilesManager->GetProfile();
+#endif //ENABLE_PROFILE_NAMES
 
             std::unique_ptr<IHashAlgorithm> hashAlgorithm(profile->CreateUserKeyAlgorithm());
             hashAlgorithm->UpdateHash(userPassphrase);
@@ -226,11 +234,15 @@ namespace lcp
     {
         try
         {
+#if ENABLE_PROFILE_NAMES
             IEncryptionProfile * profile = m_encryptionProfilesManager->GetProfile(license->Crypto()->EncryptionProfile());
             if (profile == nullptr)
             {
                 return Status(StatusCode::ErrorCommonEncryptionProfileNotFound, "ErrorCommonEncryptionProfileNotFound");
             }
+#else
+            IEncryptionProfile * profile = m_encryptionProfilesManager->GetProfile();
+#endif //ENABLE_PROFILE_NAMES
 
             //http://www.w3.org/2009/xmlenc11#aes256-gcm
             //http://www.w3.org/2001/04/xmlenc#aes256-cbc
@@ -333,11 +345,15 @@ namespace lcp
     {
         try
         {
+#if ENABLE_PROFILE_NAMES
             IEncryptionProfile * profile = m_encryptionProfilesManager->GetProfile(license->Crypto()->EncryptionProfile());
             if (profile == nullptr)
             {
                 return Status(StatusCode::ErrorCommonEncryptionProfileNotFound, "ErrorCommonEncryptionProfileNotFound");
             }
+#else
+            IEncryptionProfile * profile = m_encryptionProfilesManager->GetProfile();
+#endif //ENABLE_PROFILE_NAMES
 
             //http://www.w3.org/2009/xmlenc11#aes256-gcm
             //http://www.w3.org/2001/04/xmlenc#aes256-cbc
@@ -365,11 +381,15 @@ namespace lcp
     {
         try
         {
+#if ENABLE_PROFILE_NAMES
             IEncryptionProfile * profile = m_encryptionProfilesManager->GetProfile(license->Crypto()->EncryptionProfile());
             if (profile == nullptr)
             {
                 return Status(StatusCode::ErrorCommonEncryptionProfileNotFound, "ErrorCommonEncryptionProfileNotFound");
             }
+#else
+            IEncryptionProfile * profile = m_encryptionProfilesManager->GetProfile();
+#endif //ENABLE_PROFILE_NAMES
 
             std::unique_ptr<ISymmetricAlgorithm> algo(profile->CreatePublicationAlgorithm(keyProvider->ContentKey(), algorithm));
             *decryptedDataLength = algo->Decrypt(
@@ -394,11 +414,15 @@ namespace lcp
     {
         try
         {
+#if ENABLE_PROFILE_NAMES
             IEncryptionProfile * profile = m_encryptionProfilesManager->GetProfile(license->Crypto()->EncryptionProfile());
             if (profile == nullptr)
             {
                 return Status(StatusCode::ErrorCommonEncryptionProfileNotFound, "ErrorCommonEncryptionProfileNotFound");
             }
+#else
+            IEncryptionProfile * profile = m_encryptionProfilesManager->GetProfile();
+#endif //ENABLE_PROFILE_NAMES
 
             Status res(StatusCode::ErrorCommonSuccess);
             std::unique_ptr<ISymmetricAlgorithm> algo(profile->CreatePublicationAlgorithm(keyProvider->ContentKey(), algorithm));

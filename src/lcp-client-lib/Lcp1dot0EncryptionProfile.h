@@ -36,7 +36,9 @@ namespace lcp
     class Lcp1dot0EncryptionProfile : public IEncryptionProfile
     {
     public:
+#if ENABLE_PROFILE_NAMES
         virtual std::string Name() const;
+#endif //ENABLE_PROFILE_NAMES
         virtual std::string UserKeyAlgorithm() const;
         virtual std::string PublicationAlgorithmGCM() const;
         virtual std::string PublicationAlgorithmCBC() const;

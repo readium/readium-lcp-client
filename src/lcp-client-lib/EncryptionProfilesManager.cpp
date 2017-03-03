@@ -32,10 +32,15 @@ namespace lcp
 {
     EncryptionProfilesManager::EncryptionProfilesManager()
     {
+#if ENABLE_PROFILE_NAMES
         std::unique_ptr<IEncryptionProfile> lcp1dot0(new Lcp1dot0EncryptionProfile());
         m_profilesMap.insert(std::make_pair(lcp1dot0->Name(), std::move(lcp1dot0)));
+#else
+        m_profile.reset(new Lcp1dot0EncryptionProfile());
+#endif //ENABLE_PROFILE_NAMES
     }
 
+#if ENABLE_PROFILE_NAMES
     bool EncryptionProfilesManager::RegisterProfile(std::unique_ptr<IEncryptionProfile> profile)
     {
         std::unique_lock<std::mutex> locker(m_profilesSync);
@@ -53,4 +58,10 @@ namespace lcp
         }
         return nullptr;
     }
+#else
+    IEncryptionProfile * EncryptionProfilesManager::GetProfile() const
+    {
+        return m_profile.get();
+    }
+#endif //ENABLE_PROFILE_NAMES
 }

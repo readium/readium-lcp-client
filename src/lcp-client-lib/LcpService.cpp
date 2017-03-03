@@ -448,11 +448,16 @@ namespace lcp
                 return Status(StatusCode::ErrorDecryptionLicenseEncrypted, "ErrorDecryptionLicenseEncrypted");
             }
             
+#if ENABLE_PROFILE_NAMES
             IEncryptionProfile * profile = m_encryptionProfilesManager->GetProfile(license->Crypto()->EncryptionProfile());
             if (profile == nullptr)
             {
                 return Status(StatusCode::ErrorCommonEncryptionProfileNotFound, "ErrorCommonEncryptionProfileNotFound");
             }
+#else
+            IEncryptionProfile * profile = m_encryptionProfilesManager->GetProfile();
+#endif //ENABLE_PROFILE_NAMES
+
             if (algorithm != profile->PublicationAlgorithmGCM() && algorithm != profile->PublicationAlgorithmCBC())
             {
                 return Status(StatusCode::ErrorCommonAlgorithmMismatch, "ErrorCommonAlgorithmMismatch");
@@ -499,11 +504,15 @@ namespace lcp
                 return Status(StatusCode::ErrorDecryptionLicenseEncrypted, "ErrorDecryptionLicenseEncrypted");
             }
 
+#if ENABLE_PROFILE_NAMES
             IEncryptionProfile * profile = m_encryptionProfilesManager->GetProfile(license->Crypto()->EncryptionProfile());
             if (profile == nullptr)
             {
                 return Status(StatusCode::ErrorCommonEncryptionProfileNotFound, "ErrorCommonEncryptionProfileNotFound");
             }
+#else
+            IEncryptionProfile * profile = m_encryptionProfilesManager->GetProfile();
+#endif //ENABLE_PROFILE_NAMES
 
             if (algorithm != profile->PublicationAlgorithmGCM() && algorithm != profile->PublicationAlgorithmCBC())
             {
