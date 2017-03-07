@@ -79,18 +79,20 @@ namespace lcp
 
                 rapidjson::Type type = linksMember->value.GetType();
 
+                bool checkHref = name != Hint;
+
                 if (type == rapidjson::kObjectType)
                 {
                     const rapidjson::Value & linkObject = linksMember->value;
 
-                    Link link = this->ParseLinkValues(linkObject, reader);
+                    Link link = this->ParseLinkValues(linkObject, reader, checkHref);
                     m_linksMultiMap.insert(std::make_pair(name, link));
                 }
                 else if (type == rapidjson::kArrayType)
                 {
                     for (auto linkObject = linksMember->value.Begin(); linkObject != linksMember->value.End(); ++linkObject)
                     {
-                        Link link = this->ParseLinkValues(*linkObject, reader);
+                        Link link = this->ParseLinkValues(*linkObject, reader, checkHref);
                         m_linksMultiMap.insert(std::make_pair(name, link));
                     }
                 }
@@ -134,12 +136,14 @@ namespace lcp
                 {
                     throw StatusException(Status(StatusCode::ErrorOpeningLicenseNotValid, "ErrorOpeningLicenseNotValid: links object is not valid"));
                 }
+
+                bool checkHref = true;
                 if (name == Hint)
                 {
                     hintFound = true;
+                    checkHref = false;
                 }
-
-                Link link = this->ParseLinkValues(*linkObject, reader);
+                Link link = this->ParseLinkValues(*linkObject, reader, checkHref);
                 m_linksMultiMap.insert(std::make_pair(name, link));
             }
 
@@ -217,10 +221,14 @@ namespace lcp
         return new MultiMapIterator<Link>(m_linksMultiMap);
     }
 
-    Link LinksLcpNode::ParseLinkValues(const rapidjson::Value & linkObject, JsonValueReader * reader)
+    Link LinksLcpNode::ParseLinkValues(const rapidjson::Value & linkObject, JsonValueReader * reader, bool checkHref)
     {
         Link link;
-        link.href = reader->ReadStringCheck("href", linkObject);
+        if (checkHref) {
+            link.href = reader->ReadStringCheck("href", linkObject);
+        } else {
+            link.href = reader->ReadString("href", linkObject);
+        }
         link.title = reader->ReadString("title", linkObject);
         link.type = reader->ReadString("type", linkObject);
         link.templated = reader->ReadBoolean("templated", linkObject);
