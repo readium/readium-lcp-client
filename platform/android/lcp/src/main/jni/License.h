@@ -45,6 +45,9 @@ JNIEXPORT jboolean JNICALL Java_org_readium_sdk_lcp_License_nativeIsDecrypted(
 JNIEXPORT jstring JNICALL Java_org_readium_sdk_lcp_License_nativeGetOriginalContent(
         JNIEnv *env, jobject obj, jlong licensePtr);
 
+JNIEXPORT jstring JNICALL Java_org_readium_sdk_lcp_License_nativeGetPassphraseHint(
+        JNIEnv *env, jobject obj, jlong licensePtr);
+
 JNIEXPORT jstring JNICALL Java_org_readium_sdk_lcp_License_nativeGetLinkPublication(
         JNIEnv *env, jobject obj, jlong licensePtr);
 

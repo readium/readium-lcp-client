@@ -43,6 +43,10 @@ public class License {
         return this.nativeGetOriginalContent(this.nativePtr);
     }
 
+    public String getPassphraseHint() {
+        return this.nativeGetPassphraseHint(this.nativePtr);
+    }
+
     public void decrypt(String passphrase) {
         this.nativeDecrypt(this.nativePtr, this.servicePtr, passphrase);
     }
@@ -85,6 +89,8 @@ public class License {
     private native boolean nativeIsDecrypted(long nativePtr);
 
     private native String nativeGetOriginalContent(long nativePtr);
+
+    private native String nativeGetPassphraseHint(long nativePtr);
 
     private native String nativeGetLinkPublication(long nativePtr);
     private native String nativeGetLinkStatus(long nativePtr);
