@@ -1,9 +1,10 @@
 readium-lcp-client
 ==================
 
-This repository is for the Readium Lightweight Content Protection (LCP) client side implementation work.
+This repository is for the Readium Licensed Content Protection (LCP) client side implementation work.
 
 Created by Artem Brazhnikov, Mickaël Menu.
+Maintained by Cyrille Lebeaupin, Daniel Weck.
 
 
 ## Overview
