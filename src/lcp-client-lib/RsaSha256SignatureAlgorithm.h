@@ -59,7 +59,10 @@ namespace lcp
 
     private:
         typedef CryptoPP::RSASS<CryptoPP::PKCS1v15, CryptoPP::SHA256>::Verifier ThisVerifier;
-        CryptoPP::RSA::PublicKey m_publicKey;
+
+//        CryptoPP::RSA::PublicKey m_publicKey;
+//        CryptoPP::ByteQueue m_publicKeyQueue;
+        KeyType m_publicKeyType;
     };
 }
 

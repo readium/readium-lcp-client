@@ -152,7 +152,9 @@ namespace lcp
             }
 #endif //!DISABLE_CRL
 
-            if (!providerCertificate->VerifyMessage(license->CanonicalContent(), license->Crypto()->Signature()))
+            //providerCertificate->VerifyMessage
+            lcp::ISignatureAlgorithm* signatureAlgorithm = profile->CreateSignatureAlgorithm(providerCertificate->PublicKey(), license->Crypto()->SignatureAlgorithm());
+            if (!signatureAlgorithm->VerifySignature(license->CanonicalContent(), license->Crypto()->Signature()))
             {
                 return Status(StatusCode::ErrorOpeningLicenseSignatureNotValid, "ErrorOpeningLicenseSignatureNotValid");
             }

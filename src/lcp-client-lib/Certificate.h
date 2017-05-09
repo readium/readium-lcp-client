@@ -78,8 +78,11 @@ namespace lcp
         std::string m_notBeforeDate;
         std::string m_notAfterDate;
 
-        CryptoPP::ECDSA<CryptoPP::ECP, CryptoPP::SHA256>::PublicKey m_publicKeyECDSA;
-        CryptoPP::RSA::PublicKey m_publicKeyRSA;
+//        CryptoPP::ECDSA<CryptoPP::ECP, CryptoPP::SHA256>::PublicKey m_publicKeyECDSA;
+////        CryptoPP::DL_PublicKey_EC<CryptoPP::ECP> m_publicKeyECDSA;
+//        CryptoPP::RSA::PublicKey m_publicKeyRSA;
+//        ByteQueue m_publicKeyQueue;
+        KeyType m_publicKeyType;
 
         SecByteBlock m_toBeSignedData;
         SecByteBlock m_rootSignature;
