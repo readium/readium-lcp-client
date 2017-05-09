@@ -48,7 +48,7 @@ namespace lcp
         virtual std::string NotAfterDate() const = 0;
         virtual KeyType PublicKey() const = 0;
         virtual bool VerifyCertificate(ICertificate * rootCertificate) = 0;
-        virtual bool VerifyMessage(const std::string & message, const std::string & hashBase64) = 0;
+//        virtual bool VerifyMessage(const std::string & message, const std::string & hashBase64) = 0;
         virtual ICrlDistributionPoints * DistributionPoints() const = 0;
         virtual ~ICertificate() {}
     };

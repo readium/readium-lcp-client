@@ -63,13 +63,13 @@ namespace lcp
         KeyType PublicKey() const;
 
         bool VerifyCertificate(ICertificate * rootCertificate);
-        bool VerifyMessage(const std::string & message, const std::string & hashBase64);
-        bool VerifyMessage(
-            const unsigned char * message,
-            size_t messageLength,
-            const unsigned char * signature,
-            size_t signatureLength
-            );
+//        bool VerifyMessage(const std::string & message, const std::string & hashBase64);
+//        bool VerifyMessage(
+//            const unsigned char * message,
+//            size_t messageLength,
+//            const unsigned char * signature,
+//            size_t signatureLength
+//            );
 
         ICrlDistributionPoints * DistributionPoints() const;
 

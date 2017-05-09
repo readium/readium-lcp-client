@@ -206,25 +206,25 @@ namespace lcp
 //        return outKey;
     }
 
-    bool Certificate::VerifyMessage(const std::string & message, const std::string & hashBase64)
-    {
-        return m_signatureAlgorithm->VerifySignature(message, hashBase64);
-    }
-
-    bool Certificate::VerifyMessage(
-        const unsigned char * message,
-        size_t messageLength,
-        const unsigned char * signature,
-        size_t signatureLength
-        )
-    {
-        return m_signatureAlgorithm->VerifySignature(
-            message,
-            messageLength,
-            signature,
-            signatureLength
-            );
-    }
+//    bool Certificate::VerifyMessage(const std::string & message, const std::string & hashBase64)
+//    {
+//        return m_signatureAlgorithm->VerifySignature(message, hashBase64);
+//    }
+//
+//    bool Certificate::VerifyMessage(
+//        const unsigned char * message,
+//        size_t messageLength,
+//        const unsigned char * signature,
+//        size_t signatureLength
+//        )
+//    {
+//        return m_signatureAlgorithm->VerifySignature(
+//            message,
+//            messageLength,
+//            signature,
+//            signatureLength
+//            );
+//    }
 
     bool Certificate::VerifyCertificate(ICertificate * rootCertificate)
     {
