@@ -33,8 +33,13 @@
 #include "CrlUpdater.h"
 
 #if !DISABLE_NET_PROVIDER
+#if !DISABLE_CRL_DOWNLOAD_IN_MEMORY
 #include "SimpleMemoryWritableStream.h"
 #include "DownloadInMemoryRequest.h"
+#else // !DISABLE_CRL_DOWNLOAD_IN_MEMORY
+#include "DownloadInFileRequest.h"
+#endif // !DISABLE_CRL_DOWNLOAD_IN_MEMORY
+
 #endif //!DISABLE_NET_PROVIDER
 
 #include "DateTime.h"
@@ -48,16 +53,26 @@ namespace lcp
 #if !DISABLE_NET_PROVIDER
         INetProvider * netProvider,
 #endif //!DISABLE_NET_PROVIDER
+
+            IFileSystemProvider * fileSystemProvider,
+
         ICertificateRevocationList * revocationList,
+#if !DISABLE_CRL_BACKGROUND_POLL
         ThreadTimer * threadTimer,
+#endif //!DISABLE_CRL_BACKGROUND_POLL
         const std::string & defaultCrlUrl
         )
         : m_requestRunning(false)
 #if !DISABLE_NET_PROVIDER
         , m_netProvider(netProvider)
 #endif //!DISABLE_NET_PROVIDER
+
+            , m_fileSystemProvider(fileSystemProvider)
+
         , m_revocationList(revocationList)
-        , m_threadTimer(threadTimer)
+#if !DISABLE_CRL_BACKGROUND_POLL
+          , m_threadTimer(threadTimer)
+#endif //!DISABLE_CRL_BACKGROUND_POLL
         , m_currentRequestStatus(Status(StatusCode::ErrorCommonSuccess))
     {
         if (!defaultCrlUrl.empty())
@@ -136,10 +151,17 @@ namespace lcp
     void CrlUpdater::Download(const std::string & url)
     {
 #if !DISABLE_NET_PROVIDER
-        m_crlStream.reset(new SimpleMemoryWritableStream());
-        m_downloadRequest.reset(new DownloadInMemoryRequest(url, m_crlStream.get()));
-        m_netProvider->StartDownloadRequest(m_downloadRequest.get(), this);
         m_requestRunning = true;
+
+#if !DISABLE_CRL_DOWNLOAD_IN_MEMORY
+        m_crlStream.reset(new SimpleMemoryWritableStream()); // not actually used! (NetProvider Java operates on File)
+        m_downloadRequest.reset(new DownloadInMemoryRequest(url, m_crlStream.get()));
+#else // !DISABLE_CRL_DOWNLOAD_IN_MEMORY
+        m_crlFile.reset(m_fileSystemProvider->GetFile(PATH_TO_DOWNLOAD));
+        m_downloadRequest.reset(new DownloadInFileRequest(url, m_crlFile.get()));
+#endif // !DISABLE_CRL_DOWNLOAD_IN_MEMORY
+
+        m_netProvider->StartDownloadRequest(m_downloadRequest.get(), this);
 #else
         m_currentRequestStatus = Status(StatusCode::ErrorCommonSuccess);
         m_requestRunning = false;
@@ -150,10 +172,12 @@ namespace lcp
 #if !DISABLE_NET_PROVIDER
     void CrlUpdater::OnRequestStarted(INetRequest * request)
     {
+        bool breakpoint = true;
     }
 
     void CrlUpdater::OnRequestProgressed(INetRequest * request, float progress)
     {
+        bool breakpoint = true;
     }
 
     void CrlUpdater::OnRequestCanceled(INetRequest * request)
@@ -170,7 +194,51 @@ namespace lcp
             std::unique_lock<std::mutex> locker(m_downloadSync);
             if (Status::IsSuccess(result))
             {
-                m_revocationList->UpdateRevocationList(m_crlStream->Buffer());
+#if !DISABLE_CRL_DOWNLOAD_IN_MEMORY
+                lcp::BaseDownloadRequest* request_ = dynamic_cast<lcp::BaseDownloadRequest*>(request);
+                if (request_) {
+                    std::string path = request_->SuggestedFileName();
+                    if (path.length()) {
+                        IFile* file = m_fileSystemProvider->GetFile(path, IFileSystemProvider::ReadOnly);
+
+                        size_t bufferSize = 1024 * 1024;
+                        std::vector<unsigned char> buffer(bufferSize);
+
+                        size_t read = 0;
+                        size_t sizeToRead = bufferSize;
+                        size_t fileSize = static_cast<size_t>(file->Size());
+                        while (read != fileSize)
+                        {
+                            sizeToRead = (fileSize - read > bufferSize) ? bufferSize : fileSize - read;
+                            file->Read(buffer.data(), sizeToRead);
+                            read += sizeToRead;
+                        }
+
+                        delete file;
+
+                        m_revocationList->UpdateRevocationList(buffer); //std::vector<unsigned char>
+                    }
+                }
+                // m_revocationList->UpdateRevocationList(m_crlStream->Buffer()); //std::vector<unsigned char>
+
+#else // !DISABLE_CRL_DOWNLOAD_IN_MEMORY
+                // IFile == IReadableStream
+                size_t bufferSize = 1024 * 1024;
+                std::vector<unsigned char> buffer(bufferSize);
+
+                size_t read = 0;
+                size_t sizeToRead = bufferSize;
+                size_t fileSize = static_cast<size_t>(m_crlFile->Size());
+                while (read != fileSize)
+                {
+                    sizeToRead = (fileSize - read > bufferSize) ? bufferSize : fileSize - read;
+                    m_crlFile->Read(buffer.data(), sizeToRead);
+                    read += sizeToRead;
+                }
+
+                m_revocationList->UpdateRevocationList(buffer); //std::vector<unsigned char>
+#endif // !DISABLE_CRL_DOWNLOAD_IN_MEMORY
+
                 this->ResetNextUpdate();
             }
             m_currentRequestStatus = result;
@@ -180,12 +248,15 @@ namespace lcp
         catch (const std::exception & ex)
         {
             m_currentRequestStatus = Status(StatusCode::ErrorNetworkingRequestFailed, "ErrorNetworkingRequestFailed: " + std::string(ex.what()));
+            m_requestRunning = false;
+            m_conditionDownload.notify_one();
         }
     }
 #endif //!DISABLE_NET_PROVIDER
 
     void CrlUpdater::ResetNextUpdate()
     {
+#if !DISABLE_CRL_BACKGROUND_POLL
         if (m_revocationList->HasNextUpdateDate())
         {
             DateTime nextUpdate(m_revocationList->NextUpdateDate());
@@ -205,7 +276,13 @@ namespace lcp
             m_threadTimer->SetUsage(ThreadTimer::DurationUsage);
             m_threadTimer->SetDuration(ThreadTimer::DurationType(TenMinutesPeriod));
         }
+//
+//// TODO: remove this, for testing async update only!
+//        m_threadTimer->SetUsage(ThreadTimer::DurationUsage);
+//        m_threadTimer->SetDuration(ThreadTimer::DurationType(2000)); //TenMinutesPeriod == 1000 * 60 * 10
+
         m_threadTimer->SetAutoReset(true);
+#endif //!DISABLE_CRL_BACKGROUND_POLL
     }
 }
 

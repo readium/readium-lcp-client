@@ -46,6 +46,8 @@ namespace lcp
             ILicense * license
             ) = 0;
 
+        virtual Status CheckRevokation(ILicense* license) = 0;
+
         virtual Status DecryptUserKey(
             const std::string & userPassphrase,
             ILicense * license,

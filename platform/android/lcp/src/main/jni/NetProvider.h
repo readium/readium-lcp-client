@@ -61,7 +61,7 @@ namespace lcp {
 JNIEXPORT void JNICALL Java_org_readium_sdk_lcp_NetProviderCallback_nativeOnRequestStarted(
         JNIEnv *env, jobject obj, jlong callbackPtr, jlong requestPtr);
 JNIEXPORT void JNICALL Java_org_readium_sdk_lcp_NetProviderCallback_nativeOnRequestEnded(
-        JNIEnv *env, jobject obj, jlong callbackPtr, jlong requestPtr);
+        JNIEnv *env, jobject obj, jlong callbackPtr, jlong requestPtr, jstring path);
 JNIEXPORT void JNICALL Java_org_readium_sdk_lcp_NetProviderCallback_nativeOnRequestCanceled(
         JNIEnv *env, jobject obj, jlong callbackPtr, jlong requestPtr);
 JNIEXPORT void JNICALL Java_org_readium_sdk_lcp_NetProviderCallback_nativeOnRequestProgressed(

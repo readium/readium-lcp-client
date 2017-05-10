@@ -40,7 +40,7 @@ namespace lcp
     {
     public:
         CertificateRevocationList() = default;
-        explicit CertificateRevocationList(const Buffer & crlRaw);
+//        explicit CertificateRevocationList(const Buffer & crlRaw);
         
         // ICertificateRevocationList
         virtual void UpdateRevocationList(const Buffer & crlRaw);
@@ -50,6 +50,8 @@ namespace lcp
         virtual std::string NextUpdateDate() const;
         virtual bool SerialNumberRevoked(const std::string & serialNumber) const;
         virtual const StringsSet & RevokedSerialNumbers() const;
+        virtual const void InsertRevokedSerialNumber(std::string serial);
+
 
     private:
         mutable std::mutex m_sync;
