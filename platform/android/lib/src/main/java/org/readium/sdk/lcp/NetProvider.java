@@ -26,6 +26,7 @@
 
 package org.readium.sdk.lcp;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -36,21 +37,28 @@ import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.async.http.AsyncHttpRequest;
 import com.koushikdutta.async.http.Headers;
 import com.koushikdutta.ion.Ion;
+import com.koushikdutta.ion.Response;
 import com.koushikdutta.ion.loader.AsyncHttpRequestFactory;
+
+import org.apache.commons.io.IOUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringWriter;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class NetProvider {
 //#if !DISABLE_NET_PROVIDER
 
     private Context context;
-    private Map<Long, Future<InputStream>> requests;
+    private Activity activity;
+    private Map<Long, Future<Response<InputStream>>> requests;
 
     /**
      * Cancel request asynchronously
@@ -59,7 +67,7 @@ public class NetProvider {
         @Override
         protected Void doInBackground(Long... requestPtrs) {
             for (Long requestPtr: requestPtrs) {
-                Future<InputStream> request = NetProvider.this.requests.get(requestPtr);
+                Future<Response<InputStream>> request = NetProvider.this.requests.get(requestPtr);
                 request.cancel();
             }
 
@@ -67,26 +75,45 @@ public class NetProvider {
         }
     }
 
-    public NetProvider(Context context) {
+    public NetProvider(Context context, Activity activity) {
         this.context = context;
+        this.activity = activity;
+
         this.requests = new HashMap<>();
     }
 
-    public void download(String url, String dstPath, long requestPtr, long callbackPtr) {
+    public void download(final String url, String dstPath, final long requestPtr, long callbackPtr) {
 
         final NetProviderCallback callback = new NetProviderCallback(callbackPtr, requestPtr);
-        final String destPath = dstPath;
 
         if (dstPath == null || dstPath.isEmpty()) {
             File outputDir = this.context.getCacheDir();
             File outputFile = null;
             try {
-                outputFile = File.createTempFile("readium_lcp_download", ".tmp", outputDir);
+                outputFile = File.createTempFile("readium_TEMP_download", ".tmp", outputDir);
                 dstPath = outputFile.getAbsolutePath();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+        final String destPath = dstPath;
+
+//        Timer timer = new Timer();
+//        timer.schedule(new TimerTask() {
+//            @Override
+//            public void run() {
+//
+//            }
+//        }, 500);
+
+//        runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//        new AsyncTask<Void, Void, Void>() {
+//            @Override
+//            protected Void doInBackground(Void... params) {
+
 //        final AsyncHttpRequestFactory current = Ion.getDefault(context).configure().getAsyncHttpRequestFactory();
 //        Ion.getDefault(context).configure().setAsyncHttpRequestFactory(new AsyncHttpRequestFactory() {
 //            @Override
@@ -97,54 +124,77 @@ public class NetProvider {
 //            }
 //        });
 
+//        this.activity.runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
 
-        Future<InputStream> request = Ion.with(this.context)
-                .load("GET", url)
-                .setLogging("Ion", Log.VERBOSE)
-                .progress(callback) // not UI thread
-                //.progressHandler(callback) // UI thread
-                //.setTimeout(AsyncHttpRequest.DEFAULT_TIMEOUT) //30000
-                .setTimeout(6000)
-                //.setHeader(name, value)
+                Future<Response<InputStream>> request = Ion.with(NetProvider.this.context)
+                        .load("GET", url)
+                        .setLogging("Readium Ion", Log.VERBOSE)
 
-                // UI thread
-                .asInputStream().setCallback(new FutureCallback<InputStream>() {
-                    @Override
-                    public void onCompleted(Exception e, InputStream inputStream) {
-                        if (e != null) {
-                            callback.onCompleted(e, null);
-                            return;
-                        }
-                        if (inputStream == null) {
-                            callback.onCompleted(null, null);
-                            return;
-                        }
-                        File destFile = new File(destPath);
-                        try {
-                            FileOutputStream outputStream = new FileOutputStream(destFile);
-                            //inputStream.transferTo(outputStream);
+                        //.setTimeout(AsyncHttpRequest.DEFAULT_TIMEOUT) //30000
+                        .setTimeout(6000)
 
-                            byte[] buf = new byte[4096];
-                            int n;
-                            int total = 0;
-                            while((n = inputStream.read(buf))>0){
-                                total += n;
-                                outputStream.write(buf, 0, n);
+                        // TODO: comment this in production! (this is only for testing a local HTTP server)
+                        //.setHeader("X-Add-Delay", "2s")
+
+                        .progress(callback) // not UI thread
+                        //.progressHandler(callback) // UI thread
+
+                        .asInputStream()
+                        .withResponse()
+
+                        // UI thread
+                        .setCallback(new FutureCallback<Response<InputStream>>() {
+                            @Override
+                            public void onCompleted(Exception e, Response<InputStream> response) {
+
+                                InputStream inputStream = response != null ? response.getResult() : null;
+                                int httpResponseCode = response != null ? response.getHeaders().code() : 0;
+                                if (e != null || inputStream == null
+                                        || httpResponseCode < 200 || httpResponseCode >= 300) {
+
+                                    callback.onCompleted(e, null);
+                                    return;
+                                }
+
+                                File destFile = new File(destPath);
+                                try {
+                                    FileOutputStream outputStream = new FileOutputStream(destFile);
+                                    //inputStream.transferTo(outputStream);
+
+                                    byte[] buf = new byte[4096];
+                                    int n;
+                                    int total = 0;
+                                    while ((n = inputStream.read(buf)) > 0) {
+                                        total += n;
+                                        outputStream.write(buf, 0, n);
+                                    }
+                                    outputStream.close();
+//                                    inputStream.close();
+                                    callback.onCompleted(null, destFile);
+
+                                } catch (Exception ex) {
+                                    ex.printStackTrace();
+                                    callback.onCompleted(ex, null);
+                                } finally {
+                                    try {
+                                        inputStream.close();
+                                    } catch (IOException ex) {
+                                        ex.printStackTrace();
+                                        // ignore
+                                    }
+                                }
                             }
-                            outputStream.close();
-                            inputStream.close();
-                            callback.onCompleted(null, destFile);
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                            callback.onCompleted(ex, null);
-                        }
-                    }
-                })
-//                .write(new File(dstPath))
-//                .setCallback(callback)
-                ;
+                        });
 
-        this.requests.put(requestPtr, request);
+                NetProvider.this.requests.put(requestPtr, request);
+
+//// ASYNC TASK
+//                return null;
+
+//            }
+//        });
     }
 
     public void cancel(long requestPtr) {

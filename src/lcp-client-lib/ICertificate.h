@@ -74,6 +74,7 @@ namespace lcp
         virtual std::string NextUpdateDate() const = 0;
         virtual bool SerialNumberRevoked(const std::string & serialNumber) const = 0;
         virtual const StringsSet & RevokedSerialNumbers() const = 0;
+        virtual const void InsertRevokedSerialNumber(std::string serial) = 0;
         virtual ~ICertificateRevocationList() {}
     };
 

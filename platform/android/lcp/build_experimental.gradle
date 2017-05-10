@@ -63,7 +63,7 @@ model {
                     "-fexceptions",
                     "-fpic",
                     "-DFEATURES_READIUM",
-                    "-DDISABLE_CRL",
+                    "-D__DISABLE_CRL__",
                     "-DZLIB_ONLY",
                     ndk_clang ? "-D_LIBCPP_INLINE_VISIBILITY_EXCEPT_GCC49=_LIBCPP_INLINE_VISIBILITY" : "-DREADIUM_GCC",
                     "-I" + project(':epub3').projectDir +  "/include",

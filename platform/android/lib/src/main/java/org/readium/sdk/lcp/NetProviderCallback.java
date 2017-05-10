@@ -77,7 +77,7 @@ public class NetProviderCallback
             // Request timeout
             this.nativeOnRequestCanceled(this.nativePtr, this.requestPtr);
         } else if (e == null && result != null) {
-            this.nativeOnRequestEnded(this.nativePtr, this.requestPtr);
+            this.nativeOnRequestEnded(this.nativePtr, this.requestPtr, result.getAbsolutePath());
         } else {
             // Other errors
             this.nativeOnRequestCanceled(this.nativePtr, this.requestPtr);
@@ -104,6 +104,6 @@ public class NetProviderCallback
     private native void nativeOnRequestStarted(long nativePtr, long requestPtr);
     private native void nativeOnRequestProgressed(long nativePtr, long requestPtr,
                                                   float progress);
-    private native void nativeOnRequestEnded(long nativePtr, long requestPtr);
+    private native void nativeOnRequestEnded(long nativePtr, long requestPtr, String path);
     private native void nativeOnRequestCanceled(long nativePtr, long requestPtr);
 }
