@@ -42,7 +42,10 @@ bld/
 [Oo]bj/
 ipch/
 .vs/
-
+dist/
+.externalNativeBuild/
+.gradle/
+.classpath
 
 # Windows
 Thumbs.db
@@ -68,5 +71,7 @@ storage.json
 result.epub
 
 *.iml
-
+.settings/
+.project
+local.properties
 platform/android/lcp/libs/
