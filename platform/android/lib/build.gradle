@@ -16,7 +16,12 @@ def ndk_skipARM = (rootProject.hasProperty("readium_ndk_skipARM") && rootProject
 def ndk_clang = (rootProject.hasProperty("readium_ndk_clang") && rootProject.readium_ndk_clang)
 def readiumSdkLibDir = null
 def readiumSdkIncludeDir = null
-def readiumLcpBuildContentFilter = false
+def lcpBuildContentFilter = false
+def extraCmake = null
+
+if (rootProject.hasProperty("readium_extra_cmake")) {
+    extraCmake = rootProject.readium_extra_cmake
+}
 
 if (rootProject.hasProperty("readium_sdk_lib_dir")) {
     readiumSdkLibDir = rootProject.readium_sdk_lib_dir
@@ -27,18 +32,18 @@ if (rootProject.hasProperty("readium_sdk_include_dir")) {
 }
 
 if (rootProject.hasProperty("readium_lcp_build_content_filter")) {
-    readiumLcpBuildContentFilter = rootProject.readium_lcp_build_content_filter
+    lcpBuildContentFilter = rootProject.readium_lcp_build_content_filter
 }
-
+println("Test ${extraCmake}")
 def toolchain = ndk_clang ? "clang" : "gcc"
 def stl = ndk_clang ? "c++_shared" : "gnustl_shared"
 
-if (!readiumLcpBuildContentFilter) {
+if (!lcpBuildContentFilter) {
     try {
         def epub3Dir = project(':epub3').projectDir
         readiumSdkLibDir = "${epub3Dir}/libs"
         readiumSdkIncludeDir = "${epub3Dir}/include"
-        readiumLcpBuildContentFilter = true
+        lcpBuildContentFilter = true
     } catch (UnknownProjectException e) {
         // No epub3 project is defined
         println("Build without rsdk")
@@ -59,7 +64,7 @@ android {
 
         externalNativeBuild {
             cmake {
-                if (readiumLcpBuildContentFilter) {
+                if (lcpBuildContentFilter) {
                     targets "clientlib", "contentfilter", "lcp"
                 } else {
                     targets "clientlib", "lcp-min"
@@ -69,13 +74,14 @@ android {
                     "-DANDROID_TOOLCHAIN=${toolchain}",
                     "-DANDROID_STL=${stl}",
                     "-DRSDK_INCLUDE_DIR=${readiumSdkIncludeDir}",
-                    "-DRSDK_LIB_DIR=${readiumSdkLibDir}"
+                    "-DRSDK_LIB_DIR=${readiumSdkLibDir}",
+                    "-DEXTRA_CMAKE=${extraCmake}"
             }
         }
     }
 
     sourceSets {
-        if (readiumLcpBuildContentFilter) {
+        if (lcpBuildContentFilter) {
             main {
                 java {
                     srcDirs = [

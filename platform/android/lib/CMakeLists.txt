@@ -27,14 +27,8 @@ include_directories(
     ${THIRDPARTY_DIR}
     ${MODULE_DIR}/src/clientlib/cpp/)
 
-# Build clientlib without JNI
-add_library("clientlib" STATIC ${CLIENTLIB_ALL_SOURCES})
-
-# Build shared library with JNI
+# Client lib JNI files
 file(GLOB CLIENTLIB_JNI_SOURCES ${MODULE_DIR}/src/clientlib/cpp/*.cpp)
-
-add_library("lcp-min" SHARED ${CLIENTLIB_JNI_SOURCES})
-target_link_libraries("lcp-min" "clientlib")
 
 # LCP with content filter
 add_definitions("-DFEATURES_READIUM -DREADIUM_GCC")
@@ -46,12 +40,27 @@ include_directories(
     ${RSDK_INCLUDE_DIR}
     ${MODULE_DIR}/src/contentfilter/cpp/)
 
-# Build contentfilter without JNI
-add_library("contentfilter" STATIC ${CONTENTFILTER_SOURCES})
+# Link libraries used by LCP shared library
+SET (
+    LCP_LINK_LIBRARIES
+    "clientlib"
+    "contentfilter"
+    "${RSDK_LIB_DIR}/${ANDROID_ABI}/libepub3.so"
+)
 
+# Extra cmake called before build
+if(EXISTS "${EXTRA_CMAKE}")
+    include(${EXTRA_CMAKE})
+endif()
+
+# Targets to build
+add_library("clientlib" STATIC ${CLIENTLIB_ALL_SOURCES})
+add_library("lcp-min" SHARED ${CLIENTLIB_JNI_SOURCES})
+add_library("contentfilter" STATIC ${CONTENTFILTER_SOURCES})
 add_library("lcp" SHARED
     ${CLIENTLIB_JNI_SOURCES}
     ${CONTENTFILTER_JNI_SOURCES})
 
-# Link to lcp-client-lib, lcp-content-filter and rsdk
-target_link_libraries("lcp" "clientlib" "contentfilter" ${RSDK_LIB_DIR}/${ANDROID_ABI}/libepub3.so)
+# Target links
+target_link_libraries("lcp" ${LCP_LINK_LIBRARIES})
+target_link_libraries("lcp-min" "clientlib")

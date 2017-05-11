@@ -19,6 +19,9 @@ buildscript {
         ndkSkipARM = (ndkSkipARM == "true") ? true : false;
         rootProject.ext.set('readium_ndk_skipARM', ndkSkipARM)
 
+        def extraCmake = properties.getProperty('readium.extra_cmake', null)
+        rootProject.ext.set('readium_extra_cmake', extraCmake)
+
         def readiumSdkLibDir = properties.getProperty('readium.sdk_lib_dir', null)
         rootProject.ext.set('readium_sdk_lib_dir', readiumSdkLibDir)
 
