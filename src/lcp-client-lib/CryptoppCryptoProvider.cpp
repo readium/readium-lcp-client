@@ -219,7 +219,8 @@ namespace lcp
     {
         try
         {
-            userKey2 = userKey1; // noop
+            userKey2.assign(userKey1.begin(), userKey1.end());
+
             return Status(StatusCode::ErrorCommonSuccess);
         }
         catch (const std::exception & ex)
