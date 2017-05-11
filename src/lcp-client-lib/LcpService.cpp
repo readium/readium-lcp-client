@@ -223,9 +223,7 @@ namespace lcp
 
         Status result = Status(StatusCode::ErrorCommonSuccess);
 
-        if (
-                false && // TODO comment this! => skips the decryption attempt (from stored passphrase) at first-time load, to test the user prompt
-                !license->Decrypted())
+        if (!license->Decrypted()) // false && // TODO comment this! => skips the decryption attempt (from stored passphrase) at first-time load, to test the user prompt
         {
             result = this->DecryptLicenseOnOpening(license);
             
@@ -338,16 +336,17 @@ namespace lcp
                 throw std::invalid_argument("license is nullptr");
             }
 
-            KeyType userKey;
-            Status res = m_cryptoProvider->DecryptUserKey(userPassphrase, license, userKey);
+            KeyType userKey1;
+            KeyType userKey2;
+            Status res = m_cryptoProvider->DecryptUserKey(userPassphrase, license, userKey1, userKey2);
             if (!Status::IsSuccess(res))
                 return res;
 
-            res = this->DecryptLicenseByUserKey(license, userKey);
+            res = this->DecryptLicenseByUserKey(license, userKey2);
             if (!Status::IsSuccess(res))
                 return res;
 
-            return this->AddDecryptedUserKey(license, userKey);
+            return this->AddDecryptedUserKey(license, userKey1);
         }
         catch (const StatusException & ex)
         {
@@ -371,15 +370,15 @@ namespace lcp
         rootNode->SetKeyProvider(std::unique_ptr<IKeyProvider>(new SimpleKeyProvider(userKey, contentKey)));
         return rootNode->DecryptNode(license, rootNode, m_cryptoProvider.get());
     }
-
-    Status LcpService::DecryptLicenseByHexUserKey(ILicense * license, const std::string & hexUserKey)
-    {
-        KeyType userKey;
-        Status res = m_cryptoProvider->ConvertHexToRaw(hexUserKey, userKey);
-        if (!Status::IsSuccess(res))
-            return res;
-        return this->DecryptLicenseByUserKey(license, userKey);
-    }
+//
+//    Status LcpService::DecryptLicenseByHexUserKey(ILicense * license, const std::string & hexUserKey)
+//    {
+//        KeyType userKey;
+//        Status res = m_cryptoProvider->ConvertHexToRaw(hexUserKey, userKey);
+//        if (!Status::IsSuccess(res))
+//            return res;
+//        return this->DecryptLicenseByUserKey(license, userKey);
+//    }
 
     Status LcpService::DecryptLicenseOnOpening(ILicense * license)
     {
@@ -421,7 +420,17 @@ namespace lcp
             );
         if (!userKeyHex.empty())
         {
-            Status res = this->DecryptLicenseByHexUserKey(license, userKeyHex);
+            KeyType userKey1;
+            Status res = m_cryptoProvider->ConvertHexToRaw(userKeyHex, userKey1);
+            if (!Status::IsSuccess(res))
+                return res;
+
+            KeyType userKey2;
+            res = m_cryptoProvider->LegacyPassphraseUserKey(userKey1, userKey2);
+            if (!Status::IsSuccess(res))
+                return res;
+
+            res = this->DecryptLicenseByUserKey(license, userKey2);
             if (Status::IsSuccess(res)) {
                 return res;
             }
@@ -430,7 +439,19 @@ namespace lcp
         std::unique_ptr<KvStringsIterator> it(m_storageProvider->EnumerateVault(UserKeysVaultId));
         for (it->First(); !it->IsDone(); it->Next())
         {
-            Status res = this->DecryptLicenseByHexUserKey(license, it->Current());
+            std::string userKeyHex = it->Current();
+
+            KeyType userKey1;
+            Status res = m_cryptoProvider->ConvertHexToRaw(userKeyHex, userKey1);
+            if (!Status::IsSuccess(res))
+                continue;
+
+            KeyType userKey2;
+            res = m_cryptoProvider->LegacyPassphraseUserKey(userKey1, userKey2);
+            if (!Status::IsSuccess(res))
+                continue;
+
+            res = this->DecryptLicenseByUserKey(license, userKey2);
             if (Status::IsSuccess(res))
                 return res;
         }

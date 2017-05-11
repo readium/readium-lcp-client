@@ -131,7 +131,7 @@ namespace lcp
         
         Status DecryptLicenseOnOpening(ILicense * license);
         Status DecryptLicenseByUserKey(ILicense * license, const KeyType & userKey);
-        Status DecryptLicenseByHexUserKey(ILicense * license, const std::string & hexUserKey);
+//        Status DecryptLicenseByHexUserKey(ILicense * license, const std::string & hexUserKey);
         Status DecryptLicenseByStorage(ILicense * license);
         Status AddDecryptedUserKey(ILicense * license, const KeyType & userKey);
 
