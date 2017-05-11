@@ -30,6 +30,7 @@
 
 #include <memory>
 #include <mutex>
+#include "public/IFileSystemProvider.h"
 #include "ICryptoProvider.h"
 #include "NonCopyable.h"
 
@@ -59,6 +60,9 @@ class ICertificateRevocationList;
 #if !DISABLE_NET_PROVIDER
         , INetProvider * netProvider
 #endif //!DISABLE_NET_PROVIDER
+
+                , IFileSystemProvider * fileSystemProvider
+
 
 #if !DISABLE_CRL
         , const std::string & defaultCrlUrl
@@ -125,16 +129,27 @@ class ICertificateRevocationList;
             const std::string & algorithm
             );
 
-    private:
-        Status ProcessRevokation(ICertificate * rootCertificate, ICertificate * providerCertificate);
+#if !DISABLE_CRL
+    public:
+        Status CheckRevokation(ILicense* license);
 
     private:
-#if !DISABLE_CRL
+        Status CheckRevokation(ICertificate * providerCertificate);
+        Status ProcessRevokation(ICertificate * rootCertificate, ICertificate * providerCertificate);
+
+
         std::unique_ptr<ICertificateRevocationList> m_revocationList;
+
+#if !DISABLE_CRL_BACKGROUND_POLL
         std::unique_ptr<ThreadTimer> m_threadTimer;
+#endif //!DISABLE_CRL_BACKGROUND_POLL
+
+        IFileSystemProvider * m_fileSystemProvider;
+
         std::unique_ptr<CrlUpdater> m_crlUpdater;
-#endif //!DISABLE_CRL
         std::mutex m_processRevocationSync;
+#endif //!DISABLE_CRL
+
         EncryptionProfilesManager * m_encryptionProfilesManager;
     };
 }

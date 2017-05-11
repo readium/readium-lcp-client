@@ -58,7 +58,6 @@ DEFINE_OID(ASN1::joint_iso_ccitt() + 5, joint_iso_ccitt_ds);
 DEFINE_OID(joint_iso_ccitt_ds() + 29, id_ce);
 DEFINE_OID(id_ce() + 31, id_ce_CRLDistributionPoints);
 
-
 namespace lcp
 {
     Certificate::Certificate(
@@ -74,7 +73,7 @@ namespace lcp
         certData.Put(rawDecodedCert.data(), rawDecodedCert.size());
         certData.MessageEnd();
 
-        ByteQueue subjectPublicKey;
+        ByteQueue subjectPublicKey; //CryptoPP::BufferedTransformation
 
         BERSequenceDecoder cert(certData);
         {
@@ -98,13 +97,21 @@ namespace lcp
                 // subject
                 CryptoppUtils::Cert::SkipNextSequence(toBeSignedCert);
 
+
                 //subjectPublicKey (RSA or ECDSA)
                 //CryptoppUtils::Cert::ReadSubjectPublicKey(toBeSignedCert, m_publicKeyRSA);
-                BERSequenceDecoder subjPublicInfoFrom(toBeSignedCert);
-                DERSequenceEncoder subjPublicInfoOut(subjectPublicKey);
-                subjPublicInfoFrom.TransferTo(subjPublicInfoOut, subjPublicInfoFrom.RemainingLength());
-                subjPublicInfoOut.MessageEnd();
-                subjPublicInfoFrom.MessageEnd();
+                // subjectPublicKeyInfo
+                BERSequenceDecoder spki(toBeSignedCert);
+                DERSequenceEncoder spkiEncoder(subjectPublicKey);
+                spki.CopyTo(spkiEncoder);
+                spkiEncoder.MessageEnd();
+                spki.SkipAll();
+                // ----- EQUIVALENT:
+//                BERSequenceDecoder subjPublicInfoFrom(toBeSignedCert);
+//                DERSequenceEncoder subjPublicInfoOut(subjectPublicKey);
+//                subjPublicInfoFrom.TransferTo(subjPublicInfoOut, subjPublicInfoFrom.RemainingLength());
+//                subjPublicInfoOut.MessageEnd();
+//                subjPublicInfoFrom.MessageEnd();
 
 
                 while (!toBeSignedCert.EndReached())
@@ -157,60 +164,67 @@ namespace lcp
             algo = AlgorithmNames::RsaMd5Id;
         }
 
-        if (algo == AlgorithmNames::EcdsaSha256Id) {
-            m_publicKeyECDSA.BERDecode(subjectPublicKey);
-        } else {
-            m_publicKeyRSA.BERDecode(subjectPublicKey);
-        }
+//        m_publicKeyQueue = subjectPublicKey;
 
-        //this->PublicKey()
-        ByteQueue publicKeyQueue;
-        if (algo == AlgorithmNames::EcdsaSha256Id) {
-            m_publicKeyECDSA.DEREncode(publicKeyQueue);
-        } else {
-            m_publicKeyRSA.DEREncode(publicKeyQueue);
-        }
-        size_t size = static_cast<size_t>(publicKeyQueue.MaxRetrievable());
+//        if (algo == AlgorithmNames::EcdsaSha256Id) {
+//            m_publicKeyECDSA.BERDecode(subjectPublicKey);
+//        } else {
+//            m_publicKeyRSA.BERDecode(subjectPublicKey);
+//        }
+//
+//        //this->PublicKey()
+//        ByteQueue publicKeyQueue;
+//        if (algo == AlgorithmNames::EcdsaSha256Id) {
+//            m_publicKeyECDSA.DEREncode(publicKeyQueue);
+//        } else {
+//            m_publicKeyRSA.DEREncode(publicKeyQueue);
+//        }
+
+        size_t size = static_cast<size_t>(subjectPublicKey.MaxRetrievable());
         KeyType outKey(size);
-        publicKeyQueue.Get(&outKey.at(0), outKey.size());
+        subjectPublicKey.Get(&outKey.at(0), outKey.size());
+        m_publicKeyType = outKey;
 
-        m_signatureAlgorithm.reset(m_encryptionProfile->CreateSignatureAlgorithm(outKey, algo));
+        m_signatureAlgorithm.reset(m_encryptionProfile->CreateSignatureAlgorithm(m_publicKeyType, algo));
     }
 
     KeyType Certificate::PublicKey() const
     {
-        ByteQueue publicKeyQueue;
-        if (m_signatureAlgorithm->Name() == AlgorithmNames::EcdsaSha256Id) {
-            m_publicKeyECDSA.DEREncode(publicKeyQueue);
-        } else {
-            m_publicKeyRSA.DEREncode(publicKeyQueue);
-        }
+        return m_publicKeyType;
 
-        size_t size = static_cast<size_t>(publicKeyQueue.MaxRetrievable());
-        KeyType outKey(size);
-        publicKeyQueue.Get(&outKey.at(0), outKey.size());
-        return outKey;
+//        ByteQueue publicKeyQueue;
+//        if (m_signatureAlgorithm->Name() == AlgorithmNames::EcdsaSha256Id) {
+//            m_publicKeyECDSA.DEREncode(publicKeyQueue);
+//        } else {
+//            m_publicKeyRSA.DEREncode(publicKeyQueue);
+//        }
+//
+//        ByteQueue publicKeyQueue = m_publicKeyQueue;
+//        size_t size = static_cast<size_t>(publicKeyQueue.MaxRetrievable());
+//        KeyType outKey(size);
+//        publicKeyQueue.Get(&outKey.at(0), outKey.size());
+//        return outKey;
     }
 
-    bool Certificate::VerifyMessage(const std::string & message, const std::string & hashBase64)
-    {
-        return m_signatureAlgorithm->VerifySignature(message, hashBase64);
-    }
-
-    bool Certificate::VerifyMessage(
-        const unsigned char * message,
-        size_t messageLength,
-        const unsigned char * signature,
-        size_t signatureLength
-        )
-    {
-        return m_signatureAlgorithm->VerifySignature(
-            message,
-            messageLength,
-            signature,
-            signatureLength
-            );
-    }
+//    bool Certificate::VerifyMessage(const std::string & message, const std::string & hashBase64)
+//    {
+//        return m_signatureAlgorithm->VerifySignature(message, hashBase64);
+//    }
+//
+//    bool Certificate::VerifyMessage(
+//        const unsigned char * message,
+//        size_t messageLength,
+//        const unsigned char * signature,
+//        size_t signatureLength
+//        )
+//    {
+//        return m_signatureAlgorithm->VerifySignature(
+//            message,
+//            messageLength,
+//            signature,
+//            signatureLength
+//            );
+//    }
 
     bool Certificate::VerifyCertificate(ICertificate * rootCertificate)
     {
@@ -218,32 +232,32 @@ namespace lcp
         KeyType rawPublicKey = rootCertificate->PublicKey();
         publicKeyQueue.Put(&rawPublicKey.at(0), rawPublicKey.size());
         publicKeyQueue.MessageEnd();
-
-        CryptoPP::ECDSA<CryptoPP::ECP, CryptoPP::SHA256>::PublicKey publicKeyECDSA;
-        CryptoPP::RSA::PublicKey publicKeyRSA;
-
-        if (m_signatureAlgorithm->Name() == AlgorithmNames::EcdsaSha256Id) {
-            publicKeyECDSA.BERDecode(publicKeyQueue);
-        } else {
-            publicKeyRSA.BERDecode(publicKeyQueue);
-        }
+//
+//        CryptoPP::ECDSA<CryptoPP::ECP, CryptoPP::SHA256>::PublicKey publicKeyECDSA;
+//        CryptoPP::RSA::PublicKey publicKeyRSA;
+//
+//        if (m_signatureAlgorithm->Name() == AlgorithmNames::EcdsaSha256Id) {
+//            publicKeyECDSA.BERDecode(publicKeyQueue);
+//        } else {
+//            publicKeyRSA.BERDecode(publicKeyQueue);
+//        }
 
         std::unique_ptr<PK_Verifier> rootVerifierPtr;
 
         if (m_signatureAlgorithm->Name() == AlgorithmNames::EcdsaSha256Id) {
-            rootVerifierPtr.reset(new ECDSA<ECP, SHA256>::Verifier(publicKeyECDSA));
+            rootVerifierPtr.reset(new ECDSA<ECP, SHA256>::Verifier(publicKeyQueue));
         }
         else if (m_signatureAlgorithmId == sha256withRSAEncryption())
         {
-            rootVerifierPtr.reset(new RSASS<PKCS1v15, SHA256>::Verifier(publicKeyRSA));
+            rootVerifierPtr.reset(new RSASS<PKCS1v15, SHA256>::Verifier(publicKeyQueue));
         }
         else if (m_signatureAlgorithmId == sha1withRSAEncryption())
         {
-            rootVerifierPtr.reset(new RSASS<PKCS1v15, SHA1>::Verifier(publicKeyRSA));
+            rootVerifierPtr.reset(new RSASS<PKCS1v15, SHA1>::Verifier(publicKeyQueue));
         }
         else if (m_signatureAlgorithmId == md5withRSAEncryption())
         {
-            rootVerifierPtr.reset(new RSASS<PKCS1v15, Weak::MD5>::Verifier(publicKeyRSA));
+            rootVerifierPtr.reset(new RSASS<PKCS1v15, Weak::MD5>::Verifier(publicKeyQueue));
         }
         else
         {

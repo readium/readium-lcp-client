@@ -45,13 +45,13 @@ namespace lcp
             , m_readPosition(0)
             , m_writePosition(0)
         {
-            int mode = 0;
-            if (openMode == IFileSystemProvider::CreateNew)
-                mode = std::ios::in | std::ios::out | std::fstream::trunc | std::ios::binary;
-            else if (openMode == IFileSystemProvider::ReadOnly)
-                mode = std::ios::in  | std::ios::binary;
+            m_fstream.open(path.c_str(), (openMode == IFileSystemProvider::CreateNew) ?
+                                         (std::ios::in | std::ios::out | std::fstream::trunc | std::ios::binary) :
+                                         ((openMode == IFileSystemProvider::ReadOnly) ?
+                                              (std::ios::in  | std::ios::binary) :
+                                              std::ios::binary)
+            );
 
-            m_fstream.open(path, mode);
             if (!m_fstream.is_open())
             {
                 this->ThrowError("Can not open file: ");

@@ -84,6 +84,8 @@ namespace lcp
                     , m_netProvider
 #endif //!DISABLE_NET_PROVIDER
 
+                    , fileSystemProvider
+
 #if !DISABLE_CRL
                     , defaultCrlUrl
 #endif //!DISABLE_CRL
@@ -152,6 +154,14 @@ namespace lcp
                 if (!(*licensePTR)->Decrypted()) {
                     res = this->CheckDecrypted((*licensePTR));
                 }
+
+#if !DISABLE_CRL
+                Status resx = m_cryptoProvider->CheckRevokation((*licensePTR));
+                if (!Status::IsSuccess(resx))
+                {
+                    return resx;
+                }
+#endif //!DISABLE_CRL
 
                 res = this->CheckLicenseStatusDocument((*licensePTR));
 

@@ -33,11 +33,7 @@ namespace lcp
 {
     EcdsaSha256SignatureAlgorithm::EcdsaSha256SignatureAlgorithm(const KeyType & publicKey)
     {
-        ByteQueue publicKeyQueue;
-        KeyType rawPublicKey = publicKey;
-        publicKeyQueue.Put(&rawPublicKey.at(0), rawPublicKey.size());
-        publicKeyQueue.MessageEnd();
-        m_publicKey.BERDecode(publicKeyQueue);
+        m_publicKeyType = publicKey;
     }
 
     std::string EcdsaSha256SignatureAlgorithm::Name() const
@@ -68,7 +64,13 @@ namespace lcp
             size_t signatureLength
     )
     {
-        ThisVerifier verifier(m_publicKey);
+        ByteQueue publicKeyQueue;
+        publicKeyQueue.Put(&m_publicKeyType.at(0), m_publicKeyType.size());
+        publicKeyQueue.MessageEnd();
+//        m_publicKey.BERDecode(publicKeyQueue);
+//        m_publicKeyQueue = publicKeyQueue;
+
+        ThisVerifier verifier(publicKeyQueue);
         return verifier.VerifyMessage(
                 message,
                 messageLength,

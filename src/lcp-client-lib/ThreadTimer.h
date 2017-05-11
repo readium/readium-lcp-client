@@ -29,6 +29,8 @@
 
 #if !DISABLE_CRL
 
+#if !DISABLE_CRL_BACKGROUND_POLL
+
 #include <chrono>
 #include <thread>
 #include <mutex>
@@ -96,6 +98,8 @@ namespace lcp
         UsageTypeEnum m_usageType;
     };
 }
+
+#endif //!DISABLE_CRL_BACKGROUND_POLL
 
 #endif //!DISABLE_CRL
 
