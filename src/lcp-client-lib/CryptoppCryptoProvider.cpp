@@ -212,10 +212,28 @@ namespace lcp
         }
     }
 
+    Status CryptoppCryptoProvider::LegacyPassphraseUserKey(
+            const KeyType & userKey1,
+            KeyType & userKey2
+    )
+    {
+        try
+        {
+            userKey2.assign(userKey1.begin(), userKey1.end());
+
+            return Status(StatusCode::ErrorCommonSuccess);
+        }
+        catch (const std::exception & ex)
+        {
+            return Status(StatusCode::ErrorDecryptionUserPassphraseNotValid, "ErrorDecryptionUserPassphraseNotValid: " + std::string(ex.what()));
+        }
+    }
+
     Status CryptoppCryptoProvider::DecryptUserKey(
         const std::string & userPassphrase,
         ILicense * license,
-        KeyType & userKey
+        KeyType & userKey1,
+        KeyType & userKey2
         )
     {
         try
@@ -232,13 +250,18 @@ namespace lcp
 
             std::unique_ptr<IHashAlgorithm> hashAlgorithm(profile->CreateUserKeyAlgorithm());
             hashAlgorithm->UpdateHash(userPassphrase);
-            userKey = hashAlgorithm->Hash();
+            userKey1 = hashAlgorithm->Hash();
+
+            Status resx = this->LegacyPassphraseUserKey(userKey1, userKey2);
+            if (!Status::IsSuccess(resx)) {
+                return resx;
+            }
 
             //http://www.w3.org/2009/xmlenc11#aes256-gcm
             //http://www.w3.org/2001/04/xmlenc#aes256-cbc
             const std::string algorithm = license->Crypto()->ContentKeyAlgorithm();
 
-            std::unique_ptr<ISymmetricAlgorithm> contentKeyAlgorithm(profile->CreateContentKeyAlgorithm(userKey, algorithm));
+            std::unique_ptr<ISymmetricAlgorithm> contentKeyAlgorithm(profile->CreateContentKeyAlgorithm(userKey2, algorithm));
             std::string id = contentKeyAlgorithm->Decrypt(license->Crypto()->UserKeyCheck());
             if (!EqualsUtf8(id, license->Id()))
             {

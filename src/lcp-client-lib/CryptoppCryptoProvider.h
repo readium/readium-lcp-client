@@ -76,10 +76,16 @@ class ICertificateRevocationList;
             );
 
         virtual Status DecryptUserKey(
-            const std::string & userPassphrase,
-            ILicense * license,
-            KeyType & userKey
-            );
+                const std::string & userPassphrase,
+                ILicense * license,
+                KeyType & userKey1,
+                KeyType & userKey2
+        );
+
+        virtual Status LegacyPassphraseUserKey(
+                const KeyType & userKey1,
+                KeyType & userKey2
+        );
 
         virtual Status DecryptContentKey(
             const KeyType & userKey,
