@@ -46,7 +46,7 @@
 #include "SimpleMemoryWritableStream.h"
 #endif // !DISABLE_CRL_DOWNLOAD_IN_MEMORY
 
-#include "IFileSystemProvider.h"
+#include "public/IFileSystemProvider.h"
 
 namespace lcp
 {
