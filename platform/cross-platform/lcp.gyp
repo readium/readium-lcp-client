@@ -42,7 +42,9 @@
         '<(third_party_dir)'
       ],
       'cflags_cc': [
-        '-std=c++11'
+        '-std=c++11',
+        '-frtti',
+        '-fexceptions',
       ],
       'sources': [
         '<@(lcp_client_lib_sources)'
@@ -51,6 +53,12 @@
     {
       'target_name': 'cryptopp',
       'type': 'static_library',
+      'cflags_cc': [
+        '-std=c++11',
+        '-fpermissive',
+        '-frtti',
+        '-fexceptions',
+      ],
       'sources': [
         '<@(cryptopp_sources)'
       ]
@@ -64,7 +72,9 @@
       ],
       'cflags_cc': [
         '-std=c++11',
-        '-fpermissive'
+        '-fpermissive',
+        '-frtti',
+        '-fexceptions',
       ],
       'sources': [
         '<@(zip_lib_sources)'
