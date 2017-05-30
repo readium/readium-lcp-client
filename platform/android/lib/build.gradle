@@ -1,55 +1,241 @@
-apply plugin: 'com.android.model.library'
+apply plugin: 'com.android.library'
 
-model {
-    android {
-        compileSdkVersion = 23
-        buildToolsVersion = "23.0.2"
+repositories {
+    mavenCentral()
+    jcenter()
+}
 
-        defaultConfig.with {
-            minSdkVersion.apiLevel = 19
-            targetSdkVersion.apiLevel = 23
-        }
+dependencies {
+    compile 'com.android.support:support-v4:25.+'
+    compile 'commons-io:commons-io:2.4'
+    compile 'com.koushikdutta.ion:ion:2.+'
+}
 
-        sources {
-            main {
-                jniLibs {
-                    dependencies {
-                        project ":lcp"
-                    }
+def ndk_skipX86 = (rootProject.hasProperty("readium_ndk_skipX86") && rootProject.readium_ndk_skipX86)
+def ndk_skipARM = (rootProject.hasProperty("readium_ndk_skipARM") && rootProject.readium_ndk_skipARM)
+def ndk_clang = (rootProject.hasProperty("readium_ndk_clang") && rootProject.readium_ndk_clang)
+def readiumSdkLibDir = null
+def readiumSdkIncludeDir = null
+def lcpBuildContentFilter = false
+def extraCmake = null
+
+if (rootProject.hasProperty("readium_extra_cmake")) {
+    extraCmake = rootProject.readium_extra_cmake
+}
+
+if (rootProject.hasProperty("readium_sdk_lib_dir")) {
+    readiumSdkLibDir = rootProject.readium_sdk_lib_dir
+}
+
+if (rootProject.hasProperty("readium_sdk_include_dir")) {
+    readiumSdkIncludeDir = rootProject.readium_sdk_include_dir
+}
+
+if (rootProject.hasProperty("readium_lcp_build_content_filter")) {
+    lcpBuildContentFilter = rootProject.readium_lcp_build_content_filter
+}
+println("Test ${extraCmake}")
+def toolchain = ndk_clang ? "clang" : "gcc"
+def stl = ndk_clang ? "c++_shared" : "gnustl_shared"
+
+if (!lcpBuildContentFilter) {
+    try {
+        def epub3Dir = project(':epub3').projectDir
+        readiumSdkLibDir = "${epub3Dir}/libs"
+        readiumSdkIncludeDir = "${epub3Dir}/include"
+        lcpBuildContentFilter = true
+    } catch (UnknownProjectException e) {
+        // No epub3 project is defined
+        println("Build without rsdk")
+    }
+} else {
+    println("Build with rsdk")
+}
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion '25.0.2'
+
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+
+        externalNativeBuild {
+            cmake {
+                if (lcpBuildContentFilter) {
+                    targets "clientlib", "contentfilter", "lcp"
+
+                    arguments "-DFEATURES_READIUM=1",
+                        "-DANDROID_PLATFORM=android-19",
+                        "-DANDROID_TOOLCHAIN=${toolchain}",
+                        "-DANDROID_STL=${stl}",
+                        "-DRSDK_INCLUDE_DIR=${readiumSdkIncludeDir}",
+                        "-DRSDK_LIB_DIR=${readiumSdkLibDir}",
+                        "-DEXTRA_CMAKE=${extraCmake}"
+                } else {
+                    targets "clientlib", "lcp-min"
+
+                    arguments "-DANDROID_PLATFORM=android-19",
+                        "-DANDROID_TOOLCHAIN=${toolchain}",
+                        "-DANDROID_STL=${stl}",
+                        "-DRSDK_INCLUDE_DIR=${readiumSdkIncludeDir}",
+                        "-DRSDK_LIB_DIR=${readiumSdkLibDir}",
+                        "-DEXTRA_CMAKE=${extraCmake}"
                 }
             }
+        }
+    }
+
+    sourceSets {
+        if (lcpBuildContentFilter) {
             main {
                 java {
-                    source {
-                        srcDirs = [
-                                './src/main/java'
-                        ]
+                    srcDirs = [
+                        './src/clientlib/java',
+                        './src/contentfilter/java'
+                    ]
+                }
+            }
+        } else {
+            main {
+                java {
+                    srcDirs = [
+                            './src/clientlib/java'
+                    ]
+                }
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            externalNativeBuild {
+                cmake {
+                    arguments '-DCMAKE_BUILD_TYPE=RELEASE'
+                }
+            }
+        }
+
+        debug {
+            externalNativeBuild {
+                cmake {
+                    arguments '-DCMAKE_BUILD_TYPE=DEBUG'
+                }
+            }
+        }
+    }
+
+    externalNativeBuild {
+        cmake {
+            path "CMakeLists.txt"
+        }
+    }
+
+    productFlavors {
+        if (!ndk_skipARM) {
+            arm7 {
+                ndk {
+                    abiFilter 'armeabi-v7a'
+                }
+            }
+        }
+        if (!ndk_skipX86) {
+            x86 {
+                ndk {
+                    abiFilter 'x86'
+                }
+            }
+        }
+        /*arm8 {
+            ndk {
+                abiFilters 'arm64-v8a'
+            }
+        }
+        arm {
+            ndk {
+                abiFilter 'armeabi'
+            }
+        }
+        x86_64 {
+            ndk {
+                abiFilter 'x86_64'
+            }
+        }*/
+    }
+}
+
+build.doLast {
+    println("Copy libs to dist directory")
+    android.productFlavors.all { flavor ->
+        android.buildTypes.all { buildType ->
+            def abiFilter = flavor.ndk.abiFilters.first()
+            def dstDirPath = "${project.projectDir}/../dist/${buildType.name.toLowerCase()}/${abiFilter}"
+
+            // Copy static libs
+            def srcDirPath = "${project.projectDir}/.externalNativeBuild/cmake/${flavor.name}${buildType.name.capitalize()}/${abiFilter}"
+
+            copy {
+                from("${srcDirPath}") {
+                    include("*.a")
+                }
+                into("${dstDirPath}")
+            }
+
+            // Copy shared libs
+            srcDirPath = "${project.projectDir}/build/intermediates/cmake/${flavor.name}/${buildType.name}/obj/${abiFilter}"
+
+            copy {
+                from("${srcDirPath}") {
+                    include("*.so")
+                }
+                into("${dstDirPath}")
+            }
+
+            // Copy aar
+            srcDirPath = "${project.projectDir}/build/outputs/aar"
+            def srcFilename = "lib-${flavor.name}-${buildType.name}.aar"
+
+            copy {
+                from("${srcDirPath}") {
+                    include(srcFilename)
+                }
+                into("${dstDirPath}")
+                rename(srcFilename, "liblcp.aar")
+            }
+        }
+    }
+}
+
+clean.doFirst {
+    println("Clean dist directory")
+    def dstDirPath = "${project.projectDir}/../dist/"
+    delete dstDirPath
+}
+
+task copyLibs {
+    doLast {
+        println ("Copy shared library to libs")
+        android.productFlavors.all { flavor ->
+            android.buildTypes.all { buildType ->
+                def abiFilter = flavor.ndk.abiFilters.first()
+                def srcDirPath = "${project.projectDir}/build/intermediates/cmake/${flavor.name}/${buildType.name}/obj/${abiFilter}"
+                def dstDirPath = "${project.projectDir}/libs/${abiFilter}"
+
+                copy {
+                    from("${srcDirPath}") {
+                        include("liblcp.so")
                     }
+                    into("${dstDirPath}")
                 }
             }
         }
+    }
+}
 
-        buildTypes {
-            debug {
-                minifyEnabled = false
-            }
-            release {
-                minifyEnabled = false
-                proguardFiles.add(file('proguard-rules.txt'))
-            }
-        }
-
-        productFlavors {
-            create ("arm") {
-                ndk.with {
-                    abiFilters.add("armeabi-v7a")
-                }
-            }
-            create ("x86") {
-                ndk.with {
-                    abiFilters.add("x86")
-                }
-            }
-        }
+tasks.whenTaskAdded { task ->
+    if (task.name.startsWith('assemble')) {
+        task.dependsOn copyLibs
     }
 }
