@@ -17,6 +17,10 @@ include(${PROJECT_DIR}/lib/clientlib.cmake)
 #        and just use it with the following line
 include(${PROJECT_DIR}/lib/ndk-stl-config.cmake)
 
+if("${FEATURES_READIUM}")
+    add_definitions("-DFEATURES_READIUM")
+endif()
+
 # Compiler options
 add_definitions("-DZLIB_ONLY")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11 -fpic -frtti -fexceptions -fpermissive -Wall")
@@ -31,7 +35,7 @@ include_directories(
 file(GLOB CLIENTLIB_JNI_SOURCES ${MODULE_DIR}/src/clientlib/cpp/*.cpp)
 
 # LCP with content filter
-add_definitions("-DFEATURES_READIUM -DREADIUM_GCC")
+add_definitions("-DREADIUM_GCC")
 include(${PROJECT_DIR}/lib/contentfilter.cmake)
 file(GLOB CONTENTFILTER_JNI_SOURCES ${MODULE_DIR}/src/contentfilter/cpp/*.cpp)
 include_directories(

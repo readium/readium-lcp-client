@@ -66,16 +66,24 @@ android {
             cmake {
                 if (lcpBuildContentFilter) {
                     targets "clientlib", "contentfilter", "lcp"
+
+                    arguments "-DFEATURES_READIUM=1",
+                        "-DANDROID_PLATFORM=android-19",
+                        "-DANDROID_TOOLCHAIN=${toolchain}",
+                        "-DANDROID_STL=${stl}",
+                        "-DRSDK_INCLUDE_DIR=${readiumSdkIncludeDir}",
+                        "-DRSDK_LIB_DIR=${readiumSdkLibDir}",
+                        "-DEXTRA_CMAKE=${extraCmake}"
                 } else {
                     targets "clientlib", "lcp-min"
-                }
 
-                arguments "-DANDROID_PLATFORM=android-19",
-                    "-DANDROID_TOOLCHAIN=${toolchain}",
-                    "-DANDROID_STL=${stl}",
-                    "-DRSDK_INCLUDE_DIR=${readiumSdkIncludeDir}",
-                    "-DRSDK_LIB_DIR=${readiumSdkLibDir}",
-                    "-DEXTRA_CMAKE=${extraCmake}"
+                    arguments "-DANDROID_PLATFORM=android-19",
+                        "-DANDROID_TOOLCHAIN=${toolchain}",
+                        "-DANDROID_STL=${stl}",
+                        "-DRSDK_INCLUDE_DIR=${readiumSdkIncludeDir}",
+                        "-DRSDK_LIB_DIR=${readiumSdkLibDir}",
+                        "-DEXTRA_CMAKE=${extraCmake}"
+                }
             }
         }
     }
