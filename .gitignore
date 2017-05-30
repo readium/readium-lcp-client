@@ -3,6 +3,7 @@
 *.lo
 *.o
 *.obj
+*.pyc
 
 # Precompiled Headers
 *.gch
@@ -43,6 +44,9 @@ bld/
 ipch/
 .vs/
 
+# cross-platform
+platform/cross-platform/out
+platform/cross-platform/vendor
 
 # Windows
 Thumbs.db
