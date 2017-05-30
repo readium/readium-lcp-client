@@ -3,6 +3,7 @@
 *.lo
 *.o
 *.obj
+*.pyc
 
 # Precompiled Headers
 *.gch
@@ -42,10 +43,15 @@ bld/
 [Oo]bj/
 ipch/
 .vs/
+
 dist/
 .externalNativeBuild/
 .gradle/
 .classpath
+
+# cross-platform
+platform/cross-platform/out
+platform/cross-platform/vendor
 
 # Windows
 Thumbs.db
@@ -74,4 +80,5 @@ result.epub
 .settings/
 .project
 local.properties
+
 platform/android/lcp/libs/

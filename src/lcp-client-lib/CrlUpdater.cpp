@@ -154,7 +154,7 @@ namespace lcp
         m_requestRunning = true;
 
 #if !DISABLE_CRL_DOWNLOAD_IN_MEMORY
-        m_crlStream.reset(new SimpleMemoryWritableStream()); // not actually used! (NetProvider Java operates on File)
+        m_crlStream.reset(new SimpleMemoryWritableStream()); // not actually used with NetProvider Java which operates on File only :(
         m_downloadRequest.reset(new DownloadInMemoryRequest(url, m_crlStream.get()));
 #else // !DISABLE_CRL_DOWNLOAD_IN_MEMORY
         m_crlFile.reset(m_fileSystemProvider->GetFile(PATH_TO_DOWNLOAD));
@@ -198,7 +198,7 @@ namespace lcp
                 lcp::BaseDownloadRequest* request_ = dynamic_cast<lcp::BaseDownloadRequest*>(request);
                 if (request_) {
                     std::string path = request_->SuggestedFileName();
-                    if (path.length()) {
+                    if (path.length() && path.at(0) == '/') { // SUPER HACKY!! (because Android NetProvider only handles file download)
                         IFile* file = m_fileSystemProvider->GetFile(path, IFileSystemProvider::ReadOnly);
 
                         size_t bufferSize = 1024 * 1024;
@@ -217,9 +217,10 @@ namespace lcp
                         delete file;
 
                         m_revocationList->UpdateRevocationList(buffer); //std::vector<unsigned char>
+                    } else {
+                        m_revocationList->UpdateRevocationList(m_crlStream->Buffer()); //std::vector<unsigned char>
                     }
                 }
-                // m_revocationList->UpdateRevocationList(m_crlStream->Buffer()); //std::vector<unsigned char>
 
 #else // !DISABLE_CRL_DOWNLOAD_IN_MEMORY
                 // IFile == IReadableStream
