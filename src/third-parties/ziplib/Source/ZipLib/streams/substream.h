@@ -1,6 +1,6 @@
 #pragma once
 #include <istream>
-#include "./streambuffs/sub_streambuf.h"
+#include "streambuffs/sub_streambuf.h"
 
 /**
  * \brief Basic input substream. Creates a virtual stream over an existing input stream.

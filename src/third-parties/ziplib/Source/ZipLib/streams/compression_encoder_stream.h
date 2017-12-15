@@ -1,6 +1,6 @@
 #pragma once
 #include <ostream>
-#include "./streambuffs/compression_encoder_streambuf.h"
+#include "streambuffs/compression_encoder_streambuf.h"
 
 /**
  * \brief Basic generic compression encoder stream.

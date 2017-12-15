@@ -1,6 +1,6 @@
 #pragma once
 #include <iostream>
-#include "./streambuffs/zip_crypto_streambuf.h"
+#include "streambuffs/zip_crypto_streambuf.h"
 
 template <typename ELEM_TYPE, typename TRAITS_TYPE>
 class basic_zip_cryptostream

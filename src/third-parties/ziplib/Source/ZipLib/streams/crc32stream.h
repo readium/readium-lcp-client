@@ -1,6 +1,6 @@
 #pragma once
 #include <istream>
-#include "./streambuffs/crc32_streambuf.h"
+#include "streambuffs/crc32_streambuf.h"
 
 /**
  * \brief Basic CRC32 output stream. Computes CRC32 of input data.
