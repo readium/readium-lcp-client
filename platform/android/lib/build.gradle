@@ -34,7 +34,7 @@ if (rootProject.hasProperty("readium_sdk_include_dir")) {
 if (rootProject.hasProperty("readium_lcp_build_content_filter")) {
     lcpBuildContentFilter = rootProject.readium_lcp_build_content_filter
 }
-println("Test ${extraCmake}")
+println("extraCmake ${extraCmake}")
 def toolchain = ndk_clang ? "clang" : "gcc"
 def stl = ndk_clang ? "c++_shared" : "gnustl_shared"
 
@@ -44,6 +44,7 @@ if (!lcpBuildContentFilter) {
         readiumSdkLibDir = "${epub3Dir}/libs"
         readiumSdkIncludeDir = "${epub3Dir}/include"
         lcpBuildContentFilter = true
+        println("Build with rsdk *")
     } catch (UnknownProjectException e) {
         // No epub3 project is defined
         println("Build without rsdk")
@@ -51,14 +52,16 @@ if (!lcpBuildContentFilter) {
 } else {
     println("Build with rsdk")
 }
-
+println "${lcpBuildContentFilter}"
+println "${readiumSdkLibDir}"
+println "${readiumSdkIncludeDir}"
 android {
-    compileSdkVersion 25
-    buildToolsVersion "26.0.2"
+    compileSdkVersion 26
+    buildToolsVersion "27.0.2"
 
     defaultConfig {
         minSdkVersion 19
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
 
