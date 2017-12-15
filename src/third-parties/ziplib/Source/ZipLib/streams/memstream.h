@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 #include <cstdint>
-#include "streambuffs/mem_streambuf.h"
+#include "./streambuffs/mem_streambuf.h"
 
 /**
  * \brief Basic input memory stream.

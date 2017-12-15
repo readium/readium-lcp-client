@@ -1,6 +1,6 @@
 #pragma once
 #include <istream>
-#include "streambuffs/compression_decoder_streambuf.h"
+#include "./streambuffs/compression_decoder_streambuf.h"
 
 /**
  * \brief Basic generic compression decoder stream.

@@ -1,7 +1,7 @@
 #pragma once
 #include <ostream>
 #include <cstdint>
-#include "streambuffs/tee_streambuff.h"
+#include "./streambuffs/tee_streambuff.h"
 
 /**
  * \brief Basic teestream. Distributes the input data into every bound output stream.

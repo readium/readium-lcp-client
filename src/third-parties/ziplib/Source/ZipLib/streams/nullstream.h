@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 #include <cstdint>
-#include "streambuffs/null_streambuf.h"
+#include "./streambuffs/null_streambuf.h"
 
 /**
  * \brief Basic null stream.
