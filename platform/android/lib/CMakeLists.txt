@@ -25,6 +25,10 @@ endif()
 add_definitions("-DZLIB_ONLY")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11 -fpic -frtti -fexceptions -fpermissive -Wall")
 
+#set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu11")
+#set(CMAKE_C_FLAGS "${CMAKE_ANSI_CFLAGS} ${CMAKE_C_FLAGS} -std=gnu11")
+#set(CMAKE_REQUIRED_FLAGS ${CMAKE_ANSI_CFLAGS})
+
 include_directories(
     ${CLIENTLIB_DIR}
     ${CLIENTLIB_DIR}/public
@@ -49,7 +53,7 @@ SET (
     LCP_LINK_LIBRARIES
     "clientlib"
     "contentfilter"
-    "${RSDK_LIB_DIR}/${ANDROID_ABI}/libepub3.so"
+    "${RSDK_LIB_DIR}/${CMAKE_BUILD_TYPE}/${ANDROID_ABI}/libepub3.so"
 )
 
 # Extra cmake called before build
