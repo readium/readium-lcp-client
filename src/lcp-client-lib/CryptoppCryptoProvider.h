@@ -150,11 +150,11 @@ class ICertificateRevocationList;
         std::unique_ptr<ThreadTimer> m_threadTimer;
 #endif //!DISABLE_CRL_BACKGROUND_POLL
 
-        IFileSystemProvider * m_fileSystemProvider;
-
         std::unique_ptr<CrlUpdater> m_crlUpdater;
         std::mutex m_processRevocationSync;
 #endif //!DISABLE_CRL
+        
+        IFileSystemProvider * m_fileSystemProvider;
 
         EncryptionProfilesManager * m_encryptionProfilesManager;
     };
