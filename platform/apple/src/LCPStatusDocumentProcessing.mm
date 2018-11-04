@@ -365,6 +365,15 @@ didCompleteWithError:(nullable NSError *)error
             
         } else if (code < 200 || code >= 300) {
             
+            if (_data_TASK_DESCRIPTION_LCP_LSD_FETCH != nil) {
+                try {
+                    NSString *msg = [[NSString alloc] initWithData:_data_TASK_DESCRIPTION_LCP_LSD_FETCH encoding:NSUTF8StringEncoding];
+                    NSLog(@"%@", msg);
+                }
+                catch (NSException *e) {
+                    NSLog(@"%@", [e reason]);
+                }
+            }
             _data_TASK_DESCRIPTION_LCP_LSD_FETCH = nil;
             
             NSLog(@"%@", [NSString stringWithFormat:@"HTTP fail (TASK_DESCRIPTION_LCP_LSD_FETCH) [%@] => (%li)", [(NSHTTPURLResponse *)task.response URL], code]);
@@ -427,6 +436,15 @@ didCompleteWithError:(nullable NSError *)error
             
         } else if (code < 200 || code >= 300) {
             
+            if (_data_TASK_DESCRIPTION_LCP_LSD_REGISTER != nil) {
+                try {
+                    NSString *msg = [[NSString alloc] initWithData:_data_TASK_DESCRIPTION_LCP_LSD_REGISTER encoding:NSUTF8StringEncoding];
+                    NSLog(@"%@", msg);
+                }
+                catch (NSException *e) {
+                    NSLog(@"%@", [e reason]);
+                }
+            }
             _data_TASK_DESCRIPTION_LCP_LSD_REGISTER = nil;
             
             NSLog(@"%@", [NSString stringWithFormat:@"HTTP fail (TASK_DESCRIPTION_LCP_LSD_REGISTER) [%@] => (%li)", [(NSHTTPURLResponse *)task.response URL], code]);
@@ -479,6 +497,15 @@ didCompleteWithError:(nullable NSError *)error
             
         } else if (code < 200 || code >= 300) {
             
+            if (_data_TASK_DESCRIPTION_LCP_FETCH != nil) {
+                try {
+                    NSString *msg = [[NSString alloc] initWithData:_data_TASK_DESCRIPTION_LCP_FETCH encoding:NSUTF8StringEncoding];
+                    NSLog(@"%@", msg);
+                }
+                catch (NSException *e) {
+                    NSLog(@"%@", [e reason]);
+                }
+            }
             _data_TASK_DESCRIPTION_LCP_FETCH = nil;
             
             NSLog(@"%@", [NSString stringWithFormat:@"HTTP fail (TASK_DESCRIPTION_LCP_LSD_FETCH) [%@] => (%li)", [(NSHTTPURLResponse *)task.response URL], code]);
@@ -533,6 +560,15 @@ didCompleteWithError:(nullable NSError *)error
             
         } else if (code < 200 || code >= 300) {
             
+            if (_data_TASK_DESCRIPTION_LCP_LSD_RENEW != nil) {
+                try {
+                    NSString *msg = [[NSString alloc] initWithData:_data_TASK_DESCRIPTION_LCP_LSD_RENEW encoding:NSUTF8StringEncoding];
+                    NSLog(@"%@", msg);
+                }
+                catch (NSException *e) {
+                    NSLog(@"%@", [e reason]);
+                }
+            }
             _data_TASK_DESCRIPTION_LCP_LSD_RENEW = nil;
             
             NSLog(@"%@", [NSString stringWithFormat:@"HTTP fail (TASK_DESCRIPTION_LCP_LSD_RENEW) [%@] => (%li)", [(NSHTTPURLResponse *)task.response URL], code]);
@@ -583,6 +619,15 @@ didCompleteWithError:(nullable NSError *)error
             
         } else if (code < 200 || code >= 300) {
             
+            if (_data_TASK_DESCRIPTION_LCP_LSD_RETURN != nil) {
+                try {
+                    NSString *msg = [[NSString alloc] initWithData:_data_TASK_DESCRIPTION_LCP_LSD_RETURN encoding:NSUTF8StringEncoding];
+                    NSLog(@"%@", msg);
+                }
+                catch (NSException *e) {
+                    NSLog(@"%@", [e reason]);
+                }
+            }
             _data_TASK_DESCRIPTION_LCP_LSD_RETURN = nil;
             
             NSLog(@"%@", [NSString stringWithFormat:@"HTTP fail (TASK_DESCRIPTION_LCP_LSD_RETURN) [%@] => (%li)", [(NSHTTPURLResponse *)task.response URL], code]);
