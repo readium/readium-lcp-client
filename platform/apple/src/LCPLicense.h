@@ -32,14 +32,20 @@ namespace lcp {
 }
 #endif
 
-
 @interface LCPLicense : NSObject
 
 @property (readonly, nonatomic) NSString *identifier;
 @property (readonly, nonatomic) NSString *linkPublication;
 @property (readonly, nonatomic) BOOL isDecrypted;
 
+@property (readonly, nonatomic) NSString *username;
 @property (readonly, nonatomic) NSString *userHint;
+
+- (NSString *)originalJSON;
+- (NSString *)canonicalJSON;
+
+- (NSDate *)rightsStart;
+- (NSDate *)rightsEnd;
 
 #ifdef __cplusplus
 @property (readonly, nonatomic) lcp::ILicense *nativeLicense;

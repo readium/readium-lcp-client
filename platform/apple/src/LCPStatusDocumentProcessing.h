@@ -25,6 +25,25 @@
 
 #import <Foundation/Foundation.h>
 
+@interface StatusDocumentLink : NSObject {
+    NSString* rel;
+    NSString* href;
+    NSString* type;
+    BOOL templated;
+    NSString* title;
+    NSString* profile;
+}
+
+- (instancetype)init_:(NSString*) rel href:(NSString*) href type:(NSString*) type templated:(BOOL) templated title:(NSString*) title profile:(NSString*) profile;
+
+@property (nonatomic, readonly) NSString* rel;
+@property (nonatomic, readonly) NSString* href;
+@property (nonatomic, readonly) NSString* type;
+@property (nonatomic, readonly) BOOL templated;
+@property (nonatomic, readonly) NSString* title;
+@property (nonatomic, readonly) NSString* profile;
+
+@end
 
 @protocol DeviceIdManager
 
@@ -61,11 +80,29 @@ typedef void (^DoneCallback)(bool);
 -(bool)isInitialized;
 
 -(bool)hasLicenseUpdatePending;
--(bool)isActive;
--(bool)hasRenewLink;
--(bool)hasReturnLink;
 
+- (NSString *)identifier;
+- (NSString *)message;
+
+-(NSString *)status;
+-(bool)isActive;
+
+-(StatusDocumentLink *)licenseLink;
+
+-(bool)hasRegisterLink;
+-(StatusDocumentLink *)registerLink;
+
+-(bool)hasRenewLink;
+-(StatusDocumentLink *)renewLink;
 -(void)doRenew:(DoneCallback)doneCallback_doRenew; //void(^)(bool)
+
+-(bool)hasReturnLink;
+-(StatusDocumentLink *)returnLink;
 -(void)doReturn:(DoneCallback)doneCallback_doReturn; //void(^)(bool)
+
+-(NSDate *)potentialRightsEndDate;
+
+- (NSDate *)statusUpdated;
+- (NSDate *)licenseUpdated;
 
 @end
