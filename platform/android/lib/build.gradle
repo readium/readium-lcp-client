@@ -56,12 +56,12 @@ println "${lcpBuildContentFilter}"
 println "${readiumSdkLibDir}"
 println "${readiumSdkIncludeDir}"
 android {
-    compileSdkVersion 26
-    buildToolsVersion "27.0.3"
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
 
     defaultConfig {
         minSdkVersion 19
-        targetSdkVersion 26
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
 
@@ -70,7 +70,8 @@ android {
                 if (lcpBuildContentFilter) {
                     targets "clientlib", "contentfilter", "lcp"
 
-                    arguments "-DFEATURES_READIUM=1",
+                    arguments "-DCMAKE_JOB_POOLS:STRING=compile=6;link=6",
+                        "-DFEATURES_READIUM=1",
                         "-DANDROID_PLATFORM=android-19",
                         "-DANDROID_TOOLCHAIN=${toolchain}",
                         "-DANDROID_STL=${stl}",
@@ -80,7 +81,8 @@ android {
                 } else {
                     targets "clientlib", "lcp-min"
 
-                    arguments "-DANDROID_PLATFORM=android-19",
+                    arguments "-DCMAKE_JOB_POOLS:STRING=compile=6;link=6",
+                        "-DANDROID_PLATFORM=android-19",
                         "-DANDROID_TOOLCHAIN=${toolchain}",
                         "-DANDROID_STL=${stl}",
                         "-DRSDK_INCLUDE_DIR=${readiumSdkIncludeDir}",
