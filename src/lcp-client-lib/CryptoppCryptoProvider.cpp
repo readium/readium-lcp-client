@@ -55,22 +55,41 @@ namespace lcp
     , INetProvider * netProvider
 #endif //!DISABLE_NET_PROVIDER
 
+            , IFileSystemProvider * fileSystemProvider
+
 #if !DISABLE_CRL
         , const std::string & defaultCrlUrl
 #endif //!DISABLE_CRL
         )
-        : m_encryptionProfilesManager(encryptionProfilesManager)
+        :
+            m_encryptionProfilesManager(encryptionProfilesManager)
+
+            , m_fileSystemProvider(fileSystemProvider)
+
     {
 #if !DISABLE_CRL
         m_revocationList.reset(new CertificateRevocationList());
+
+#if !DISABLE_CRL_BACKGROUND_POLL
         m_threadTimer.reset(new ThreadTimer());
+#endif //!DISABLE_CRL_BACKGROUND_POLL
 
         m_crlUpdater.reset(new CrlUpdater(
 #if !DISABLE_NET_PROVIDER
                 netProvider,
 #endif //!DISABLE_NET_PROVIDER
-                m_revocationList.get(), m_threadTimer.get(), defaultCrlUrl));
 
+                m_fileSystemProvider,
+
+                m_revocationList.get(),
+
+#if !DISABLE_CRL_BACKGROUND_POLL
+                m_threadTimer.get(),
+#endif //!DISABLE_CRL_BACKGROUND_POLL
+
+                defaultCrlUrl));
+
+#if !DISABLE_CRL_BACKGROUND_POLL
         m_threadTimer->SetHandler(std::bind(&CrlUpdater::Update, m_crlUpdater.get()));
         m_threadTimer->SetAutoReset(false);
 
@@ -80,6 +99,8 @@ namespace lcp
             m_threadTimer->SetDuration(ThreadTimer::DurationType(ThreadTimer::DurationType::zero()));
             m_threadTimer->Start();
         }
+#endif //!DISABLE_CRL_BACKGROUND_POLL
+
 #endif //!DISABLE_CRL
     }
 
@@ -89,7 +110,10 @@ namespace lcp
         try
         {
             m_crlUpdater->Cancel();
+
+#if !DISABLE_CRL_BACKGROUND_POLL
             m_threadTimer->Stop();
+#endif //!DISABLE_CRL_BACKGROUND_POLL
         }
         catch (...)
         {
@@ -104,11 +128,15 @@ namespace lcp
     {
         try
         {
+#if ENABLE_PROFILE_NAMES
             IEncryptionProfile * profile = m_encryptionProfilesManager->GetProfile(license->Crypto()->EncryptionProfile());
             if (profile == nullptr)
             {
                 return Status(StatusCode::ErrorCommonEncryptionProfileNotFound, "ErrorCommonEncryptionProfileNotFound");
             }
+#else
+            IEncryptionProfile * profile = m_encryptionProfilesManager->GetProfile();
+#endif //ENABLE_PROFILE_NAMES
 
             if (rootCertificateBase64.empty())
             {
@@ -148,7 +176,9 @@ namespace lcp
             }
 #endif //!DISABLE_CRL
 
-            if (!providerCertificate->VerifyMessage(license->CanonicalContent(), license->Crypto()->Signature()))
+            //providerCertificate->VerifyMessage
+            lcp::ISignatureAlgorithm* signatureAlgorithm = profile->CreateSignatureAlgorithm(providerCertificate->PublicKey(), license->Crypto()->SignatureAlgorithm());
+            if (!signatureAlgorithm->VerifySignature(license->CanonicalContent(), license->Crypto()->Signature()))
             {
                 return Status(StatusCode::ErrorOpeningLicenseSignatureNotValid, "ErrorOpeningLicenseSignatureNotValid");
             }
@@ -182,29 +212,56 @@ namespace lcp
         }
     }
 
+    Status CryptoppCryptoProvider::LegacyPassphraseUserKey(
+            const KeyType & userKey1,
+            KeyType & userKey2
+    )
+    {
+        try
+        {
+            userKey2.assign(userKey1.begin(), userKey1.end());
+
+            return Status(StatusCode::ErrorCommonSuccess);
+        }
+        catch (const std::exception & ex)
+        {
+            return Status(StatusCode::ErrorDecryptionUserPassphraseNotValid, "ErrorDecryptionUserPassphraseNotValid: " + std::string(ex.what()));
+        }
+    }
+
     Status CryptoppCryptoProvider::DecryptUserKey(
         const std::string & userPassphrase,
         ILicense * license,
-        KeyType & userKey
+        KeyType & userKey1,
+        KeyType & userKey2
         )
     {
         try
         {
+#if ENABLE_PROFILE_NAMES
             IEncryptionProfile * profile = m_encryptionProfilesManager->GetProfile(license->Crypto()->EncryptionProfile());
             if (profile == nullptr)
             {
                 return Status(StatusCode::ErrorCommonEncryptionProfileNotFound, "ErrorCommonEncryptionProfileNotFound");
             }
+#else
+            IEncryptionProfile * profile = m_encryptionProfilesManager->GetProfile();
+#endif //ENABLE_PROFILE_NAMES
 
             std::unique_ptr<IHashAlgorithm> hashAlgorithm(profile->CreateUserKeyAlgorithm());
             hashAlgorithm->UpdateHash(userPassphrase);
-            userKey = hashAlgorithm->Hash();
+            userKey1 = hashAlgorithm->Hash();
+
+            Status resx = this->LegacyPassphraseUserKey(userKey1, userKey2);
+            if (!Status::IsSuccess(resx)) {
+                return resx;
+            }
 
             //http://www.w3.org/2009/xmlenc11#aes256-gcm
             //http://www.w3.org/2001/04/xmlenc#aes256-cbc
             const std::string algorithm = license->Crypto()->ContentKeyAlgorithm();
 
-            std::unique_ptr<ISymmetricAlgorithm> contentKeyAlgorithm(profile->CreateContentKeyAlgorithm(userKey, algorithm));
+            std::unique_ptr<ISymmetricAlgorithm> contentKeyAlgorithm(profile->CreateContentKeyAlgorithm(userKey2, algorithm));
             std::string id = contentKeyAlgorithm->Decrypt(license->Crypto()->UserKeyCheck());
             if (!EqualsUtf8(id, license->Id()))
             {
@@ -226,11 +283,15 @@ namespace lcp
     {
         try
         {
+#if ENABLE_PROFILE_NAMES
             IEncryptionProfile * profile = m_encryptionProfilesManager->GetProfile(license->Crypto()->EncryptionProfile());
             if (profile == nullptr)
             {
                 return Status(StatusCode::ErrorCommonEncryptionProfileNotFound, "ErrorCommonEncryptionProfileNotFound");
             }
+#else
+            IEncryptionProfile * profile = m_encryptionProfilesManager->GetProfile();
+#endif //ENABLE_PROFILE_NAMES
 
             //http://www.w3.org/2009/xmlenc11#aes256-gcm
             //http://www.w3.org/2001/04/xmlenc#aes256-cbc
@@ -333,11 +394,15 @@ namespace lcp
     {
         try
         {
+#if ENABLE_PROFILE_NAMES
             IEncryptionProfile * profile = m_encryptionProfilesManager->GetProfile(license->Crypto()->EncryptionProfile());
             if (profile == nullptr)
             {
                 return Status(StatusCode::ErrorCommonEncryptionProfileNotFound, "ErrorCommonEncryptionProfileNotFound");
             }
+#else
+            IEncryptionProfile * profile = m_encryptionProfilesManager->GetProfile();
+#endif //ENABLE_PROFILE_NAMES
 
             //http://www.w3.org/2009/xmlenc11#aes256-gcm
             //http://www.w3.org/2001/04/xmlenc#aes256-cbc
@@ -365,11 +430,15 @@ namespace lcp
     {
         try
         {
+#if ENABLE_PROFILE_NAMES
             IEncryptionProfile * profile = m_encryptionProfilesManager->GetProfile(license->Crypto()->EncryptionProfile());
             if (profile == nullptr)
             {
                 return Status(StatusCode::ErrorCommonEncryptionProfileNotFound, "ErrorCommonEncryptionProfileNotFound");
             }
+#else
+            IEncryptionProfile * profile = m_encryptionProfilesManager->GetProfile();
+#endif //ENABLE_PROFILE_NAMES
 
             std::unique_ptr<ISymmetricAlgorithm> algo(profile->CreatePublicationAlgorithm(keyProvider->ContentKey(), algorithm));
             *decryptedDataLength = algo->Decrypt(
@@ -394,11 +463,15 @@ namespace lcp
     {
         try
         {
+#if ENABLE_PROFILE_NAMES
             IEncryptionProfile * profile = m_encryptionProfilesManager->GetProfile(license->Crypto()->EncryptionProfile());
             if (profile == nullptr)
             {
                 return Status(StatusCode::ErrorCommonEncryptionProfileNotFound, "ErrorCommonEncryptionProfileNotFound");
             }
+#else
+            IEncryptionProfile * profile = m_encryptionProfilesManager->GetProfile();
+#endif //ENABLE_PROFILE_NAMES
 
             Status res(StatusCode::ErrorCommonSuccess);
             std::unique_ptr<ISymmetricAlgorithm> algo(profile->CreatePublicationAlgorithm(keyProvider->ContentKey(), algorithm));
@@ -412,6 +485,43 @@ namespace lcp
     }
 
 #if !DISABLE_CRL
+
+    Status CryptoppCryptoProvider::CheckRevokation(ILicense* license) {
+
+#if ENABLE_PROFILE_NAMES
+        IEncryptionProfile * profile = m_encryptionProfilesManager->GetProfile(license->Crypto()->EncryptionProfile());
+            if (profile == nullptr)
+            {
+                return Status(StatusCode::ErrorCommonEncryptionProfileNotFound, "ErrorCommonEncryptionProfileNotFound");
+            }
+#else
+        IEncryptionProfile * profile = m_encryptionProfilesManager->GetProfile();
+#endif //ENABLE_PROFILE_NAMES
+
+        std::unique_ptr<lcp::Certificate> providerCertificate;
+        try {
+            providerCertificate.reset(
+                    new lcp::Certificate(license->Crypto()->SignatureCertificate(), profile));
+        }
+        catch (std::exception &ex) {
+            return Status(StatusCode::ErrorOpeningContentProviderCertificateNotValid,
+                          "ErrorOpeningContentProviderCertificateNotValid: " +
+                          std::string(ex.what()));
+        }
+
+        return this->CheckRevokation(providerCertificate.get());
+    }
+
+    Status CryptoppCryptoProvider::CheckRevokation(ICertificate * providerCertificate) {
+
+        if (m_revocationList->SerialNumberRevoked(providerCertificate->SerialNumber())) {
+            return Status(StatusCode::ErrorOpeningContentProviderCertificateRevoked,
+                          "ErrorOpeningContentProviderCertificateRevoked");
+        }
+
+        return StatusCode::ErrorCommonSuccess;
+    }
+
     Status CryptoppCryptoProvider::ProcessRevokation(ICertificate * rootCertificate, ICertificate * providerCertificate)
     {
         m_crlUpdater->UpdateCrlUrls(rootCertificate->DistributionPoints());
@@ -421,33 +531,52 @@ namespace lcp
         std::unique_lock<std::mutex> locker(m_processRevocationSync);
         if (m_crlUpdater->ContainsAnyUrl() && !m_revocationList->HasThisUpdateDate())
         {
+#if !DISABLE_CRL_BACKGROUND_POLL
             if (m_threadTimer->IsRunning())
             {
                 m_threadTimer->Stop();
             }
+#endif //!DISABLE_CRL_BACKGROUND_POLL
 
-            // Check once more, the CRL state could've been changed during the stop process
-            if (!m_revocationList->HasThisUpdateDate())
-            {
-                // If CRL is absent, update it right before certificate verification
-                m_crlUpdater->Update();
-            }
+//            // Check once more, the CRL state could've been changed during the stop process
+//            if (!m_revocationList->HasThisUpdateDate())
+//            {
+//                // If CRL is absent, update it right before certificate verification
+//                m_crlUpdater->Update();
+//            }
 
+#if !DISABLE_CRL_BACKGROUND_POLL
             // Start timer which will check CRL for updates periodically or by time point
             m_threadTimer->SetAutoReset(true);
             m_threadTimer->SetUsage(ThreadTimer::DurationUsage);
+
+            //std::function<void()>
+            m_threadTimer->SetHandler([&]{
+                m_crlUpdater->Update();
+            }); // std::bind(&CrlUpdater::Update, &m_crlUpdater);
+
             m_threadTimer->SetDuration(ThreadTimer::DurationType(CrlUpdater::TenMinutesPeriod));
             m_threadTimer->Start();
+#endif //!DISABLE_CRL_BACKGROUND_POLL
         }
         locker.unlock();
 
+#if !DISABLE_CRL_BACKGROUND_POLL
         // If exception occurred in the timer thread, re-throw it
         m_threadTimer->RethrowExceptionIfAny();
+#endif //!DISABLE_CRL_BACKGROUND_POLL
 
-        if (m_revocationList->SerialNumberRevoked(providerCertificate->SerialNumber()))
+
+        Status resx = this->CheckRevokation(providerCertificate);
+        if (!Status::IsSuccess(resx))
         {
-            return Status(StatusCode::ErrorOpeningContentProviderCertificateRevoked, "ErrorOpeningContentProviderCertificateRevoked");
+            return resx;
         }
+//
+//        // TODO: only for testing fake mock revocation!!
+//        // TODO: REMOVE !
+//        m_revocationList->InsertRevokedSerialNumber(providerCertificate->SerialNumber());
+
         return Status(StatusCode::ErrorCommonSuccess);
     }
 #endif //!DISABLE_CRL

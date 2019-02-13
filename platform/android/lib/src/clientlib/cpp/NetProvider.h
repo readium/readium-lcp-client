@@ -24,9 +24,13 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-#ifndef LCP_ANDROID_LICENSE_H
-#define LCP_ANDROID_LICENSE_H
+#ifndef LCP_ANDROID_NET_PROVIDER_H
+#define LCP_ANDROID_NET_PROVIDER_H
 
+#if !DISABLE_NET_PROVIDER
+
+#include <public/INetProvider.h>
+#include <string>
 #include <jni.h>
 
 #ifdef __cplusplus
@@ -34,40 +38,40 @@ extern "C" {
 #endif
 
 namespace lcp {
-    class License {
+    class NetRequest: public INetRequest {
 
+    };
+
+    class NetProvider: public INetProvider {
+    private:
+        jobject jNetProvider;
+        jmethodID jDownloadMethodId;
+        jmethodID jCancelMethodId;
+    public:
+        NetProvider(jobject jNetProvider);
+        ~NetProvider();
+        void StartDownloadRequest(
+                IDownloadRequest * request,
+                INetProviderCallback * callback
+        );
+        void CancelDownloadRequest(IDownloadRequest * request);
     };
 }
 
-JNIEXPORT jboolean JNICALL Java_org_readium_sdk_lcp_License_nativeIsDecrypted(
-        JNIEnv *env, jobject obj, jlong licensePtr);
+JNIEXPORT void JNICALL Java_org_readium_sdk_lcp_NetProviderCallback_nativeOnRequestStarted(
+        JNIEnv *env, jobject obj, jlong callbackPtr, jlong requestPtr);
+JNIEXPORT void JNICALL Java_org_readium_sdk_lcp_NetProviderCallback_nativeOnRequestEnded(
+        JNIEnv *env, jobject obj, jlong callbackPtr, jlong requestPtr, jstring path);
+JNIEXPORT void JNICALL Java_org_readium_sdk_lcp_NetProviderCallback_nativeOnRequestCanceled(
+        JNIEnv *env, jobject obj, jlong callbackPtr, jlong requestPtr);
+JNIEXPORT void JNICALL Java_org_readium_sdk_lcp_NetProviderCallback_nativeOnRequestProgressed(
+        JNIEnv *env, jobject obj, jlong callbackPtr, jlong requestPtr, jfloat progress);
 
-JNIEXPORT jstring JNICALL Java_org_readium_sdk_lcp_License_nativeGetOriginalContent(
-        JNIEnv *env, jobject obj, jlong licensePtr);
-
-JNIEXPORT jstring JNICALL Java_org_readium_sdk_lcp_License_nativeGetLinkPublication(
-        JNIEnv *env, jobject obj, jlong licensePtr);
-
-JNIEXPORT jstring JNICALL Java_org_readium_sdk_lcp_License_nativeGetLinkStatus(
-        JNIEnv *env, jobject obj, jlong licensePtr);
-
-
-JNIEXPORT void JNICALL Java_org_readium_sdk_lcp_License_nativeDecrypt(
-        JNIEnv *env, jobject obj, jlong licensePtr, jlong servicePtr, jstring jPassphrase);
-
-JNIEXPORT jboolean JNICALL Java_org_readium_sdk_lcp_License_nativeIsOlderThan(
-        JNIEnv *env, jobject obj, jlong licensePtr, jlong servicePtr, jstring jTimestamp);
-
-JNIEXPORT void JNICALL Java_org_readium_sdk_lcp_License_nativeSetStatusDocumentProcessingFlag(
-        JNIEnv *env, jobject obj, jlong licensePtr, jboolean jFlag);
-
-#if ENABLE_NET_PROVIDER_ACQUISITION
-JNIEXPORT jobject JNICALL Java_org_readium_sdk_lcp_License_nativeCreateAcquisition(
-        JNIEnv *env, jobject obj, jlong licensePtr, jlong servicePtr, jstring jDstPath);
-#endif //ENABLE_NET_PROVIDER_ACQUISITION
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif //LCP_ANDROID_LICENSE_H
+#endif //!DISABLE_NET_PROVIDER
+
+#endif //LCP_ANDROID_NET_PROVIDER_H

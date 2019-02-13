@@ -26,6 +26,8 @@
 
 #if !DISABLE_CRL
 
+#if !DISABLE_CRL_BACKGROUND_POLL
+
 #include "ThreadTimer.h"
 
 namespace lcp
@@ -139,6 +141,13 @@ namespace lcp
             std::unique_lock<std::mutex> locker(m_sync);
             do
             {
+                locker.unlock();
+                if (m_handler)
+                {
+                    m_handler();
+                }
+                locker.lock();
+
                 if (m_usageType == UsageTypeEnum::TimePointUsage)
                 {
                     m_conditionRunning.wait_until(locker, m_runTimePoint, [&]() { return !m_isRunning; });
@@ -151,13 +160,6 @@ namespace lcp
                 {
                     throw std::logic_error("Unknown timer usage type");
                 }
-
-                locker.unlock();
-                if (m_handler)
-                {
-                    m_handler();
-                }
-                locker.lock();
             }
             while (m_isAutoReset && m_isRunning);
 
@@ -183,5 +185,7 @@ namespace lcp
         }
     }
 }
+
+#endif //!DISABLE_CRL_BACKGROUND_POLL
 
 #endif //!DISABLE_CRL

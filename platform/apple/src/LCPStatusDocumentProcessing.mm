@@ -41,29 +41,6 @@
 
 using namespace lcp;
 
-
-@interface StatusDocumentLink : NSObject {
-    
-    NSString* rel;
-    NSString* href;
-    NSString* type;
-    BOOL templated;
-    NSString* title;
-    NSString* profile;
-}
-
-- (instancetype)init_:(NSString*) rel href:(NSString*) href type:(NSString*) type templated:(BOOL) templated title:(NSString*) title profile:(NSString*) profile;
-
-@property (nonatomic, readonly) NSString* rel;
-@property (nonatomic, readonly) NSString* href;
-@property (nonatomic, readonly) NSString* type;
-@property (nonatomic, readonly) BOOL templated;
-@property (nonatomic, readonly) NSString* title;
-@property (nonatomic, readonly) NSString* profile;
-
-@end
-
-
 @interface StatusDocumentLink()
 @end
 
@@ -111,7 +88,7 @@ using namespace lcp;
     id<DeviceIdManager> _deviceIDManager;
     
     bool _wasCancelled;
-    id<StatusDocumentProcessingListener> _statusDocumentProcessingListener;
+    __weak id<StatusDocumentProcessingListener> _statusDocumentProcessingListener;
     
     NSString * _statusDocument_ID;
     NSString * _statusDocument_STATUS; // ready, active, revoked, returned, cancelled, expired
@@ -354,7 +331,6 @@ didCompleteWithError:(nullable NSError *)error
     if ([task.taskDescription isEqualToString:TASK_DESCRIPTION_LCP_LSD_FETCH]) {
         
         if (error) {
-            
             _data_TASK_DESCRIPTION_LCP_LSD_FETCH = nil;
             
             NSLog(@"%@", [NSString stringWithFormat:@"HTTP error (TASK_DESCRIPTION_LCP_LSD_FETCH) [%@] => (%li) ... %@ [%li]", [(NSHTTPURLResponse *)task.originalRequest URL], code, error.domain, error.code]);
@@ -365,10 +341,19 @@ didCompleteWithError:(nullable NSError *)error
             
         } else if (code < 200 || code >= 300) {
             
+            if (_data_TASK_DESCRIPTION_LCP_LSD_FETCH != nil) {
+                try {
+                    NSString *msg = [[NSString alloc] initWithData:_data_TASK_DESCRIPTION_LCP_LSD_FETCH encoding:NSUTF8StringEncoding];
+                    NSLog(@"%@", msg);
+                }
+                catch (NSException *e) {
+                    NSLog(@"%@", [e reason]);
+                }
+            }
             _data_TASK_DESCRIPTION_LCP_LSD_FETCH = nil;
             
             NSLog(@"%@", [NSString stringWithFormat:@"HTTP fail (TASK_DESCRIPTION_LCP_LSD_FETCH) [%@] => (%li)", [(NSHTTPURLResponse *)task.response URL], code]);
-            
+
             if (!_wasCancelled) {
                 [_statusDocumentProcessingListener onStatusDocumentProcessingComplete:self];
             }
@@ -427,6 +412,15 @@ didCompleteWithError:(nullable NSError *)error
             
         } else if (code < 200 || code >= 300) {
             
+            if (_data_TASK_DESCRIPTION_LCP_LSD_REGISTER != nil) {
+                try {
+                    NSString *msg = [[NSString alloc] initWithData:_data_TASK_DESCRIPTION_LCP_LSD_REGISTER encoding:NSUTF8StringEncoding];
+                    NSLog(@"%@", msg);
+                }
+                catch (NSException *e) {
+                    NSLog(@"%@", [e reason]);
+                }
+            }
             _data_TASK_DESCRIPTION_LCP_LSD_REGISTER = nil;
             
             NSLog(@"%@", [NSString stringWithFormat:@"HTTP fail (TASK_DESCRIPTION_LCP_LSD_REGISTER) [%@] => (%li)", [(NSHTTPURLResponse *)task.response URL], code]);
@@ -473,15 +467,24 @@ didCompleteWithError:(nullable NSError *)error
             
             _data_TASK_DESCRIPTION_LCP_FETCH = nil;
             
-            NSLog(@"%@", [NSString stringWithFormat:@"HTTP error (TASK_DESCRIPTION_LCP_LSD_FETCH) [%@] => (%li) ... %@ [%li]", [(NSHTTPURLResponse *)task.originalRequest URL], code, error.domain, error.code]);
+            NSLog(@"%@", [NSString stringWithFormat:@"HTTP error (TASK_DESCRIPTION_LCP_FETCH) [%@] => (%li) ... %@ [%li]", [(NSHTTPURLResponse *)task.originalRequest URL], code, error.domain, error.code]);
             
             _doneCallback_fetchAndInjectUpdatedLicense(false);
             
         } else if (code < 200 || code >= 300) {
             
+            if (_data_TASK_DESCRIPTION_LCP_FETCH != nil) {
+                try {
+                    NSString *msg = [[NSString alloc] initWithData:_data_TASK_DESCRIPTION_LCP_FETCH encoding:NSUTF8StringEncoding];
+                    NSLog(@"%@", msg);
+                }
+                catch (NSException *e) {
+                    NSLog(@"%@", [e reason]);
+                }
+            }
             _data_TASK_DESCRIPTION_LCP_FETCH = nil;
             
-            NSLog(@"%@", [NSString stringWithFormat:@"HTTP fail (TASK_DESCRIPTION_LCP_LSD_FETCH) [%@] => (%li)", [(NSHTTPURLResponse *)task.response URL], code]);
+            NSLog(@"%@", [NSString stringWithFormat:@"HTTP fail (TASK_DESCRIPTION_LCP_FETCH) [%@] => (%li)", [(NSHTTPURLResponse *)task.response URL], code]);
             
             _doneCallback_fetchAndInjectUpdatedLicense(false);
             
@@ -533,6 +536,15 @@ didCompleteWithError:(nullable NSError *)error
             
         } else if (code < 200 || code >= 300) {
             
+            if (_data_TASK_DESCRIPTION_LCP_LSD_RENEW != nil) {
+                try {
+                    NSString *msg = [[NSString alloc] initWithData:_data_TASK_DESCRIPTION_LCP_LSD_RENEW encoding:NSUTF8StringEncoding];
+                    NSLog(@"%@", msg);
+                }
+                catch (NSException *e) {
+                    NSLog(@"%@", [e reason]);
+                }
+            }
             _data_TASK_DESCRIPTION_LCP_LSD_RENEW = nil;
             
             NSLog(@"%@", [NSString stringWithFormat:@"HTTP fail (TASK_DESCRIPTION_LCP_LSD_RENEW) [%@] => (%li)", [(NSHTTPURLResponse *)task.response URL], code]);
@@ -540,8 +552,16 @@ didCompleteWithError:(nullable NSError *)error
             _doneCallback_doRenew(false);
             
         } else {
-            
             try {
+                if (_data_TASK_DESCRIPTION_LCP_LSD_RENEW != nil) {
+                    try {
+                        NSString *msg = [[NSString alloc] initWithData:_data_TASK_DESCRIPTION_LCP_LSD_RENEW encoding:NSUTF8StringEncoding];
+                        NSLog(@"%@", msg);
+                    }
+                    catch (NSException *e) {
+                        NSLog(@"%@", [e reason]);
+                    }
+                }
                 _data_TASK_DESCRIPTION_LCP_LSD_RENEW = nil;
                 
                 // forces re-check of LSD, now with updated LCP timestamp
@@ -583,6 +603,15 @@ didCompleteWithError:(nullable NSError *)error
             
         } else if (code < 200 || code >= 300) {
             
+            if (_data_TASK_DESCRIPTION_LCP_LSD_RETURN != nil) {
+                try {
+                    NSString *msg = [[NSString alloc] initWithData:_data_TASK_DESCRIPTION_LCP_LSD_RETURN encoding:NSUTF8StringEncoding];
+                    NSLog(@"%@", msg);
+                }
+                catch (NSException *e) {
+                    NSLog(@"%@", [e reason]);
+                }
+            }
             _data_TASK_DESCRIPTION_LCP_LSD_RETURN = nil;
             
             NSLog(@"%@", [NSString stringWithFormat:@"HTTP fail (TASK_DESCRIPTION_LCP_LSD_RETURN) [%@] => (%li)", [(NSHTTPURLResponse *)task.response URL], code]);
@@ -592,6 +621,15 @@ didCompleteWithError:(nullable NSError *)error
         } else {
             
             try {
+                if (_data_TASK_DESCRIPTION_LCP_LSD_RETURN != nil) {
+                    try {
+                        NSString *msg = [[NSString alloc] initWithData:_data_TASK_DESCRIPTION_LCP_LSD_RETURN encoding:NSUTF8StringEncoding];
+                        NSLog(@"%@", msg);
+                    }
+                    catch (NSException *e) {
+                        NSLog(@"%@", [e reason]);
+                    }
+                }
                 _data_TASK_DESCRIPTION_LCP_LSD_RETURN = nil;
                 
                 // forces re-check of LSD, now with updated LCP timestamp
@@ -676,7 +714,6 @@ didCompleteWithError:(nullable NSError *)error
         }
         
         NSDictionary *updatedJsonDict = [rootJsonDict valueForKey:@"updated"];
-        
         strTemp = [updatedJsonDict valueForKey:@"license"];
         if (strTemp != nil) {
             _statusDocument_UPDATED_LICENSE = strTemp;
@@ -706,7 +743,7 @@ didCompleteWithError:(nullable NSError *)error
                         templated = YES;
                     }
                 } else if ([templated_ isKindOfClass:[NSNumber class]]) {
-                    if (((NSNumber*)templated_) > 0) {
+                    if ([((NSNumber*)templated_) integerValue] > 0) {
                         templated = YES;
                     }
                 }
@@ -778,7 +815,7 @@ didCompleteWithError:(nullable NSError *)error
 }
 
 -(bool)hasLicenseUpdatePending {
-    if (_statusDocument_UPDATED_LICENSE == nil) {
+    if (_statusDocument_UPDATED_LICENSE == nil || [_statusDocument_UPDATED_LICENSE length] == 0) {
         return false;
     }
     
@@ -961,7 +998,6 @@ didCompleteWithError:(nullable NSError *)error
     [task resume];
 }
 
-
 -(void)doRenew:(DoneCallback)doneCallback_doRenew //void(^)(bool)
 {
     if (_statusDocument_LINK_RENEW == nil) {
@@ -987,7 +1023,6 @@ didCompleteWithError:(nullable NSError *)error
     //urlString = [urlString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     
     NSURL *url = [NSURL URLWithString:urlString];
-    
     
     NSURLSessionConfiguration *config = [NSURLSessionConfiguration ephemeralSessionConfiguration];
     
@@ -1073,17 +1108,66 @@ didCompleteWithError:(nullable NSError *)error
     [task resume];
 }
 
+- (NSString *)identifier {
+    return _statusDocument_ID;
+}
 
+- (NSString *)message {
+    return _statusDocument_MESSAGE;
+}
+
+- (NSString *)status {
+    return _statusDocument_STATUS;
+}
 -(bool)isActive {
     return (_statusDocument_STATUS != nil && [_statusDocument_STATUS isEqualToString:@"active"]);
 }
 
--(bool)hasRenewLink {
-    return (_statusDocument_LINK_RENEW != nil);
+- (NSDate *)statusUpdated {
+    if (_statusDocument_UPDATED_STATUS != nil && [_statusDocument_UPDATED_STATUS length] > 0) {
+        NSISO8601DateFormatter *dateFormatter = [[NSISO8601DateFormatter alloc] init];
+        return [dateFormatter dateFromString:_statusDocument_UPDATED_STATUS]; // can be nil
+    }
+    return nil;
+}
+- (NSDate *)licenseUpdated {
+    if (_statusDocument_UPDATED_LICENSE != nil && [_statusDocument_UPDATED_LICENSE length] > 0) {
+        NSISO8601DateFormatter *dateFormatter = [[NSISO8601DateFormatter alloc] init];
+        return [dateFormatter dateFromString:_statusDocument_UPDATED_LICENSE]; // can be nil
+    }
+    return nil;
+}
+- (NSDate *)potentialRightsEnd {
+    if (_statusDocument_POTENTIAL_RIGHTS_END != nil && [_statusDocument_POTENTIAL_RIGHTS_END length] > 0) {
+        NSISO8601DateFormatter *dateFormatter = [[NSISO8601DateFormatter alloc] init];
+        return [dateFormatter dateFromString:_statusDocument_POTENTIAL_RIGHTS_END]; // can be nil
+    }
+    return nil;
 }
 
--(bool)hasReturnLink {
+- (StatusDocumentLink *)licenseLink {
+    return _statusDocument_LINK_LICENSE;
+}
+
+- (bool)hasRegisterLink {
+    return (_statusDocument_LINK_REGISTER != nil);
+}
+- (StatusDocumentLink *)registerLink {
+    return _statusDocument_LINK_REGISTER;
+}
+
+- (bool)hasRenewLink {
+    return (_statusDocument_LINK_RENEW != nil);
+}
+- (StatusDocumentLink *)renewLink {
+    return _statusDocument_LINK_RENEW;
+}
+
+- (bool)hasReturnLink {
     return (_statusDocument_LINK_RETURN != nil);
+}
+- (StatusDocumentLink *)returnLink {
+    return _statusDocument_LINK_RETURN;
 }
 
 @end
@@ -1102,3 +1186,4 @@ didCompleteWithError:(nullable NSError *)error
 //        });
 //    });
 
+// NSLog(@"%s", __PRETTY_FUNCTION__);

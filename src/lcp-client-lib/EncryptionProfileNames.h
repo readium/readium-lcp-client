@@ -28,6 +28,8 @@
 #ifndef __ENCRYPTION_PROFILE_NAMES_H__
 #define __ENCRYPTION_PROFILE_NAMES_H__
 
+#if ENABLE_PROFILE_NAMES
+
 #include <string>
 
 namespace lcp
@@ -36,7 +38,10 @@ namespace lcp
     {
     public:
         static std::string Lcp1dot0ProfileId;
+        static std::string LcpBasicProfileId;
     };
 }
+
+#endif //ENABLE_PROFILE_NAMES
 
 #endif //__ENCRYPTION_PROFILE_NAMES_H__

@@ -25,11 +25,11 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import "LCPLicense.h"
-
 #import "ICrypto.h"
 #import "ILicense.h"
-
 #import "ILinks.h"
+#import "IRights.h"
+#import "IUser.h"
 
 @interface LCPLicense ()
 @property (nonatomic) lcp::ILicense *nativeLicense;
@@ -77,9 +77,89 @@
     return _nativeLicense->Decrypted();
 }
 
+- (NSString *)username
+{
+    if (_nativeLicense->User() != NULL) { // _nativeLicense->User()->Name() can be std::string.empty(), but not nil
+        return [NSString stringWithUTF8String:_nativeLicense->User()->Name().c_str()];
+    }
+    return @""; // no nil return to be consistent with the above potential missing Name() JSON value (empty std::string)
+}
+
 - (NSString *)userHint
 {
     return [NSString stringWithUTF8String:_nativeLicense->Crypto()->UserKeyHint().c_str()];
+}
+
+- (NSString *)originalJSON
+{
+    return [NSString stringWithUTF8String:_nativeLicense->OriginalContent().c_str()];
+}
+
+- (NSString *)canonicalJSON
+{
+    return [NSString stringWithUTF8String:_nativeLicense->CanonicalContent().c_str()];
+}
+
+- (NSDate *)rightsStart {
+    std::string start;
+    // _nativeLicense->Rights()->HasRightValue(lcp::StartRight)
+    if (_nativeLicense->Rights() != NULL && _nativeLicense->Rights()->GetRightValue(lcp::StartRight, start)) {
+        NSString *startDateString = [NSString stringWithUTF8String:start.c_str()];
+
+        NSISO8601DateFormatter *dateFormatter = [[NSISO8601DateFormatter alloc] init];
+        NSDate *startDate = [dateFormatter dateFromString:startDateString]; // may be nil
+        return startDate;
+    }
+    return nil;
+
+//    NSData *data = [[self canonicalJSON] dataUsingEncoding:NSUTF8StringEncoding];
+//
+//    NSError *error;
+//    NSDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+//    if (!jsonDictionary) {
+//        NSLog(@"Failed to parse license JSON: %@", error);
+//        return nil;
+//    }
+//
+//    NSDictionary *rights = [jsonDictionary objectForKey:@"rights"];
+//    if (rights == nil) { //  no need to check for (id)[NSNull null] here (because source data is LCP license JSON)
+//        return nil;
+//    }
+//    NSString *startDateString = [rights objectForKey:@"start"];
+//    if (startDateString == nil || [startDateString length] == 0) { // early exit
+//        return nil;
+//    }
+}
+
+- (NSDate *)rightsEnd {
+    std::string end;
+    // _nativeLicense->Rights()->HasRightValue(lcp::StartRight)
+    if (_nativeLicense->Rights() != NULL && _nativeLicense->Rights()->GetRightValue(lcp::EndRight, end)) {
+        NSString *endDateString = [NSString stringWithUTF8String:end.c_str()];
+
+        NSISO8601DateFormatter *dateFormatter = [[NSISO8601DateFormatter alloc] init];
+        NSDate *endDate = [dateFormatter dateFromString:endDateString]; // may be nil
+        return endDate;
+    }
+    return nil;
+
+//    NSData *data = [[self canonicalJSON] dataUsingEncoding:NSUTF8StringEncoding];
+//
+//    NSError *error;
+//    NSDictionary *jsonDictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+//    if (!jsonDictionary) {
+//        NSLog(@"Failed to parse license JSON: %@", error);
+//        return nil;
+//    }
+//
+//    NSDictionary *rights = [jsonDictionary objectForKey:@"rights"];
+//    if (rights == nil) { //  no need to check for (id)[NSNull null] here (because source data is LCP license JSON)
+//        return nil;
+//    }
+//    NSString *endDateString = [rights objectForKey:@"end"];
+//    if (endDateString == nil || [endDateString length] == 0) { // early exit
+//        return nil;
+//    }
 }
 
 @end

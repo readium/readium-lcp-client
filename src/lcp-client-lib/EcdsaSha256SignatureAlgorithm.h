@@ -59,7 +59,10 @@ namespace lcp
 
     private:
         typedef CryptoPP::ECDSA<CryptoPP::ECP, CryptoPP::SHA256>::Verifier ThisVerifier;
-        CryptoPP::ECDSA<CryptoPP::ECP, CryptoPP::SHA256>::PublicKey m_publicKey;
+
+//        CryptoPP::ECDSA<CryptoPP::ECP, CryptoPP::SHA256>::PublicKey m_publicKey;
+//        CryptoPP::ByteQueue m_publicKeyQueue;
+        KeyType m_publicKeyType;
     };
 }
 

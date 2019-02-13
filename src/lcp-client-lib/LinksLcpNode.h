@@ -52,7 +52,7 @@ namespace lcp
         virtual bool GetLinks(const std::string & name, std::vector<Link> & links) const;
 
     private:
-        Link ParseLinkValues(const rapidjson::Value & linkObject, JsonValueReader * reader);
+        Link ParseLinkValues(const rapidjson::Value & linkObject, JsonValueReader * reader, bool checkHref);
 
     private:
         typedef std::multimap<std::string, Link> LinksMap;

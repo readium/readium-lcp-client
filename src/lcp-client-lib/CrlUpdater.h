@@ -37,11 +37,16 @@
 #include "ICertificate.h"
 
 #if !DISABLE_NET_PROVIDER
-#include "SimpleMemoryWritableStream.h"
 #include "public/INetProvider.h"
 #endif //!DISABLE_NET_PROVIDER
 
 #include "NonCopyable.h"
+
+#if !DISABLE_CRL_DOWNLOAD_IN_MEMORY
+#include "SimpleMemoryWritableStream.h"
+#endif // !DISABLE_CRL_DOWNLOAD_IN_MEMORY
+
+#include "public/IFileSystemProvider.h"
 
 namespace lcp
 {
@@ -62,8 +67,13 @@ namespace lcp
 #if !DISABLE_NET_PROVIDER
             INetProvider * netProvider,
 #endif //!DISABLE_NET_PROVIDER
+
+                IFileSystemProvider * fileSystemProvider,
+
             ICertificateRevocationList * revocationList,
+#if !DISABLE_CRL_BACKGROUND_POLL
             ThreadTimer * threadTimer,
+#endif //!DISABLE_CRL_BACKGROUND_POLL
             const std::string & defaultCrlUrl
             );
 
@@ -95,10 +105,20 @@ namespace lcp
         INetProvider * m_netProvider;
 #endif //!DISABLE_NET_PROVIDER
         ICertificateRevocationList * m_revocationList;
+#if !DISABLE_CRL_BACKGROUND_POLL
         ThreadTimer * m_threadTimer;
+#endif //!DISABLE_CRL_BACKGROUND_POLL
 
 #if !DISABLE_NET_PROVIDER
+
+        IFileSystemProvider * m_fileSystemProvider;
+
+#if !DISABLE_CRL_DOWNLOAD_IN_MEMORY
         std::unique_ptr<SimpleMemoryWritableStream> m_crlStream;
+#else // !DISABLE_CRL_DOWNLOAD_IN_MEMORY
+        std::unique_ptr<IFile> m_crlFile;
+#endif // !DISABLE_CRL_DOWNLOAD_IN_MEMORY
+
         std::unique_ptr<IDownloadRequest> m_downloadRequest;
 #endif //!DISABLE_NET_PROVIDER
 

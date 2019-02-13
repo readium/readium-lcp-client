@@ -96,11 +96,15 @@ namespace lcp
 
     Status CryptoLcpNode::VerifyNode(ILicense * license, IClientProvider * clientProvider, ICryptoProvider * cryptoProvider)
     {
+#if ENABLE_PROFILE_NAMES
         m_encryptionProfile = m_encryptionProfilesManager->GetProfile(m_cryptoInfo.encryptionProfile);
         if (m_encryptionProfile == nullptr)
         {
             return Status(StatusCode::ErrorCommonEncryptionProfileNotFound, "ErrorCommonEncryptionProfileNotFound");
         }
+#else
+        m_encryptionProfile = m_encryptionProfilesManager->GetProfile();
+#endif //ENABLE_PROFILE_NAMES
 
         if (m_encryptionProfile->ContentKeyAlgorithmCBC() != m_cryptoInfo.contentKeyAlgorithm && m_encryptionProfile->ContentKeyAlgorithmGCM() != m_cryptoInfo.contentKeyAlgorithm)
         {

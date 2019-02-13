@@ -60,6 +60,7 @@ namespace lcptest
         ASSERT_EQ(lcp::StatusCode::ErrorCommonSuccess, res.Code);
     }
 
+#if ENABLE_PROFILE_NAMES
     TEST_F(CryptoppCryptoProviderTest, VerifyLicense_Return_ErrorCommonEncryptionProfileNotFound)
     {
         FakeCryptoImpl crypto;
@@ -69,6 +70,7 @@ namespace lcptest
         lcp::Status res = m_cryptoProvider->VerifyLicense(TestCertificate, &license);
         ASSERT_EQ(lcp::StatusCode::ErrorCommonEncryptionProfileNotFound, res.Code);
     }
+#endif //ENABLE_PROFILE_NAMES
 
     TEST_F(CryptoppCryptoProviderTest, VerifyLicense_Return_ErrorOpeningNoRootCertificate)
     {

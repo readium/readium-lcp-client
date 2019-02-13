@@ -49,6 +49,14 @@ JNIEXPORT jstring JNICALL Java_org_readium_sdk_lcp_License_nativeGetOriginalCont
     return res;
 }
 
+JNIEXPORT jstring JNICALL Java_org_readium_sdk_lcp_License_nativeGetPassphraseHint(
+        JNIEnv *env, jobject obj, jlong licensePtr) {
+    lcp::ILicense * license = (lcp::ILicense *) licensePtr;
+    std::string hint = license->Crypto()->UserKeyHint();
+    jstring res = env->NewStringUTF(hint.c_str());
+    return res;
+}
+
 JNIEXPORT jstring JNICALL Java_org_readium_sdk_lcp_License_nativeGetLinkPublication(
         JNIEnv *env, jobject obj, jlong licensePtr) {
     lcp::ILicense * license = (lcp::ILicense *) licensePtr;

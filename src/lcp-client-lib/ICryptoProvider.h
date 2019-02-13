@@ -46,11 +46,21 @@ namespace lcp
             ILicense * license
             ) = 0;
 
+#if !DISABLE_CRL
+        virtual Status CheckRevokation(ILicense* license) = 0;
+#endif //!DISABLE_CRL
+        
         virtual Status DecryptUserKey(
-            const std::string & userPassphrase,
-            ILicense * license,
-            KeyType & userKey
-            ) = 0;
+                const std::string & userPassphrase,
+                ILicense * license,
+                KeyType & userKey1,
+                KeyType & userKey2
+        ) = 0;
+
+        virtual Status LegacyPassphraseUserKey(
+                const KeyType & userKey1,
+                KeyType & userKey2
+        ) = 0;
 
         virtual Status DecryptContentKey(
             const KeyType & userKey,

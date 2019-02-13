@@ -27,6 +27,8 @@
 #if !DISABLE_NET_PROVIDER
 
 #include "NetProvider.h"
+#include "BaseDownloadRequest.h"
+
 #include "Util.h"
 
 namespace lcp {
@@ -49,6 +51,12 @@ namespace lcp {
     ) {
         JNIEnv * env = getJNIEnv();
         jstring jUrl = env->NewStringUTF(request->Url().c_str());
+
+        if (!request->HasDestinationPath()) {
+            // TODO: write to STREAM instead!!
+            // request->DestinationStream()
+        }
+
         jstring jDstPath = env->NewStringUTF(request->DestinationPath().c_str());
         env->CallVoidMethod(this->jNetProvider, this->jDownloadMethodId, jUrl, jDstPath,
                                    (jlong) request, (jlong) callback);
@@ -70,9 +78,18 @@ JNIEXPORT void JNICALL Java_org_readium_sdk_lcp_NetProviderCallback_nativeOnRequ
 }
 
 JNIEXPORT void JNICALL Java_org_readium_sdk_lcp_NetProviderCallback_nativeOnRequestEnded(
-        JNIEnv *env, jobject obj, jlong callbackPtr, jlong requestPtr) {
+        JNIEnv *env, jobject obj, jlong callbackPtr, jlong requestPtr, jstring path) {
     lcp::INetProviderCallback * callback = (lcp::INetProviderCallback *) callbackPtr;
     lcp::IDownloadRequest * request = (lcp::IDownloadRequest *) requestPtr;
+
+    // This is a hack, see TODO above in StartDownloadRequest() (Java/JNI NetProvider only supports download-to-file, not memory stream!)
+    lcp::BaseDownloadRequest* request_ = dynamic_cast<lcp::BaseDownloadRequest*>(request);
+    if (request_) {
+        const char *path_ = env->GetStringUTFChars(path, 0);
+        request_->SetSuggestedFileName(std::string(path_));
+    }
+
+
     lcp::Status status(lcp::StatusCode::ErrorCommonSuccess);
     callback->OnRequestEnded(request, status);
 }
