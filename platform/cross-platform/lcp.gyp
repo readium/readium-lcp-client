@@ -75,6 +75,7 @@
         '-fpermissive',
         '-frtti',
         '-fexceptions',
+        '-DZLIB_ONLY'
       ],
       'sources': [
         '<@(zip_lib_sources)'
