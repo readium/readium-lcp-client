@@ -228,6 +228,17 @@ task copyLibs {
                         }
                         into("${dstDirPath_LIBS}")
                     }
+
+                    if (lcpBuildContentFilter) {
+                        srcDirPath_LIBS = "${readiumSdkLibDir}/${buildType.name.toUpperCase()}/${abiFilter}"
+
+                        copy {
+                            from("${srcDirPath_LIBS}") {
+                                include("*.so")
+                            }
+                            into("${dstDirPath_LIBS}")
+                        }
+                    }
                 }
             }
         }
