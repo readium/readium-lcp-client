@@ -1,6 +1,10 @@
 apply plugin: 'com.android.library'
 
 repositories {
+    google()
+    maven {
+        url "https://maven.google.com"
+    }
     mavenCentral()
     jcenter()
 }
@@ -89,6 +93,17 @@ android {
                         "-DRSDK_LIB_DIR=${readiumSdkLibDir}",
                         "-DEXTRA_CMAKE=${extraCmake}"
                 }
+
+                if (!ndk_skipARM && !ndk_skipX86) {
+                    abiFilters = ['armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64']
+                } else {
+                    if (!ndk_skipARM) {
+                        abiFilters = ['armeabi-v7a', 'arm64-v8a']
+                    }
+                    if (!ndk_skipX86) {
+                        abiFilters = ['x86', 'x86_64']
+                    }
+                }
             }
         }
     }
@@ -138,101 +153,81 @@ android {
         }
     }
 
+    flavorDimensions "version"
     productFlavors {
-        if (!ndk_skipARM) {
-            arm7 {
+        if (!ndk_skipARM && !ndk_skipX86) {
+            'armeabi-v7a--arm64-v8a--x86--x86_64' {
+                dimension "version"
                 ndk {
-                    abiFilter 'armeabi-v7a'
+                    abiFilters = ['armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64']
                 }
             }
-        }
-        if (!ndk_skipX86) {
-            x86 {
-                ndk {
-                    abiFilter 'x86'
+        } else {
+            if (!ndk_skipARM) {
+                'armeabi-v7a--arm64-v8a' {
+                    dimension "version"
+                    ndk {
+                        abiFilters = ['armeabi-v7a', 'arm64-v8a']
+                    }
                 }
             }
-        }
-        /*arm8 {
-            ndk {
-                abiFilters 'arm64-v8a'
-            }
-        }
-        arm {
-            ndk {
-                abiFilter 'armeabi'
-            }
-        }
-        x86_64 {
-            ndk {
-                abiFilter 'x86_64'
-            }
-        }*/
-    }
-}
-
-build.doLast {
-    println("Copy libs to dist directory")
-    android.productFlavors.all { flavor ->
-        android.buildTypes.all { buildType ->
-            def abiFilter = flavor.ndk.abiFilters.first()
-            def dstDirPath = "${project.projectDir}/../dist/${buildType.name.toLowerCase()}/${abiFilter}"
-
-            // Copy static libs
-            def srcDirPath = "${project.projectDir}/.externalNativeBuild/cmake/${flavor.name}${buildType.name.capitalize()}/${abiFilter}"
-
-            copy {
-                from("${srcDirPath}") {
-                    include("*.a")
+            if (!ndk_skipX86) {
+                'x86--x86_64' {
+                    dimension "version"
+                    ndk {
+                        abiFilters = ['x86', 'x86_64']
+                    }
                 }
-                into("${dstDirPath}")
-            }
-
-            // Copy shared libs
-            srcDirPath = "${project.projectDir}/build/intermediates/cmake/${flavor.name}/${buildType.name}/obj/${abiFilter}"
-
-            copy {
-                from("${srcDirPath}") {
-                    include("*.so")
-                }
-                into("${dstDirPath}")
-            }
-
-            // Copy aar
-            srcDirPath = "${project.projectDir}/build/outputs/aar"
-            def srcFilename = "lib-${flavor.name}-${buildType.name}.aar"
-
-            copy {
-                from("${srcDirPath}") {
-                    include(srcFilename)
-                }
-                into("${dstDirPath}")
-                rename(srcFilename, "liblcp.aar")
             }
         }
     }
 }
 
 clean.doFirst {
-    println("Clean dist directory")
+    println("Clean dist and libs directory")
+
     def dstDirPath = "${project.projectDir}/../dist/"
+    delete dstDirPath
+
+    dstDirPath = "${project.projectDir}/libs/"
     delete dstDirPath
 }
 
 task copyLibs {
     doLast {
-        println ("Copy shared library to libs")
+        println ("Copy libs ...")
         android.productFlavors.all { flavor ->
             android.buildTypes.all { buildType ->
-                def abiFilter = flavor.ndk.abiFilters.first()
-                def srcDirPath = "${project.projectDir}/build/intermediates/cmake/${flavor.name}/${buildType.name}/obj/${abiFilter}"
-                def dstDirPath = "${project.projectDir}/libs/${abiFilter}"
 
+                def srcDirPath_AAR = "${project.projectDir}/build/outputs/aar"
+                def dstDirPath_AAR = "${project.projectDir}/../dist/${buildType.name.toUpperCase()}"
                 copy {
-                    from("${srcDirPath}") {
-                        include("liblcp.so")
+                    from("${srcDirPath_AAR}") {
+                        include("lib-${flavor.name}-${buildType.name}.aar")
                     }
-                    into("${dstDirPath}")
+                    into("${dstDirPath_AAR}")
+                }
+
+                // def srcFilename = "lib-${flavor.name}-${buildType.name}.aar"
+                // copy {
+                //     from("${srcDirPath_AAR}") {
+                //         include(srcFilename)
+                //     }
+                //     into("${dstDirPath_AAR}")
+                //     rename(srcFilename, "liblcp.aar")
+                // }
+
+                flavor.ndk.abiFilters.each { abiFilter ->
+
+                    def srcDirPath_LIBS = "${project.projectDir}/build/intermediates/cmake/${flavor.name}/${buildType.name}/obj/${abiFilter}"
+                    def dstDirPath_LIBS = "${project.projectDir}/libs/${buildType.name.toUpperCase()}/${abiFilter}"
+
+                    copy {
+                        from("${srcDirPath_LIBS}") {
+                            include("*.so", "*.a")
+                        }
+                        into("${dstDirPath_LIBS}")
+                    }
                 }
             }
         }
