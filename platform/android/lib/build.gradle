@@ -38,28 +38,41 @@ if (rootProject.hasProperty("readium_sdk_include_dir")) {
 if (rootProject.hasProperty("readium_lcp_build_content_filter")) {
     lcpBuildContentFilter = rootProject.readium_lcp_build_content_filter
 }
-println("extraCmake ${extraCmake}")
+
+// println "[[${project.name}]] (LIB) Gradle Experimental: ${ndk_experimental}"
+println "[[${project.name}]] (LIB) Skip ARM: ${ndk_skipARM}"
+println "[[${project.name}]] (LIB) Skip x86: ${ndk_skipX86}"
+println "[[${project.name}]] (LIB) Clang: ${ndk_clang}"
+println "[[${project.name}]] (LIB) extraCmake: ${extraCmake}"
+
 def toolchain = ndk_clang ? "clang" : "gcc"
 def stl = ndk_clang ? "c++_shared" : "gnustl_shared"
 
 if (!lcpBuildContentFilter) {
     try {
         def epub3Dir = project(':epub3').projectDir
-        readiumSdkLibDir = "${epub3Dir}/libs"
+        readiumSdkLibDir = "${epub3Dir}/jniLibs"
         readiumSdkIncludeDir = "${epub3Dir}/include"
         lcpBuildContentFilter = true
-        println("Build with rsdk *")
+        println "[[${project.name}]] (LIB) lcpBuildContentFilter 2: ${lcpBuildContentFilter}"
     } catch (UnknownProjectException e) {
-        // No epub3 project is defined
-        println("Build without rsdk")
+        println "[[${project.name}]] (LIB) lcpBuildContentFilter 3: ${lcpBuildContentFilter}"
     }
 } else {
-    println("Build with rsdk")
+    println "[[${project.name}]] (LIB) lcpBuildContentFilter 1: ${lcpBuildContentFilter}"
 }
-println "${lcpBuildContentFilter}"
-println "${readiumSdkLibDir}"
-println "${readiumSdkIncludeDir}"
+
+println "[[${project.name}]] (LIB) readiumSdkLibDir: ${readiumSdkLibDir}"
+println "[[${project.name}]] (LIB) readiumSdkIncludeDir: ${readiumSdkIncludeDir}"
+
+def currentBuildType
 android {
+    libraryVariants.all { variant ->
+        println "[[${project.name}]] (LIB) libraryVariant buildType: ${variant.buildType.name}"
+
+        // currentBuildType = variant.buildType.name
+    }
+
     compileSdkVersion 28
     buildToolsVersion "28.0.3"
 
@@ -181,62 +194,79 @@ android {
             }
         }
     }
+
+    variantFilter { variant ->
+        println "[[${project.name}]] (LIB) variantFilter buildType: ${variant.buildType.name}"
+
+        // def names = variant.flavors*.name
+        // if (names.contains("xxx")) {
+        //     setIgnore(true)
+        // }
+    }
 }
 
 clean.doFirst {
-    println("Clean dist and libs directory")
+    println "[[${project.name}]] (LIB) Remove *.so *.aar"
 
     def dstDirPath = "${project.projectDir}/../dist/"
     delete dstDirPath
 
-    dstDirPath = "${project.projectDir}/libs/"
+    dstDirPath = "${project.projectDir}/jniLibs/"
     delete dstDirPath
 }
 
 task copyLibs {
     doLast {
-        println ("Copy libs ...")
+        println "[[${project.name}]] (LIB) Copy *.so *.aar (${currentBuildType})"
+
         android.productFlavors.all { flavor ->
+            println "  [[${project.name}]] (LIB) productFlavor (${flavor.name})"
+
             android.buildTypes.all { buildType ->
+                println "    [[${project.name}]] (LIB) buildType (${buildType.name})"
 
-                def srcDirPath_AAR = "${project.projectDir}/build/outputs/aar"
-                def dstDirPath_AAR = "${project.projectDir}/../dist/${buildType.name.toUpperCase()}"
-                copy {
-                    from("${srcDirPath_AAR}") {
-                        include("lib-${flavor.name}-${buildType.name}.aar")
-                    }
-                    into("${dstDirPath_AAR}")
-                }
+                if (currentBuildType == buildType.name) {
 
-                // def srcFilename = "lib-${flavor.name}-${buildType.name}.aar"
-                // copy {
-                //     from("${srcDirPath_AAR}") {
-                //         include(srcFilename)
-                //     }
-                //     into("${dstDirPath_AAR}")
-                //     rename(srcFilename, "liblcp.aar")
-                // }
-
-                flavor.ndk.abiFilters.each { abiFilter ->
-
-                    def srcDirPath_LIBS = "${project.projectDir}/build/intermediates/cmake/${flavor.name}/${buildType.name}/obj/${abiFilter}"
-                    def dstDirPath_LIBS = "${project.projectDir}/libs/${buildType.name.toUpperCase()}/${abiFilter}"
-
+                    def srcDirPath_AAR = "${project.projectDir}/build/outputs/aar"
+                    def dstDirPath_AAR = "${project.projectDir}/../dist/${buildType.name.toUpperCase()}"
                     copy {
-                        from("${srcDirPath_LIBS}") {
-                            include("*.so", "*.a")
+                        from("${srcDirPath_AAR}") {
+                            include("lib-${flavor.name}-${buildType.name}.aar")
                         }
-                        into("${dstDirPath_LIBS}")
+                        into("${dstDirPath_AAR}")
                     }
 
-                    if (lcpBuildContentFilter) {
-                        srcDirPath_LIBS = "${readiumSdkLibDir}/${buildType.name.toUpperCase()}/${abiFilter}"
+                    // def srcFilename = "lib-${flavor.name}-${buildType.name}.aar"
+                    // copy {
+                    //     from("${srcDirPath_AAR}") {
+                    //         include(srcFilename)
+                    //     }
+                    //     into("${dstDirPath_AAR}")
+                    //     rename(srcFilename, "liblcp.aar")
+                    // }
+
+                    flavor.ndk.abiFilters.each { abiFilter ->
+                        println "      [[${project.name}]] (LIB) abiFilter (${abiFilter})"
+
+                        def srcDirPath_LIBS = "${project.projectDir}/build/intermediates/cmake/${flavor.name}/${buildType.name}/obj/${abiFilter}"
+                        def dstDirPath_LIBS = "${project.projectDir}/jniLibs/${buildType.name.toUpperCase()}/${abiFilter}"
 
                         copy {
                             from("${srcDirPath_LIBS}") {
-                                include("*.so")
+                                include("*.so", "*.a")
                             }
                             into("${dstDirPath_LIBS}")
+                        }
+
+                        if (lcpBuildContentFilter) {
+                            srcDirPath_LIBS = "${readiumSdkLibDir}/${buildType.name.toUpperCase()}/${abiFilter}"
+
+                            copy {
+                                from("${srcDirPath_LIBS}") {
+                                    include("*.so")
+                                }
+                                into("${dstDirPath_LIBS}")
+                            }
                         }
                     }
                 }
@@ -246,7 +276,64 @@ task copyLibs {
 }
 
 tasks.whenTaskAdded { task ->
-    if (task.name.startsWith('assemble')) {
-        task.dependsOn copyLibs
+    println "[[${project.name}]] (LIB) TaskAdded: ${task.name} (${currentBuildType})"
+
+    if (task.name.startsWith('compile')) {
+        if (lcpBuildContentFilter) {
+            // task.dependsOn ":epub3:buildMk"
+            if (task.name.toLowerCase().contains("debug")) {
+                task.dependsOn ":rsdk:assembleDebug"
+            } else {
+                task.dependsOn ":rsdk:assembleRelease"
+            }
+        }
+    }
+    if (task.name.startsWith("assemble")) {
+        task.finalizedBy copyLibs
     }
 }
+gradle.buildFinished { buildResult ->
+    println "[[${project.name}]] (LIB) buildFinished (${currentBuildType})"
+}
+
+gradle.taskGraph.whenReady { taskGraph ->
+    println "[[${project.name}]] (LIB) taskGraph ready"
+
+    // taskGraph.getAllTasks().last().finalizedBy copyLibs
+    taskGraph.getAllTasks().last().doLast {
+        println "[[${project.name}]] (LIB) last TASK (${currentBuildType})"
+    } // .dependsOn copyLibs
+
+    if (taskGraph.hasTask(buildRelease)) {
+        println "[[${project.name}]] (LIB) taskGraph RELEASE (build)"
+
+        currentBuildType = "release"
+    } else if (taskGraph.hasTask(buildDebug)) {
+        println "[[${project.name}]] (LIB) taskGraph DEBUG (build)"
+
+        currentBuildType = "debug"
+    } else {
+        if (taskGraph.hasTask(assembleRelease)) {
+            println "[[${project.name}]] (LIB) taskGraph RELEASE (assemble)"
+
+            currentBuildType = "release"
+        }
+        if (taskGraph.hasTask(assembleDebug)) {
+            println "[[${project.name}]] (LIB) taskGraph DEBUG (assemble)"
+
+            currentBuildType = "debug"
+        }
+    }
+}
+
+task buildRelease(type: GradleBuild, dependsOn: build) {
+}
+
+task buildDebug(type: GradleBuild, dependsOn: build) {
+}
+
+// task assembleRelease(type: GradleBuild, dependsOn: assemble) {
+// }
+
+// task assembleDebug(type: GradleBuild, dependsOn: assemble) {
+// }
