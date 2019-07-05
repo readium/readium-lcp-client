@@ -102,8 +102,6 @@ android {
                         "-DANDROID_PLATFORM=android-19",
                         "-DANDROID_TOOLCHAIN=${toolchain}",
                         "-DANDROID_STL=${stl}",
-                        "-DRSDK_INCLUDE_DIR=${readiumSdkIncludeDir}",
-                        "-DRSDK_LIB_DIR=${readiumSdkLibDir}",
                         "-DEXTRA_CMAKE=${extraCmake}"
                 }
 
