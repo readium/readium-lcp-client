@@ -7,6 +7,10 @@ import utils
 SYSTEM = platform.system().lower()
 
 if SYSTEM == "linux":
+    # Use ARM cross-compiler toolchain (arm-linux-gnueabi)
+    # os.environ["CC"] = "arm-linux-gnueabi-gcc"
+    # os.environ["CXX"] = "arm-linux-gnueabi-g++"
+    #
     # Use clang on linux
     # print "Use clang compiler"
     # os.environ["CC"] = "clang"

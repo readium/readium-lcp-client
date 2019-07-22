@@ -23,8 +23,11 @@
     {
       'target_name': 'lcp_content_filter',
       'type': 'static_library',
+      'standalone_static_library': 1,
       'cflags_cc': [
-        '-std=c++11'
+        '-std=c++11',
+        '-frtti',
+        '-fexceptions',
       ],
       'sources': [
         '<@(lcp_content_filter_sources)'
@@ -33,6 +36,7 @@
     {
       'target_name': 'lcp_client_lib',
       'type': 'static_library',
+      'standalone_static_library': 1,
       'dependencies': [
         'cryptopp',
         'zip_lib',
@@ -53,6 +57,7 @@
     {
       'target_name': 'cryptopp',
       'type': 'static_library',
+      'standalone_static_library': 1,
       'cflags_cc': [
         '-std=c++11',
         '-fpermissive',
@@ -66,6 +71,7 @@
     {
       'target_name': 'zip_lib',
       'type': 'static_library',
+      'standalone_static_library': 1,
       'dependencies': [
         'zlib',
         'bzip2'
@@ -83,6 +89,7 @@
     {
       'target_name': 'zlib',
       'type': 'static_library',
+      'standalone_static_library': 1,
       'sources': [
         '<@(zlib_sources)'
       ]
@@ -90,6 +97,7 @@
     {
       'target_name': 'bzip2',
       'type': 'static_library',
+      'standalone_static_library': 1,
       'sources': [
         '<@(bzip2_sources)'
       ]
@@ -97,6 +105,7 @@
     {
       'target_name': 'time64',
       'type': 'static_library',
+      'standalone_static_library': 1,
       'sources': [
         '<@(time64_sources)'
       ]
@@ -160,6 +169,11 @@
           'cflags': [
             '-m64',
             '-march=x86-64',
+# Use ARM cross-compiler toolchain (arm-linux-gnueabi)
+#            '-march=armv7-a',
+#            '-mthumb',
+#            '-mfpu=neon',
+#            '-mfloat-abi=hard',
           ],
           'cflags_cc': [
           ],
