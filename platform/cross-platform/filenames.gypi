@@ -183,6 +183,7 @@
     'lcp_client_lib_sources': [
       '<(lcp_client_lib_dir)/Acquisition.cpp',
       '<(lcp_client_lib_dir)/AesCbcSymmetricAlgorithm.cpp',
+      '<(lcp_client_lib_dir)/AesGcmSymmetricAlgorithm.cpp',
       '<(lcp_client_lib_dir)/AlgorithmNames.cpp',
       '<(lcp_client_lib_dir)/Certificate.cpp',
       '<(lcp_client_lib_dir)/CertificateExtension.cpp',
@@ -193,6 +194,7 @@
       '<(lcp_client_lib_dir)/CryptoppCryptoProvider.cpp',
       '<(lcp_client_lib_dir)/CryptoppUtils.cpp',
       '<(lcp_client_lib_dir)/DateTime.cpp',
+      '<(lcp_client_lib_dir)/EcdsaSha256SignatureAlgorithm.cpp',
       '<(lcp_client_lib_dir)/EncryptionProfileNames.cpp',
       '<(lcp_client_lib_dir)/EncryptionProfilesManager.cpp',
       '<(lcp_client_lib_dir)/JsonCanonicalizer.cpp',
