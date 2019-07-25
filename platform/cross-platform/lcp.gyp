@@ -16,6 +16,7 @@
       '-g', # Debug mode
     ],
     'defines': [
+      'ENABLE_NET_PROVIDER_ACQUISITION=1',
       'BUILDING_EPUB3'
     ]
   },
@@ -169,11 +170,10 @@
           'cflags': [
             '-m64',
             '-march=x86-64',
-# Use ARM cross-compiler toolchain (arm-linux-gnueabi)
-#            '-march=armv7-a',
-#            '-mthumb',
-#            '-mfpu=neon',
-#            '-mfloat-abi=hard',
+#             '-march=armv7-a',
+#             '-mthumb',
+#             '-mfpu=neon',
+#             '-mfloat-abi=hard',
           ],
           'cflags_cc': [
           ],

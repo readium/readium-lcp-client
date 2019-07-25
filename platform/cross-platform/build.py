@@ -7,14 +7,12 @@ import utils
 SYSTEM = platform.system().lower()
 
 if SYSTEM == "linux":
-    # Use ARM cross-compiler toolchain (arm-linux-gnueabi)
-    # os.environ["CC"] = "arm-linux-gnueabi-gcc"
-    # os.environ["CXX"] = "arm-linux-gnueabi-g++"
-    #
     # Use clang on linux
     # print "Use clang compiler"
-    # os.environ["CC"] = "clang"
-    # os.environ["CXX"] = "clang++"
+    # sudo apt-get install gcc-arm-linux-gnueabi g++-arm-linux-gnueabi
+    # sudo apt-get install libc6-armel-cross libc6-dev-armel-cross binutils-arm-linux-gnueabi libncurses5-dev
+    # os.environ["CC"] = "arm-linux-gnueabi-gcc"
+    # os.environ["CXX"] = "arm-linux-gnueabi-g++"
     # os.environ["GYP_DEFINES"] = "clang=1"
     GYP_OS = "linux"
 elif SYSTEM == "windows":
