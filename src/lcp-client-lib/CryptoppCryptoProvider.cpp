@@ -263,9 +263,16 @@ namespace lcp
 
             std::unique_ptr<ISymmetricAlgorithm> contentKeyAlgorithm(profile->CreateContentKeyAlgorithm(userKey2, algorithm));
             std::string id = contentKeyAlgorithm->Decrypt(license->Crypto()->UserKeyCheck());
-            if (!EqualsUtf8(id, license->Id()))
+            try
             {
-                return Status(StatusCode::ErrorDecryptionUserPassphraseNotValid, "ErrorDecryptionUserPassphraseNotValid");
+                if (!EqualsUtf8(id, license->Id()))
+                {
+                    return Status(StatusCode::ErrorDecryptionUserPassphraseNotValid, "ErrorDecryptionUserPassphraseNotValid");
+                }
+            }
+            catch (const std::exception & exc) // utf8::invalid_utf8
+            {
+                return Status(StatusCode::ErrorDecryptionUserPassphraseNotValid, "ErrorDecryptionUserPassphraseNotValid: " + std::string(exc.what()));
             }
             return Status(StatusCode::ErrorCommonSuccess);
         }
@@ -298,9 +305,16 @@ namespace lcp
             const std::string algorithm_ = license->Crypto()->ContentKeyAlgorithm();
             std::unique_ptr<ISymmetricAlgorithm> contentKeyAlgorithm_(profile->CreateContentKeyAlgorithm(userKey, algorithm_));
             std::string id = contentKeyAlgorithm_->Decrypt(license->Crypto()->UserKeyCheck());
-            if (!EqualsUtf8(id, license->Id()))
+            try
             {
-                return Status(StatusCode::ErrorDecryptionUserPassphraseNotValid, "ErrorDecryptionUserPassphraseNotValid");
+                if (!EqualsUtf8(id, license->Id()))
+                {
+                    return Status(StatusCode::ErrorDecryptionUserPassphraseNotValid, "ErrorDecryptionUserPassphraseNotValid");
+                }
+            }
+            catch (const std::exception & exc) // utf8::invalid_utf8
+            {
+                return Status(StatusCode::ErrorDecryptionUserPassphraseNotValid, "ErrorDecryptionUserPassphraseNotValid: " + std::string(exc.what()));
             }
 
             const std::string algorithm = license->Crypto()->ContentKeyAlgorithm();
