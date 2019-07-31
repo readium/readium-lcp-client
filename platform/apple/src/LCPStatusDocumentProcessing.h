@@ -100,7 +100,7 @@ typedef void (^DoneCallback)(bool);
 -(StatusDocumentLink *)returnLink;
 -(void)doReturn:(DoneCallback)doneCallback_doReturn; //void(^)(bool)
 
--(NSDate *)potentialRightsEndDate;
+-(NSDate *)potentialRightsEnd;
 
 - (NSDate *)statusUpdated;
 - (NSDate *)licenseUpdated;
