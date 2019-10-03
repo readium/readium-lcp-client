@@ -63,7 +63,13 @@ namespace lcp
         {
             return it->value;
         }
-        return rapidjson::Value(rapidjson::kNullType).Move();
+
+        // https://rapidjson.org/md_doc_tutorial.html#TemporaryValues
+        // https://github.com/Tencent/rapidjson/issues/387#issuecomment-122067853
+        // std::move() not needed (same as other returns, like it->value above)
+        // rapidjson::Value(rapidjson::kNullType).Move();
+        // rapidjson::Value().SetNull());
+        return rapidjson::Document().SetNull(); // THIS WORKS!! (allocator is preserved)
     }
 
     const rapidjson::Value & JsonValueReader::ReadArrayCheck(const std::string & name, const rapidjson::Value & jsonValue)
@@ -83,7 +89,13 @@ namespace lcp
         {
             return it->value;
         }
-        return rapidjson::Value(rapidjson::kNullType).Move();
+
+        // https://rapidjson.org/md_doc_tutorial.html#TemporaryValues
+        // https://github.com/Tencent/rapidjson/issues/387#issuecomment-122067853
+        // std::move() not needed (same as other returns, like it->value above)
+        // rapidjson::Value(rapidjson::kNullType).Move();
+        // rapidjson::Value().SetNull());
+        return rapidjson::Document().SetNull(); // THIS WORKS!! (allocator is preserved)
     }
 
     const rapidjson::Value & JsonValueReader::ReadObjectCheck(const std::string & name, const rapidjson::Value & jsonValue)
