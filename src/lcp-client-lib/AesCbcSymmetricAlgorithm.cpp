@@ -108,23 +108,29 @@ namespace lcp
             throw std::out_of_range("Invalid encrypted file, size is out of range");
         }
 
+        // we read the last two 16-bytes AES blocks (first one is IV for second)
         size_t readPosition = static_cast<size_t>(stream->Size()) - (CryptoPP::AES::BLOCKSIZE + CryptoPP::AES::BLOCKSIZE);
         stream->SetReadPosition(readPosition);
         std::vector<unsigned char> inBuffer(CryptoPP::AES::BLOCKSIZE + CryptoPP::AES::BLOCKSIZE);
-        std::vector<unsigned char> outBuffer(inBuffer.size());
         stream->Read(&inBuffer.at(0), inBuffer.size());
 
+        std::vector<unsigned char> outBuffer(CryptoPP::AES::BLOCKSIZE); // we only decrypt the last 16-bytes AES block
         size_t outSize = this->InnerDecrypt(
             &inBuffer.at(0),
             inBuffer.size(),
             &outBuffer.at(0),
             outBuffer.size(),
-            BlockPaddingSchemeDef::W3C_PADDING // Note that handling of W3C padding scheme during decryption also handles PKCS#7 (which is BlockPaddingSchemeDef::PKCS_PADDING in CryptoPP, with AES CBC Block Size > 8 (not PKCS#5))
+            BlockPaddingSchemeDef::NO_PADDING // if W3C_PADDING and padding length == full-length 16-bytes AES padding block, then outSize is ZERO
             );
+
+        // BlockPaddingSchemeDef::W3C_PADDING => ZERO for all unused bytes in the 16-bytes AES block, except for the last one which corresponds to the padding length.
+        // BlockPaddingSchemeDef::PKCS_PADDING (PKCS#7) => stores the padding length in ALL unused bytes in the 16-bytes AES block.
+        // Even when padding is not needed (because encrypted data is exactly a multiple of 16-bytes AES block size), there is a trailing padding block with the sole purpose of informing the presence of this full-length 16-bytes padding block.
+        size_t paddingSize = static_cast<size_t>(outBuffer[outBuffer.size() - 1]);
 
         return static_cast<size_t>(stream->Size())
             - CryptoPP::AES::BLOCKSIZE // minus IV or previous block
-            - (CryptoPP::AES::BLOCKSIZE - outSize) % CryptoPP::AES::BLOCKSIZE; // minus padding part
+            - paddingSize;
     }
 
     void AesCbcSymmetricAlgorithm::Decrypt(
@@ -166,23 +172,24 @@ namespace lcp
             blocksCount++;
         }
 
-        // Figure out what padding scheme to use 
-        BlockPaddingSchemeDef::BlockPaddingScheme padding = BlockPaddingSchemeDef::NO_PADDING;
-        size_t sizeWithoutPaddedBlock = plainTextSize - (plainTextSize % CryptoPP::AES::BLOCKSIZE);
-        if (rangeInfo.position + rangeInfo.length > sizeWithoutPaddedBlock)
-        {
-            padding = BlockPaddingSchemeDef::W3C_PADDING; // Note that handling of W3C padding scheme during decryption also handles PKCS#7 (which is BlockPaddingSchemeDef::PKCS_PADDING in CryptoPP, with AES CBC Block Size > 8 (not PKCS#5))
-        }
-
         // Read data from the stream
         stream->SetReadPosition(readPosition);
         std::vector<unsigned char> inBuffer(blocksCount * CryptoPP::AES::BLOCKSIZE);
         std::vector<unsigned char> outBuffer(inBuffer.size());
-        if (readPosition + inBuffer.size() > stream->Size())
+        int64_t total = readPosition + inBuffer.size();
+        int64_t ssize = stream->Size();
+        if (total > ssize)
         {
             throw std::out_of_range("encrypted stream is out of range");
         }
         stream->Read(&inBuffer.at(0), inBuffer.size());
+        
+        // Figure out what padding scheme to use
+        BlockPaddingSchemeDef::BlockPaddingScheme padding = BlockPaddingSchemeDef::NO_PADDING;
+        if (total > (ssize - CryptoPP::AES::BLOCKSIZE))
+        {
+            padding = BlockPaddingSchemeDef::W3C_PADDING; // Note that handling of W3C padding scheme during decryption also handles PKCS#7 (which is BlockPaddingSchemeDef::PKCS_PADDING in CryptoPP, with AES CBC Block Size > 8 (not PKCS#5))
+        }
 
         // Decrypt and copy necessary data
         size_t outSize = this->InnerDecrypt(

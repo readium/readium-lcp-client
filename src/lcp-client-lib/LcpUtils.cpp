@@ -103,6 +103,9 @@ namespace lcp
 
     bool EqualsUtf8(const std::string & left, const std::string & right)
     {
+        ValidateUtf8(left);
+        ValidateUtf8(right);
+        
         Utf8ConstIt leftBeginIt(left.begin(), left.begin(), left.end());
         Utf8ConstIt leftEndIt(left.end(), left.begin(), left.end());
         Utf8ConstIt rightBeginIt(right.begin(), right.begin(), right.end());
@@ -112,6 +115,9 @@ namespace lcp
 
     bool LexicographicalCompareUtf8(const std::string & left, const std::string & right)
     {
+        ValidateUtf8(left);
+        ValidateUtf8(right);
+        
         Utf8ConstIt leftBeginIt(left.begin(), left.begin(), left.end());
         Utf8ConstIt leftEndIt(left.end(), left.begin(), left.end());
         Utf8ConstIt rightBeginIt(right.begin(), right.begin(), right.end());

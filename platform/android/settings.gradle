@@ -1,1 +1,19 @@
 include ':lib'
+
+Properties properties = new Properties()
+properties.load(new File('./local.properties').newDataInputStream())
+
+def readiumSdkLibDir = properties.getProperty('readium.sdk_lib_dir', null)
+def readiumSdkIncludeDir = properties.getProperty('readium.sdk_include_dir', null)
+
+def lcpBuildContentFilter = readiumSdkLibDir != null && readiumSdkIncludeDir != null
+
+println "[[LCP]] (SETTINGS) readiumSdkLibDir: ${readiumSdkLibDir}"
+println "[[LCP]] (SETTINGS) readiumSdkIncludeDir: ${readiumSdkIncludeDir}"
+
+if (lcpBuildContentFilter) {
+    include ':epub3'
+    project(':epub3').projectDir = new File(readiumSdkIncludeDir, '../')
+    include ':rsdk'
+    project(':rsdk').projectDir = new File(readiumSdkIncludeDir, '../../lib/')
+}
