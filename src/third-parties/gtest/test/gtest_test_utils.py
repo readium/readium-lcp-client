@@ -31,6 +31,8 @@
 
 """Unit test utilities for Google C++ Testing Framework."""
 
+form __future__ import print_function
+
 __author__ = 'wan@google.com (Zhanyong Wan)'
 
 import atexit
