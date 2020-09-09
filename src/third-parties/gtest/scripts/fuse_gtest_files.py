@@ -147,7 +147,7 @@ def ValidateOutputDir(output_dir):
 def FuseGTestH(gtest_root, output_dir):
   """Scans folder gtest_root to generate gtest/gtest.h in output_dir."""
 
-  output_file = file(os.path.join(output_dir, GTEST_H_OUTPUT), 'w')
+  output_file = open(os.path.join(output_dir, GTEST_H_OUTPUT), 'w')
   processed_files = sets.Set()  # Holds all gtest headers we've processed.
 
   def ProcessFile(gtest_header_path):
@@ -160,7 +160,7 @@ def FuseGTestH(gtest_root, output_dir):
     processed_files.add(gtest_header_path)
 
     # Reads each line in the given gtest header.
-    for line in file(os.path.join(gtest_root, gtest_header_path), 'r'):
+    for line in open(os.path.join(gtest_root, gtest_header_path), 'r'):
       m = INCLUDE_GTEST_FILE_REGEX.match(line)
       if m:
         # It's '#include "gtest/..."' - let's process it recursively.
@@ -188,7 +188,7 @@ def FuseGTestAllCcToFile(gtest_root, output_file):
     processed_files.add(gtest_source_file)
 
     # Reads each line in the given gtest source file.
-    for line in file(os.path.join(gtest_root, gtest_source_file), 'r'):
+    for line in open(os.path.join(gtest_root, gtest_source_file), 'r'):
       m = INCLUDE_GTEST_FILE_REGEX.match(line)
       if m:
         if 'include/' + m.group(1) == GTEST_SPI_H_SEED:
@@ -219,7 +219,7 @@ def FuseGTestAllCcToFile(gtest_root, output_file):
 def FuseGTestAllCc(gtest_root, output_dir):
   """Scans folder gtest_root to generate gtest/gtest-all.cc in output_dir."""
 
-  output_file = file(os.path.join(output_dir, GTEST_ALL_CC_OUTPUT), 'w')
+  output_file = open(os.path.join(output_dir, GTEST_ALL_CC_OUTPUT), 'w')
   FuseGTestAllCcToFile(gtest_root, output_file)
   output_file.close()
 

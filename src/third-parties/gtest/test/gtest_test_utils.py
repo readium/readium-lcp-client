@@ -178,7 +178,7 @@ def GetTestExecutablePath(executable_name, build_dir=None):
         'Unable to find the test binary. Please make sure to provide path\n'
         'to the binary via the --build_dir flag or the BUILD_DIR\n'
         'environment variable.')
-    print >> sys.stderr, message
+    print(message, file=sys.stderr)
     sys.exit(1)
 
   return path
