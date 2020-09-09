@@ -55,6 +55,7 @@ problems to googletestframework@googlegroups.com.  You can read
 http://code.google.com/p/googletest/wiki/GoogleTestAdvancedGuide for
 more information.
 """
+from __future__ import print_function
 
 __author__ = 'wan@google.com (Zhanyong Wan)'
 
@@ -90,8 +91,8 @@ def VerifyFileExists(directory, relative_path):
   """
 
   if not os.path.isfile(os.path.join(directory, relative_path)):
-    print 'ERROR: Cannot find %s in directory %s.' % (relative_path,
-                                                      directory)
+    print('ERROR: Cannot find %s in directory %s.' % (relative_path,
+                                                      directory))
     print ('Please either specify a valid project root directory '
            'or omit it on the command line.')
     sys.exit(1)
@@ -123,7 +124,7 @@ def VerifyOutputFile(output_dir, relative_path):
            (relative_path, output_dir))
     answer = sys.stdin.readline().strip()
     if answer not in ['y', 'Y']:
-      print 'ABORTED.'
+      print('ABORTED.')
       sys.exit(1)
 
   # Makes sure the directory holding the output file exists; creates
@@ -146,7 +147,7 @@ def ValidateOutputDir(output_dir):
 def FuseGTestH(gtest_root, output_dir):
   """Scans folder gtest_root to generate gtest/gtest.h in output_dir."""
 
-  output_file = file(os.path.join(output_dir, GTEST_H_OUTPUT), 'w')
+  output_file = open(os.path.join(output_dir, GTEST_H_OUTPUT), 'w')
   processed_files = sets.Set()  # Holds all gtest headers we've processed.
 
   def ProcessFile(gtest_header_path):
@@ -159,7 +160,7 @@ def FuseGTestH(gtest_root, output_dir):
     processed_files.add(gtest_header_path)
 
     # Reads each line in the given gtest header.
-    for line in file(os.path.join(gtest_root, gtest_header_path), 'r'):
+    for line in open(os.path.join(gtest_root, gtest_header_path), 'r'):
       m = INCLUDE_GTEST_FILE_REGEX.match(line)
       if m:
         # It's '#include "gtest/..."' - let's process it recursively.
@@ -187,7 +188,7 @@ def FuseGTestAllCcToFile(gtest_root, output_file):
     processed_files.add(gtest_source_file)
 
     # Reads each line in the given gtest source file.
-    for line in file(os.path.join(gtest_root, gtest_source_file), 'r'):
+    for line in open(os.path.join(gtest_root, gtest_source_file), 'r'):
       m = INCLUDE_GTEST_FILE_REGEX.match(line)
       if m:
         if 'include/' + m.group(1) == GTEST_SPI_H_SEED:
@@ -218,7 +219,7 @@ def FuseGTestAllCcToFile(gtest_root, output_file):
 def FuseGTestAllCc(gtest_root, output_dir):
   """Scans folder gtest_root to generate gtest/gtest-all.cc in output_dir."""
 
-  output_file = file(os.path.join(output_dir, GTEST_ALL_CC_OUTPUT), 'w')
+  output_file = open(os.path.join(output_dir, GTEST_ALL_CC_OUTPUT), 'w')
   FuseGTestAllCcToFile(gtest_root, output_file)
   output_file.close()
 
@@ -242,7 +243,7 @@ def main():
     # fuse_gtest_files.py GTEST_ROOT_DIR OUTPUT_DIR
     FuseGTest(sys.argv[1], sys.argv[2])
   else:
-    print __doc__
+    print(__doc__)
     sys.exit(1)
 
 

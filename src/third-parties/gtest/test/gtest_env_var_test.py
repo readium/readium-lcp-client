@@ -30,6 +30,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 """Verifies that Google Test correctly parses environment variables."""
+from __future__ import print_function
 
 __author__ = 'wan@google.com (Zhanyong Wan)'
 
@@ -47,8 +48,8 @@ environ = os.environ.copy()
 
 def AssertEq(expected, actual):
   if expected != actual:
-    print 'Expected: %s' % (expected,)
-    print '  Actual: %s' % (actual,)
+    print('Expected: %s' % (expected,))
+    print('  Actual: %s' % (actual,))
     raise AssertionError
 
 
