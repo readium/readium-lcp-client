@@ -55,6 +55,7 @@ problems to googletestframework@googlegroups.com.  You can read
 http://code.google.com/p/googletest/wiki/GoogleTestAdvancedGuide for
 more information.
 """
+from __future__ import print_function
 
 __author__ = 'wan@google.com (Zhanyong Wan)'
 
@@ -90,8 +91,8 @@ def VerifyFileExists(directory, relative_path):
   """
 
   if not os.path.isfile(os.path.join(directory, relative_path)):
-    print 'ERROR: Cannot find %s in directory %s.' % (relative_path,
-                                                      directory)
+    print('ERROR: Cannot find %s in directory %s.' % (relative_path,
+                                                      directory))
     print ('Please either specify a valid project root directory '
            'or omit it on the command line.')
     sys.exit(1)
@@ -123,7 +124,7 @@ def VerifyOutputFile(output_dir, relative_path):
            (relative_path, output_dir))
     answer = sys.stdin.readline().strip()
     if answer not in ['y', 'Y']:
-      print 'ABORTED.'
+      print('ABORTED.')
       sys.exit(1)
 
   # Makes sure the directory holding the output file exists; creates
@@ -242,7 +243,7 @@ def main():
     # fuse_gtest_files.py GTEST_ROOT_DIR OUTPUT_DIR
     FuseGTest(sys.argv[1], sys.argv[2])
   else:
-    print __doc__
+    print(__doc__)
     sys.exit(1)
 
 
