@@ -207,6 +207,8 @@
       '<(lcp_client_lib_dir)/RootLcpNode.cpp',
       '<(lcp_client_lib_dir)/RsaSha256SignatureAlgorithm.cpp',
       '<(lcp_client_lib_dir)/Sha256HashAlgorithm.cpp',
+      '<(lcp_client_lib_dir)/EcdsaSha256SignatureAlgorithm.cpp',
+      '<(lcp_client_lib_dir)/AesGcmSymmetricAlgorithm.cpp',
       '<(lcp_client_lib_dir)/SymmetricAlgorithmEncryptedStream.cpp',
       '<(lcp_client_lib_dir)/ThreadTimer.cpp',
       '<(lcp_client_lib_dir)/UserLcpNode.cpp'
